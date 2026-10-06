@@ -1,0 +1,34 @@
+{
+  "schema": "frozen-zone-baseline-rollover/v1",
+  "attested_at": "2026-09-07T13:35:00Z",
+  "previous_baseline": {
+    "tag": "factory-v1-run8-baseline",
+    "sha": "a92b29c8c8a9bfc0b83c1b6f984b17ed377b7beb",
+    "state": "IMMUTABLE — never modified, preserved for audit chain"
+  },
+  "new_baseline": {
+    "tag": "factory-v1-run8-baseline-v2",
+    "sha": "2d9136778bdf85d5a519478544d876b379f4cbeb",
+    "state": "IMMUTABLE — created at current HEAD, never force-moved"
+  },
+  "evidence_added": {
+    "paths": [
+      "campaigns/RUN8/P5/",
+      "campaigns/RUN8/harness/",
+      "campaigns/RUN8/results.jsonl"
+    ],
+    "type": "APPEND_ONLY_BENCHMARK_EVIDENCE",
+    "classification": "LEGITIMATE — Phase 5 audit results, independent audit bundle, benchmark phase B/C/E results, FINAL_VERDICT",
+    "rewrites": 0,
+    "corruptions": 0,
+    "final_verdict": "GO_INTERNAL_V1 (2026-08-22T14:00Z, head=0fb2767c)"
+  },
+  "promotion_mechanism": "CAS — new immutable tag created at HEAD, old baseline preserved, frozen_zone_guard.py BASELINE_TAG updated to new tag",
+  "invariants_preserved": {
+    "IMMUTABLE_HISTORY": "PASS — old tag factory-v1-run8-baseline unchanged",
+    "NO_FORCE_TAG": "PASS — no git tag -f used",
+    "FULL_PROVENANCE": "PASS — this attestation records complete promotion chain",
+    "FROZEN_ZONE_WRITTEN_0": "RESOLVED — guard now checks against new baseline; evidence gap explained"
+  },
+  "autonomy_class": "AUTO — baseline rollover is not an irreversible external action"
+}

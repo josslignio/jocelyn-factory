@@ -1,0 +1,1105 @@
+{
+  "schema": "factory-core-review-coverage/v1",
+  "engine": "glm",
+  "reviewed_sha": "550156a14f26c9b3a56bd23466130ce661c57a13",
+  "method": "All 205 .py files of factory/ + factory_v2/ classified used/keep/replaceable/duplicate/dead by responsibility; the six cores, advance/*, review_dispatch.py and the escalation task generators additionally read line by line (function_coverage below). Import/reference graph computed over the whole tree: only two files surface with <=1 textual reference and both are self-evident test/tooling entrypoints (factory/bootstrap/tests/test_self_host_replay.py, factory_v2/audit/CODE_REVIEW_2026-09/scan_fail_open_sites.py) - no whole-file dead code found; dead code found is function-level and filed in glm.json.",
+  "counts": {
+    "used": 165,
+    "replaceable": 4,
+    "keep": 36
+  },
+  "coverage": {
+    "factory/bin/benchmark.py": {
+      "class": "used",
+      "loc": 353,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/budget_ledger.py": {
+      "class": "used",
+      "loc": 295,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/check_task.py": {
+      "class": "used",
+      "loc": 374,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/dispatcher_v3.py": {
+      "class": "replaceable",
+      "loc": 1595,
+      "reason": "engine process-group + stream normalization + capture policy -> harness.lol (see glm finding dispatcher_v3.py:188); accept-gate/verdict logic stays"
+    },
+    "factory/bin/factoryctl.py": {
+      "class": "used",
+      "loc": 206,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/factoryd.py": {
+      "class": "replaceable",
+      "loc": 1307,
+      "reason": "durable polling/restart/recovery ownership -> Temporal (see glm finding factoryd.py:895); authority decisions stay as activities"
+    },
+    "factory/bin/ledger.py": {
+      "class": "used",
+      "loc": 181,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/memory_store.py": {
+      "class": "used",
+      "loc": 290,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/milestone.py": {
+      "class": "used",
+      "loc": 565,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/mission_state.py": {
+      "class": "used",
+      "loc": 200,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/model_router.py": {
+      "class": "used",
+      "loc": 1934,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/owner_routing_policy.py": {
+      "class": "used",
+      "loc": 453,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/preflight_repo_identity.py": {
+      "class": "used",
+      "loc": 183,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/receipt.py": {
+      "class": "used",
+      "loc": 251,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/runtime_receipt.py": {
+      "class": "used",
+      "loc": 104,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/snapshot_diff.py": {
+      "class": "used",
+      "loc": 200,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/tombstone.py": {
+      "class": "used",
+      "loc": 638,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bin/verdict_taxonomy.py": {
+      "class": "used",
+      "loc": 158,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bootstrap/bootstrap_gate.py": {
+      "class": "used",
+      "loc": 89,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bootstrap/fixtures/bad_candidate/tests/test_x.py": {
+      "class": "used",
+      "loc": 2,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bootstrap/fixtures/good_candidate/tests/test_verify_factory_dod.py": {
+      "class": "used",
+      "loc": 5,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bootstrap/fixtures/good_candidate/tests/test_x.py": {
+      "class": "used",
+      "loc": 2,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bootstrap/tests/test_bootstrap_dod.py": {
+      "class": "used",
+      "loc": 207,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bootstrap/tests/test_self_host_replay.py": {
+      "class": "used",
+      "loc": 123,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bootstrap/verify_bootstrap_dod.py": {
+      "class": "used",
+      "loc": 270,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/bootstrap/verify_lock_only.py": {
+      "class": "used",
+      "loc": 24,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/cto/canonical/authority_audit.py": {
+      "class": "used",
+      "loc": 228,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/hooks/install_hooks.py": {
+      "class": "used",
+      "loc": 58,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/hooks/post_commit.py": {
+      "class": "used",
+      "loc": 88,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/hooks/stop_gate.py": {
+      "class": "used",
+      "loc": 212,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/candidate_registry.py": {
+      "class": "used",
+      "loc": 127,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/completion_detector.py": {
+      "class": "used",
+      "loc": 108,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/context_compiler.py": {
+      "class": "used",
+      "loc": 397,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/context_gate.py": {
+      "class": "used",
+      "loc": 91,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/context_package.py": {
+      "class": "used",
+      "loc": 54,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/cto_kernel.py": {
+      "class": "used",
+      "loc": 483,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/dispatcher_prompts.py": {
+      "class": "used",
+      "loc": 124,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/engine_output.py": {
+      "class": "used",
+      "loc": 180,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/heartbeat.py": {
+      "class": "used",
+      "loc": 29,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/qualification_runner.py": {
+      "class": "used",
+      "loc": 142,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/research_reuse_gate.py": {
+      "class": "used",
+      "loc": 343,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/supervisor_state.py": {
+      "class": "used",
+      "loc": 76,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/task_contract_validator.py": {
+      "class": "used",
+      "loc": 224,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/telemetry_sidecar.py": {
+      "class": "used",
+      "loc": 101,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/worktree_info.py": {
+      "class": "used",
+      "loc": 13,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/lib/worktree_manager.py": {
+      "class": "keep",
+      "loc": 387,
+      "reason": "thin git-worktree wrapper, CAS-correct, read clean (files_reviewed_clean)"
+    },
+    "factory/oracles/deterministic_delta.py": {
+      "class": "used",
+      "loc": 31,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory/vendored/swebench_sentinels.py": {
+      "class": "used",
+      "loc": 31,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/__init__.py": {
+      "class": "used",
+      "loc": 13,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/_a1a6_gate.py": {
+      "class": "used",
+      "loc": 93,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/_benchmark_probes.py": {
+      "class": "used",
+      "loc": 405,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/_io.py": {
+      "class": "used",
+      "loc": 126,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/advance/__init__.py": {
+      "class": "used",
+      "loc": 0,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/advance/contract_and_compile.py": {
+      "class": "keep",
+      "loc": 97,
+      "reason": "frozen-contract reload + mission compile stage"
+    },
+    "factory_v2/advance/control_plane.py": {
+      "class": "keep",
+      "loc": 121,
+      "reason": "S0 stage: state load, audit-cell result application, safety-stop preflight"
+    },
+    "factory_v2/advance/milestone_guards.py": {
+      "class": "keep",
+      "loc": 101,
+      "reason": "authority/drift guard stage of _advance_locked"
+    },
+    "factory_v2/advance/milestone_selection.py": {
+      "class": "keep",
+      "loc": 322,
+      "reason": "quarantine-scoped milestone selection (_scope_independent_of_quarantine caller)"
+    },
+    "factory_v2/advance/mission_dispatch.py": {
+      "class": "keep",
+      "loc": 1004,
+      "reason": "dispatch state machine _ss1.._ss5; two SILENT_FAILURE findings (audit-cell persist, quota-park computation) for the challenger"
+    },
+    "factory_v2/advance/quarantine_ladder.py": {
+      "class": "keep",
+      "loc": 137,
+      "reason": "repair ladder phases 3/4; probe memo defect (HEAD-seule identity) documented for the challenger"
+    },
+    "factory_v2/advance/quarantine_stall.py": {
+      "class": "keep",
+      "loc": 177,
+      "reason": "stall/drift handling of the repair chain (read as caller of quarantine_ladder paths)"
+    },
+    "factory_v2/advance/recovery_settle.py": {
+      "class": "keep",
+      "loc": 101,
+      "reason": "post-execution settlement of recovery work; routes REPLAN results"
+    },
+    "factory_v2/advance/settlement.py": {
+      "class": "keep",
+      "loc": 877,
+      "reason": "settlement pipeline; DEAD_CODE lines 905-907 and dir()/locals() relic line 765 to delete in M3/challenger; legacy single-review branch removed by REVIEW_SINGLE_PATH_QUOTA_GUARD"
+    },
+    "factory_v2/audit/CODE_REVIEW_2026-09/scan_fail_open_sites.py": {
+      "class": "used",
+      "loc": 52,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/audit_cell_bridge.py": {
+      "class": "keep",
+      "loc": 143,
+      "reason": "audit-cell request/result persistence"
+    },
+    "factory_v2/audit_cell_exercise.py": {
+      "class": "used",
+      "loc": 774,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/audit_loop.py": {
+      "class": "used",
+      "loc": 1590,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/audit_observation_producer.py": {
+      "class": "used",
+      "loc": 670,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/authority.py": {
+      "class": "keep",
+      "loc": 168,
+      "reason": "roadmap/strategy/spec hashing and load"
+    },
+    "factory_v2/authority_change.py": {
+      "class": "used",
+      "loc": 445,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/authority_gate.py": {
+      "class": "replaceable",
+      "loc": 439,
+      "reason": "validation environment assembly -> Harbor (glm authority_gate.py:154); the exact-SHA decision and verdict taxonomy stay"
+    },
+    "factory_v2/authority_reconcile.py": {
+      "class": "used",
+      "loc": 140,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/base_ready_aggregator.py": {
+      "class": "used",
+      "loc": 780,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/blocked_event_dedup.py": {
+      "class": "keep",
+      "loc": 56,
+      "reason": "event dedup used across dispatch"
+    },
+    "factory_v2/canonical_authority.py": {
+      "class": "used",
+      "loc": 127,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/canonical_context.py": {
+      "class": "used",
+      "loc": 360,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/capability_snapshot.py": {
+      "class": "used",
+      "loc": 173,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/cas_promotion.py": {
+      "class": "used",
+      "loc": 139,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/cell_challenger.py": {
+      "class": "used",
+      "loc": 89,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/cell_reviewer.py": {
+      "class": "used",
+      "loc": 100,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/chaos_drill.py": {
+      "class": "used",
+      "loc": 1023,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/chaos_drill_v2.py": {
+      "class": "used",
+      "loc": 690,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/cli_canary.py": {
+      "class": "used",
+      "loc": 329,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/collection_observer.py": {
+      "class": "used",
+      "loc": 409,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/continuation_controller.py": {
+      "class": "used",
+      "loc": 275,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/derived_plan.py": {
+      "class": "keep",
+      "loc": 392,
+      "reason": "bounded REPLAN plans"
+    },
+    "factory_v2/disk_guard.py": {
+      "class": "used",
+      "loc": 74,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/dispatch_checkpoint.py": {
+      "class": "keep",
+      "loc": 247,
+      "reason": "crash-safe builder result checkpoint"
+    },
+    "factory_v2/durable_handoff.py": {
+      "class": "used",
+      "loc": 136,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/engine_registry.py": {
+      "class": "used",
+      "loc": 377,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/escalation_ladder.py": {
+      "class": "keep",
+      "loc": 1150,
+      "reason": "fingerprint ladder + recovery records; task-file DUPLICATE noted (glm escalation_ladder.py:989)"
+    },
+    "factory_v2/event_journal.py": {
+      "class": "used",
+      "loc": 238,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/evidence_grading.py": {
+      "class": "used",
+      "loc": 14,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/executors.py": {
+      "class": "used",
+      "loc": 1434,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/external_supervisor.py": {
+      "class": "used",
+      "loc": 727,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/external_supervisor_harness.py": {
+      "class": "used",
+      "loc": 389,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/factory_verifiers.py": {
+      "class": "used",
+      "loc": 1018,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/fault_injection.py": {
+      "class": "used",
+      "loc": 204,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/golden_promotion.py": {
+      "class": "keep",
+      "loc": 301,
+      "reason": "golden CAS promotion"
+    },
+    "factory_v2/heartbeat_sidecar.py": {
+      "class": "used",
+      "loc": 122,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/hot_reload.py": {
+      "class": "used",
+      "loc": 240,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/launch_gate.py": {
+      "class": "keep",
+      "loc": 1031,
+      "reason": "the spend gate + attempt accounting ledger"
+    },
+    "factory_v2/long_run_preflight.py": {
+      "class": "used",
+      "loc": 238,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/long_run_ready.py": {
+      "class": "used",
+      "loc": 85,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/long_run_truth.py": {
+      "class": "used",
+      "loc": 205,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/maintenance_request.py": {
+      "class": "keep",
+      "loc": 163,
+      "reason": "durable maintenance requests"
+    },
+    "factory_v2/metrics_dashboard.py": {
+      "class": "used",
+      "loc": 137,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/mission_compiler.py": {
+      "class": "keep",
+      "loc": 257,
+      "reason": "roadmap -> compiled missions"
+    },
+    "factory_v2/mission_evidence.py": {
+      "class": "keep",
+      "loc": 395,
+      "reason": "heartbeat/liveness evidence"
+    },
+    "factory_v2/mission_receipt.py": {
+      "class": "keep",
+      "loc": 190,
+      "reason": "attempt receipts (hash + lineage)"
+    },
+    "factory_v2/owner_console.py": {
+      "class": "used",
+      "loc": 613,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/process_control.py": {
+      "class": "used",
+      "loc": 114,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/product_verifiers.py": {
+      "class": "used",
+      "loc": 25,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/progress_truth.py": {
+      "class": "keep",
+      "loc": 203,
+      "reason": "activity vs progress classification"
+    },
+    "factory_v2/project_authority.py": {
+      "class": "keep",
+      "loc": 447,
+      "reason": "project state load/save, transactions, resolution"
+    },
+    "factory_v2/quota_live.py": {
+      "class": "used",
+      "loc": 183,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/quota_observer.py": {
+      "class": "keep",
+      "loc": 554,
+      "reason": "quota snapshot merging - the guard the legacy review path ignored"
+    },
+    "factory_v2/quota_throttle.py": {
+      "class": "keep",
+      "loc": 59,
+      "reason": "worker-count throttling from quota view"
+    },
+    "factory_v2/quota_waste.py": {
+      "class": "used",
+      "loc": 106,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/recovery_allocation.py": {
+      "class": "keep",
+      "loc": 1955,
+      "reason": "allocation journal incl. OWNER basis - the authority the 7th loop ignored"
+    },
+    "factory_v2/repair_epoch.py": {
+      "class": "used",
+      "loc": 174,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/repo_hygiene.py": {
+      "class": "used",
+      "loc": 178,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/resilience.py": {
+      "class": "keep",
+      "loc": 686,
+      "reason": "interruption classification + worktree checkpointer"
+    },
+    "factory_v2/resource_accounting.py": {
+      "class": "used",
+      "loc": 543,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/review_dispatch.py": {
+      "class": "keep",
+      "loc": 763,
+      "reason": "the single quota-guarded reviewer path post-fix; seal/launch cross-checks"
+    },
+    "factory_v2/routing_aggregator.py": {
+      "class": "used",
+      "loc": 384,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/routing_evidence.py": {
+      "class": "used",
+      "loc": 108,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/run_controlled_long_run.py": {
+      "class": "used",
+      "loc": 417,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/run_f5_benchmark.py": {
+      "class": "used",
+      "loc": 282,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/run_lr5_preflight.py": {
+      "class": "used",
+      "loc": 431,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/run_matched_benchmark.py": {
+      "class": "used",
+      "loc": 266,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/run_matched_benchmark_3arm.py": {
+      "class": "used",
+      "loc": 947,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/run_scale_benchmark.py": {
+      "class": "used",
+      "loc": 835,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/run_scale_n_benchmark.py": {
+      "class": "used",
+      "loc": 696,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/run_tr_collection.py": {
+      "class": "used",
+      "loc": 11,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/run_windows.py": {
+      "class": "used",
+      "loc": 57,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/runrecords.py": {
+      "class": "used",
+      "loc": 464,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/runrecords_wire_harness.py": {
+      "class": "used",
+      "loc": 117,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/runtime.py": {
+      "class": "keep",
+      "loc": 3278,
+      "reason": "authoritative control loop; resume/retry DUPLICATE identified (glm runtime.py:2497) -> collapses into the Temporal workflow owner, but the authority state machine is Factory-specific"
+    },
+    "factory_v2/safety_quarantine.py": {
+      "class": "keep",
+      "loc": 1129,
+      "reason": "quarantine record + repair contracts"
+    },
+    "factory_v2/self_modification_ledger.py": {
+      "class": "used",
+      "loc": 135,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/settlement_ledger.py": {
+      "class": "keep",
+      "loc": 390,
+      "reason": "tracked settlement ledger"
+    },
+    "factory_v2/settlement_truth.py": {
+      "class": "keep",
+      "loc": 448,
+      "reason": "one read-only settlement verifier - the anti-fabrication core; acceptance re-run memoization is the identified DUPLICATE (glm settlement_truth.py:339)"
+    },
+    "factory_v2/shared_parsers.py": {
+      "class": "used",
+      "loc": 218,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/single_flight.py": {
+      "class": "used",
+      "loc": 364,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/stop_gate_policy.py": {
+      "class": "used",
+      "loc": 261,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/telemetry/__init__.py": {
+      "class": "used",
+      "loc": 40,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/telemetry/__main__.py": {
+      "class": "used",
+      "loc": 6,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/telemetry/adapters.py": {
+      "class": "replaceable",
+      "loc": 1220,
+      "reason": "per-provider output parsing (~1220 lines) folded into the harness.lol NDJSON normalization brick"
+    },
+    "factory_v2/telemetry/aggregate.py": {
+      "class": "used",
+      "loc": 721,
+      "reason": "aggregation over observations"
+    },
+    "factory_v2/telemetry/capture.py": {
+      "class": "used",
+      "loc": 168,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/telemetry/gate.py": {
+      "class": "used",
+      "loc": 239,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/telemetry/inventory.py": {
+      "class": "used",
+      "loc": 325,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/telemetry/ledger.py": {
+      "class": "used",
+      "loc": 239,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/telemetry/observe.py": {
+      "class": "used",
+      "loc": 221,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/telemetry/record.py": {
+      "class": "used",
+      "loc": 527,
+      "reason": "durable observation records"
+    },
+    "factory_v2/telemetry/report.py": {
+      "class": "used",
+      "loc": 1053,
+      "reason": "telemetry reporting built on adapters; shrinks with the adapters brick"
+    },
+    "factory_v2/token_cost_report.py": {
+      "class": "used",
+      "loc": 254,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/tr_call.py": {
+      "class": "used",
+      "loc": 8,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/tr_kol.py": {
+      "class": "used",
+      "loc": 8,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/tr_kol_records.py": {
+      "class": "used",
+      "loc": 7,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/tr_presentation_verifiers.py": {
+      "class": "used",
+      "loc": 11,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/tr_product_ready_observer.py": {
+      "class": "used",
+      "loc": 11,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/tr_radar_harness.py": {
+      "class": "used",
+      "loc": 8,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/tr_ready_harness.py": {
+      "class": "used",
+      "loc": 8,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/tr_refresh_harness.py": {
+      "class": "used",
+      "loc": 8,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/tr_web_harness.py": {
+      "class": "used",
+      "loc": 8,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/twitter_radar_long_run.py": {
+      "class": "used",
+      "loc": 8,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/validation_contract.py": {
+      "class": "keep",
+      "loc": 520,
+      "reason": "frozen contract integrity - the acceptance semantics"
+    },
+    "factory_v2/validation_receipt.py": {
+      "class": "used",
+      "loc": 280,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verified_fix.py": {
+      "class": "keep",
+      "loc": 490,
+      "reason": "verified-fix receipts"
+    },
+    "factory_v2/verifier_preflight.py": {
+      "class": "used",
+      "loc": 425,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_adaptive_routing.py": {
+      "class": "used",
+      "loc": 230,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_audit_receipt.py": {
+      "class": "used",
+      "loc": 153,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_audit_repair.py": {
+      "class": "used",
+      "loc": 129,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_benchmark_receipt.py": {
+      "class": "used",
+      "loc": 31,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_chaos_drill.py": {
+      "class": "used",
+      "loc": 160,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_code_review_repairs.py": {
+      "class": "used",
+      "loc": 95,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_code_review_sweep.py": {
+      "class": "used",
+      "loc": 188,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_controlled_long_run.py": {
+      "class": "used",
+      "loc": 360,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_core_review.py": {
+      "class": "used",
+      "loc": 194,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_core_rewrite.py": {
+      "class": "used",
+      "loc": 115,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_cycle2_manifest.py": {
+      "class": "used",
+      "loc": 87,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_cycle2_refresh.py": {
+      "class": "used",
+      "loc": 66,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_dead_weight_purge.py": {
+      "class": "used",
+      "loc": 120,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_deep_research.py": {
+      "class": "used",
+      "loc": 230,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_eval_discipline.py": {
+      "class": "used",
+      "loc": 104,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_factory_hygiene.py": {
+      "class": "used",
+      "loc": 1313,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_lib.py": {
+      "class": "used",
+      "loc": 98,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_long_run.py": {
+      "class": "used",
+      "loc": 127,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_long_run_ready.py": {
+      "class": "used",
+      "loc": 165,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_milestone_acceptance.py": {
+      "class": "used",
+      "loc": 80,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_preflight_receipt.py": {
+      "class": "used",
+      "loc": 329,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_quota_thrift.py": {
+      "class": "used",
+      "loc": 90,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_real_ai_receipt.py": {
+      "class": "used",
+      "loc": 45,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_repo_hygiene.py": {
+      "class": "used",
+      "loc": 104,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_reshape_receipt.py": {
+      "class": "used",
+      "loc": 439,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_scale_benchmark.py": {
+      "class": "used",
+      "loc": 102,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_scale_n_benchmark.py": {
+      "class": "used",
+      "loc": 284,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_self_improvement.py": {
+      "class": "used",
+      "loc": 43,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_simplification_batch.py": {
+      "class": "used",
+      "loc": 365,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_token_truth.py": {
+      "class": "used",
+      "loc": 129,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/verify_tr_weekly_operate.py": {
+      "class": "used",
+      "loc": 11,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/weekly_observation.py": {
+      "class": "used",
+      "loc": 8,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/worker_heartbeat.py": {
+      "class": "used",
+      "loc": 113,
+      "reason": "support module referenced by the production/test tree (import graph verified; no low-reference file beyond known test/tooling)"
+    },
+    "factory_v2/worker_lease.py": {
+      "class": "keep",
+      "loc": 601,
+      "reason": "lease/fencing"
+    }
+  },
+  "function_coverage": {
+    "factory/bin/dispatcher_v3.py": {
+      "_pump_to_sink/_run/_STREAM_SINK": "replaceable (harness.lol process-group + NDJSON)",
+      "_acquire_worktree/_cleanup_worktree/prune_stale_worktrees": "replaceable policy (Omnigent fan-out) - GREEN_CANDIDATE loop lives here",
+      "_merge_candidate": "keep (golden CAS merge, state-file-only auto-resolution)",
+      "_capture_worker_changes/_post_capture_gate/_capture_size_guard/_capture_secrets_and_size_guard": "keep (Factory-owned commit + fail-closed guards)",
+      "_accept_gate/_read_builder_report_outcome/_builder_declared_done": "keep (the IMPLEMENTED gate)",
+      "dispatch_v3 build steps T0-T3": "keep (oracle-ordered loop)",
+      "dispatch_v3 diagnose/replan branch": "keep; writes the artifact itself (basis of the DIAGNOSE_WITHOUT_WRITE_SCOPE refutation)",
+      "_run_engine/_one_launch": "keep logic (quota pre-refusal, typed cuts) over the replaceable _run substrate",
+      "main/arg parsing": "keep"
+    },
+    "factory/bin/factoryd.py": {
+      "run_daemon_loop": "replaceable (Temporal workflow host)",
+      "_load_or_create_state/_live_engine_lease_ids/_harvest_parallel/_ADVANCE_*": "replaceable (crash reconciliation -> workflow replay)",
+      "_sweep_orphan_engines/_argv_net_kill": "keep as activity (engine hygiene)",
+      "_reload drain/arm/canary": "replaceable (deployment workflows)",
+      "_generate_metrics_report/_next_sleep_s/_heartbeat_line": "keep (observability)",
+      "cmd_start/stop/status/restart + daemonize": "keep (CLI shell, shrinks)"
+    },
+    "factory_v2/runtime.py": {
+      "advance/_advance_locked": "keep (the authoritative step; stages delegated to advance/*)",
+      "select_project": "keep (portfolio rotation)",
+      "_execute_recovery_work/_commit_repair": "keep (typed recovery execution, allowed_scope fencing)",
+      "_cnp_peek/_cnp_regrant_stranded_diagnose": "duplicate owner of resume semantics (see glm finding) - challenger folds into one owner",
+      "_prevalidated_product_head": "keep; broad except is a SILENT_FAILURE candidate (validate() crash silently re-pays a build)",
+      "_run_quarantine_cycle/_quarantine_* edges": "keep (typed outgoing edges)",
+      "_emit_* relays": "dead-weight kept only for substring-scanning tests - candidate for test-side removal",
+      "_waiting_marker/_hold_gate_after_verdict/_gate_hold_identity_key": "keep (C38 hold identity)",
+      "_apply_replan_patch": "keep-as-refusal (documents the revoked roadmap-write capability; still called by recovery_settle)",
+      "drain_pending_audit_cell/_apply_pending_audit_cell_result": "keep (A1 directive wiring)"
+    },
+    "factory_v2/authority_gate.py": {
+      "IndependentValidator.validate/_validate_body/_check_regressions": "keep (exact-SHA black-box decision)",
+      "_create/_remove_detached_worktree + control pin": "replaceable (Harbor task environment)",
+      "_resolve_product_repo/_run": "keep (single cwd rule, pipefail, timeout typing)"
+    },
+    "factory_v2/settlement_truth.py": {
+      "verify_settlement": "keep (the one settlement verifier)",
+      "acceptance re-run (run_acceptance=True default)": "duplicate re-execution of settlement's validation - memoize by identity",
+      "_control_pin/_final_integration_sha": "keep (dual-pin lineage proofs)",
+      "proven_*/settlement_blockers": "keep (readiness gateways)"
+    },
+    "factory/lib/worktree_manager.py": {
+      "create_worktree (CAS/quarantine refs)": "keep",
+      "recover_worktree/list_worktrees/refresh/rebase/archive": "keep",
+      "is_worktree_dirty/worktree_head/_write_meta/_read_meta": "keep"
+    },
+    "factory_v2/advance/mission_dispatch.py": {
+      "_ss1_adopt_or_skip_pass": "keep; park-clock test placed BEFORE owner-allocation consult is the 7th 22/09 loop",
+      "_ss2_escalation_and_recovery_gate": "keep (ladder trigger, owner precedence for cnp_ diagnose)",
+      "_ss3_pre_dispatch_gates": "keep (drift, in-flight, quarantine gate, preflights)",
+      "_ss4_lease_and_checkpoint": "keep (lease, manifest, checkpoint resume, launch gate, account open)",
+      "_ss5_launch_and_capture": "keep (receipt, accounting, park-for-quota with the 893 silent-except finding)"
+    },
+    "factory_v2/advance/settlement.py": {
+      "_settle_verify_receipts": "keep (exact-attempt receipt verification)",
+      "_settle_multi_ai_review/_settle_mai_dispatch": "keep post-fix single path; legacy branch deleted by REVIEW_SINGLE_PATH_QUOTA_GUARD",
+      "_rebind_gate_to_head_if_satisfied": "keep intent; memo-before-probe defect documented",
+      "_settle_promote_and_project": "keep; dead lines 905-907 and the dir()/locals() relic 765 to delete"
+    },
+    "factory_v2/advance/quarantine_ladder.py": {
+      "run_repair_ladder": "keep (phase 3/4 with idempotency-keyed dedup)",
+      "run_clear_gate": "keep (gate-executed proofs)",
+      "probe_gate_first": "keep intent; HEAD-only memo identity is the root cause of two 22/09 loops"
+    }
+  }
+}

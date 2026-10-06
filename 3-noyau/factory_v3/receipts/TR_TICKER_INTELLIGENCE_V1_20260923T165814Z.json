@@ -1,0 +1,70 @@
+{
+  "schema": "factory-v3-run/v1",
+  "milestone": "TR_TICKER_INTELLIGENCE_V1",
+  "project": "projects/twitter-radar",
+  "repo": "/private/tmp/tr-product-v3",
+  "base_sha": "3f484e6b34217fafa0087588395a87958a4d16eb",
+  "worktree": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/v3-TR_TICKER_INTELLIGENCE_V1-nwaodvq5",
+  "started_at": "2026-09-23T16:58:14Z",
+  "engine": {
+    "engine": "claude",
+    "model": "claude-sonnet-5",
+    "prompt_chars": 5367,
+    "argv0": "claude",
+    "rc": 0,
+    "timed_out": false,
+    "elapsed_s": 156.7,
+    "log": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/factory_v3/receipts/TR_TICKER_INTELLIGENCE_V1_20260923T165814Z.engine.log",
+    "num_turns": 14,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 54196,
+      "cache_read_input_tokens": 570694,
+      "output_tokens": 3821,
+      "output_tokens_details": {
+        "thinking_tokens": 1201
+      },
+      "server_tool_use": {
+        "web_search_requests": 0,
+        "web_fetch_requests": 0
+      },
+      "service_tier": "standard",
+      "cache_creation": {
+        "ephemeral_1h_input_tokens": 54196,
+        "ephemeral_5m_input_tokens": 0
+      },
+      "inference_geo": "not_available",
+      "iterations": [
+        {
+          "input_tokens": 2,
+          "output_tokens": 365,
+          "cache_read_input_tokens": 72536,
+          "cache_creation_input_tokens": 191,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 191
+          },
+          "type": "message"
+        }
+      ],
+      "speed": "standard"
+    },
+    "total_cost_usd": 0.37168580000000007,
+    "session_id": "80a42da3-70a5-4179-95d8-64a5724a163e",
+    "is_error": false
+  },
+  "tests": {
+    "cmd": "python3 -m pytest tests/ -q -k 'ticker or fundamental or liquidity or taxonomy'",
+    "rc": 0,
+    "elapsed_s": 50.3,
+    "tail": ".....s.....s.....................s..ss............................sssss. [ 65%]\n..........ssss..s.....................                                   [100%]\n95 passed, 15 skipped, 1389 deselected in 49.53s"
+  },
+  "commit": {
+    "committed": true,
+    "sha": "320efbb40ef720132d63e7f3d7aae53fbf3a00bf",
+    "branch": "v3/TR_TICKER_INTELLIGENCE_V1-20260923T165814Z",
+    "files": 1
+  },
+  "finished_at": "2026-09-23T17:01:42Z",
+  "verdict": "GREEN"
+}

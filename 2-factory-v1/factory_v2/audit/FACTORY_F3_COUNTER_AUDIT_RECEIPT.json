@@ -1,0 +1,147 @@
+{
+  "adversarial_pass": "Single bounded pass (Codex-equivalent adversarial questions — resource-scarce, used once per F3)",
+  "attacks": [
+    {
+      "attack": "Optional parameter means callers can ignore it. If autopilot.py is not updated to pass project_authority before it is retired, P6 still affects production missions. The fix has a window of partial-fix state.",
+      "f4_requirement": "runtime.advance() must pass project_authority. autopilot.py retirement happens in the SAME commit.",
+      "id": "CA-001",
+      "mitigation": "F4 must wire project_authority in V2 runtime.advance() FIRST, then retire autopilot.py. Test: test_context_compiler_uses_v2_authority_when_provided. The optional=None fallback is intentional for non-V2 callers — not a bug.",
+      "target": "P6 fix — ContextCompiler optional project_authority parameter",
+      "verdict": "VALID RISK"
+    },
+    {
+      "attack": "roadmap_resolver.resolve() returns a ResolverResult with a next_milestone that may have a different schema than what backlog_refiller.select_next_mission() returns. factoryd downstream code (dispatcher, plan building) expects the V1 mission format. Swapping the source without updating all callers causes AttributeError at runtime.",
+      "f4_requirement": "Grep: factory/bin/factoryd.py for backlog_refiller. Audit all .next_mission() usages. Update all sites or add typed adapter before removing backlog_refiller.",
+      "id": "CA-002",
+      "mitigation": "F4 must either: (A) add an adapter that wraps ResolverResult.next_milestone into the Mission dataclass, or (B) change downstream callers to accept Milestone directly. Option B is cleaner (net simplification). Must grep all callers of backlog_refiller.select_next_mission() and audit their downstream usage of the returned mission object.",
+      "target": "roadmap_resolver replaces backlog_refiller in factoryd",
+      "verdict": "VALID RISK"
+    },
+    {
+      "attack": "milestone_controller.evaluate() may be doing secondary bookkeeping (CTO_STATE.json updates, metric recording) that is not replicated by IndependentValidator. Deleting it removes those side effects silently.",
+      "f4_requirement": "Read factory/lib/milestone_controller.py before deletion. Extract side effects. Test: existing milestone_controller tests must pass with V2 settlement path.",
+      "id": "CA-003",
+      "mitigation": "Read milestone_controller.py fully before deleting. Extract any bookkeeping (CTO_STATE.json writes, metric records) into an explicit step in the settlement path. Do NOT assume milestone_controller is pure advisory logic.",
+      "target": "Delete advisory gates — milestone_controller removed from settlement path",
+      "verdict": "VALID RISK"
+    },
+    {
+      "attack": "If factoryd settles a milestone but the IndependentValidator PASS happens inside V2 runtime.advance() which returns an outcome, factoryd must distinguish outcome.passed vs outcome.failed to know when to call runrecords.append_run(). If the contract is wrong (e.g. advance() raises on failure), then factoryd never reaches append_run() and RunRecords stays unwired for failures.",
+      "f4_requirement": "append_run signature: append_run(milestone_id, sha, duration_s, agent_used, tokens, status: Literal['PASS', 'FAIL']). Called in try/finally in factoryd settlement callback.",
+      "id": "CA-004",
+      "mitigation": "RunRecords should record ALL runs (pass AND fail) for learning. append_run() should be called unconditionally with a status field (PASS/FAIL). The call belongs in factoryd after advance() returns, in a try/finally block so it runs even on exception.",
+      "target": "RunRecords wire at settlement boundary",
+      "verdict": "VALID CONCERN"
+    },
+    {
+      "attack": "mini-swe-agent DefaultAgent at 160 LOC works because it has zero Factory concerns (no auth, no heartbeat, no budget, no context injection, no receipt). Factory dispatcher_v3 at 918 LOC has all those concerns. Claiming '82% smaller' is a false benchmark — the correct comparison is 160 (mini-swe-agent core) + Factory's addons, not 160 vs 918.",
+      "f4_requirement": "Target: dispatcher_v3 < 450 LOC after F4. Net reduction: ~470 LOC.",
+      "id": "CA-005",
+      "mitigation": "Revised F4 target: dispatcher_v3 should be ~400 LOC (not 160). The core loop is ~100 LOC (mini-swe-agent pattern). The Factory addons (retry, budget, heartbeat, receipt, context injection) are ~300 LOC. Total: ~400 LOC. The 518 LOC to delete are the hardcoded retry constants, untyped subprocess wrangling, and dead code paths.",
+      "target": "mini-swe-agent pattern for dispatcher_v3 reduction",
+      "verdict": "CORRECT ATTACK — the F3 framing was imprecise"
+    },
+    {
+      "attack": "If RoadmapResolver does not have a from_file() classmethod with the exact signature used in the test, the test will fail to import, not because of DEF-001 but because of a test implementation bug.",
+      "f4_requirement": "After reading roadmap_resolver.py: update test_def001 constructor call if needed before committing F3.",
+      "id": "CA-006",
+      "mitigation": "Read factory_v2/roadmap_resolver.py to confirm the from_file() or equivalent constructor. Update test to match actual API.",
+      "target": "DEF-001 regression test depends on RoadmapResolver.from_file() API",
+      "verdict": "VALID — must verify API"
+    },
+    {
+      "attack": "The ROADMAP.yaml fix added version: v3 and changed depends_on chains. But if RoadmapResolver was not updated to handle the version field, it may error or silently ignore the version. The dry-run verification in a previous step claimed it returns FULL_CODEBASE_STATE_OF_ART_AUDIT — but was that actually run, or just claimed?",
+      "closure": {
+        "command": "python3 -m pytest tests/test_def001_premature_idle.py -q -p no:cacheprovider",
+        "executed": "2026-09-18, session FULL_CODEBASE_AUDIT_REVIEWED#M1",
+        "note": "Includes test_v3_roadmap_returns_correct_audit_milestone_not_benchmark, which reads the REAL projects/factory/ROADMAP.yaml with a frozen state fixture; the roadmap at HEAD is v3+ and the ordering invariant holds. The dry-run question ('was that actually run, or just claimed?') is closed by this fresh run.",
+        "output": "7 passed in 4.57s",
+        "rc": 0
+      },
+      "f4_requirement": "Run tests/test_def001_premature_idle.py after F3 commit. Fix if fail.",
+      "id": "CA-007",
+      "mitigation": "Run the DEF-001 test suite after F3 commit. The test_v3_roadmap_returns_correct_f3_not_benchmark test reads the actual ROADMAP.yaml file from the repo.",
+      "target": "ROADMAP.yaml v3 topological sort correctness",
+      "verdict": "CLOSED 2026-09-18 — VERIFIED GREEN (was: MUST VERIFY)"
+    }
+  ],
+  "control_sha": "865de5703a2450b38bc4f166cbcfe835439c6c9a",
+  "control_sha_rebind_2026_09_19": "REBOUND 2026-09-19 (codex BLOCK 2f0e5bf3 repair, session 5): control_sha moved 57cd98e0->865de5703a2450b38bc4f166cbcfe835439c6c9a because intervening milestones (SAFE_SELF_IMPROVEMENT, FACTORY_CODE_REVIEW_SWEEP, FACTORY_DEEP_RESEARCH) committed real code after 2f0e5bf3 (git diff --name-only 2f0e5bf3..HEAD: factoryd.py, runtime.py, mission_dispatch.py, settlement.py, launch_gate.py, owner_routing_policy.py, tests/). Re-verified at the new binding: LOC re-measured fresh (wc -l; drift found and updated: runtime.py 4468->4475, factoryd.py 2343->2363; all other entries exact), line citations re-resolved (factoryd _reconcile_stale_active l.200, _load_or_create_state l.884 still exact), mechanical judge python3 factory_v2/verify_audit_repair.py . -> AUDIT_REPAIR_VERIFIED rc=0.",
+  "def001_root_cause": {
+    "adjudicated": "2026-09-18, FULL_CODEBASE_AUDIT_REVIEWED#M1 (relecteur Claude BLOCK aa295959: 'Two conflicting root causes, neither in the receipt')",
+    "defect": "PREMATURE_IDLE_AFTER_MILESTONE_SETTLEMENT",
+    "evidence_commands": [
+      "git show --stat 829ceb991212ba94d30b5e0036fb9071804c01dd -> projects/factory/PROJECT_STATE.json | 47 +, projects/factory/ROADMAP.yaml | 74 +, projects/factory/SPEC.md | 6 +- (no code file)",
+      "git show 829ceb991 -- projects/factory/ROADMAP.yaml | grep 'Root cause' -> '+# Root cause of v2 defect: FACTORY_V2_RESHAPE_BENCHMARK_PROMOTION was placed BEFORE' '+# FULL_CODEBASE_STATE_OF_ART_AUDIT, inverting the canonical F3->F4->F5 order.'",
+      "git log --format='%H %ad' -1 b671efe7889fbd3b8b0004dd8c4ef1379efe790c -> 2026-09-13 02:41:20 +0200 (V1 deletions, 6 days after the fix)",
+      "python3 -m pytest tests/test_def001_premature_idle.py -q -p no:cacheprovider -> 7 passed in 4.57s, rc=0 (session 2026-09-18)"
+    ],
+    "regression_test": "tests/test_def001_premature_idle.py",
+    "regression_test_status": "GREEN fresh in session 3 (3rd repair pass): python3 -m pytest tests/test_def001_premature_idle.py -q -p no:cacheprovider -> '7 passed in 2.39s', rc=0 (2026-09-18T11:5xZ) ; runs précédents : '7 passed in 2.32s' (session 2), '7 passed in 4.57s' (session 1)",
+    "root_cause": "ROADMAP.yaml v2 depends_on ordering (the V2 resolver path), NOT the V1 backlog_refiller path. The v2 roadmap placed FACTORY_V2_RESHAPE_BENCHMARK_PROMOTION BEFORE FULL_CODEBASE_STATE_OF_ART_AUDIT in the dependency chain (it depended only on FOUNDATIONAL_LONG_RUN_TWITTER_RADAR, while the audit milestone additionally depended on the benchmark), so roadmap_resolver's topological sort selected the BENCHMARK milestone right after F2 settled; that milestone was not startable under the production gate configuration, so the supervisor went IDLE with an open roadmap. PROOF THE CAUSE IS V2-ORDERING AND NOT V1-BACKLOG_REFILLER: (1) the fix commit 829ceb991212ba94d30b5e0036fb9071804c01dd (2026-09-07 21:22) touches ONLY projects/factory/ROADMAP.yaml, PROJECT_STATE.json and SPEC.md -- zero lines of code -- and its diff states verbatim: 'Root cause of v2 defect: FACTORY_V2_RESHAPE_BENCHMARK_PROMOTION was placed BEFORE FULL_CODEBASE_STATE_OF_ART_AUDIT, inverting the canonical F3->F4->F5 order'; reordering a YAML DAG cannot repair a V1 queue-empty code path. (2) projects/factory/PROJECT_STATE.json records DEF-001 status=FIXED_ROADMAP_CORRECTED (observed_at 2026-09-07) -- the fix is the ROADMAP correction itself. (3) The V1 modules (backlog_refiller, autopilot, cto_planner, campaign_state) were still ALIVE in the tree until FACTORY_SIMPLIFY_S2/S4 (b671efe7889f / 2f5249abe3ca, 2026-09-13), i.e. 6 days AFTER the defect was observed and fixed -- if the V1 path had been the cause, the roadmap reorder could not have closed the defect while the V1 code was still present. The earlier attribution to backlog_refiller (2026-09-07 ledger prose, 'when queue emptied, showed no work despite open roadmap') is REFUTED and has been corrected in FACTORY_CONVERGENCE_LEDGER.json (update_2026_09_18). The test docstring of the regression test documents the same v2-ordering mechanism (tests/test_def001_premature_idle.py lines 12-14)."
+  },
+  "milestone": "FULL_CODEBASE_STATE_OF_ART_AUDIT",
+  "note": "Counter-audit attacks the integration assumptions made in F3. Every ATTACK is a concrete question about a decision in FACTORY_CONVERGENCE_LEDGER or FACTORY_VS_UPSTREAM_MATRIX.",
+  "produced_at": "2026-09-07",
+  "schema": "f3-counter-audit-receipt/v1",
+  "summary": {
+    "blockers_for_f4": [
+      "CA-002 (backlog_refiller caller audit)",
+      "CA-003 (milestone_controller side effects)",
+      "CA-006 (roadmap_resolver API)"
+    ],
+    "closed_2026_09_18": 1,
+    "correct_precision_corrections": 2,
+    "f4_priority_order": [
+      "CA-006 verify",
+      "CA-001 wire runtime.advance + project_authority",
+      "CA-002 audit backlog_refiller callers",
+      "CA-003 read milestone_controller before delete",
+      "CA-004 runrecords try/finally"
+    ],
+    "must_verify": 0,
+    "total_attacks": 7,
+    "valid_concerns": 1,
+    "valid_risks": 3
+  },
+  "update_2026_09_12": {
+    "evidence_provenance_note_2026_09_18_s3": "Les chemins .context/ cités ci-dessous (REVIEW_FIXES.json, AUDITS_RAW_7_LENTILLES_2026-09-12.json, FINDINGS_RAW_96.json, RAPPORT_FINAL_2026-09-12.md) sont ABSENTS du dépôt et n'ont jamais été commités (git log --all --diff-filter=A -- <chemin> → vide, vérifié session 3 ; .context/factory-tightening-audit-2026-09-12/ ne contient que RESILIENCE_DRILL.md) : ce sont des artefacts de la session de travail 2026-09-12, non reproductibles depuis le dépôt. Le résumé ci-dessous est conservé comme récit as-of, pas comme preuve vérifiable in-repo.",
+    "machine_clause_status": "UNMET as of this update — no evidence/review_accounts.jsonl exists; wiring dispatch_review() into this milestone's review path is separate, undone work, not something this JSON update can satisfy.",
+    "note": "Real, dated reviewer artifacts exist for today's tightening pass but are NOT the same thing verify_audit_receipt.py's reviewers_min_3_distinct_accept clause counts: that clause reads ONLY evidence/review_accounts.jsonl rows written by review_dispatch.dispatch_review() with milestone=FULL_CODEBASE_STATE_OF_ART_AUDIT, reviewed_sha==<exact HEAD>, read_only=true, verdict=ACCEPT — no such row exists at any SHA yet (evidence/review_accounts.jsonl has never been written in this checkout). The reviewers below are real, dated, and evidenced, but recorded as narrative documents, not as dispatch_review() ledger rows, so they cannot make that machine clause true.",
+    "reviewers_with_dated_evidence": [
+      {
+        "engine": "glm (zai-coding-plan/glm-5.3)",
+        "evidence": ".context/factory-tightening-audit-2026-09-12/REVIEW_FIXES.json",
+        "reviewed_at_sha": "f1ff9f70",
+        "role": "adversarial fix reviewer, 11 lots + orchestrator wiring",
+        "verdict": "ACCEPT_WITH_FIXES"
+      },
+      {
+        "engine": "glm+sol (7-lens audit: ECO, DSP, CTL, CPX, STA, GAT, TST)",
+        "evidence": [
+          ".context/factory-tightening-audit-2026-09-12/AUDITS_RAW_7_LENTILLES_2026-09-12.json",
+          ".context/factory-tightening-audit-2026-09-12/FINDINGS_RAW_96.json"
+        ],
+        "role": "independent findings audit, 96 raw findings -> 80 clusters"
+      },
+      {
+        "engine": "codex/sol",
+        "evidence": ".context/factory-tightening-audit-2026-09-12/RAPPORT_FINAL_2026-09-12.md#section-5",
+        "role": "R1/R2 counter-audit orders, night recovery pass (00:09-04:04, 13 commits)"
+      },
+      {
+        "engine": "claude (fable, this audit) + 14 sonnet worker lots",
+        "evidence": ".context/factory-tightening-audit-2026-09-12/RAPPORT_FINAL_2026-09-12.md#section-6",
+        "role": "codebase audit synthesis + P0/P1 fix implementation, each lot reviewed by a separate adversarial pass"
+      }
+    ]
+  },
+  "update_2026_09_18": {
+    "ca007_closed": "verdict -> CLOSED 2026-09-18 with executed command + cited output (fresh green run)",
+    "def001_root_cause_added": true,
+    "measured_at_head": "d256977f9bb00006fb5f5271a762b1c58354cfae",
+    "reason": "Relecteur Claude BLOCK aa295959: le receipt ne nommait jamais PREMATURE_IDLE_AFTER_MILESTONE_SETTLEMENT, ne tranchait pas entre les deux causes racines concurrentes (ordre ROADMAP v2 vs chemin V1 backlog_refiller) et laissait CA-007 à MUST VERIFY.",
+    "second_pass_2026_09_18": "BLOCK codex 60d76f11 : re-exécution fraîche du test de régression dans la session de 2e réparation (7 passed, rc=0, sortie citée) ; preuves git de la cause racine re-vérifiées inchangées (829ceb99 3 fichiers zéro code ; b671efe7 2026-09-13 02:41:20 +0200 ; docstring l.12-14 confirmée par sed).",
+    "third_pass_2026_09_18": "BLOCK codex a4f12607 (2026-09-18T11:29:25Z, transcription absente du worktree — re-vérification par exécution) : preuves git de la cause racine re-exécutées (git show --stat 829ceb991 -> 3 fichiers PROJECT_STATE/ROADMAP/SPEC, zéro code ; grep 'Root cause' -> citation verbatim ; git log -1 b671efe7 -> 2026-09-13 02:41:20 +0200) ; test DEF-001 re-exécuté frais : 7 passed rc=0 (2.39s) ; evidence .context/2026-09-12 annotée ABSENTE du dépôt (jamais commitée) dans update_2026_09_12."
+  }
+}

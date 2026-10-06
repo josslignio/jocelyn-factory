@@ -1,0 +1,31 @@
+[factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=4 milestone=- (twitter-radar)
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______________ test_advance_still_runs_after_host_reload_shutdown ______________
+tests/test_repairs_lot1_pool_recovery.py:59: in test_advance_still_runs_after_host_reload_shutdown
+    assert (b / "built.txt").read_text() == "done"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1027: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1013: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5425/test_advance_still_runs_after_0/twitter-radar/built.txt'
+----------------------------- Captured stdout call -----------------------------
+[factoryd] V2_PORTFOLIO_MODE: portfolio=/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5425/test_advance_still_runs_after_0/portfolio.json — select_project() governs next work. DEFAULT_RUNTIME=V2.
+[factoryd] LOG_TARGET_DETACHED: factoryd.log no longer resolves to the inode this process writes to — readers are on a stale snapshot
+[factoryd] PARALLEL_ADVANCE_STARTED: twitter-radar slot=0 (running=1)
+[factoryd] [factoryd] HEARTBEAT pid=919 polls=1 action=ADVANCE_RUNNING reason= streak=0 next_sleep_s=1.0
+[factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=1 milestone=- (twitter-radar)
+[factoryd] PARALLEL_ADVANCE_DONE: twitter-radar action=WAITING_NETWORK
+[factoryd] PARALLEL_ADVANCE_STARTED: twitter-radar slot=0 (running=1)
+[factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=2 milestone=- (twitter-radar)
+[factoryd] PARALLEL_ADVANCE_DONE: twitter-radar action=WAITING_NETWORK
+[factoryd] PARALLEL_ADVANCE_STARTED: twitter-radar slot=0 (running=1)
+[factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=3 milestone=- (twitter-radar)
+[factoryd] PARALLEL_ADVANCE_DONE: twitter-radar action=WAITING_NETWORK
+[factoryd] PARALLEL_ADVANCE_STARTED: twitter-radar slot=0 (running=1)
+=========================== short test summary info ============================
+FAILED tests/test_repairs_lot1_pool_recovery.py::test_advance_still_runs_after_host_reload_shutdown
+1 failed in 2.23s

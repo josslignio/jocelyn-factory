@@ -1,0 +1,135 @@
+[
+  {
+    "id": "L1_advance-002",
+    "status": "FIXED",
+    "commit": "76caa565c1510c5eb4635be90e71197fd5f9511f",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_002_retired_never_selected_after_parking",
+    "note": "Alternative selection now shares the retired, dependency and parking eligibility predicate."
+  },
+  {
+    "id": "L1_advance-003",
+    "status": "FIXED",
+    "commit": "ba216c3df1366b403ac5e2e0eca34b14a4d66c7d",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_003_rotation_respects_active_deliverables",
+    "note": "Anti-starvation rotation now excludes exact and nested deliverables owned by live workers."
+  },
+  {
+    "id": "L1_advance-004",
+    "status": "FIXED",
+    "commit": "76caa565c1510c5eb4635be90e71197fd5f9511f",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_004_scoped_recovery_skips_foreign_head",
+    "note": "Milestone guard queries pending recovery work scoped to the selected milestone."
+  },
+  {
+    "id": "L1_advance-005",
+    "status": "FIXED",
+    "commit": "8761991ded2e1ded4c5cd12672d95dc1a41b160f",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_005_adoption_records_previous_contract",
+    "note": "Previous contract id is captured before the aliased mission record is updated."
+  },
+  {
+    "id": "L1_advance-008",
+    "status": "FIXED",
+    "commit": "8761991ded2e1ded4c5cd12672d95dc1a41b160f",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_008_capture_preserves_executor_type",
+    "note": "Captured mission state persists the executor type used by the attempt."
+  },
+  {
+    "id": "L1_advance-009",
+    "status": "FIXED",
+    "commit": "8e96ae4ac030cb2d4fa119d523fbc656a2851074",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_009_failed_diagnose_cannot_authorize_repair",
+    "note": "Only a successfully settled diagnosis authorizes SAFE_REPAIR; completed failures no longer occupy the step."
+  },
+  {
+    "id": "L1_advance-010",
+    "status": "FIXED",
+    "commit": "8e96ae4ac030cb2d4fa119d523fbc656a2851074",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_010_authority_refresh_reopens_external_block",
+    "note": "EXTERNAL_BLOCK reopens when the repair contract authority hashes match current authority."
+  },
+  {
+    "id": "L1_advance-011",
+    "status": "FIXED",
+    "commit": "63bc057be17ec6a95e83fd0855152f86030f4a7b",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_011_invalidations_saved_before_parked_return",
+    "note": "Receipt invalidations are saved before a later parked mission returns early."
+  },
+  {
+    "id": "L1_advance-012",
+    "status": "FIXED",
+    "commit": "63bc057be17ec6a95e83fd0855152f86030f4a7b",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_012_hold_invalidated_when_quarantine_cause_disappears",
+    "note": "A cached gate hold is invalidated when its causal quarantine disappears or changes."
+  },
+  {
+    "id": "L1_advance-013",
+    "status": "FIXED",
+    "commit": "63bc057be17ec6a95e83fd0855152f86030f4a7b",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_013_frozen_review_threshold_never_lowered",
+    "note": "The runtime no longer lowers frozen min_distinct_accept requirements."
+  },
+  {
+    "id": "L1_advance-014",
+    "status": "FIXED",
+    "commit": "63bc057be17ec6a95e83fd0855152f86030f4a7b",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_014_hardened_single_remaining_reviewer_keeps_provenance",
+    "note": "Hardened review remains hardened and routes the declared reviewer with provenance checks."
+  },
+  {
+    "id": "L1_advance-015",
+    "status": "FIXED",
+    "commit": "63bc057be17ec6a95e83fd0855152f86030f4a7b",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_015_block_overrides_cached_accepts",
+    "note": "A BLOCK on an exact SHA takes precedence over cached ACCEPT rows."
+  },
+  {
+    "id": "L1_advance-016",
+    "status": "FIXED",
+    "commit": "63bc057be17ec6a95e83fd0855152f86030f4a7b",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l1_advance_016_prevalidation_does_not_mutate_canonical_executor",
+    "note": "Prevalidation uses a replaced dispatch mission and preserves the canonical autopilot mission."
+  },
+  {
+    "id": "L2_runtime_core-008",
+    "status": "FIXED",
+    "commit": "76caa565c1510c5eb4635be90e71197fd5f9511f",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l2_runtime_core_008_record_attempt_preserves_settlement_ids",
+    "note": "record_attempt preserves durable settlement idempotence metadata."
+  },
+  {
+    "id": "L2_runtime_core-018",
+    "status": "FIXED",
+    "commit": "ba216c3df1366b403ac5e2e0eca34b14a4d66c7d",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l2_runtime_core_018_stale_recovery_closes_before_budget_gate",
+    "note": "Stale recovery closure runs before the launch budget gate and persists completion."
+  },
+  {
+    "id": "L2_runtime_core-019",
+    "status": "FIXED",
+    "commit": "8761991ded2e1ded4c5cd12672d95dc1a41b160f",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l2_runtime_core_019_expired_park_allows_retry",
+    "note": "Expired parking clears its stale fingerprint streak and allows a retry."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-013",
+    "status": "FIXED",
+    "commit": "2a47240aac1baaa59569f03e8b9bb07a3e47e50d",
+    "test": "tests/test_unblock_settlement_repairs.py::test_l5_factory_v2_rest_2_013_unfinished_roadmap_blocks_exit",
+    "note": "Stop policy reads canonical roadmap milestones when project state is empty."
+  },
+  {
+    "id": "UNBLOCK_SYNTH-001",
+    "status": "FIXED",
+    "commit": "fec99d07ef201214f2374953a74e603ecb1ddab8",
+    "test": "tests/test_unblock_settlement_synthesis.py::test_unblock_synth_001_alternate_path_honours_retired_dependency",
+    "note": "Le prédicat d'éligibilité partagé applique la sémantique de dépendances du resolver canonique (retiré = satisfait, required_state ≠ COMPLETE non bloquant) ; voie alternative et rotation ne parquent plus un jalon à côté d'un jalon exécutable (milestone_selection.py:177 original). Second test : test_unblock_synth_001_rotation_shares_canonical_dependency_semantics."
+  },
+  {
+    "id": "UNBLOCK_SYNTH-002",
+    "status": "FIXED",
+    "commit": "fec99d07ef201214f2374953a74e603ecb1ddab8",
+    "test": "tests/test_unblock_settlement_synthesis.py::test_unblock_synth_002_hold_kept_while_unscoped_foreign_quarantine_persists",
+    "note": "Le gate_hold est identifié par la quarantaine causale exacte (milestone_id + entered_at) : tenu tant qu'elle persiste même sans milestone_id, invalidé quand elle disparaît, est remplacée ou devient la nôtre (settlement.py:155, runtime.py:2273 originaux). Second test : test_unblock_synth_002_hold_invalidated_when_quarantine_replaced."
+  }
+]

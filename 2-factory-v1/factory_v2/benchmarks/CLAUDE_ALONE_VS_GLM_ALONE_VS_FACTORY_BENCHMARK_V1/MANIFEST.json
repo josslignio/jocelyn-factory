@@ -1,0 +1,24 @@
+{
+  "budget_s": 600,
+  "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+  "faults": [
+    "FI-1_BUILD_BROKEN",
+    "FI-2_FALSE_BAIT",
+    "FI-3_SIGKILL_MID_REPAIR"
+  ],
+  "observations": {
+    "claude_alone_run1.json": "161298cbf380a1725d26364440768798676e57734e613ce2269df3ba3759891b",
+    "claude_alone_run2.json": "220d79bc2078dc3b487176852cafb7d56cac505a10a3bfe10d0351b9c7f7db26",
+    "claude_alone_run3.json": "b992b211dee53af699bfd0c36b0c758becdb7905556f53ccf3dfbe679bd9de9a",
+    "factory_run1.json": "7bdcbdb119e171ee4cd3fe3fdd5b86e1fefcc30693dffdb173ea7d2cb92ae021",
+    "factory_run2.json": "0055400828e854ae7faac752210100705cfaa1b7ebeb7f806f657995cb37bd0f",
+    "factory_run3.json": "31bcc3119eee8a08755247f8b8aa494ddbea5e7425fa1b12a94057af0a405ef1",
+    "glm_alone_run1.json": "d21e627bfeeb670d58ea4dc279ed9b5741843ec3cf2edf109790f33e07a36991",
+    "glm_alone_run2.json": "0f44c0e8dd65d2ffd9f51368f2ff758ddb18dec95fb4df8b5e854960ba42c06d",
+    "glm_alone_run3.json": "d2469dbfa586e8bf714b4d4356efdfeec1de2d0721767617618bd700164028ce"
+  },
+  "producer_sha256": "271df7b9033e869e52b3779dbe53988b185e37a48f8d752e9ce3e898c54abe0f",
+  "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+  "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25",
+  "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+}

@@ -1,0 +1,488 @@
+factory_v2/_benchmark_probes.py	152	EXCEPT_PASS	probe_kill_and_resume	ProcessLookupError
+factory_v2/_benchmark_probes.py	156	EXCEPT_PASS	probe_kill_and_resume	subprocess.TimeoutExpired
+factory_v2/_io.py	67	EXCEPT_RETURN	_read_json	(OSError, ValueError) -> None
+factory_v2/advance/milestone_selection.py	199	EXCEPT_RETURN	_parallel_alternate	ValueError -> None
+factory_v2/advance/milestone_selection.py	242	EXCEPT_RETURN	_idle_guard_tripped	Exception -> False
+factory_v2/advance/milestone_selection.py	255	EXCEPT_CONTINUE	_idle_guard_tripped	ValueError
+factory_v2/advance/milestone_selection.py	273	EXCEPT_RETURN	_idle_guard_tripped	HeartbeatObservationUnknown -> False
+factory_v2/advance/milestone_selection.py	275	EXCEPT_PASS	_idle_guard_tripped	Exception
+factory_v2/advance/mission_dispatch.py	319	EXCEPT_PASS	_ss2_escalation_and_recovery_gate	Exception
+factory_v2/advance/mission_dispatch.py	807	EXCEPT_PASS	_ss4_lease_and_checkpoint	Exception
+factory_v2/advance/mission_dispatch.py	868	EXCEPT_PASS	_ss4_lease_and_checkpoint	Exception
+factory_v2/advance/mission_dispatch.py	1011	EXCEPT_PASS	_ss5_launch_and_capture	Exception
+factory_v2/advance/mission_dispatch.py	1046	EXCEPT_PASS	_ss5_launch_and_capture	Exception
+factory_v2/advance/mission_dispatch.py	1201	EXCEPT_PASS	_ss5_launch_and_capture	Exception
+factory_v2/advance/mission_dispatch.py	1269	EXCEPT_PASS	_ss5_launch_and_capture	Exception
+factory_v2/advance/mission_dispatch.py	1287	EXCEPT_PASS	_ss5_launch_and_capture	Exception
+factory_v2/advance/settlement.py	1119	EXCEPT_PASS	_settle_promote_and_project	(OSError, _sp.TimeoutExpired)
+factory_v2/advance/settlement.py	1150	EXCEPT_PASS	_settle_promote_and_project	Exception
+factory_v2/audit_cell_bridge.py	92	EXCEPT_CONTINUE	pending_request	Exception
+factory_v2/audit_cell_bridge.py	127	EXCEPT_CONTINUE	unapplied_result	Exception
+factory_v2/audit_loop.py	239	EXCEPT_PASS	freeze_evidence_bundle	Exception
+factory_v2/audit_loop.py	251	EXCEPT_PASS	freeze_evidence_bundle	Exception
+factory_v2/audit_loop.py	306	EXCEPT_PASS	load_audit_records	Exception
+factory_v2/audit_loop.py	524	EXCEPT_RETURN	verify_integrity	CredentialLeakRefused -> False
+factory_v2/audit_loop.py	570	EXCEPT_RETURN	_tracked_tree_digest	Exception -> ''
+factory_v2/audit_loop.py	601	EXCEPT_PASS	_launch_role	Exception
+factory_v2/audit_loop.py	816	EXCEPT_PASS	run_reviewer	Exception
+factory_v2/audit_loop.py	843	EXCEPT_CONTINUE	_extract_verdict_json	Exception
+factory_v2/audit_loop.py	1156	EXCEPT_RETURN	_persist_model_review_telemetry	Exception -> None
+factory_v2/audit_loop.py	1329	EXCEPT_PASS	_read	Exception
+factory_v2/audit_loop.py	1363	MISSING_FILE_RETURN	read_cell_transitions	not path.exists() -> []
+factory_v2/audit_loop.py	1369	EXCEPT_CONTINUE	read_cell_transitions	Exception
+factory_v2/audit_observation_producer.py	59	EXCEPT_RETURN	_git_safe	Exception -> None
+factory_v2/audit_observation_producer.py	137	EXCEPT_RETURN	_review_account_supervised	Exception -> False
+factory_v2/audit_observation_producer.py	141	EXCEPT_RETURN	_review_account_supervised	Exception -> False
+factory_v2/audit_observation_producer.py	173	MISSING_FILE_RETURN	unproven_review_accounts	not project_dir.is_dir() -> []
+factory_v2/audit_observation_producer.py	178	EXCEPT_RETURN	unproven_review_accounts	Exception -> []
+factory_v2/audit_observation_producer.py	218	MISSING_FILE_RETURN	observed_reviewers	not project_dir.is_dir() -> []
+factory_v2/audit_observation_producer.py	223	EXCEPT_RETURN	observed_reviewers	Exception -> []
+factory_v2/audit_observation_producer.py	426	EXCEPT_RETURN	_artifact_json_at_head	json.JSONDecodeError -> None
+factory_v2/audit_observation_producer.py	496	EXCEPT_RETURN	def001_fixed	(OSError, json.JSONDecodeError) -> False
+factory_v2/authority_change.py	311	EXCEPT_PASS	apply_authority_change_proposal	Exception
+factory_v2/authority_change.py	326	EXCEPT_PASS	apply_authority_change_proposal	Exception
+factory_v2/authority_change.py	374	EXCEPT_PASS	apply_authority_change_proposal	Exception
+factory_v2/authority_change.py	447	EXCEPT_PASS	_reconstruct_original	Exception
+factory_v2/base_ready_aggregator.py	93	EXCEPT_RETURN	_load_json	Exception -> None
+factory_v2/base_ready_aggregator.py	101	EXCEPT_RETURN	_git	Exception -> None
+factory_v2/base_ready_aggregator.py	117	MISSING_FILE_RETURN	_git_intact	not p.is_file() -> False
+factory_v2/base_ready_aggregator.py	293	EXCEPT_CONTINUE	_transitions	json.JSONDecodeError
+factory_v2/base_ready_aggregator.py	588	EXCEPT_CONTINUE	_metric_self_improvement_decisions	json.JSONDecodeError
+factory_v2/canonical_context.py	173	EXCEPT_PASS	build_manifest	Exception
+factory_v2/canonical_context.py	187	EXCEPT_PASS	build_manifest	Exception
+factory_v2/canonical_context.py	208	EXCEPT_PASS	build_manifest	Exception
+factory_v2/canonical_context.py	228	EXCEPT_PASS	build_manifest	Exception
+factory_v2/canonical_context.py	332	EXCEPT_PASS	_extract_section_authority	Exception
+factory_v2/canonical_context.py	356	EXCEPT_PASS	_extract_section	Exception
+factory_v2/chaos_drill.py	814	EXCEPT_CONTINUE	scenario_daemon_crash_mid_mission	ValueError
+factory_v2/chaos_drill.py	840	EXCEPT_PASS	scenario_daemon_crash_mid_mission	ValueError
+factory_v2/chaos_drill.py	868	MISSING_FILE_RETURN	_backdate_ledger	not ledger.is_file() -> None
+factory_v2/chaos_drill.py	938	EXCEPT_PASS	_registry	ImportError
+factory_v2/chaos_drill_v2.py	90	EXCEPT_PASS	_ledger_rows	ValueError
+factory_v2/cli_canary.py	107	EXCEPT_PASS	_stream_reports_error	(ValueError, TypeError)
+factory_v2/cli_canary.py	117	EXCEPT_CONTINUE	_stream_reports_error	(ValueError, TypeError)
+factory_v2/cli_canary.py	243	EXCEPT_PASS	run_canary	(ProcessLookupError, PermissionError)
+factory_v2/collection_observer.py	144	EXCEPT_CONTINUE	observe_collection	Exception
+factory_v2/collection_observer.py	218	EXCEPT_CONTINUE	_accounts_from_events_text	Exception
+factory_v2/collection_observer.py	241	EXCEPT_CONTINUE	_load_registry	Exception
+factory_v2/dispatch_checkpoint.py	82	EXCEPT_PASS	journal_event	Exception
+factory_v2/dispatch_checkpoint.py	183	MISSING_FILE_RETURN	load_dispatch_checkpoint	not path.exists() -> None
+factory_v2/dispatch_checkpoint.py	194	EXCEPT_LOG_RETURN	load_dispatch_checkpoint	Exception -> None
+factory_v2/dispatch_checkpoint.py	221	EXCEPT_LOG_RETURN	consume_dispatch_checkpoint	Exception -> False
+factory_v2/durable_handoff.py	73	MISSING_FILE_RETURN	acknowledge_handoff	not handoff_file.exists() -> False
+factory_v2/durable_handoff.py	84	EXCEPT_RETURN	acknowledge_handoff	Exception -> False
+factory_v2/durable_handoff.py	91	MISSING_FILE_RETURN	load_handoff	not handoff_file.exists() -> None
+factory_v2/durable_handoff.py	101	EXCEPT_RETURN	load_handoff	Exception -> None
+factory_v2/durable_handoff.py	112	MISSING_FILE_RETURN	assert_no_valid_checkpoint_as_complete	not state_file.exists() -> None
+factory_v2/engine_registry.py	54	EXCEPT_RETURN	_proc_age_s	Exception -> None
+factory_v2/engine_registry.py	60	EXCEPT_RETURN	_proc_age_s	ValueError -> None
+factory_v2/engine_registry.py	91	EXCEPT_PASS	_proc_birth_time	Exception
+factory_v2/engine_registry.py	100	EXCEPT_RETURN	_pid_alive	(ProcessLookupError, PermissionError, OSError) -> False
+factory_v2/engine_registry.py	125	EXCEPT_PASS	register_engine_process	OSError
+factory_v2/engine_registry.py	129	EXCEPT_PASS	register_engine_process	OSError
+factory_v2/engine_registry.py	169	EXCEPT_CONTINUE	read_registry	json.JSONDecodeError
+factory_v2/engine_registry.py	203	EXCEPT_CONTINUE	orphans_from_registry	(TypeError, ValueError)
+factory_v2/engine_registry.py	236	EXCEPT_RETURN	_launcher_alive	(TypeError, ValueError) -> False
+factory_v2/engine_registry.py	310	EXCEPT_CONTINUE	kill_orphans	(TypeError, ValueError)
+factory_v2/engine_registry.py	324	EXCEPT_PASS	kill_orphans	ProcessLookupError
+factory_v2/engine_registry.py	334	EXCEPT_PASS	kill_orphans	Exception
+factory_v2/escalation_ladder.py	416	EXCEPT_RETURN	_recovery_is_stale	Exception -> ''
+factory_v2/escalation_ladder.py	440	MISSING_FILE_RETURN	read_pending_recovery_work	not rdir.exists() -> None
+factory_v2/escalation_ladder.py	473	MISSING_FILE_RETURN	supersede_pending_recovery_work	not rdir.exists() -> []
+factory_v2/escalation_ladder.py	480	EXCEPT_CONTINUE	supersede_pending_recovery_work	Exception
+factory_v2/escalation_ladder.py	549	EXCEPT_CONTINUE	migrate_settlement_ledger	Exception
+factory_v2/escalation_ladder.py	635	EXCEPT_CONTINUE	reconcile_prepared_settlements	Exception
+factory_v2/escalation_ladder.py	688	EXCEPT_PASS	mark_recovery_complete	Exception
+factory_v2/escalation_ladder.py	707	EXCEPT_RETURN	supersede_recovery_by_valid_product	Exception -> False
+factory_v2/escalation_ladder.py	843	EXCEPT_PASS	settle_recovery_work_with_ladder	Exception
+factory_v2/event_journal.py	76	MISSING_FILE_RETURN	_read_all_lines	not path.is_file() -> []
+factory_v2/event_journal.py	87	EXCEPT_CONTINUE	_keys_from_lines	json.JSONDecodeError
+factory_v2/event_journal.py	153	EXCEPT_CONTINUE	iter_events	json.JSONDecodeError
+factory_v2/executors.py	88	EXCEPT_RETURN	_receipt_fingerprint	OSError -> None
+factory_v2/executors.py	101	MISSING_FILE_RETURN	_read_dispatch_sidecar	not sidecar.is_file() -> []
+factory_v2/executors.py	111	EXCEPT_CONTINUE	_read_dispatch_sidecar	json.JSONDecodeError
+factory_v2/executors.py	114	EXCEPT_RETURN	_read_dispatch_sidecar	OSError -> []
+factory_v2/executors.py	954	EXCEPT_PASS	execute	Exception
+factory_v2/executors.py	985	EXCEPT_PASS	execute	Exception
+factory_v2/executors.py	1014	EXCEPT_PASS	execute	Exception
+factory_v2/executors.py	1236	EXCEPT_PASS	weekly_refresh_observed_cli	OSError
+factory_v2/executors.py	1398	EXCEPT_PASS	weekly_refresh_materialize_cli	OSError
+factory_v2/external_supervisor.py	123	EXCEPT_RETURN	is_quarantined	FileNotFoundError -> None
+factory_v2/external_supervisor.py	167	EXCEPT_RETURN	_owner_exception_valid	(FileNotFoundError, json.JSONDecodeError) -> False
+factory_v2/external_supervisor.py	191	EXCEPT_RETURN	_owner_exception_valid	OSError -> False
+factory_v2/external_supervisor.py	226	EXCEPT_PASS	_fence_process_group	(ProcessLookupError, PermissionError)
+factory_v2/external_supervisor.py	649	EXCEPT_PASS	run_supervisor	(ProcessLookupError, PermissionError)
+factory_v2/external_supervisor.py	653	EXCEPT_PASS	run_supervisor	subprocess.TimeoutExpired
+factory_v2/external_supervisor_harness.py	387	EXCEPT_RETURN	is_quarantined_live	Exception -> False
+factory_v2/factory_verifiers.py	673	EXCEPT_PASS	verify_audit_loop_cell	CapabilityDenial
+factory_v2/factory_verifiers.py	679	EXCEPT_PASS	verify_audit_loop_cell	CapabilityDenial
+factory_v2/factory_verifiers.py	687	EXCEPT_PASS	verify_audit_loop_cell	CredentialLeakRefused
+factory_v2/factory_verifiers.py	731	EXCEPT_CONTINUE	verify_audit_loop_cell	Exception
+factory_v2/factory_verifiers.py	740	EXCEPT_CONTINUE	verify_audit_loop_cell	Exception
+factory_v2/factory_verifiers.py	754	EXCEPT_CONTINUE	verify_audit_loop_cell	Exception
+factory_v2/factory_verifiers.py	832	EXCEPT_PASS	verify_audit_loop_cell	ContractBindingFailure
+factory_v2/factory_verifiers.py	834	EXCEPT_PASS	verify_audit_loop_cell	Exception
+factory_v2/fault_injection.py	100	EXCEPT_RETURN	wait_pid_dead	OSError -> True
+factory_v2/fault_injection.py	198	EXCEPT_PASS	inject_golden_ref_corruption	Exception
+factory_v2/heartbeat_sidecar.py	32	EXCEPT_RETURN	_alive	ProcessLookupError -> False
+factory_v2/heartbeat_sidecar.py	34	EXCEPT_RETURN	_alive	PermissionError -> True
+factory_v2/heartbeat_sidecar.py	65	EXCEPT_PASS	run	Exception
+factory_v2/heartbeat_sidecar.py	103	EXCEPT_RETURN	spawn_detached_heartbeat	Exception -> None
+factory_v2/hot_reload.py	224	EXCEPT_CONTINUE	reload_canary	ValueError
+factory_v2/launch_gate.py	161	EXCEPT_RETURN	_iso_epoch	(ValueError, TypeError) -> None
+factory_v2/launch_gate.py	675	EXCEPT_PASS	close_account	_ra.AllocationUnavailable
+factory_v2/launch_gate.py	731	EXCEPT_PASS	_record_telemetry_persist_failed	Exception
+factory_v2/launch_gate.py	750	EXCEPT_RETURN	persist_telemetry	Exception -> 0
+factory_v2/launch_gate.py	773	EXCEPT_CONTINUE	persist_telemetry	Exception
+factory_v2/launch_gate.py	884	MISSING_FILE_RETURN	resume_pending_projection	not pending.is_file() -> []
+factory_v2/launch_gate.py	888	EXCEPT_LOG_RETURN	resume_pending_projection	(OSError, json.JSONDecodeError) -> []
+factory_v2/launch_gate.py	916	EXCEPT_CONTINUE	reconcile_on_boot	json.JSONDecodeError
+factory_v2/launch_gate.py	940	EXCEPT_PASS	reconcile_on_boot	Exception
+factory_v2/launch_gate.py	971	EXCEPT_PASS	reconcile_on_boot	Exception
+factory_v2/long_run_truth.py	32	MISSING_FILE_RETURN	_read_jsonl	not path.is_file() -> []
+factory_v2/maintenance_request.py	115	MISSING_FILE_RETURN	_supersede_legacy_duplicates	not d.is_dir() -> None
+factory_v2/maintenance_request.py	123	EXCEPT_CONTINUE	_supersede_legacy_duplicates	Exception
+factory_v2/maintenance_request.py	133	MISSING_FILE_RETURN	open_requests	not d.is_dir() -> []
+factory_v2/maintenance_request.py	139	EXCEPT_CONTINUE	open_requests	Exception
+factory_v2/metrics_dashboard.py	25	EXCEPT_RETURN	_timestamp	(TypeError, ValueError) -> None
+factory_v2/metrics_dashboard.py	38	MISSING_FILE_RETURN	_read_jsonl	not path.is_file() -> ()
+factory_v2/metrics_dashboard.py	44	EXCEPT_CONTINUE	_read_jsonl	json.JSONDecodeError
+factory_v2/metrics_dashboard.py	54	EXCEPT_RETURN	_events	(OSError, json.JSONDecodeError) -> ()
+factory_v2/mission_evidence.py	57	EXCEPT_PASS	get_process_birth_time	Exception
+factory_v2/mission_evidence.py	68	EXCEPT_PASS	get_process_birth_time	Exception
+factory_v2/mission_evidence.py	95	EXCEPT_PASS	get_process_birth_time	Exception
+factory_v2/mission_evidence.py	161	EXCEPT_RETURN	read_heartbeat	FileNotFoundError -> None
+factory_v2/mission_evidence.py	194	EXCEPT_RETURN	is_worker_alive	Exception -> False
+factory_v2/mission_evidence.py	202	EXCEPT_RETURN	is_worker_alive	(ProcessLookupError, PermissionError, OSError) -> False
+factory_v2/mission_evidence.py	230	EXCEPT_PASS	clear_worker_state	Exception
+factory_v2/mission_evidence.py	235	EXCEPT_PASS	clear_worker_state	Exception
+factory_v2/mission_evidence.py	306	EXCEPT_PASS	stop	Exception
+factory_v2/mission_evidence.py	332	EXCEPT_PASS	_run	Exception
+factory_v2/mission_evidence.py	342	EXCEPT_PASS	_run	Exception
+factory_v2/mission_receipt.py	114	EXCEPT_RETURN	load_mission_receipt	(FileNotFoundError, json.JSONDecodeError, TypeError) -> None
+factory_v2/mission_receipt.py	123	MISSING_FILE_RETURN	load_latest_mission_receipt	not rdir.exists() -> None
+factory_v2/mission_receipt.py	131	EXCEPT_CONTINUE	load_latest_mission_receipt	Exception
+factory_v2/owner_console.py	62	EXCEPT_RETURN	_parse_ts	(TypeError, ValueError) -> None
+factory_v2/owner_console.py	79	MISSING_FILE_RETURN	_read_jsonl	not path.is_file() -> []
+factory_v2/owner_console.py	88	EXCEPT_CONTINUE	_read_jsonl	json.JSONDecodeError
+factory_v2/owner_console.py	103	EXCEPT_PASS	_rel_or_str	ValueError
+factory_v2/owner_console.py	159	MISSING_FILE_RETURN	_visual_validation_exceptions	not shots_dir.is_dir() -> []
+factory_v2/owner_console.py	355	EXCEPT_RETURN	_last_heartbeat_age_s	OSError -> None
+factory_v2/owner_console.py	364	EXCEPT_RETURN	_last_heartbeat_age_s	OSError -> None
+factory_v2/process_control.py	50	EXCEPT_RETURN	_group_alive	(ProcessLookupError, PermissionError) -> False
+factory_v2/process_control.py	75	EXCEPT_PASS	terminate_process_group	(ProcessLookupError, PermissionError)
+factory_v2/process_control.py	87	EXCEPT_PASS	terminate_process_group	(ProcessLookupError, PermissionError)
+factory_v2/process_control.py	93	EXCEPT_PASS	terminate_process_group	(ProcessLookupError, PermissionError)
+factory_v2/process_control.py	100	EXCEPT_RETURN	terminate_process_group	(ProcessLookupError, PermissionError) -> None
+factory_v2/process_control.py	113	EXCEPT_PASS	terminate_process_group	(ProcessLookupError, PermissionError)
+factory_v2/progress_truth.py	112	EXCEPT_RETURN	_pid_alive	Exception -> False
+factory_v2/project_authority.py	420	EXCEPT_PASS	project_transaction	OSError
+factory_v2/quota_observer.py	172	EXCEPT_RETURN	refresh_from_cli	Exception -> False
+factory_v2/quota_observer.py	265	EXCEPT_RETURN	_parse_timestamp	ValueError -> None
+factory_v2/quota_observer.py	389	EXCEPT_PASS	engine_allowance	(TypeError, ValueError)
+factory_v2/quota_observer.py	415	EXCEPT_CONTINUE	engine_allowance	(TypeError, ValueError)
+factory_v2/quota_observer.py	463	MISSING_FILE_RETURN	_discover_project_dirs	not projects_root.is_dir() -> []
+factory_v2/quota_waste.py	32	EXCEPT_RETURN	_ts	(TypeError, ValueError) -> None
+factory_v2/recovery_allocation.py	308	MISSING_FILE_RETURN	observed_incident_id	not p.is_file() -> ''
+factory_v2/recovery_allocation.py	501	EXCEPT_RETURN	_diff_touches_relevant_paths	Exception -> None
+factory_v2/recovery_allocation.py	777	EXCEPT_PASS	owner_key	OSError
+factory_v2/recovery_allocation.py	903	EXCEPT_CONTINUE	_standing_window_frees_at	(TypeError, ValueError)
+factory_v2/recovery_allocation.py	933	EXCEPT_CONTINUE	_standing_used_today	(TypeError, ValueError)
+factory_v2/recovery_allocation.py	1342	EXCEPT_RETURN	_attempt_ledger_rows	Exception -> []
+factory_v2/recovery_allocation.py	1420	EXCEPT_RETURN	_owner_contract_compatible	validation_contract.ContractIntegrityError -> False
+factory_v2/resilience.py	127	EXCEPT_CONTINUE	_structured_error_text	(ValueError, TypeError)
+factory_v2/resilience.py	201	EXCEPT_CONTINUE	_any_reachable	OSError
+factory_v2/resilience.py	236	EXCEPT_RETURN	engine_reachable	(OSError, ssl.SSLError, ValueError) -> False
+factory_v2/resilience.py	288	EXCEPT_PASS	wait_for_network	Exception
+factory_v2/resilience.py	290	EXCEPT_PASS	wait_for_network	Exception
+factory_v2/resilience.py	385	EXCEPT_RETURN	checkpoint_worktree	(subprocess.SubprocessError, OSError) -> ''
+factory_v2/resilience.py	392	EXCEPT_PASS	checkpoint_worktree	OSError
+factory_v2/resilience.py	443	EXCEPT_PASS	write_interruption_marker	OSError
+factory_v2/resilience.py	468	EXCEPT_PASS	consume_interruption_marker	OSError
+factory_v2/resilience.py	472	EXCEPT_RETURN	consume_interruption_marker	OSError -> {}
+factory_v2/resilience.py	484	EXCEPT_PASS	consume_interruption_marker	OSError
+factory_v2/resilience.py	489	EXCEPT_PASS	consume_interruption_marker	OSError
+factory_v2/resilience.py	575	EXCEPT_PASS	_loop	Exception
+factory_v2/resilience.py	649	EXCEPT_PASS	choose_engine_with_quota	Exception
+factory_v2/resource_accounting.py	369	MISSING_FILE_RETURN	read_rows	not ledger.is_file() -> []
+factory_v2/review_dispatch.py	126	EXCEPT_RETURN	_owner_key	Exception -> None
+factory_v2/review_dispatch.py	130	EXCEPT_RETURN	_owner_key	Exception -> None
+factory_v2/review_dispatch.py	205	EXCEPT_RETURN	verify_supervised_launch	Exception -> False
+factory_v2/review_dispatch.py	209	EXCEPT_RETURN	verify_supervised_launch	Exception -> False
+factory_v2/review_dispatch.py	241	MISSING_FILE_RETURN	read_reviews	not p.is_file() -> []
+factory_v2/review_dispatch.py	250	EXCEPT_CONTINUE	read_reviews	json.JSONDecodeError
+factory_v2/review_dispatch.py	271	EXCEPT_CONTINUE	_looks_structured_transcript	(ValueError, TypeError)
+factory_v2/review_dispatch.py	290	EXCEPT_CONTINUE	_agent_text_lines	(ValueError, TypeError)
+factory_v2/review_dispatch.py	396	EXCEPT_RETURN	_builder_engine_from_runrecords	ImportError -> None
+factory_v2/review_dispatch.py	403	EXCEPT_RETURN	_builder_engine_from_runrecords	Exception -> None
+factory_v2/review_dispatch.py	437	EXCEPT_RETURN	engine_quota_refused	Exception -> None
+factory_v2/review_dispatch.py	686	EXCEPT_PASS	dispatch_review	Exception
+factory_v2/routing_aggregator.py	378	EXCEPT_PASS	main	BrokenPipeError
+factory_v2/run_controlled_long_run.py	103	EXCEPT_PASS	_observe_daemon_identity	Exception
+factory_v2/run_controlled_long_run.py	237	EXCEPT_PASS	run_controlled_long_run	Exception
+factory_v2/run_controlled_long_run.py	253	EXCEPT_PASS	run_controlled_long_run	Exception
+factory_v2/run_controlled_long_run.py	345	EXCEPT_RETURN	_read_completed_milestones	Exception -> []
+factory_v2/run_controlled_long_run.py	370	EXCEPT_RETURN	_count_active_engines	Exception -> 0
+factory_v2/run_controlled_long_run.py	413	EXCEPT_PASS	_kill_proc	Exception
+factory_v2/run_matched_benchmark_3arm.py	371	MISSING_FILE_RETURN	ground_truth_state	not product.exists() -> None
+factory_v2/run_matched_benchmark_3arm.py	405	EXCEPT_PASS	run_one	ProcessLookupError
+factory_v2/run_matched_benchmark_3arm.py	424	EXCEPT_PASS	run_one	ProcessLookupError
+factory_v2/run_scale_benchmark.py	279	EXCEPT_RETURN	_mission_complete	Exception -> False
+factory_v2/run_scale_benchmark.py	295	EXCEPT_CONTINUE	_launch_windows	ValueError
+factory_v2/run_scale_benchmark.py	301	EXCEPT_CONTINUE	_launch_windows	(OSError, ValueError)
+factory_v2/run_scale_benchmark.py	312	EXCEPT_RETURN	_launch_count	OSError -> 0
+factory_v2/run_scale_benchmark.py	547	EXCEPT_PASS	run_daemon_arm	json.JSONDecodeError
+factory_v2/run_scale_n_benchmark.py	430	EXCEPT_PASS	run_daemon_arm_n	json.JSONDecodeError
+factory_v2/run_windows.py	50	EXCEPT_CONTINUE	close_run	json.JSONDecodeError
+factory_v2/runrecords.py	116	MISSING_FILE_RETURN	read_runs	not p.exists() -> []
+factory_v2/runrecords.py	126	EXCEPT_CONTINUE	read_runs	json.JSONDecodeError
+factory_v2/runrecords.py	186	EXCEPT_RETURN	_worker_still_alive	(TypeError, ValueError) -> False
+factory_v2/runrecords.py	193	EXCEPT_RETURN	_worker_still_alive	PermissionError -> True
+factory_v2/runrecords.py	195	EXCEPT_RETURN	_worker_still_alive	OSError -> False
+factory_v2/runrecords.py	212	MISSING_FILE_RETURN	reconcile_orphan_predictions	not p.exists() -> []
+factory_v2/runrecords.py	227	EXCEPT_CONTINUE	reconcile_orphan_predictions	json.JSONDecodeError
+factory_v2/runrecords.py	261	MISSING_FILE_RETURN	read_attempt_phases	not p.exists() -> []
+factory_v2/runrecords.py	271	EXCEPT_CONTINUE	read_attempt_phases	json.JSONDecodeError
+factory_v2/runrecords_wire_harness.py	115	EXCEPT_CONTINUE	read_ledger	json.JSONDecodeError
+factory_v2/runtime.py	316	EXCEPT_RETURN	_waiting_until	ValueError -> None
+factory_v2/runtime.py	334	EXCEPT_RETURN	_waiting_marker	OSError -> ''
+factory_v2/runtime.py	375	EXCEPT_RETURN	_authorized_settlement_supersedes	(OSError, json.JSONDecodeError) -> ''
+factory_v2/runtime.py	399	EXCEPT_RETURN	_read_portfolio_cursor	Exception -> 0
+factory_v2/runtime.py	469	EXCEPT_LOG_RETURN	_cannot_advance_this_cycle	Exception -> False
+factory_v2/runtime.py	510	EXCEPT_RETURN	_calendar_blocked	Exception -> False
+factory_v2/runtime.py	546	EXCEPT_CONTINUE	_record_authority_incident	ValueError
+factory_v2/runtime.py	999	EXCEPT_PASS	_execute_recovery_work	(OSError, ValueError)
+factory_v2/runtime.py	1042	EXCEPT_PASS	_execute_recovery_work	(OSError, ValueError)
+factory_v2/runtime.py	1502	EXCEPT_RETURN	_frozen_contract_body	Exception -> {}
+factory_v2/runtime.py	1508	EXCEPT_RETURN	_frozen_contract_body	Exception -> {}
+factory_v2/runtime.py	1744	EXCEPT_RETURN	_is_ancestor	Exception -> False
+factory_v2/runtime.py	1876	EXCEPT_CONTINUE	_all_recovery_work	Exception
+factory_v2/runtime.py	1895	EXCEPT_RETURN	_stamp_recovery_identity	Exception -> None
+factory_v2/runtime.py	2930	EXCEPT_RETURN	_git_head_sha	Exception -> ''
+factory_v2/runtime.py	2991	EXCEPT_RETURN	_candidate_object_missing	Exception -> False
+factory_v2/runtime.py	3028	EXCEPT_RETURN	_candidate_deliverable_missing_paths	Exception -> []
+factory_v2/runtime.py	3035	EXCEPT_CONTINUE	_candidate_deliverable_missing_paths	Exception
+factory_v2/runtime.py	3081	EXCEPT_PASS	_resolve_promotion_target	OSError
+factory_v2/runtime.py	3212	EXCEPT_RETURN	_trusted_local_command_uses_no_model	ValueError -> False
+factory_v2/runtime.py	3263	EXCEPT_RETURN	_cnp_regrant_stranded_diagnose	Exception -> None
+factory_v2/runtime.py	3478	MISSING_FILE_RETURN	_diagnose_exists	not rdir.is_dir() -> False
+factory_v2/runtime.py	3483	EXCEPT_CONTINUE	_diagnose_exists	Exception
+factory_v2/runtime.py	3626	EXCEPT_RETURN	_mission_pass_contradicted_by_lost_attempt	Exception -> False
+factory_v2/runtime.py	4189	EXCEPT_CONTINUE	_backfill_roadmap_sha_at_record	ContractIntegrityError
+factory_v2/safety_quarantine.py	167	EXCEPT_RETURN	from_dict	TypeError -> None
+factory_v2/safety_quarantine.py	495	EXCEPT_RETURN	from_dict	TypeError -> None
+factory_v2/safety_quarantine.py	656	EXCEPT_RETURN	load	(FileNotFoundError, json.JSONDecodeError, TypeError) -> None
+factory_v2/safety_quarantine.py	674	MISSING_FILE_RETURN	_consume_bound_stop	not expected or not stop.exists() -> None
+factory_v2/safety_quarantine.py	1068	EXCEPT_PASS	clear_quarantine	FileNotFoundError
+factory_v2/safety_quarantine.py	1091	EXCEPT_RETURN	_read_quarantine	FileNotFoundError -> None
+factory_v2/safety_quarantine.py	1113	EXCEPT_RETURN	_durable_unlink	FileNotFoundError -> None
+factory_v2/self_modification_ledger.py	40	MISSING_FILE_RETURN	_read_rows	not ledger_path.exists() -> []
+factory_v2/self_modification_ledger.py	59	EXCEPT_CONTINUE	_last_row_hash_raw	json.JSONDecodeError
+factory_v2/settle_fullsuite.py	57	EXCEPT_PASS	main	(IndexError, ValueError)
+factory_v2/settlement_ledger.py	152	EXCEPT_RETURN	_git_ok	Exception -> False
+factory_v2/settlement_truth.py	61	EXCEPT_RETURN	_load_state	Exception -> {}
+factory_v2/settlement_truth.py	70	EXCEPT_RETURN	quarantined_milestone	Exception -> ''
+factory_v2/single_flight.py	74	EXCEPT_RETURN	_read	Exception -> None
+factory_v2/single_flight.py	84	EXCEPT_RETURN	_pid_alive	(ProcessLookupError, ValueError) -> False
+factory_v2/single_flight.py	86	EXCEPT_RETURN	_pid_alive	PermissionError -> True
+factory_v2/single_flight.py	98	EXCEPT_RETURN	_birth_of	Exception -> ''
+factory_v2/single_flight.py	324	EXCEPT_RETURN	_parse_ts	(ValueError, TypeError) -> None
+factory_v2/stop_gate_policy.py	100	EXCEPT_PASS	classify_stop_context	Exception
+factory_v2/stop_gate_policy.py	203	MISSING_FILE_RETURN	_check_live_owner	not pid_path.exists() -> False
+factory_v2/stop_gate_policy.py	209	EXCEPT_RETURN	_check_live_owner	(ValueError, ProcessLookupError, PermissionError, OSError) -> False
+factory_v2/stop_gate_policy.py	216	MISSING_FILE_RETURN	_check_durable_handoff	not handoff_file.exists() -> False
+factory_v2/stop_gate_policy.py	222	EXCEPT_RETURN	_check_durable_handoff	Exception -> False
+factory_v2/stop_gate_policy.py	229	MISSING_FILE_RETURN	_has_open_roadmap	not state_file.exists() -> True
+factory_v2/stop_gate_policy.py	259	EXCEPT_RETURN	_has_open_roadmap	Exception -> True
+factory_v2/telemetry/adapters.py	1097	EXCEPT_RETURN	final_text	(json.JSONDecodeError, TypeError, ValueError) -> ''
+factory_v2/telemetry/adapters.py	1113	EXCEPT_CONTINUE	_last_of	json.JSONDecodeError
+factory_v2/telemetry/aggregate.py	684	EXCEPT_RETURN	_t	(ValueError, TypeError) -> None
+factory_v2/telemetry/capture.py	43	EXCEPT_RETURN	iter_lines	OSError -> None
+factory_v2/telemetry/capture.py	105	EXCEPT_PASS	_gen	Exception
+factory_v2/telemetry/gate.py	74	MISSING_FILE_RETURN	read_events	not path.exists() -> []
+factory_v2/telemetry/gate.py	80	EXCEPT_CONTINUE	read_events	Exception
+factory_v2/telemetry/gate.py	237	EXCEPT_LOG_RETURN	emit_interrupted_for_lost	TelemetryPersistenceError -> False
+factory_v2/telemetry/inventory.py	188	EXCEPT_CONTINUE	dispatcher_reachability	Exception
+factory_v2/telemetry/ledger.py	91	EXCEPT_CONTINUE	_read_one	json.JSONDecodeError
+factory_v2/telemetry/report.py	259	EXCEPT_RETURN	_accounts	Exception -> []
+factory_v2/telemetry/report.py	291	MISSING_FILE_RETURN	sidecar_for	not sidecar.is_file() -> {}
+factory_v2/telemetry/report.py	295	EXCEPT_RETURN	sidecar_for	(OSError, json.JSONDecodeError) -> {}
+factory_v2/telemetry/report.py	402	EXCEPT_PASS	_sidecar_wall	ValueError
+factory_v2/telemetry/report.py	451	EXCEPT_RETURN	_date_quota_by_mtime	OSError -> None
+factory_v2/telemetry/report.py	466	EXCEPT_CONTINUE	_sniff	json.JSONDecodeError
+factory_v2/validation_receipt.py	97	EXCEPT_RETURN	is_stale	Exception -> True
+factory_v2/verified_fix.py	225	EXCEPT_RETURN	product_code_sha	Exception -> ''
+factory_v2/verified_fix.py	369	EXCEPT_RETURN	_read_index	ReceiptRefused -> {}
+factory_v2/verified_fix.py	371	MISSING_FILE_RETURN	_read_index	not p.is_file() -> {}
+factory_v2/verified_fix.py	375	EXCEPT_RETURN	_read_index	json.JSONDecodeError -> {}
+factory_v2/verified_fix.py	464	EXCEPT_RETURN	load_referenced	ReceiptRefused -> None
+factory_v2/verified_fix.py	471	EXCEPT_RETURN	load_referenced	json.JSONDecodeError -> None
+factory_v2/verified_fix.py	477	EXCEPT_RETURN	load_referenced	TypeError -> None
+factory_v2/verify_controlled_long_run.py	347	EXCEPT_PASS	_has_real_artifact	Exception
+factory_v2/verify_controlled_long_run.py	357	EXCEPT_PASS	_has_real_artifact	Exception
+factory_v2/verify_deep_research.py	151	EXCEPT_CONTINUE	_engines_launched	json.JSONDecodeError
+factory_v2/verify_factory_hygiene.py	167	EXCEPT_CONTINUE	check_io_common	SyntaxError
+factory_v2/verify_factory_hygiene.py	319	EXCEPT_RETURN	_ts	ValueError -> None
+factory_v2/verify_factory_hygiene.py	365	EXCEPT_CONTINUE	check_metrics_dashboard	json.JSONDecodeError
+factory_v2/verify_factory_hygiene.py	434	EXCEPT_CONTINUE	check_tr_test_hygiene	SyntaxError
+factory_v2/verify_factory_hygiene.py	950	EXCEPT_CONTINUE	check_owner_console	ValueError
+factory_v2/verify_factory_hygiene.py	1295	EXCEPT_CONTINUE	check_ledger_engine_known	ValueError
+factory_v2/verify_reshape_receipt.py	166	MISSING_FILE_RETURN	_load_frozen_zone_guard	not guard_path.is_file() -> None
+factory_v2/verify_reshape_receipt.py	175	EXCEPT_RETURN	_load_frozen_zone_guard	Exception -> None
+factory_v2/verify_scale_n_benchmark.py	52	MISSING_FILE_RETURN	_canonical_scale_2_numbers	not CANONICAL_SCALE_2.is_file() -> None
+factory_v2/verify_scale_n_benchmark.py	56	EXCEPT_RETURN	_canonical_scale_2_numbers	(OSError, ValueError) -> None
+factory_v2/worker_lease.py	101	EXCEPT_PASS	_process_birth_identity	Exception
+factory_v2/worker_lease.py	115	EXCEPT_PASS	_repo_identity	Exception
+factory_v2/worker_lease.py	140	EXCEPT_RETURN	_is_pid_alive	(ProcessLookupError, PermissionError, OSError) -> False
+factory_v2/worker_lease.py	172	EXCEPT_RETURN	is_expired	Exception -> True
+factory_v2/worker_lease.py	188	EXCEPT_RETURN	is_process_group_alive	(ProcessLookupError, PermissionError, OSError) -> False
+factory_v2/worker_lease.py	211	EXCEPT_RETURN	_read_nolock	FileNotFoundError -> None
+factory/bin/benchmark.py	110	EXCEPT_PASS	_run_factory_task	(json.JSONDecodeError, OSError)
+factory/bin/budget_ledger.py	117	MISSING_FILE_RETURN	_load_records	not path.exists() -> []
+factory/bin/budget_ledger.py	126	EXCEPT_CONTINUE	_load_records	json.JSONDecodeError
+factory/bin/dispatcher_v3.py	201	EXCEPT_RETURN	_resume_preamble	Exception -> ''
+factory/bin/dispatcher_v3.py	479	EXCEPT_PASS	_run	(ProcessLookupError, PermissionError, OSError)
+factory/bin/dispatcher_v3.py	491	EXCEPT_PASS	_run	(ProcessLookupError, PermissionError)
+factory/bin/dispatcher_v3.py	497	EXCEPT_PASS	_run	ProcessLookupError
+factory/bin/dispatcher_v3.py	609	EXCEPT_PASS	_merge_candidate	Exception
+factory/bin/dispatcher_v3.py	674	EXCEPT_PASS	_worktree_has_live_process	Exception
+factory/bin/dispatcher_v3.py	687	EXCEPT_CONTINUE	_worktree_has_live_process	Exception
+factory/bin/dispatcher_v3.py	692	EXCEPT_RETURN	_worktree_has_live_process	Exception -> True
+factory/bin/dispatcher_v3.py	700	EXCEPT_RETURN	_worktree_has_live_process	Exception -> True
+factory/bin/dispatcher_v3.py	770	EXCEPT_LOG_RETURN	prune_stale_worktrees	Exception -> []
+factory/bin/dispatcher_v3.py	780	EXCEPT_CONTINUE	prune_stale_worktrees	(OSError, ValueError)
+factory/bin/dispatcher_v3.py	788	EXCEPT_CONTINUE	prune_stale_worktrees	OSError
+factory/bin/dispatcher_v3.py	1195	EXCEPT_LOG_RETURN	_check_research_reuse_gate	ImportError -> None
+factory/bin/dispatcher_v3.py	1297	EXCEPT_PASS	_append_telemetry_sidecar	Exception
+factory/bin/dispatcher_v3.py	1338	EXCEPT_PASS	_refresh_cli_quota_snapshot	Exception
+factory/bin/dispatcher_v3.py	1354	EXCEPT_PASS	_mark_provider_exhausted	Exception
+factory/bin/dispatcher_v3.py	1361	MISSING_FILE_RETURN	read_telemetry_sidecar	not path.is_file() -> []
+factory/bin/dispatcher_v3.py	1371	EXCEPT_CONTINUE	read_telemetry_sidecar	json.JSONDecodeError
+factory/bin/dispatcher_v3.py	1373	EXCEPT_RETURN	read_telemetry_sidecar	OSError -> []
+factory/bin/dispatcher_v3.py	1432	EXCEPT_CONTINUE	_extract_resumable_session	(json.JSONDecodeError, ValueError)
+factory/bin/dispatcher_v3.py	1439	EXCEPT_RETURN	_extract_resumable_session	(json.JSONDecodeError, ValueError) -> None
+factory/bin/dispatcher_v3.py	1461	EXCEPT_RETURN	_builder_declared_done	Exception -> False
+factory/bin/dispatcher_v3.py	1478	EXCEPT_CONTINUE	_last_json_event	(json.JSONDecodeError, ValueError)
+factory/bin/dispatcher_v3.py	1543	EXCEPT_RETURN	_codex_out_file_text	OSError -> ''
+factory/bin/dispatcher_v3.py	1572	EXCEPT_CONTINUE	_codex_last_agent_message_from_stream	(json.JSONDecodeError, ValueError)
+factory/bin/dispatcher_v3.py	1667	EXCEPT_PASS	_extract_json_object	(json.JSONDecodeError, ValueError)
+factory/bin/dispatcher_v3.py	1683	EXCEPT_RETURN	_extract_json_object	(json.JSONDecodeError, ValueError) -> None
+factory/bin/dispatcher_v3.py	1766	EXCEPT_RETURN	_stream_truncation_verdict	Exception -> None
+factory/bin/dispatcher_v3.py	1773	EXCEPT_RETURN	_stream_truncation_verdict	Exception -> None
+factory/bin/dispatcher_v3.py	1910	EXCEPT_RETURN	_safe_snapshot	Exception -> None
+factory/bin/dispatcher_v3.py	1964	EXCEPT_RETURN	_load_capture_ignore_patterns	Exception -> []
+factory/bin/dispatcher_v3.py	1999	EXCEPT_RETURN	_looks_binary	OSError -> False
+factory/bin/dispatcher_v3.py	2026	EXCEPT_CONTINUE	_capture_size_guard	OSError
+factory/bin/dispatcher_v3.py	2097	EXCEPT_CONTINUE	_capture_secrets_and_size_guard	OSError
+factory/bin/dispatcher_v3.py	2122	EXCEPT_CONTINUE	_capture_secrets_and_size_guard	OSError
+factory/bin/dispatcher_v3.py	2930	EXCEPT_PASS	_run_engine	Exception
+factory/bin/dispatcher_v3.py	3697	EXCEPT_PASS	main	OSError
+factory/bin/factoryd.py	92	MISSING_FILE_RETURN	log_target_is_live	not log_path.exists() -> False
+factory/bin/factoryd.py	96	EXCEPT_RETURN	log_target_is_live	OSError -> False
+factory/bin/factoryd.py	100	EXCEPT_RETURN	log_target_is_live	(OSError, ValueError) -> True
+factory/bin/factoryd.py	190	MISSING_FILE_RETURN	read_pid_file	not pid_path.exists() -> None
+factory/bin/factoryd.py	194	EXCEPT_RETURN	read_pid_file	(ValueError, OSError) -> None
+factory/bin/factoryd.py	237	EXCEPT_LOG_RETURN	_reconcile_stale_active	Exception -> None
+factory/bin/factoryd.py	258	EXCEPT_PASS	_reconcile_stale_active	Exception
+factory/bin/factoryd.py	345	EXCEPT_LOG_RETURN	_sync_h1_to_campaign_queue	Exception -> None
+factory/bin/factoryd.py	390	EXCEPT_LOG_RETURN	_sync_portfolio_settlement	Exception -> None
+factory/bin/factoryd.py	465	EXCEPT_PASS	_handle_mission_settled	Exception
+factory/bin/factoryd.py	545	EXCEPT_LOG_RETURN	_handle_mission_failure	fdir.EquivalentRetryDetected -> False
+factory/bin/factoryd.py	562	EXCEPT_PASS	_handle_mission_failure	OSError
+factory/bin/factoryd.py	573	EXCEPT_LOG_RETURN	_handle_mission_failure	Exception -> False
+factory/bin/factoryd.py	587	MISSING_FILE_RETURN	_dependency_gap	not plan_path.exists() -> None
+factory/bin/factoryd.py	755	EXCEPT_PASS	do_poll_iteration	(ProcessLookupError, PermissionError)
+factory/bin/factoryd.py	874	EXCEPT_CONTINUE	_handle_signal	(ProcessLookupError, PermissionError)
+factory/bin/factoryd.py	892	EXCEPT_PASS	_handle_signal	(ProcessLookupError, PermissionError)
+factory/bin/factoryd.py	948	EXCEPT_LOG_RETURN	_cto_startup_check	Exception -> False
+factory/bin/factoryd.py	963	EXCEPT_LOG_RETURN	_cto_startup_check	CTOContextIncomplete -> False
+factory/bin/factoryd.py	968	EXCEPT_LOG_RETURN	_cto_startup_check	Exception -> False
+factory/bin/factoryd.py	990	EXCEPT_RETURN	_classify_progress	(OSError, _json.JSONDecodeError) -> []
+factory/bin/factoryd.py	1037	EXCEPT_RETURN	next_milestone_from_resolver	Exception -> ''
+factory/bin/factoryd.py	1073	EXCEPT_RETURN	_live_engine_lease_ids	Exception -> None
+factory/bin/factoryd.py	1080	EXCEPT_CONTINUE	_live_engine_lease_ids	FileNotFoundError
+factory/bin/factoryd.py	1082	EXCEPT_RETURN	_live_engine_lease_ids	(OSError, json.JSONDecodeError) -> None
+factory/bin/factoryd.py	1099	EXCEPT_RETURN	_live_engine_lease_ids	HeartbeatObservationUnknown -> None
+factory/bin/factoryd.py	1105	EXCEPT_CONTINUE	_live_engine_lease_ids	Exception
+factory/bin/factoryd.py	1115	EXCEPT_RETURN	_live_engine_lease_ids	(OSError, json.JSONDecodeError) -> None
+factory/bin/factoryd.py	1126	EXCEPT_CONTINUE	_live_engine_lease_ids	ValueError
+factory/bin/factoryd.py	1148	EXCEPT_PASS	_engine_registry_files	OSError
+factory/bin/factoryd.py	1180	EXCEPT_CONTINUE	_sweep_orphan_engines	Exception
+factory/bin/factoryd.py	1191	EXCEPT_PASS	_sweep_orphan_engines	Exception
+factory/bin/factoryd.py	1208	EXCEPT_PASS	_argv_net_kill	Exception
+factory/bin/factoryd.py	1237	EXCEPT_CONTINUE	_argv_net_kill	ValueError
+factory/bin/factoryd.py	1245	EXCEPT_CONTINUE	_argv_net_kill	Exception
+factory/bin/factoryd.py	1284	EXCEPT_PASS	_record_network_wait	OSError
+factory/bin/factoryd.py	1289	EXCEPT_PASS	_record_network_wait	OSError
+factory/bin/factoryd.py	1297	EXCEPT_PASS	_clear_network_wait	OSError
+factory/bin/factoryd.py	1556	EXCEPT_PASS	_advance_v2	Exception
+factory/bin/factoryd.py	1654	EXCEPT_RETURN	_current_head	Exception -> ''
+factory/bin/factoryd.py	2056	EXCEPT_PASS	run_daemon_loop	Exception
+factory/bin/factoryd.py	2085	EXCEPT_PASS	_loop_watchdog	Exception
+factory/bin/factoryd.py	2094	EXCEPT_PASS	run_daemon_loop	Exception
+factory/bin/factoryd.py	2260	EXCEPT_PASS	run_daemon_loop	Exception
+factory/bin/factoryd.py	2299	EXCEPT_PASS	run_daemon_loop	Exception
+factory/bin/factoryd.py	2437	EXCEPT_PASS	run_daemon_loop	ValueError
+factory/bin/factoryd.py	2456	EXCEPT_PASS	run_daemon_loop	Exception
+factory/bin/factoryd.py	2507	EXCEPT_PASS	run_daemon_loop	OSError
+factory/bin/factoryd.py	2613	EXCEPT_CONTINUE	_reap_pids	(ProcessLookupError, PermissionError)
+factory/bin/factoryd.py	2639	EXCEPT_PASS	cmd_stop	OSError
+factory/bin/i2_gate_verdict.py	106	EXCEPT_PASS	_metric_view	(KeyError, TypeError)
+factory/bin/ledger.py	138	EXCEPT_PASS	event	ValueError
+factory/bin/memory_store.py	239	EXCEPT_CONTINUE	populated_lesson_paths	OSError
+factory/bin/milestone.py	89	MISSING_FILE_RETURN	_candidate_still_present	not wt.exists() -> False
+factory/bin/model_router.py	257	EXCEPT_CONTINUE	_quota_routing_lookup_guard	ValueError
+factory/bin/model_router.py	405	EXCEPT_CONTINUE	_quota_unknown_ration	ValueError
+factory/bin/model_router.py	439	EXCEPT_RETURN	engine_capable	ValueError -> False
+factory/bin/model_router.py	724	EXCEPT_CONTINUE	route	ValueError
+factory/bin/model_router.py	1553	EXCEPT_RETURN	_git_info_exclude_path	OSError -> None
+factory/bin/model_router.py	1581	EXCEPT_PASS	_ensure_git_excluded	OSError
+factory/bin/model_router.py	1609	EXCEPT_PASS	_codex_confined_out_path	OSError
+factory/bin/receipt.py	189	EXCEPT_PASS	verify_runtime	(subprocess.TimeoutExpired, ValueError)
+factory/bin/receipt_summary.py	104	EXCEPT_PASS	<module>	BrokenPipeError
+factory/bin/runtime_receipt.py	30	MISSING_FILE_RETURN	_event_hash_exists	not events_jsonl.exists() -> False
+factory/bin/solo_benchmark_score.py	90	MISSING_FILE_RETURN	_check_reuse_xr03	not impl.exists() -> False
+factory/bin/solo_benchmark_score.py	98	MISSING_FILE_RETURN	_check_architecture	not impl.exists() -> False
+factory/bin/solo_benchmark_score.py	108	MISSING_FILE_RETURN	_check_price_redownload	not impl.exists() -> False
+factory/bin/supervised_factoryd_worker.py	51	EXCEPT_RETURN	_heartbeat_age_s	OSError -> None
+factory/bin/supervised_factoryd_worker.py	91	EXCEPT_PASS	main	(ProcessLookupError, PermissionError)
+factory/bin/tombstone.py	105	MISSING_FILE_RETURN	load_jsonl	not p.exists() -> []
+factory/bin/tombstone.py	203	MISSING_FILE_RETURN	_campaign_run_result	not result.is_file() -> None
+factory/bin/tombstone.py	207	EXCEPT_RETURN	_campaign_run_result	(OSError, ValueError) -> None
+factory/lib/completion_detector.py	60	EXCEPT_RETURN	is_worker_dead	ProcessLookupError -> True
+factory/lib/completion_detector.py	62	EXCEPT_RETURN	is_worker_dead	OverflowError -> True
+factory/lib/completion_detector.py	64	EXCEPT_RETURN	is_worker_dead	PermissionError -> False
+factory/lib/completion_detector.py	78	EXCEPT_RETURN	is_worker_dead	Exception -> False
+factory/lib/completion_detector.py	91	MISSING_FILE_RETURN	is_heartbeat_stale	not path.exists() -> True
+factory/lib/context_compiler.py	80	EXCEPT_RETURN	_read_text	FileNotFoundError -> ''
+factory/lib/context_compiler.py	82	EXCEPT_LOG_RETURN	_read_text	OSError -> ''
+factory/lib/context_compiler.py	226	EXCEPT_CONTINUE	_context_version	OSError
+factory/lib/context_compiler.py	337	EXCEPT_PASS	compile	Exception
+factory/lib/convergence_gate.py	254	MISSING_FILE_RETURN	_evidence_text_blob	not evidence_dir.is_dir() -> ''
+factory/lib/convergence_gate.py	260	EXCEPT_CONTINUE	_evidence_text_blob	OSError
+factory/lib/convergence_gate.py	378	MISSING_FILE_RETURN	_runtime_basenames	not d.is_dir() -> set()
+factory/lib/cto_kernel.py	191	EXCEPT_RETURN	_read_text	FileNotFoundError -> ''
+factory/lib/cto_kernel.py	193	EXCEPT_LOG_RETURN	_read_text	OSError -> ''
+factory/lib/failure_director.py	181	MISSING_FILE_RETURN	get_failure_history	not self.failure_log_path.exists() -> []
+factory/lib/failure_director.py	190	EXCEPT_CONTINUE	get_failure_history	json.JSONDecodeError
+factory/lib/heartbeat.py	27	MISSING_FILE_RETURN	read_heartbeat	not path.exists() -> None
+factory/lib/long_run_supervisor.py	116	EXCEPT_PASS	_load_cto_events	json.JSONDecodeError
+factory/lib/long_run_supervisor.py	119	EXCEPT_RETURN	_load_cto_events	OSError -> []
+factory/lib/progress_watchdog.py	39	EXCEPT_PASS	_parse_ts	ValueError
+factory/lib/progress_watchdog.py	43	EXCEPT_RETURN	_parse_ts	ValueError -> None
+factory/lib/progress_watchdog.py	70	MISSING_FILE_RETURN	_heartbeat_at	not path.exists() -> None
+factory/lib/progress_watchdog.py	74	EXCEPT_RETURN	_heartbeat_at	(json.JSONDecodeError, OSError) -> None
+factory/lib/progress_watchdog.py	82	MISSING_FILE_RETURN	_last_artifact_mtime	not d.exists() -> None
+factory/lib/progress_watchdog.py	90	EXCEPT_CONTINUE	_last_artifact_mtime	OSError
+factory/lib/progress_watchdog.py	98	MISSING_FILE_RETURN	_last_event_at	not events_path.exists() -> None
+factory/lib/progress_watchdog.py	107	EXCEPT_CONTINUE	_last_event_at	json.JSONDecodeError
+factory/lib/progress_watchdog.py	124	EXCEPT_RETURN	_last_commit_at	(OSError, subprocess.SubprocessError) -> None
+factory/lib/research_reuse_gate.py	261	MISSING_FILE_RETURN	load_registry	not path.exists() -> []
+factory/lib/supervisor_state.py	84	MISSING_FILE_RETURN	load_state	not path.exists() -> None
+factory/lib/worktree_manager.py	59	EXCEPT_PASS	create_worktree	subprocess.CalledProcessError
+factory/lib/worktree_manager.py	67	EXCEPT_PASS	create_worktree	subprocess.CalledProcessError
+factory/lib/worktree_manager.py	124	EXCEPT_PASS	create_worktree	subprocess.CalledProcessError
+factory/lib/worktree_manager.py	192	MISSING_FILE_RETURN	_read_meta	not meta_file.exists() -> None
+factory/lib/worktree_manager.py	196	EXCEPT_RETURN	_read_meta	(OSError, json.JSONDecodeError) -> None
+factory/lib/worktree_manager.py	239	MISSING_FILE_RETURN	recover_worktree	not path.exists() -> None
+factory/lib/worktree_manager.py	266	EXCEPT_PASS	recover_worktree	Exception

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AbandonProcessGroup</key>
+	<true/>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>HOME</key>
+		<string>/Users/jocelyngrosjean</string>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>RUNNER_RELECTEUR</key>
+		<string>aucun</string>
+	</dict>
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+	</dict>
+	<key>Label</key>
+	<string>com.factory.runner</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Library/Frameworks/Python.framework/Versions/3.12/bin/python3</string>
+		<string>/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/.context/RUNNER/runner.py</string>
+		<string>tiktok</string>
+		<string>mailbox</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/.context/RUNNER/runner.launchd.err</string>
+	<key>StandardOutPath</key>
+	<string>/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/.context/RUNNER/runner.launchd.out</string>
+	<key>ThrottleInterval</key>
+	<integer>60</integer>
+	<key>WorkingDirectory</key>
+	<string>/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/.context/RUNNER</string>
+</dict>
+</plist>

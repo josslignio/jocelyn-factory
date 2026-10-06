@@ -1,0 +1,19 @@
+{
+  "schema": "factory-v3-run/v1",
+  "milestone": "TR_FAST_NEW_CALL_RADAR_V1",
+  "project": "projects/twitter-radar",
+  "repo": "/private/tmp/tr-product-v3",
+  "base_sha": "3f484e6b34217fafa0087588395a87958a4d16eb",
+  "worktree": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/v3-TR_FAST_NEW_CALL_RADAR_V1-lk_kjo1d",
+  "started_at": "2026-09-23T16:57:42Z",
+  "engine": null,
+  "tests": {
+    "cmd": "python3 -m pytest tests/ -q -k 'radar or new_call or watermark or dedup'",
+    "rc": 1,
+    "elapsed_s": 12.9,
+    "tail": "E       + OFFLINE_E2E_PASS\n\ntests/test_e2e_radar.py:66: AssertionError\n__________________ TestOfflineMode.test_output_files_created ___________________\n\nself = <test_e2e_radar.TestOfflineMode testMethod=test_output_files_created>\n\n    def test_output_files_created(self):\n        with self._tmp_outdir() as outdir:\n            result = run_radar(\n                [\"CKCapitalxx\"], mode=\"offline\",\n                corpus_path=REAL_CORPUS, prices_path=REAL_PRICES, outdir=outdir,\n            )\n>           self.assertTrue(Path(result.output_path).is_file())\nE           AssertionError: False is not true\n\ntests/test_e2e_radar.py:88: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_radar_e2e.py::TestCli::test_main_function_returns_0_for_offline_run\nFAILED tests/test_radar_e2e.py::TestCli::test_cli_exits_0_in_offline_mode - A...\nFAILED tests/test_radar_e2e.py::TestOfflineRawCorpusDir::test_corpus_dir_mode_classifies_raw_posts\nFAILED tests/test_radar_e2e.py::TestOfflineRawCorpusDir::test_corpus_dir_mode_accounting_invariant\nFAILED tests/test_radar_e2e.py::TestOfflineRawCorpusDir::test_per_account_provenance_keys\nFAILED tests/test_radar_e2e.py::TestOfflineMode::test_filters_by_account_case_insensitive\nFAILED tests/test_radar_e2e.py::TestOfflineMode::test_radar_result_fields_populated\nFAILED tests/test_radar_e2e.py::TestOfflineMode::test_verdict_is_offline_e2e_pass_not_bare_pass\nFAILED tests/test_radar_e2e.py::TestOfflineMode::test_output_files_created - ...\nFAILED tests/test_radar_e2e.py::TestOfflineMode::test_auto_mode_uses_offline_when_twscrape_absent\nFAILED tests/test_e2e_radar.py::TestCli::test_main_function_returns_0_for_offline_run\nFAILED tests/test_e2e_radar.py::TestCli::test_cli_exits_0_in_offline_mode - A...\nFAILED tests/test_e2e_radar.py::TestOfflineRawCorpusDir::test_corpus_dir_mode_accounting_invariant\nFAILED tests/test_e2e_radar.py::TestOfflineRawCorpusDir::test_per_account_provenance_keys\nFAILED tests/test_e2e_radar.py::TestOfflineRawCorpusDir::test_corpus_dir_mode_classifies_raw_posts\nFAILED tests/test_e2e_radar.py::TestOfflineMode::test_filters_by_account_case_insensitive\nFAILED tests/test_e2e_radar.py::TestOfflineMode::test_verdict_is_offline_e2e_pass_not_bare_pass\nFAILED tests/test_e2e_radar.py::TestOfflineMode::test_radar_result_fields_populated\nFAILED tests/test_e2e_radar.py::TestOfflineMode::test_auto_mode_uses_offline_when_twscrape_absent\nFAILED tests/test_e2e_radar.py::TestOfflineMode::test_output_files_created - ...\nERROR tests/test_reconciliation.py::TestRealCorpusReconciliation::test_dedup_corpus_reconciliation_passes\n20 failed, 88 passed, 1390 deselected, 1 error in 12.18s"
+  },
+  "commit": null,
+  "finished_at": "2026-09-23T16:57:56Z",
+  "verdict": "RED"
+}

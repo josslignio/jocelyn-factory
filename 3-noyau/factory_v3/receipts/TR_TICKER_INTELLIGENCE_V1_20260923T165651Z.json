@@ -1,0 +1,19 @@
+{
+  "schema": "factory-v3-run/v1",
+  "milestone": "TR_TICKER_INTELLIGENCE_V1",
+  "project": "projects/twitter-radar",
+  "repo": "/private/tmp/tr-product-v3",
+  "base_sha": "3f484e6b34217fafa0087588395a87958a4d16eb",
+  "worktree": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/v3-TR_TICKER_INTELLIGENCE_V1-srg_s8nn",
+  "started_at": "2026-09-23T16:56:51Z",
+  "engine": null,
+  "tests": {
+    "cmd": "python3 -m pytest tests/ -q -k 'ticker or fundamental or liquidity or taxonomy'",
+    "rc": 1,
+    "elapsed_s": 49.9,
+    "tail": "ssss.........s...................s.......................F.....sssssss.s [ 65%]\n.....s................................                                   [100%]\n=================================== FAILURES ===================================\n_______________ test_real_ledger_full_build_universe_and_schema ________________\n\nreal_ledger = {'schema': 'tr-call-ledger/v2', 'rules_frozen': {'episode_unit': 'account x ticker x parsed thesis (LONG_POSITION|LONG...1/data/market/daily_prices.csv', 'tickers': 600}, 'sector_map': 'SECTOR_MAP_UNAVAILABLE (typed on every horizon)', ...}\nreal_ranking = {'schema': 'tr-kol-ranking/v2', 'qualified_count': 13, 'call_ledger_wired': True, 'result': 'OK', ...}\n\n    def test_real_ledger_full_build_universe_and_schema(real_ledger, real_ranking):\n        table, provenance = build(real_ledger, real_ranking, cache=None)\n        expected_tickers = {e[\"ticker\"] for e in real_ledger[\"episodes\"]}\n        assert {r[\"ticker\"] for r in table[\"rows\"]} == expected_tickers\n>       assert table[\"row_count\"] == len(expected_tickers) == 727\nE       AssertionError: assert 907 == 727\nE        +  where 907 = len({'AA', 'AAC', 'AAOI', 'AAPL', 'ABAT', 'ABBN', ...})\n\ntests/test_tr_ticker_intelligence.py:302: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_tr_ticker_intelligence.py::test_real_ledger_full_build_universe_and_schema\n1 failed, 94 passed, 15 skipped, 1389 deselected in 48.97s"
+  },
+  "commit": null,
+  "finished_at": "2026-09-23T16:57:42Z",
+  "verdict": "RED"
+}

@@ -1,0 +1,80 @@
+{
+  "schema": "factory-core-review/v1",
+  "engine": "codex",
+  "reviewed_sha": "550156a14f26c9b3a56bd23466130ce661c57a13",
+  "review_method": "Independent source read, execution-path tracing, existing regression evidence cross-check; no product writes during review pass.",
+  "findings": [
+    {
+      "file": "factory_v2/advance/settlement.py", "line": 203, "kind": "LOOP", "severity": "HIGH", "loop_22_09": "GATE_REPLAYS_OLD_SHA",
+      "evidence": "A red exact-SHA gate calls _rebind_gate_to_head_if_satisfied; that helper validates HEAD at line 233, reopens the mission, then settlement validates the same green HEAD again. Scenario: HEAD advances after a red bound SHA; every recovery performs two identical long validators, and before the rebind path existed the bound old SHA was replayed until quarantine.",
+      "fix": "Bind the successful prevalidation to the exact mission receipt and reuse that verdict once; never run the same validator/contract/SHA identity twice. Implemented by ONE_VALIDATION_PER_SHA."
+    },
+    {
+      "file": "factory_v2/advance/quarantine_ladder.py", "line": 128, "kind": "LOOP", "severity": "HIGH", "loop_22_09": "HEAD_PROBE_SILENT",
+      "evidence": "The probe memo is written before run_clear_gate, but an identical HEAD returns immediately on the next poll. Scenario: the first gate probe is interrupted after memo persistence or its rejection evidence is lost; later polls answer only None and cannot recreate a durable proof for that HEAD.",
+      "fix": "Challenger: make probe outcome a durable receipt keyed by contract+HEAD and treat missing receipt as retryable; do not repair in this mission."
+    },
+    {
+      "file": "factory/bin/dispatcher_v3.py", "line": 559, "kind": "LOOP", "severity": "HIGH", "loop_22_09": "GREEN_CANDIDATE_DISCARDED_ON_ROTATION",
+      "evidence": "A worktree whose base advanced and whose branch has commits is archived whenever rebase cannot run, without consulting an already-green independent candidate receipt. Scenario: engine rotation moves golden HEAD while a candidate has passed its judge; dirty or conflicting rebase archives that candidate and fresh() restarts from HEAD, so the validated work is not adopted.",
+      "fix": "Challenger: candidate registry must own green candidate identity across engine rotation; adopt or explicitly supersede it before worktree refresh."
+    },
+    {
+      "file": "factory_v2/advance/quarantine_ladder.py", "line": 128, "kind": "LOOP", "severity": "HIGH", "loop_22_09": "QUARANTINE_NO_EXIT",
+      "evidence": "probe_gate_first runs before the repair ladder, but it permanently skips a contract+HEAD pair once that HEAD is memoized. Scenario: the first probe is red because an external prerequisite is temporarily absent; the prerequisite becomes green without a code commit, yet every later quarantine poll at the same HEAD returns before run_clear_gate, so expiry or manual state editing is the only exit.",
+      "fix": "Challenger: persist the full gate identity and outcome, including non-Git inputs, and re-evaluate when that identity changes; do not key quarantine exit on HEAD alone."
+    },
+    {
+      "file": "factory_v2/advance/settlement.py", "line": 512, "kind": "LOOP", "severity": "CRITICAL", "loop_22_09": "REVIEW_LEGACY_IGNORES_QUOTA",
+      "evidence": "The min_distinct_accept<=1 branch calls dispatch_review directly; engine_quota_refused exists only in the roster branch at line 557. Scenario: a legacy one-review contract routes GLM while its quota observer is at refusal threshold, consuming the final quota window and repeating on the next candidate.",
+      "fix": "Delete the legacy branch and route one or N reviewers through one quota-guarded roster path. Implemented by REVIEW_SINGLE_PATH_QUOTA_GUARD."
+    },
+    {
+      "file": "factory_v2/advance/mission_dispatch.py", "line": 37, "kind": "LOOP", "severity": "HIGH", "loop_22_09": "PARK_IGNORES_OWNER_GRANT",
+      "evidence": "_ss1_adopt_or_skip_pass returns _CONTINUE for an unexpired MILESTONE_PARKED before _ss2 can call _cnp_peek, whose owner-allocation branch is the only code that recognizes OWNER authorization. Scenario: three equal fingerprints park a mission for six hours; a valid owner grant arrives one minute later but every cycle skips the allocation until wall-clock expiry.",
+      "fix": "Challenger: owner authorization is an event that cancels the park timer before mission selection; no correction in this closed-list mission."
+    },
+    {
+      "file": "factory/bin/dispatcher_v3.py", "line": 239, "kind": "HOMEMADE_REPLACEABLE", "severity": "MEDIUM",
+      "evidence": "_run and _pump_to_sink implement process groups, threaded stdout/stderr draining, timeout killing and raw stream persistence. Scenario: each provider output variant needs another parser/kill edge and a silent child can retain a pipe; harness.lol already normalizes supported CLIs to bounded NDJSON events and owns process groups.",
+      "fix": "replaceable_by: {project: harness.lol, url: https://www.harness.lol/docs/reference/architecture, what_it_replaces: provider subprocess and stream normalization in dispatcher_v3 plus telemetry adapters, loc_removed_estimate: 500, effort_days: 3, risk: medium}; keep Factory receipts/budget outside the adapter."
+    },
+    {
+      "file": "factory/bin/factoryd.py", "line": 895, "kind": "HOMEMADE_REPLACEABLE", "severity": "HIGH",
+      "evidence": "run_daemon_loop owns durable polling, restart, quarantine adoption, retry cadence and worker harvesting in one local daemon. Scenario: a crash between state mutation and the next poll requires bespoke reconciliation across several ledgers; Temporal already persists workflow position and replays activities after process loss.",
+      "fix": "replaceable_by: {project: Temporal, url: https://github.com/temporalio/sdk-python, what_it_replaces: daemon polling/retry/recovery ownership, loc_removed_estimate: 1800, effort_days: 12, risk: high}; keep canonical authority and settlement activities Factory-specific."
+    },
+    {
+      "file": "factory_v2/runtime.py", "line": 2497, "kind": "DUPLICATE", "severity": "HIGH",
+      "evidence": "_cnp_peek is a second recovery orchestrator alongside quarantine_ladder and factoryd, with its own grants, parking, diagnosis creation and retry semantics. Scenario: an owner allocation is interpreted in _cnp_peek but never reached because mission_dispatch applies a separate park policy first.",
+      "fix": "Transfer restart/retry ownership to one workflow owner; delete the CNP/quarantine/daemon overlap after equivalent fault tests pass."
+    },
+    {
+      "file": "factory_v2/authority_gate.py", "line": 231, "kind": "HOMEMADE_REPLACEABLE", "severity": "MEDIUM",
+      "evidence": "IndependentValidator creates detached worktrees and executes acceptance in a hand-built clean room. Scenario: host caches/environment can still differ across runs even at the same SHA; Harbor supplies versioned tasks, container environments and test scripts for repeatable agent evaluation.",
+      "fix": "replaceable_by: {project: Harbor, url: https://github.com/harbor-framework/harbor, what_it_replaces: benchmark task/environment execution only, loc_removed_estimate: 180, effort_days: 5, risk: medium}; retain Factory's exact-SHA authority decision."
+    },
+    {
+      "file": "factory_v2/settlement_truth.py", "line": 188, "kind": "DUPLICATE", "severity": "MEDIUM",
+      "evidence": "settlement_truth re-runs IndependentValidator even when settlement already has a receipt-bound green validation. Scenario: a 30-minute acceptance runs during settlement then runs again during truth projection with identical control pin and product SHA, spending local resources without changing the decision.",
+      "fix": "Use one immutable validation receipt as input to settlement truth; only re-run when any identity component changes."
+    },
+    {
+      "file": "factory/lib/worktree_manager.py", "line": 249, "kind": "HOMEMADE_REPLACEABLE", "severity": "MEDIUM",
+      "evidence": "recover_worktree parses git porcelain, repairs inherited metadata and reconstructs branch identity. Scenario: committed metadata from another mission is ignored only by local heuristics; Omnigent/Polly already assigns parallel tasks to isolated worktrees and routes diffs to a different-vendor reviewer.",
+      "fix": "replaceable_by: {project: Omnigent Polly, url: https://github.com/omnigent-ai/omnigent, what_it_replaces: read-only fan-out/worktree/reviewer orchestration, loc_removed_estimate: 250, effort_days: 10, risk: high}; retain Factory writer fencing and exact-SHA settlement."
+    },
+    {
+      "file": "factory_v2/advance/settlement.py", "line": 905, "kind": "DEAD_CODE", "severity": "LOW",
+      "evidence": "Two return None statements follow an unconditional return CycleResult in _settle_promote_and_project. Scenario: they can never execute and mislead line-by-line reviewers into believing the function has a fall-through outcome.",
+      "fix": "Delete the unreachable returns; done as part of the real LOC reduction."
+    }
+  ],
+  "files_reviewed_clean": [],
+  "loops_22_09_refuted": [
+    "DIAGNOSE_WITHOUT_WRITE_SCOPE"
+  ],
+  "refutations": {
+    "DIAGNOSE_WITHOUT_WRITE_SCOPE": "Refuted for the reviewed SHA: runtime.py:1247 freezes allowed_scope into the RepairContract; quarantine_ladder.py:54-60 schedules a distinct SAFE_REPAIR after a completed DIAGNOSE; runtime.py:1304-1305 builds that writer task and runtime.py:845-874 verifies and commits it within allowed_scope. The historical four Codex launches are not explained by absence of a legal write edge in this code."
+  }
+}

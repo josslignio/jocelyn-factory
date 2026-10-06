@@ -1,0 +1,48 @@
+import json, os, subprocess, sys, tempfile
+from pathlib import Path
+root=Path.cwd(); results=[]
+def run(name, cmd, cwd=root, expected=0, contains=''):
+    p=subprocess.run(cmd,cwd=cwd,text=True,capture_output=True,env={**os.environ,'FACTORY_NO_REAL_ENGINE':'1'})
+    assert p.returncode==expected,(name,p.returncode,p.stdout,p.stderr)
+    output=p.stdout+p.stderr
+    assert contains in output,(name,output)
+    results.append({'case':name,'command':cmd,'cwd':str(cwd),'rc':p.returncode,'output':output.strip()})
+    print(f'TEST {name} : rc={p.returncode} ; {output.strip()[:180]}')
+with tempfile.TemporaryDirectory(prefix='vh-cli-') as td:
+    temp=Path(td)
+    # Genuine CLI default paths in an isolated project, containing one real test.
+    fake=temp/'judge';fake.mkdir()
+    subprocess.run(['git','init','-q',str(fake)],check=True)
+    test=fake/'tests/test_proof.py';test.parent.mkdir();test.write_text('def test_proof():\n    assert 2 + 2 == 4\n')
+    subprocess.run(['git','-C',str(fake),'add','.'],check=True)
+    subprocess.run(['git','-C',str(fake),'-c','user.name=Test','-c','user.email=test@example.invalid','commit','-qm','fixture'],check=True)
+    sha=subprocess.check_output(['git','-C',str(fake),'rev-parse','HEAD'],text=True).strip()
+    ids=fake/'factory/config/code_review_repair_lot1_ids.json';ids.parent.mkdir(parents=True);ids.write_text('["fixture"]')
+    repairs=fake/'factory_v2/audit/CODE_REVIEW_2026-09/REPAIRS.json';repairs.parent.mkdir(parents=True)
+    repairs.write_text(json.dumps([{'id':'fixture','status':'FIXED','commit':sha,'test':'tests/test_proof.py::test_proof','note':'CLI isolated fixture'}]))
+    judge=[sys.executable,str(root/'factory_v2/verify_code_review_repairs.py')]
+    run('judge-default-paths',judge,cwd=fake,contains='CODE_REVIEW_REPAIRS_VERIFIED')
+    run('judge-explicit-paths',judge+['--project-repo',str(fake),'--ids-file',str(ids),'--repairs-file',str(repairs)],contains='CODE_REVIEW_REPAIRS_VERIFIED')
+    from tests.test_repairs_vh_longrun import _record
+    rr=temp/'records';rr.mkdir()
+    for i,engine in enumerate(('glm','claude','codex')):
+        (rr/f'{i}.json').write_text(json.dumps(_record(engine=engine)))
+    rr_cmd=[sys.executable,str(root/'factory_v2/verify_runrecords.py'),str(rr)]
+    run('min-runs-default-3',rr_cmd,contains='PASS: 3 records')
+    run('min-runs-100',rr_cmd+['--min-runs','100'],expected=1,contains='need ≥100')
+    run('require-validated-present',rr_cmd+['--require-validated'],contains='3 validated')
+    from tests.test_repairs_vh_judges import _journal
+    journal=_journal(temp)
+    refresh=[sys.executable,str(root/'factory_v2/verify_cycle2_refresh.py'),str(journal)]
+    run('human-gate-flag-absent',refresh,contains='HUMAN_GO=1')
+    run('human-gate-flag-present',refresh+['--verify-no-human-gate'],expected=1)
+    from factory_v2.verifier_preflight import _with_collect_only
+    body=temp/'test_body.py'; marker=temp/'body-ran'
+    body.write_text(f'from pathlib import Path\ndef test_body():\n    Path({str(marker)!r}).write_text("ran")\n')
+    import shlex
+    one=shlex.join([sys.executable,'-m','pytest','-q',str(body)])
+    run('compound-collect-only',["sh","-c",_with_collect_only(one+' && '+one)],cwd=temp)
+    assert not marker.exists()
+    run('pytest-without-collect-only',[sys.executable,'-m','pytest','-q',str(body)],cwd=temp,contains='1 passed')
+    assert marker.read_text()=='ran'
+Path('/tmp/vh-cli.json').write_text(json.dumps(results,indent=2,ensure_ascii=False)+'\n')

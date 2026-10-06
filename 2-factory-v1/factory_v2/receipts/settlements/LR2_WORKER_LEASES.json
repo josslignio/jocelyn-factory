@@ -1,0 +1,50 @@
+{
+  "authority_hashes": {
+    "roadmap": "fbd6a8a73db76fa9bf42c224b311bcae69f487ecb074c3063d80a9cf6f879f12",
+    "spec": "2ac7e8f706456ad7e0cdee1fca03be562a76d742ff8ecc3867a5dbf29ae885c9",
+    "strategy": "42d768f10752fd0a46501d062ac5c9955ba38eade2a15d46d87b8bd353590249"
+  },
+  "base_sha": "287d99b5c1524b514eb21b77f973700293453b46",
+  "binding_sol_reject": "d0bff136743cd84be4c6ad7ba200dad1ecc4d51f",
+  "candidate_sha": "f97073c662f01ed0a7847c61c44125a3bedea405",
+  "contract": {
+    "frozen_at": "2026-09-09T04:10:00Z",
+    "id": "0376552a8cff24c30a61da34",
+    "path": "projects/factory/validation_contracts/lr2_interprocess_frozen.json"
+  },
+  "evidence": {
+    "active_verify": [
+      {
+        "command": "python3 -m pytest tests/test_lr2_worker_leases.py -q",
+        "observed_at": "see gate response",
+        "output": "targeted suite in detached exact-SHA worktree",
+        "rc": 0
+      }
+    ],
+    "backfill": true,
+    "backfilled_from": "backfilled from durable untracked evidence (gate responses under .context/glm-primary-overnight/reviews, live PROJECT_STATE notes, per-machine validation-job receipts, full-suite logs under .context/glm-primary-overnight)",
+    "full_suite": {
+      "command": "targeted+regression",
+      "counts": "36/36 + 145 regression",
+      "duration_s": 0,
+      "rc": 0,
+      "sha": "f97073c6",
+      "validation_key": "e8a0ae7626018cbc48b716d6"
+    },
+    "gate": {
+      "note": "gate3 consolidated ACCEPT {LR2,LR3} ($0.43); dual-holder follow-up closed at 9fcf4f9a",
+      "response_context": "gate response (untracked .context reviews dir)",
+      "reviewer": "claude-sonnet-5",
+      "rounds": 1,
+      "verdict": "ACCEPT"
+    }
+  },
+  "honest_residual": [
+    "adopt() holder-binding closed at 9fcf4f9a (same-generation token re-issue) — multi-daemon HA proof still open"
+  ],
+  "milestone": "LR2_WORKER_LEASES",
+  "project": "factory",
+  "recorded_at": "2026-09-09T09:09:12Z",
+  "schema": "settlements/v1",
+  "settled_at": "2026-09-09"
+}

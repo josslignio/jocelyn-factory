@@ -1,0 +1,11 @@
+{
+  "benchmark_receipt": "factory_v2/receipts/BENCHMARK_RECEIPT.json",
+  "decision": "REJECT",
+  "decision_evidence_path": "factory_v2/benchmarks/SAFE_SELF_IMPROVEMENT_M1/DECISION_EVIDENCE.md",
+  "ledger": "factory_v2/receipts/self_modification_ledger.jsonl",
+  "note": "SAFE_SELF_IMPROVEMENT#M1, run frais 2026-09-18: challenger af8f0ed27 (base de mission) vs champion 5257c8c9 (pointeur), workload SAFE_SELF_IMPROVEMENT_M1, producteur committé run_matched_benchmark.py inchangé. Decision REJECT mesuree (settled 5/6 vs 4/6, launches_lost 2 vs 3, wall_s 20.291 vs 8.910 — pas de domination sur les 4 axes). Promotions: aucune (REJECT), pointeur champion inchange. Snapshots avant/apres identiques sur les 4 champs capacite (D018/D019: aucun elargissement). Ledger re-seede: rows precedentes liees au recu 08eef34a (remplace au commit 4a734ed71 sans re-ecriture du ledger) n etaient plus verifiables a HEAD — defaut demontre par le juge epingle (LEDGER_ROW_NOT_BOUND_TO_BENCHMARK row 0) avant ce commit; elles restent dans l historique git a 93feffc76.",
+  "promotions": [],
+  "schema": "challenger-automation-receipt/v1",
+  "snapshot_after": "factory_v2/receipts/capability_snapshots/20260918T152700Z_after.json",
+  "snapshot_before": "factory_v2/receipts/capability_snapshots/20260918T152536Z_before.json"
+}

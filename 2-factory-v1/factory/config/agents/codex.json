@@ -1,0 +1,23 @@
+{
+  "name": "Codex Architect Reviewer",
+  "role": "cto",
+  "title": "Plan & Exact-SHA Reviewer",
+  "adapterType": "codex_local",
+  "budgetMonthlyCents": 0,
+  "adapterConfig": {
+    "timeoutSec": 1200,
+    "graceSec": 30,
+    "sandbox": "read-only",
+    "approvalPolicy": "untrusted",
+    "persistSession": false
+  },
+  "runtimeConfig": {
+    "heartbeat": {
+      "enabled": false,
+      "intervalSec": 0,
+      "wakeOnAssignment": true,
+      "wakeOnOnDemand": true,
+      "wakeOnAutomation": true
+    }
+  }
+}

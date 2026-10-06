@@ -1,0 +1,298 @@
+{
+  "schema": "code-review-lot/v1",
+  "lot": "L5_factory_v2_rest_3",
+  "engine": "codex",
+  "reviewed_sha": "49007c0be862ae2809a98229508bbdcf12cb443d",
+  "files_reviewed": [
+    {
+      "path": "factory_v2/verify_long_run.py",
+      "lines": 120,
+      "verdict": "FINDINGS",
+      "summary": "Vérifie settlements, restart et autonomie depuis les preuves durables ; comptage des jalons dupliqués incorrect malgré les recomputations externes."
+    },
+    {
+      "path": "factory_v2/verify_long_run_ready.py",
+      "lines": 126,
+      "verdict": "FINDINGS",
+      "summary": "Juge subprocess des trois bundles avant LONG_RUN_READY ; contrôles de cohérence croisée et de hash incomplets, diagnostic fragile aux valeurs nulles."
+    },
+    {
+      "path": "factory_v2/verify_milestone_acceptance.py",
+      "lines": 80,
+      "verdict": "CLEAN",
+      "summary": "Recharge l’autorité, fige le contrat et délègue au validateur indépendant ; chemins autorité absente et jalon inconnu explicités, aucun défaut propre démontré."
+    },
+    {
+      "path": "factory_v2/verify_preflight_receipt.py",
+      "lines": 321,
+      "verdict": "FINDINGS",
+      "summary": "Vérifie routage recalculé, commits et observations LR5 liées par hash ; le parseur du long run accepte trois occurrences d’un seul jalon."
+    },
+    {
+      "path": "factory_v2/verify_real_ai_receipt.py",
+      "lines": 45,
+      "verdict": "CLEAN",
+      "summary": "Garde différée REAL_AI_EXECUTION : refuse explicitement par rc=2 et nomme le producteur indépendant manquant ; comportement conforme au report documenté."
+    },
+    {
+      "path": "factory_v2/verify_reshape_receipt.py",
+      "lines": 285,
+      "verdict": "FINDINGS",
+      "summary": "Recompose la preuve de reshape depuis ledger, historique Git et log de tests ; fausses acceptations sur attribution, journal, nouvelles entrées et erreurs Git."
+    },
+    {
+      "path": "factory_v2/verify_runrecords.py",
+      "lines": 68,
+      "verdict": "FINDINGS",
+      "summary": "Vérifie les fichiers de runrecords et compte moteurs/validations ; minimum inopérant seul et validations contradictoires admises."
+    },
+    {
+      "path": "factory_v2/verify_scale_benchmark.py",
+      "lines": 43,
+      "verdict": "CLEAN",
+      "summary": "Garde SCALE_2 différée faute de mesures indépendantes ; retourne explicitement NOT_IMPLEMENTED et décrit le producteur requis, sans faux succès démontré."
+    },
+    {
+      "path": "factory_v2/verify_scale_n_benchmark.py",
+      "lines": 43,
+      "verdict": "CLEAN",
+      "summary": "Garde SCALE_N différée dépendant d’une vraie mesure SCALE_2 ; refus rc=2 explicite avec travail restant nommé, aucun défaut propre démontré."
+    },
+    {
+      "path": "factory_v2/verify_self_improvement.py",
+      "lines": 43,
+      "verdict": "CLEAN",
+      "summary": "Garde SAFE_SELF_IMPROVEMENT différée jusqu’à observation indépendante champion/challenger ; le refus documenté ne prétend pas implémenter la capacité."
+    },
+    {
+      "path": "factory_v2/verify_simplification_batch.py",
+      "lines": 313,
+      "verdict": "FINDINGS",
+      "summary": "Contrôle suppression, références, dépendances et manifeste gelé ; scan des flags erroné et imports multilignes manqués."
+    },
+    {
+      "path": "factory_v2/verify_tr_weekly_operate.py",
+      "lines": 11,
+      "verdict": "CLEAN",
+      "summary": "Shim de compatibilité vers products.twitter_radar.verify_tr_weekly_operate, avec délégation du CLI à main ; aucun défaut propre démontré."
+    },
+    {
+      "path": "factory_v2/weekly_observation.py",
+      "lines": 8,
+      "verdict": "CLEAN",
+      "summary": "Shim d’identité de module vers products.twitter_radar.weekly_observation ; partage le module cible via sys.modules sans logique métier dupliquée."
+    },
+    {
+      "path": "factory_v2/worker_heartbeat.py",
+      "lines": 93,
+      "verdict": "FINDINGS",
+      "summary": "Thread périodique de progression de lease avec arrêt coopératif ; les erreurs persistantes de stockage sont avalées sans signal observable."
+    },
+    {
+      "path": "factory_v2/worker_lease.py",
+      "lines": 507,
+      "verdict": "FINDINGS",
+      "summary": "Stockage transactionnel des leases, adoption et fencing ; mutations non liées au caller, adoption sans identité, expiration du tick et collisions de chemins reproduites."
+    }
+  ],
+  "findings": [
+    {
+      "id": "L5_factory_v2_rest_3-001",
+      "file": "factory_v2/verify_long_run.py",
+      "line": 30,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if not isinstance(settled, list) or len(settled) < 3:",
+      "why": "Le seuil de trois jalons porte sur la longueur de la liste, pas sur les identifiants distincts. La même preuve de settlement M1 est donc vérifiée trois fois et comptée comme trois jalons. La reproduction substitue seulement les fonctions externes de preuve par des succès, afin d’isoler le comptage : [M1, M1, M1] retourne rc=0. Cela ne démontre pas trois progrès distincts.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\n    return p\n\ndef longrun_duplicate_milestones(p):\n    r={'milestones_settled':['M1']*3,'incidents':[{'type':'failure_replan'}],'restart_events':[{'observed_pid_before':1,'observed_pid_after':2}],'routine_human_interventions':0,'product_e2e_proven':True,'project_dir':str(p),'run_id':'r','window_start':'a','window_end':'b'}\n    write(p/'r.json',r)\n    with patch.object(sys,'argv',['verify_long_run',str(p/'r.json')]),patch('factory_v2.settlement_truth.verify_settlement',return_value=SimpleNamespace(proven=True)),patch('factory_v2.long_run_truth.recompute_restart_recovery',return_value=(True,'')),patch('factory_v2.long_run_truth.recompute_human_interventions',return_value=(0,'')),patch('factory_v2.long_run_truth.recompute_product_e2e',return_value=(True,'')),contextlib.redirect_stdout(io.StringIO()):\n        rc=longrun.main()\n    assert rc==0\n    return 'verifier_rc=0; settlements=[M1,M1,M1]; external proof functions stubbed successful; reports 3 milestones'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=longrun_duplicate_milestones(Path(tmp))\nprint('TEST longrun_duplicate_milestones: rc=0; ' + result)\nPY\nSortie observée :\nTEST longrun_duplicate_milestones: rc=0; verifier_rc=0; settlements=[M1,M1,M1]; external proof functions stubbed successful; reports 3 milestones",
+      "recommendation": "Refuser les identifiants dupliqués et compter au moins trois settlements distincts ; ajouter un test avec un reçu par ailleurs valide répétant M1 trois fois.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-002",
+      "file": "factory_v2/verify_long_run_ready.py",
+      "line": 113,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "milestones = long_run.get(\"milestones_completed\") or []",
+      "why": "Le contrôle croisé annoncé au docstring (§D) n’existe pas : le résultat de parse_kill_restart_evidence est jeté et milestones_completed n’est testé que pour sa non-vacuité. Une chronologie M1→M1,M2,M3 et un long_run revendiquant uniquement UNRELATED obtiennent ALL CHECKS PASS. set_long_run_ready peut ainsi activer le projet avec des bundles qui ne décrivent pas les mêmes jalons.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\n    return p\n\ndef git(repo,*a):\n    p=subprocess.run(['git','-C',str(repo),'-c','user.email=test@example.com','-c','user.name=Test','-c','commit.gpgsign=false',*a],capture_output=True,text=True)\n    assert p.returncode == 0, p.stderr\n    return p.stdout.strip()\n\ndef ready_fixture(p):\n    kr={'pid_a':101,'pid_b':102,'birth_a':'a','birth_b':'b','milestones_before':['M1'],'milestones_after':['M1','M2','M3'],'fault_record':{'outcome':'INJECTED'}}\n    cas={'mission_id':'m','first_outcome':'CAS_ALLOWED','second_outcome':'CAS_DUPLICATE'}\n    for name,obj in [('kr',kr),('cas',cas)]: write(p/f'{name}.json',obj)\n    receipt={'schema':'lr5-preflight-receipt/v2','integration_sha':git(ROOT,'rev-parse','HEAD'),'observations':{k:{'evidence_path':str(p/f'{v}.json'),'evidence_sha256':hashlib.sha256((p/f'{v}.json').read_bytes()).hexdigest()} for k,v in [('kill_restart_recovery','kr'),('cas_double_dispatch','cas')]}}\n    preflight={'status':'PASS','manifest_sha':'a'*64}\n    lr={'status':'PASS','crashed':True,'restarted':True,'daemon_identities':[{'pid':101,'birth':'a'},{'pid':102,'birth':'b'}],'milestones_completed':['M1','M2','M3']}\n    for name,obj in [('receipt',receipt),('preflight',preflight),('longrun',lr)]: write(p/f'{name}.json',obj)\n    return receipt,lr\n\ndef run_ready(p):\n    a=[sys.executable,'-m','factory_v2.verify_long_run_ready','--repo-dir',str(ROOT),'--project-dir',str(p),'--receipt',str(p/'receipt.json'),'--preflight',str(p/'preflight.json'),'--long-run',str(p/'longrun.json')]\n    return subprocess.run(a,capture_output=True,text=True,cwd=ROOT)\n\ndef ready_unrelated_milestones(p):\n    _,lr=ready_fixture(p);lr['milestones_completed']=['UNRELATED'];write(p/'longrun.json',lr)\n    r=run_ready(p);assert r.returncode==0,r.stdout+r.stderr\n    return 'verifier_rc=0; timeline=M1,M2,M3; long_run=UNRELATED; ALL CHECKS PASS'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=ready_unrelated_milestones(Path(tmp))\nprint('TEST ready_unrelated_milestones: rc=0; ' + result)\nPY\nSortie observée :\nTEST ready_unrelated_milestones: rc=0; verifier_rc=0; timeline=M1,M2,M3; long_run=UNRELATED; ALL CHECKS PASS",
+      "recommendation": "Conserver la chronologie parsée et vérifier que les jalons du long_run appartiennent au même run et que le progrès post-redémarrage y figure ; tester deux bundles valides séparément mais contradictoires ensemble.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-003",
+      "file": "factory_v2/verify_long_run_ready.py",
+      "line": 80,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "parse_kill_restart_evidence(repo / path)",
+      "why": "Ce second juge LR5 appelle seulement les parseurs structurels : il ne compare jamais evidence_sha256 aux octets des observations. Deux empreintes toutes nulles, donc incorrectes, sont acceptées. Le juge verify_preflight_receipt vérifie ces empreintes, mais cette voie alternative de LONG_RUN_READY contourne cette protection contre les bundles périmés ou modifiés.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\n    return p\n\ndef git(repo,*a):\n    p=subprocess.run(['git','-C',str(repo),'-c','user.email=test@example.com','-c','user.name=Test','-c','commit.gpgsign=false',*a],capture_output=True,text=True)\n    assert p.returncode == 0, p.stderr\n    return p.stdout.strip()\n\ndef ready_fixture(p):\n    kr={'pid_a':101,'pid_b':102,'birth_a':'a','birth_b':'b','milestones_before':['M1'],'milestones_after':['M1','M2','M3'],'fault_record':{'outcome':'INJECTED'}}\n    cas={'mission_id':'m','first_outcome':'CAS_ALLOWED','second_outcome':'CAS_DUPLICATE'}\n    for name,obj in [('kr',kr),('cas',cas)]: write(p/f'{name}.json',obj)\n    receipt={'schema':'lr5-preflight-receipt/v2','integration_sha':git(ROOT,'rev-parse','HEAD'),'observations':{k:{'evidence_path':str(p/f'{v}.json'),'evidence_sha256':hashlib.sha256((p/f'{v}.json').read_bytes()).hexdigest()} for k,v in [('kill_restart_recovery','kr'),('cas_double_dispatch','cas')]}}\n    preflight={'status':'PASS','manifest_sha':'a'*64}\n    lr={'status':'PASS','crashed':True,'restarted':True,'daemon_identities':[{'pid':101,'birth':'a'},{'pid':102,'birth':'b'}],'milestones_completed':['M1','M2','M3']}\n    for name,obj in [('receipt',receipt),('preflight',preflight),('longrun',lr)]: write(p/f'{name}.json',obj)\n    return receipt,lr\n\ndef run_ready(p):\n    a=[sys.executable,'-m','factory_v2.verify_long_run_ready','--repo-dir',str(ROOT),'--project-dir',str(p),'--receipt',str(p/'receipt.json'),'--preflight',str(p/'preflight.json'),'--long-run',str(p/'longrun.json')]\n    return subprocess.run(a,capture_output=True,text=True,cwd=ROOT)\n\ndef ready_wrong_hash(p):\n    receipt,_=ready_fixture(p)\n    for ref in receipt['observations'].values(): ref['evidence_sha256']='0'*64\n    write(p/'receipt.json',receipt)\n    r=run_ready(p);assert r.returncode==0,r.stdout+r.stderr\n    return 'verifier_rc=0; both evidence_sha256 deliberately wrong; ALL CHECKS PASS'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=ready_wrong_hash(Path(tmp))\nprint('TEST ready_wrong_hash: rc=0; ' + result)\nPY\nSortie observée :\nTEST ready_wrong_hash: rc=0; verifier_rc=0; both evidence_sha256 deliberately wrong; ALL CHECKS PASS",
+      "recommendation": "Partager la validation des références et empreintes avec verify_preflight_receipt, puis exiger leur succès avant LONG_RUN_READY ; tester une preuve structurellement valide modifiée après émission du reçu.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-004",
+      "file": "factory_v2/verify_long_run_ready.py",
+      "line": 112,
+      "severity": "LOW",
+      "category": "ERROR_HANDLING",
+      "evidence": "f\"RESTART_IDENTITY_NOT_DISTINCT: pids={pids} births={[b[:24] for b in births]}\")",
+      "why": "Le diagnostic de redémarrage invalide découpe chaque birth sans valider son type. Deux identités portant birth=null et le même PID déclenchent TypeError au lieu du finding RESTART_IDENTITY_NOT_DISTINCT promis. Le juge refuse bien (rc=1), mais perd son diagnostic exploitable précisément sur une observation incomplète.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\n    return p\n\ndef git(repo,*a):\n    p=subprocess.run(['git','-C',str(repo),'-c','user.email=test@example.com','-c','user.name=Test','-c','commit.gpgsign=false',*a],capture_output=True,text=True)\n    assert p.returncode == 0, p.stderr\n    return p.stdout.strip()\n\ndef ready_fixture(p):\n    kr={'pid_a':101,'pid_b':102,'birth_a':'a','birth_b':'b','milestones_before':['M1'],'milestones_after':['M1','M2','M3'],'fault_record':{'outcome':'INJECTED'}}\n    cas={'mission_id':'m','first_outcome':'CAS_ALLOWED','second_outcome':'CAS_DUPLICATE'}\n    for name,obj in [('kr',kr),('cas',cas)]: write(p/f'{name}.json',obj)\n    receipt={'schema':'lr5-preflight-receipt/v2','integration_sha':git(ROOT,'rev-parse','HEAD'),'observations':{k:{'evidence_path':str(p/f'{v}.json'),'evidence_sha256':hashlib.sha256((p/f'{v}.json').read_bytes()).hexdigest()} for k,v in [('kill_restart_recovery','kr'),('cas_double_dispatch','cas')]}}\n    preflight={'status':'PASS','manifest_sha':'a'*64}\n    lr={'status':'PASS','crashed':True,'restarted':True,'daemon_identities':[{'pid':101,'birth':'a'},{'pid':102,'birth':'b'}],'milestones_completed':['M1','M2','M3']}\n    for name,obj in [('receipt',receipt),('preflight',preflight),('longrun',lr)]: write(p/f'{name}.json',obj)\n    return receipt,lr\n\ndef run_ready(p):\n    a=[sys.executable,'-m','factory_v2.verify_long_run_ready','--repo-dir',str(ROOT),'--project-dir',str(p),'--receipt',str(p/'receipt.json'),'--preflight',str(p/'preflight.json'),'--long-run',str(p/'longrun.json')]\n    return subprocess.run(a,capture_output=True,text=True,cwd=ROOT)\n\ndef ready_null_birth(p):\n    _,lr=ready_fixture(p);lr['daemon_identities']=[{'pid':101,'birth':None},{'pid':101,'birth':None}];write(p/'longrun.json',lr)\n    r=run_ready(p);assert r.returncode==1 and 'TypeError' in r.stderr\n    return \"verifier_rc=1; TypeError: 'NoneType' object is not subscriptable; no typed finding\"\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=ready_null_birth(Path(tmp))\nprint('TEST ready_null_birth: rc=0; ' + result)\nPY\nSortie observée :\nTEST ready_null_birth: rc=0; verifier_rc=1; TypeError: 'NoneType' object is not subscriptable; no typed finding",
+      "recommendation": "Valider les types des bundles, identités, PID et birth avant les comparaisons ; rendre le diagnostic robuste aux valeurs nulles. Tester null, objet JSON non dictionnaire et identity non dictionnaire.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-005",
+      "file": "factory_v2/verify_preflight_receipt.py",
+      "line": 111,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if not isinstance(ms, list) or len(ms) < 3:",
+      "why": "Le parseur exige trois entrées sans exiger trois jalons distincts. milestones_completed=[M1,M1,M1] satisfait la preuve de trois jalons avec un seul progrès réel. C’est une frontière distincte du juge verify_long_run, utilisée pour dériver controlled_run puis l’absence d’intervention dans le reçu LR5.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\n    return p\n\ndef preflight_duplicate_milestones(p):\n    from factory_v2.verify_preflight_receipt import parse_long_run_evidence\n    r={'status':'PASS','restarted':True,'crashed':True,'milestones_completed':['M1','M1','M1'],'fault_records':[{'outcome':'INJECTED'}],'routine_human_interventions':0,'human_intervention_events':[]}\n    path=write(p/'run.json',r)\n    result=parse_long_run_evidence(path)\n    assert result['milestones_completed']==['M1','M1','M1']\n    return 'parse_long_run_evidence accepted 3 copies of one milestone as >=3 proven milestones'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=preflight_duplicate_milestones(Path(tmp))\nprint('TEST preflight_duplicate_milestones: rc=0; ' + result)\nPY\nSortie observée :\nTEST preflight_duplicate_milestones: rc=0; parse_long_run_evidence accepted 3 copies of one milestone as >=3 proven milestones",
+      "recommendation": "Contrôler les identifiants et leur unicité avant le seuil ; partager ce contrôle entre les juges de long run et ajouter un cas de répétition avec les autres champs valides.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-006",
+      "file": "factory_v2/verify_reshape_receipt.py",
+      "line": 196,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if commit_sha != base_sha and not _is_ancestor(repo, commit_sha, integration_sha):",
+      "why": "Le commit d’application peut être base_sha lui-même, ou un ancêtre antérieur : seule son accessibilité depuis integration_sha est contrôlée. La suppression peut être attribuée à base_sha alors que le fichier y existe encore ; le juge passe car il vérifie le diff global, pas le commit annoncé. Cela contredit la plage (base_sha, integration_sha] documentée et rend l’attribution de réparation fausse. Le test public censé refuser ce cas omet le test_log : il échoue pour cette autre raison.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\n    return p\n\ndef reshape_fixture(p):\n    h=runpy.run_path(str(ROOT/'tests/test_verify_reshape_receipt.py'))\n    repo,base,deleted,integration=h['_build_repo'](p)\n    ledger=h['_ledger'](p);log=h['_test_log'](p)\n    r={'schema':'convergence-reshape-receipt/v2','ledger_sha256':hashlib.sha256(ledger.read_bytes()).hexdigest(),'base_sha':base,'integration_sha':integration,'decisions_applied':[{'subsystem':'ModToDelete','file':'factory_v2/mod_to_delete.py','commit_sha':deleted},{'subsystem':'ModToReplace','file':'factory_v2/mod_to_replace.py','commit_sha':integration}],'test_log_path':str(log),'test_log_sha256':hashlib.sha256(log.read_bytes()).hexdigest()}\n    return repo,ledger,log,r\n\ndef run_reshape(p,repo,ledger,r):\n    write(p/'receipt.json',r)\n    with patch.object(reshape,'LEDGER_PATH',ledger),contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):\n        return reshape.verify(p/'receipt.json',repo)\n\ndef reshape_base_commit(p):\n    repo,ledger,log,r=reshape_fixture(p)\n    r['decisions_applied'][0]['commit_sha']=r['base_sha']\n    assert run_reshape(p,repo,ledger,r)==0\n    return 'verifier_rc=0; DELETE attributed to base_sha where deleted file still exists'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=reshape_base_commit(Path(tmp))\nprint('TEST reshape_base_commit: rc=0; ' + result)\nPY\nSortie observée :\nTEST reshape_base_commit: rc=0; verifier_rc=0; DELETE attributed to base_sha where deleted file still exists",
+      "recommendation": "Exiger base_sha < commit_sha <= integration_sha par vérifications d’ascendance et inspecter le diff du commit annoncé ; compléter le test public par un journal valide afin que seule la mauvaise attribution cause le refus.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-007",
+      "file": "factory_v2/verify_reshape_receipt.py",
+      "line": 259,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "fail_match = re.search(r\"(\\d+)\\s+failed\", log_text)",
+      "why": "re.search ne lit que la première occurrence des compteurs. Un préambule '0 failed, 0 errors' masque un résumé final '1 failed, 1 error, 12 passed' et le reçu est accepté malgré les tests rouges. L’empreinte du journal est correcte dans la reproduction : le défaut est son interprétation, pas sa liaison au reçu.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\n    return p\n\ndef reshape_fixture(p):\n    h=runpy.run_path(str(ROOT/'tests/test_verify_reshape_receipt.py'))\n    repo,base,deleted,integration=h['_build_repo'](p)\n    ledger=h['_ledger'](p);log=h['_test_log'](p)\n    r={'schema':'convergence-reshape-receipt/v2','ledger_sha256':hashlib.sha256(ledger.read_bytes()).hexdigest(),'base_sha':base,'integration_sha':integration,'decisions_applied':[{'subsystem':'ModToDelete','file':'factory_v2/mod_to_delete.py','commit_sha':deleted},{'subsystem':'ModToReplace','file':'factory_v2/mod_to_replace.py','commit_sha':integration}],'test_log_path':str(log),'test_log_sha256':hashlib.sha256(log.read_bytes()).hexdigest()}\n    return repo,ledger,log,r\n\ndef run_reshape(p,repo,ledger,r):\n    write(p/'receipt.json',r)\n    with patch.object(reshape,'LEDGER_PATH',ledger),contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):\n        return reshape.verify(p/'receipt.json',repo)\n\ndef reshape_failed_log(p):\n    repo,ledger,log,r=reshape_fixture(p)\n    log.write_text('previous run: 0 failed, 0 errors\\n===== 1 failed, 1 error, 12 passed in 1.23s =====\\n')\n    r['test_log_sha256']=hashlib.sha256(log.read_bytes()).hexdigest()\n    assert run_reshape(p,repo,ledger,r)==0\n    return 'verifier_rc=0; final summary=1 failed, 1 error, 12 passed; prefix=0 failed, 0 errors'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=reshape_failed_log(Path(tmp))\nprint('TEST reshape_failed_log: rc=0; ' + result)\nPY\nSortie observée :\nTEST reshape_failed_log: rc=0; verifier_rc=0; final summary=1 failed, 1 error, 12 passed; prefix=0 failed, 0 errors",
+      "recommendation": "Parser les résumés pytest comme des enregistrements complets ; refuser tout résultat final en échec et les journaux ambigus ou concaténés. Ajouter les cas préambule à zéro suivi d’échecs et de plusieurs exécutions.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-008",
+      "file": "factory_v2/verify_reshape_receipt.py",
+      "line": 236,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "declared_new.add(entry[\"file\"])",
+      "why": "La liste des nouveaux modules autorisés est extraite de toutes les entrées du reçu, sans vérifier que ces entrées appartiennent au ledger gelé. Ajouter surprise.py et une entrée NotInLedger suffit à contourner le refus de nouveau sous-système hors décisions : le ledger ne nomme jamais ce fichier, mais le juge passe.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\n    return p\n\ndef git(repo,*a):\n    p=subprocess.run(['git','-C',str(repo),'-c','user.email=test@example.com','-c','user.name=Test','-c','commit.gpgsign=false',*a],capture_output=True,text=True)\n    assert p.returncode == 0, p.stderr\n    return p.stdout.strip()\n\ndef reshape_fixture(p):\n    h=runpy.run_path(str(ROOT/'tests/test_verify_reshape_receipt.py'))\n    repo,base,deleted,integration=h['_build_repo'](p)\n    ledger=h['_ledger'](p);log=h['_test_log'](p)\n    r={'schema':'convergence-reshape-receipt/v2','ledger_sha256':hashlib.sha256(ledger.read_bytes()).hexdigest(),'base_sha':base,'integration_sha':integration,'decisions_applied':[{'subsystem':'ModToDelete','file':'factory_v2/mod_to_delete.py','commit_sha':deleted},{'subsystem':'ModToReplace','file':'factory_v2/mod_to_replace.py','commit_sha':integration}],'test_log_path':str(log),'test_log_sha256':hashlib.sha256(log.read_bytes()).hexdigest()}\n    return repo,ledger,log,r\n\ndef run_reshape(p,repo,ledger,r):\n    write(p/'receipt.json',r)\n    with patch.object(reshape,'LEDGER_PATH',ledger),contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):\n        return reshape.verify(p/'receipt.json',repo)\n\ndef reshape_unlisted_module(p):\n    repo,ledger,log,r=reshape_fixture(p)\n    (repo/'factory_v2/surprise.py').write_text('surprise = 1\\n')\n    git(repo,'add','-A');git(repo,'commit','-qm','new module outside ledger')\n    r['integration_sha']=git(repo,'rev-parse','HEAD')\n    r['decisions_applied'].append({'subsystem':'NotInLedger','file':'factory_v2/surprise.py','commit_sha':r['integration_sha']})\n    assert run_reshape(p,repo,ledger,r)==0\n    return 'verifier_rc=0; surprise.py absent from frozen ledger; extra receipt entry accepted'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=reshape_unlisted_module(Path(tmp))\nprint('TEST reshape_unlisted_module: rc=0; ' + result)\nPY\nSortie observée :\nTEST reshape_unlisted_module: rc=0; verifier_rc=0; surprise.py absent from frozen ledger; extra receipt entry accepted",
+      "recommendation": "Dériver les fichiers et compagnons autorisés du ledger gelé, refuser les clés de décisions supplémentaires et valider les compagnons contre une autorité indépendante du reçu.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-009",
+      "file": "factory_v2/verify_reshape_receipt.py",
+      "line": 103,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "if rc != 0:\n            continue",
+      "why": "Les erreurs de git ls-tree sont traitées comme des répertoires vides ; _added_files fait de même avec git diff (lignes 126-127). En injectant rc=128 sur ces commandes tout en laissant les autres requêtes Git fonctionner, le juge accepte avec LOC 0→0 et une justification. Une preuve illisible devient une absence de code ou de nouveaux modules.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\n    return p\n\ndef reshape_fixture(p):\n    h=runpy.run_path(str(ROOT/'tests/test_verify_reshape_receipt.py'))\n    repo,base,deleted,integration=h['_build_repo'](p)\n    ledger=h['_ledger'](p);log=h['_test_log'](p)\n    r={'schema':'convergence-reshape-receipt/v2','ledger_sha256':hashlib.sha256(ledger.read_bytes()).hexdigest(),'base_sha':base,'integration_sha':integration,'decisions_applied':[{'subsystem':'ModToDelete','file':'factory_v2/mod_to_delete.py','commit_sha':deleted},{'subsystem':'ModToReplace','file':'factory_v2/mod_to_replace.py','commit_sha':integration}],'test_log_path':str(log),'test_log_sha256':hashlib.sha256(log.read_bytes()).hexdigest()}\n    return repo,ledger,log,r\n\ndef run_reshape(p,repo,ledger,r):\n    write(p/'receipt.json',r)\n    with patch.object(reshape,'LEDGER_PATH',ledger),contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):\n        return reshape.verify(p/'receipt.json',repo)\n\ndef reshape_git_scan_error(p):\n    repo,ledger,log,r=reshape_fixture(p)\n    r['loc_justification']='The global size is stable for this measured refactoring.'\n    real=reshape._git_io\n    def broken(repo,*a,**kw):\n        if a[0] in ('ls-tree','diff'):\n            return subprocess.CompletedProcess(a,128,'','fatal: cannot read tree')\n        return real(repo,*a,**kw)\n    with patch.object(reshape,'_git_io',side_effect=broken):\n        assert run_reshape(p,repo,ledger,r)==0\n    return 'verifier_rc=0; ls-tree and diff return 128; LOC silently becomes 0->0'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=reshape_git_scan_error(Path(tmp))\nprint('TEST reshape_git_scan_error: rc=0; ' + result)\nPY\nSortie observée :\nTEST reshape_git_scan_error: rc=0; verifier_rc=0; ls-tree and diff return 128; LOC silently becomes 0->0",
+      "recommendation": "Propager une erreur typée sur tout rc Git non nul dans les scans ; empêcher la production d’un succès lorsque LOC ou les fichiers ajoutés sont inconnus. Tester les pannes de ls-tree et diff séparément.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-010",
+      "file": "factory_v2/verify_runrecords.py",
+      "line": 57,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if args.require_validated and len(validated) < args.min_runs:",
+      "why": "--min-runs est entièrement ignoré sans --require-validated. Avec un seul fichier valide et --min-runs 100, le CLI affiche PASS: 1 records. Un appelant utilisant le minimum annoncé pour vérifier l’existence de suffisamment de runs reçoit donc un faux succès.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\n    return p\n\ndef runrecords_minimum(p):\n    from factory_v2.verify_runrecords import REQUIRED_FIELDS\n    r=dict.fromkeys(REQUIRED_FIELDS,None);r.update(engine='local',wall_time_s=1,authority_hashes={'a':'a','b':'b'},validated=False)\n    write(p/'one.json',r)\n    a=subprocess.run([sys.executable,'-m','factory_v2.verify_runrecords',str(p),'--min-runs','100'],capture_output=True,text=True)\n    assert a.returncode==0,a.stderr\n    return 'verifier_rc=0; --min-runs 100; PASS: 1 records, 0 validated'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=runrecords_minimum(Path(tmp))\nprint('TEST runrecords_minimum: rc=0; ' + result)\nPY\nSortie observée :\nTEST runrecords_minimum: rc=0; verifier_rc=0; --min-runs 100; PASS: 1 records, 0 validated",
+      "recommendation": "Appliquer le minimum au nombre total de runs dans tous les cas, puis au nombre de runs validés si demandé ; ou renommer/documenter explicitement un seuil réservé aux validations. Tester le flag seul, avec --require-validated et sa valeur par défaut.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-011",
+      "file": "factory_v2/verify_runrecords.py",
+      "line": 53,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if r.get(\"validated\") is True:",
+      "why": "La validation d’un run repose seulement sur validated is True. Trois enregistrements indiquant validator_verdict=REJECTED, tests.exit_code=1 et product_e2e.exit_code=1 sont pourtant comptés comme validés et satisfont --require-validated avec deux moteurs. Les champs requis sont présents mais leur contradiction n’est pas rejetée.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\n    return p\n\ndef runrecords_failed_validation(p):\n    from factory_v2.verify_runrecords import REQUIRED_FIELDS\n    for i,e in enumerate(['claude','codex','codex']):\n        r=dict.fromkeys(REQUIRED_FIELDS,None);r.update(engine=e,wall_time_s=1,authority_hashes={'a':'a','b':'b'},validated=True,validator_verdict='REJECTED',tests={'exit_code':1},product_e2e={'exit_code':1})\n        write(p/f'{i}.json',r)\n    a=subprocess.run([sys.executable,'-m','factory_v2.verify_runrecords',str(p),'--require-validated'],capture_output=True,text=True)\n    assert a.returncode==0,a.stderr\n    return 'verifier_rc=0; 3 validated=True records with validator_verdict=REJECTED and tests/product_e2e exit_code=1'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=runrecords_failed_validation(Path(tmp))\nprint('TEST runrecords_failed_validation: rc=0; ' + result)\nPY\nSortie observée :\nTEST runrecords_failed_validation: rc=0; verifier_rc=0; 3 validated=True records with validator_verdict=REJECTED and tests/product_e2e exit_code=1",
+      "recommendation": "Valider le schéma réel des résultats, la cohérence des verdicts et la référence à la preuve de validation indépendante avant de compter un run validé ; tester les booleans contradictoires avec les verdicts et résultats réels.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-012",
+      "file": "factory_v2/verify_simplification_batch.py",
+      "line": 194,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "gg = _git(repo, \"grep\", \"-n\", \"-I\", \"-F\", token, \"HEAD\", \"--\", *REF_SCAN_PATHSPECS)",
+      "why": "Le token est passé à git grep sans -e. Un token commençant par '--', comme --legacy-v1 dans le manifeste courant, est interprété comme une option Git ; git grep sort 129, mais le code ignore returncode et conclut qu’il n’y a aucune occurrence. La reproduction garde --retired-flag dans un fichier Python suivi et le contrôle d’invariant réussit.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef git(repo,*a):\n    p=subprocess.run(['git','-C',str(repo),'-c','user.email=test@example.com','-c','user.name=Test','-c','commit.gpgsign=false',*a],capture_output=True,text=True)\n    assert p.returncode == 0, p.stderr\n    return p.stdout.strip()\n\ndef simplify_forbidden_flag(p):\n    git(p,'init','-q');(p/'factory_v2').mkdir()\n    (p/'factory_v2/live.py').write_text(\"MODE = '--retired-flag'\\n\")\n    git(p,'add','-A');git(p,'commit','-qm','fixture')\n    batch={'paths':['factory_v2/deleted.py'],'forbidden_tokens':['--retired-flag']}\n    simplify._check_batch_invariants(p,{},'S',batch,{'factory_v2/live.py'})\n    raw=subprocess.run(['git','-C',str(p),'grep','-n','-I','-F','--retired-flag','HEAD','--','factory_v2/'],capture_output=True,text=True)\n    assert raw.returncode==129\n    return 'git grep rc=129 (unknown option retired-flag); invariant check returns success with forbidden flag still present'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=simplify_forbidden_flag(Path(tmp))\nprint('TEST simplify_forbidden_flag: rc=0; ' + result)\nPY\nSortie observée :\nTEST simplify_forbidden_flag: rc=0; git grep rc=129 (unknown option retired-flag); invariant check returns success with forbidden flag still present",
+      "recommendation": "Passer chaque token via -e, distinguer rc=1 (aucune correspondance) des erreurs rc>1 et lever Unreadable dans ce dernier cas. Étendre ce contrôle de retour au scan de références et aux autres grep du juge.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-013",
+      "file": "factory_v2/verify_simplification_batch.py",
+      "line": 115,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "rf\"|from\\s+{re.escape(parent)}\\s+import\\s+([A-Za-z0-9_,\\s]*\\b{mod}\\b)\"",
+      "why": "Le scan ligne par ligne ne reconnaît pas l’import Python courant 'from factory_v2 import (', suivi de 'deleted,' à la ligne suivante. Le module supprimé reste importé au runtime mais _references renvoie une liste vide. Le motif de package absolu ne gère pas les parenthèses et git grep ne relie pas les lignes.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef git(repo,*a):\n    p=subprocess.run(['git','-C',str(repo),'-c','user.email=test@example.com','-c','user.name=Test','-c','commit.gpgsign=false',*a],capture_output=True,text=True)\n    assert p.returncode == 0, p.stderr\n    return p.stdout.strip()\n\ndef simplify_multiline_import(p):\n    git(p,'init','-q');(p/'factory_v2').mkdir()\n    (p/'factory_v2/live.py').write_text('from factory_v2 import (\\n    deleted,\\n)\\n')\n    git(p,'add','-A');git(p,'commit','-qm','fixture')\n    refs=simplify._references(p,['factory_v2/deleted.py'])\n    assert refs==[],refs\n    return 'references=[]; committed live.py contains multiline from factory_v2 import (deleted)'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=simplify_multiline_import(Path(tmp))\nprint('TEST simplify_multiline_import: rc=0; ' + result)\nPY\nSortie observée :\nTEST simplify_multiline_import: rc=0; references=[]; committed live.py contains multiline from factory_v2 import (deleted)",
+      "recommendation": "Analyser les imports Python avec ast sur les blobs suivis, en conservant un scan complémentaire pour les chemins et imports dynamiques. Ajouter les imports multilignes absolus et relatifs aux tests de non-référence.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-014",
+      "file": "factory_v2/worker_heartbeat.py",
+      "line": 80,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "except Exception:\n                # Never let heartbeat crash — just retry next tick.",
+      "why": "Toute exception du heartbeat est avalée sans journal ni état d’erreur. Deux OSError('disk full') consécutives ne produisent aucun diagnostic et la boucle continue avec last_seq=0. Un défaut de stockage durable peut donc rester invisible jusqu’à l’expiration de lease ou au watchdog, compliquant le diagnostic du travail apparemment bloqué.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef heartbeat_swallows_error(p):\n    hb=WorkerHeartbeat('m',p)\n    hb._stop_event=Mock();hb._stop_event.wait.side_effect=[False,False,True]\n    out,err=io.StringIO(),io.StringIO()\n    with patch.object(wl.WorkerLease,'tick_heartbeat',side_effect=OSError('disk full')) as tick,contextlib.redirect_stdout(out),contextlib.redirect_stderr(err):\n        hb._run()\n    assert tick.call_count==2 and not out.getvalue() and not err.getvalue() and hb.last_seq==0\n    return '2 OSError(disk full) swallowed; stdout=empty; stderr=empty; last_seq=0; retry continues'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=heartbeat_swallows_error(Path(tmp))\nprint('TEST heartbeat_swallows_error: rc=0; ' + result)\nPY\nSortie observée :\nTEST heartbeat_swallows_error: rc=0; 2 OSError(disk full) swallowed; stdout=empty; stderr=empty; last_seq=0; retry continues",
+      "recommendation": "Exposer le dernier échec et un compteur, journaliser de façon bornée, puis signaler une défaillance persistante au superviseur ; conserver la reprise sur panne transitoire et tester l’observabilité de ces deux cas.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-015",
+      "file": "factory_v2/worker_lease.py",
+      "line": 340,
+      "severity": "HIGH",
+      "category": "RACE",
+      "evidence": "lease = cls._read_nolock(mission_id, project_dir)",
+      "why": "renew recharge et prolonge la lease courante à partir du seul mission_id, sans génération ni token du caller. Après remplacement G1→G2, le token G1 est refusé par fence_with_token mais un appel de l’ancien worker à renew prolonge G2. Le renouvellement de mission_evidence._run utilise justement cette signature. tick_heartbeat partage l’absence de liaison au propriétaire. Le verrou sérialise les écritures sans empêcher un ancien worker d’entretenir son remplaçant.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef lease_stale_owner_renews(p):\n    first=wl.WorkerLease.grant('m',p)\n    second=wl.WorkerLease.grant('m',p,ttl_s=10)\n    renewed=wl.WorkerLease.renew(first.mission_id,p,ttl_s=3600)\n    assert renewed.generation==second.generation and renewed.expires_at>second.expires_at\n    assert not wl.WorkerLease.fence_with_token('m',first.generation,first.fencing_token,p)\n    return 'old token rejected; renew called using old mission succeeds on generation=2 and extends replacement TTL'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=lease_stale_owner_renews(Path(tmp))\nprint('TEST lease_stale_owner_renews: rc=0; ' + result)\nPY\nSortie observée :\nTEST lease_stale_owner_renews: rc=0; old token rejected; renew called using old mission succeeds on generation=2 and extends replacement TTL",
+      "recommendation": "Exiger la génération et le fencing_token du propriétaire sur renew et tick_heartbeat, les comparer sous le même verrou avant toute écriture, et transmettre ces valeurs depuis le heartbeat. Tester un tick tardif G1 après acquisition G2.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-016",
+      "file": "factory_v2/worker_lease.py",
+      "line": 312,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "if actual_birth and actual_birth != lease.process_birth_identity:",
+      "why": "Si le PID est vivant mais la lecture de son identité de naissance échoue et renvoie une chaîne vide, le test 'if actual_birth and ...' ne refuse pas l’adoption. Une lease portant birth-original devient ADOPTED sans identité actuelle vérifiable. Cela annule la protection contre la réutilisation de PID lorsque ps ou /proc est indisponible.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef lease_birth_unavailable(p):\n    with patch.object(wl,'_is_pid_alive',return_value=True),patch.object(wl,'_get_pgid',return_value=101),patch.object(wl,'_process_birth_identity',return_value='birth-original'):\n        wl.WorkerLease.grant('m',p,pid=101)\n    with patch.object(wl,'_is_pid_alive',return_value=True),patch.object(wl,'_process_birth_identity',return_value=''):\n        result=wl.WorkerLease.adopt('m',p)\n    assert result is not None and result.state=='ADOPTED'\n    return 'state=ADOPTED; stored birth=birth-original; live birth lookup empty (failure)'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=lease_birth_unavailable(Path(tmp))\nprint('TEST lease_birth_unavailable: rc=0; ' + result)\nPY\nSortie observée :\nTEST lease_birth_unavailable: rc=0; state=ADOPTED; stored birth=birth-original; live birth lookup empty (failure)",
+      "recommendation": "Refuser ou différer l’adoption lorsque l’identité attendue existe mais que l’identité observée est absente ; distinguer observation indisponible et mismatch prouvé. Ajouter le cas de panne du lecteur d’identité.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-017",
+      "file": "factory_v2/worker_lease.py",
+      "line": 441,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if lease is None or lease.state in (\"EXPIRED\", \"FENCED\"):",
+      "why": "Le tick exclut seulement les états explicitement EXPIRED/FENCED et oublie is_expired. Une lease ACTIVE dont expires_at est dépassé continue de recevoir heartbeat_seq et heartbeat_time, alors que current_generation refuse déjà cette lease. WorkerHeartbeat ne s’arrête donc pas à l’expiration temporelle comme annoncé. Le test public test_heartbeat_stops_on_expired_lease appelle stop() avant son assertion et ne détecte pas ce défaut.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef lease_expired_heartbeat(p):\n    lease=wl.WorkerLease.grant('m',p,ttl_s=-10)\n    assert lease.is_expired\n    updated=wl.WorkerLease.tick_heartbeat('m',p)\n    assert updated is not None and updated.is_expired and updated.heartbeat_seq==1\n    return 'expired=True; tick_heartbeat returns non-None; heartbeat_seq=1; current_generation=None'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=lease_expired_heartbeat(Path(tmp))\nprint('TEST lease_expired_heartbeat: rc=0; ' + result)\nPY\nSortie observée :\nTEST lease_expired_heartbeat: rc=0; expired=True; tick_heartbeat returns non-None; heartbeat_seq=1; current_generation=None",
+      "recommendation": "Refuser le tick quand lease.is_expired et tester que le heartbeat s’arrête de lui-même avant tout appel explicite à stop ; vérifier qu’aucune séquence n’est ajoutée après expiration.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-018",
+      "file": "factory_v2/worker_lease.py",
+      "line": 507,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "return \"\".join(c if c.isalnum() or c in \"-_.\" else \"_\" for c in mission_id)[:128]",
+      "why": "La normalisation remplace les caractères par '_' puis tronque à 128 caractères sans désambiguïsation. A#M1 et A_M1 désignent ainsi le même fichier ; après deux grant, une lecture de A#M1 retourne une lease dont mission_id est A_M1 et génération=2. Deux missions distinctes peuvent donc se remplacer ou se clôturer mutuellement. Le lecteur ne vérifie pas non plus que l’id enregistré correspond à celui demandé.\n\nReproduction exécutée sur les sources originales au SHA 49007c0be862ae2809a98229508bbdcf12cb443d ; aucun correctif appliqué (mission de revue). À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport argparse, contextlib, copy, hashlib, io, json, os, runpy, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch, Mock\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nfrom factory_v2 import verify_reshape_receipt as reshape\nfrom factory_v2 import verify_simplification_batch as simplify\nfrom factory_v2 import worker_lease as wl\nfrom factory_v2.worker_heartbeat import WorkerHeartbeat\nfrom factory_v2 import verify_long_run as longrun\n\n\ndef lease_mission_collision(p):\n    first=wl.WorkerLease.grant('A#M1',p)\n    second=wl.WorkerLease.grant('A_M1',p)\n    read=wl.WorkerLease._read_nolock('A#M1',p)\n    assert read.mission_id=='A_M1' and read.generation==2\n    return 'A#M1 and A_M1 map to same file; read(A#M1).mission_id=A_M1; generation=2'\n\nwith tempfile.TemporaryDirectory(prefix='review-m6-') as tmp:\n    result=lease_mission_collision(Path(tmp))\nprint('TEST lease_mission_collision: rc=0; ' + result)\nPY\nSortie observée :\nTEST lease_mission_collision: rc=0; A#M1 and A_M1 map to same file; read(A#M1).mission_id=A_M1; generation=2",
+      "recommendation": "Utiliser un nom injectif ou un suffixe de hash du mission_id complet, migrer les leases existantes sans collision et vérifier l’id chargé. Tester collisions de caractères et de préfixes longs.",
+      "fix_effort": "S"
+    }
+  ]
+}

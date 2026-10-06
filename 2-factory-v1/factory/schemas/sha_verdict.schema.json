@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "verdict",
+    "milestone",
+    "exact_sha",
+    "tests",
+    "qa",
+    "blocking_findings"
+  ],
+  "properties": {
+    "verdict": {
+      "enum": [
+        "MILESTONE_ACCEPT",
+        "MILESTONE_BLOCK"
+      ]
+    },
+    "milestone": {
+      "type": "string"
+    },
+    "exact_sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "tests": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "qa": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "blocking_findings": {
+      "type": "array"
+    },
+    "limitations": {
+      "type": "array"
+    }
+  }
+}

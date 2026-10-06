@@ -1,0 +1,52 @@
+{
+  "_comment": [
+    "Registre d'identité des dépôts. Décision D1 du Boss, 2026-08-07.",
+    "La clé est un CHEMIN ; l'entrée la plus spécifique gouverne. `expected_root` est le",
+    "commit racine attendu — la seule grandeur qu'un renommage de branche ou de remote",
+    "n'atteint pas. Un dépôt absent de ce registre est REFUSÉ (fail-closed), il n'est pas",
+    "présumé bon."
+  ],
+  "repos": {
+    "~/job-opportunity-radar": {
+      "label": "job-radar PRODUCTION",
+      "expected_root": "1e6914cb67158fd18321bc70f3ef6cbca5f67eec",
+      "note": "dépôt PROTÉGÉ pendant la campagne RUN8 — lecture seule, écriture interdite"
+    },
+    "~/Downloads/job-opportunity-radar": {
+      "label": "job-radar workspace de développement",
+      "expected_root": "1e6914cb67158fd18321bc70f3ef6cbca5f67eec",
+      "note": "MÊME racine attendue que la production : c'est `origin/main` qui porte la vraie ligne (55 commits). La branche nommée `main` y est un orphelin — voir quarantined_roots."
+    },
+    "~/conductor/workspaces/job-opportunity-radar": {
+      "label": "workspaces Conductor de job-radar",
+      "expected_root": "1e6914cb67158fd18321bc70f3ef6cbca5f67eec",
+      "note": "couvre belmopan et tout workspace frère, par préfixe de chemin"
+    },
+    "~/conductor/workspaces/Jocelyn-Factory-Control": {
+      "label": "dépôt de contrôle de la Factory",
+      "expected_root": "d85e8e955a9fc940b74f3edcbe0968634131d689"
+    },
+    "~/conductor/workspaces/Jocelyn-factory-control": {
+      "label": "dépôt de contrôle de la Factory (Conductor workspace lowercase)",
+      "expected_root": "d85e8e955a9fc940b74f3edcbe0968634131d689",
+      "note": "même dépôt que Jocelyn-Factory-Control — chemin Conductor avec casse minuscule"
+    },
+    "~/Jocelyn-Factory-Control": {
+      "label": "dépôt de contrôle de la Factory (checkout d'origine)",
+      "expected_root": "d85e8e955a9fc940b74f3edcbe0968634131d689"
+    },
+    "~/conductor/workspaces/twitter-radar/twitter-radar-foundation-v2": {
+      "label": "APP007 Twitter Radar — Factory build target",
+      "expected_root": "d42040158aa3ff75fda9b1f3c8f7a00eab910200",
+      "note": "APP007 product repo. Factory is the primary builder. Twitter workspace is PRODUCT_SPEC_AUTHORITY and integration target after qualification."
+    },
+    "/private/tmp/factory-worktrees": {
+      "label": "worktrees de mission de la factory (dépôt de contrôle)",
+      "expected_root": "d85e8e955a9fc940b74f3edcbe0968634131d689",
+      "note": "20/09 22:30 Bangkok : Codex refusait tout worktree /private/tmp/factory-worktrees/<mission> comme dépôt inconnu (chaos V2, observation fermée) ; même racine que le dépôt de contrôle."
+    }
+  },
+  "quarantined_roots": {
+    "046bd30943d3c9e5c2de502b234ee1540c893b87": "racine ORPHELINE de job-radar — la branche `main` du workspace de dev en descend. Contenu identique à la vraie racine 1e6914c (même arbre f4ec8737), mais AUCUN ancêtre commun : y committer isole le travail définitivement. Établi le 2026-08-07."
+  }
+}

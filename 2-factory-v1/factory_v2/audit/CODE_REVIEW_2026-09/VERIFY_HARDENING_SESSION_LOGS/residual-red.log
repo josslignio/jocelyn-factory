@@ -1,0 +1,301 @@
+FFFFFFFF.F.FFFF                                                          [100%]
+=================================== FAILURES ===================================
+______________ test_snapshot_validator_sha_matches_git_show_head _______________
+
+    def test_snapshot_validator_sha_matches_git_show_head():
+        import hashlib
+        out = subprocess.run(
+            ["git", "-C", str(REPO_ROOT), "show", "HEAD:factory_v2/product_verifiers.py"],
+            capture_output=True, check=True,
+        )
+        expect = hashlib.sha256(out.stdout).hexdigest()
+        snap = capability_snapshot.snapshot(REPO_ROOT)
+>       assert snap["validator_source_sha256"] == expect
+E       AssertionError: assert '6174b467a980...2517cdba259db' == '966fa5f9d997...cae7e3089dbad'
+E         
+E         - 966fa5f9d99742916f87e41e2d7836fa570a83f87b1ad3b0c44cae7e3089dbad
+E         + 6174b467a9809cbe25b3533b8b27659bd292d2b13c9fd886c302517cdba259db
+
+tests/test_self_improvement.py:49: AssertionError
+__________ test_runrecord_exit_code_must_be_an_observed_integer[0.0] ___________
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_runrecord_exit_code_must_0')
+code = 0.0
+
+    @pytest.mark.parametrize('code', [False, 0.0, None, '0'])
+    def test_runrecord_exit_code_must_be_an_observed_integer(tmp_path, code):
+        for i, engine in enumerate(('glm', 'claude', 'codex')):
+            (tmp_path / f'{i}.json').write_text(json.dumps(_record(engine=engine, tests={'exit_code': code})))
+        run = _run_rr(tmp_path, '--require-validated')
+>       assert run.returncode == 1, run.stdout + run.stderr
+E       AssertionError: PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']
+E         
+E       assert 0 == 1
+E        +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/factory-worktre...uire-validated'], returncode=0, stdout="PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']\n", stderr='').returncode
+
+tests/test_repairs_vh_residuals.py:36: AssertionError
+_________ test_runrecord_exit_code_must_be_an_observed_integer[False] __________
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_runrecord_exit_code_must_1')
+code = False
+
+    @pytest.mark.parametrize('code', [False, 0.0, None, '0'])
+    def test_runrecord_exit_code_must_be_an_observed_integer(tmp_path, code):
+        for i, engine in enumerate(('glm', 'claude', 'codex')):
+            (tmp_path / f'{i}.json').write_text(json.dumps(_record(engine=engine, tests={'exit_code': code})))
+        run = _run_rr(tmp_path, '--require-validated')
+>       assert run.returncode == 1, run.stdout + run.stderr
+E       AssertionError: PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']
+E         
+E       assert 0 == 1
+E        +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/factory-worktre...uire-validated'], returncode=0, stdout="PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']\n", stderr='').returncode
+
+tests/test_repairs_vh_residuals.py:36: AssertionError
+______________ test_pytest_fixture_error_is_not_a_killed_mutation ______________
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_pytest_fixture_error_is_n0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x107254740>
+
+    def test_pytest_fixture_error_is_not_a_killed_mutation(tmp_path, monkeypatch):
+        prf = _load_module('prf_residual', 'factory/bin/prove_red_factory.py')
+        bin_dir = tmp_path / 'bin'; bin_dir.mkdir()
+        (bin_dir / 'dummy.py').write_text('MARKER = 1\n')
+        (tmp_path / 'test_broken.py').write_text(
+            'import pytest\n@pytest.fixture\ndef broken():\n    raise RuntimeError("fixture broken")\n'
+            'def test_value(broken):\n    assert False\n')
+        monkeypatch.setattr(prf, 'BIN', bin_dir)
+        monkeypatch.setattr(prf, 'REPO', tmp_path)
+        result = prf.run_proof('X', 'fixture error', 'dummy.py', 'MARKER = 1', 'MARKER = 2', 'test_broken.py')
+        assert result['returncode'] == 1
+>       assert result['status'] == 'SURVIVED', result
+E       AssertionError: {'id': 'X', 'description': 'fixture error', 'status': 'KILLED', 'test': 'test_broken.py', ...}
+E       assert 'KILLED' == 'SURVIVED'
+E         
+E         - SURVIVED
+E         + KILLED
+
+tests/test_repairs_vh_residuals.py:51: AssertionError
+_________ test_feedback_per_item_words_without_images_are_not_evidence _________
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_feedback_per_item_words_w0')
+
+    def test_feedback_per_item_words_without_images_are_not_evidence(tmp_path):
+        from products.twitter_radar.tr_presentation_verifiers import verify_owner_feedback_iteration, Unmet
+        readme = '\n'.join(f'{key}: avant et après' for key in
+                           ('bouton-recherche-plus-visi', 'carte-kol-plus-lisible', 'footer-align-gauche'))
+        repo = _feedback_repo(tmp_path, readme, images=[])
+>       with pytest.raises(Unmet, match='SCREENSHOT'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE Unmet
+
+tests/test_repairs_vh_residuals.py:17: Failed
+____________ test_absent_current_milestone_does_not_prove_next_open ____________
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_absent_current_milestone_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10731a3f0>
+
+    def test_absent_current_milestone_does_not_prove_next_open(tmp_path, monkeypatch):
+        import products.twitter_radar.twitter_radar_long_run as lr
+        project = _state(tmp_path, current_milestone='')
+        calls = []
+        monkeypatch.setattr(lr, 'run_twitter_radar_long_run', lambda *a: calls.append(a))
+        lr.auto_start_twitter_radar_if_ready(project, tmp_path/'tr', tmp_path, ['/usr/bin/true'])
+>       assert not calls, 'unknown roadmap/current milestone launched a run'
+E       AssertionError: unknown roadmap/current milestone launched a run
+E       assert not [(TwitterRadarLongRunConfig(min_milestones=3, min_engines=2, fault_injection=True, timeout_s=600, poll_interval_s=2.0,...s/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_absent_current_milestone_0/factory'))]
+
+tests/test_repairs_vh_residuals.py:61: AssertionError
+___________ test_matching_head_does_not_certify_dirty_bytes[control] ___________
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_matching_head_does_not_ce0')
+dirty = 'control'
+
+    @pytest.mark.parametrize('dirty', ['control', 'product'])
+    def test_matching_head_does_not_certify_dirty_bytes(tmp_path, dirty):
+        from factory_v2.long_run_truth import recompute_product_e2e, Unproven
+        control, product, csha, psha = _setup_e2e_pair(tmp_path, FAKE_VERIFIER)
+        file = control / 'factory_v2/product_verifiers.py' if dirty == 'control' else product / 'README.md'
+        file.write_text(file.read_text() + '\n# uncommitted replacement\n')
+>       with pytest.raises(Unproven, match='dirty|uncommitted'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE Unproven
+
+tests/test_repairs_vh_residuals.py:27: Failed
+_______ test_long_run_null_or_noncanonical_ids_do_not_count[milestones2] _______
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_long_run_null_or_noncanon0')
+milestones = ['M1', ' M1 ', 'M2']
+
+    @pytest.mark.parametrize('milestones', [[None, '', 'M1'], [{}, [], 'M1'], ['M1', ' M1 ', 'M2']])
+    def test_long_run_null_or_noncanonical_ids_do_not_count(tmp_path, milestones):
+        from factory_v2.verify_preflight_receipt import parse_long_run_evidence
+        p = tmp_path / 'evidence.json'
+        p.write_text(json.dumps(dict(status='PASS', crashed=True, restarted=True,
+                                    milestones_completed=milestones, fault_records=[{'outcome': 'INJECTED'}],
+                                    routine_human_interventions=0)))
+>       with pytest.raises(ValueError, match='milestone|DISTINCT'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_repairs_vh_residuals.py:71: Failed
+_______ test_long_run_null_or_noncanonical_ids_do_not_count[milestones1] _______
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_long_run_null_or_noncanon1')
+milestones = [{}, [], 'M1']
+
+    @pytest.mark.parametrize('milestones', [[None, '', 'M1'], [{}, [], 'M1'], ['M1', ' M1 ', 'M2']])
+    def test_long_run_null_or_noncanonical_ids_do_not_count(tmp_path, milestones):
+        from factory_v2.verify_preflight_receipt import parse_long_run_evidence
+        p = tmp_path / 'evidence.json'
+        p.write_text(json.dumps(dict(status='PASS', crashed=True, restarted=True,
+                                    milestones_completed=milestones, fault_records=[{'outcome': 'INJECTED'}],
+                                    routine_human_interventions=0)))
+>       with pytest.raises(ValueError, match='milestone|DISTINCT'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_repairs_vh_residuals.py:71: Failed
+_______ test_long_run_null_or_noncanonical_ids_do_not_count[milestones0] _______
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_long_run_null_or_noncanon2')
+milestones = [None, '', 'M1']
+
+    @pytest.mark.parametrize('milestones', [[None, '', 'M1'], [{}, [], 'M1'], ['M1', ' M1 ', 'M2']])
+    def test_long_run_null_or_noncanonical_ids_do_not_count(tmp_path, milestones):
+        from factory_v2.verify_preflight_receipt import parse_long_run_evidence
+        p = tmp_path / 'evidence.json'
+        p.write_text(json.dumps(dict(status='PASS', crashed=True, restarted=True,
+                                    milestones_completed=milestones, fault_records=[{'outcome': 'INJECTED'}],
+                                    routine_human_interventions=0)))
+>       with pytest.raises(ValueError, match='milestone|DISTINCT'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_repairs_vh_residuals.py:71: Failed
+___________ test_matching_head_does_not_certify_dirty_bytes[product] ___________
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_matching_head_does_not_ce1')
+dirty = 'product'
+
+    @pytest.mark.parametrize('dirty', ['control', 'product'])
+    def test_matching_head_does_not_certify_dirty_bytes(tmp_path, dirty):
+        from factory_v2.long_run_truth import recompute_product_e2e, Unproven
+        control, product, csha, psha = _setup_e2e_pair(tmp_path, FAKE_VERIFIER)
+        file = control / 'factory_v2/product_verifiers.py' if dirty == 'control' else product / 'README.md'
+        file.write_text(file.read_text() + '\n# uncommitted replacement\n')
+>       with pytest.raises(Unproven, match='dirty|uncommitted'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE Unproven
+
+tests/test_repairs_vh_residuals.py:27: Failed
+______ test_effective_digest_matches_independently_hashed_committed_bytes ______
+
+    def test_effective_digest_matches_independently_hashed_committed_bytes():
+        repo = Path(__file__).resolve().parents[1]
+        h = hashlib.sha256()
+        for rel in cs.VALIDATOR_SOURCES:
+            blob = subprocess.check_output(['git', 'show', f'HEAD:{rel}'], cwd=repo)
+            h.update(rel.encode() + b'\0' + hashlib.sha256(blob).hexdigest().encode() + b'\0')
+>       assert cs.snapshot(repo).get('effective_validator_source_sha256') == h.hexdigest()
+E       AssertionError: assert None == '6174b467a9809cbe25b3533b8b27659bd292d2b13c9fd886c302517cdba259db'
+E        +  where None = <built-in method get of dict object at 0x1073bb380>('effective_validator_source_sha256')
+E        +    where <built-in method get of dict object at 0x1073bb380> = {'actor_capabilities': {'claude': ['A', 'B', 'S'], 'codex': ['A', 'B'], 'glm': ['B'], 'local': ['A', 'B', 'S']}, 'owne...etwork_calls_allowed': False, 'real_ai_engine_invocation_allowed': False, 'convention': 'FACTORY_NO_REAL_ENGINE'}, ...}.get
+E        +      where {'actor_capabilities': {'claude': ['A', 'B', 'S'], 'codex': ['A', 'B'], 'glm': ['B'], 'local': ['A', 'B', 'S']}, 'owne...etwork_calls_allowed': False, 'real_ai_engine_invocation_allowed': False, 'convention': 'FACTORY_NO_REAL_ENGINE'}, ...} = <function snapshot at 0x10722dc60>(PosixPath('/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1'))
+E        +        where <function snapshot at 0x10722dc60> = cs.snapshot
+E        +  and   '6174b467a9809cbe25b3533b8b27659bd292d2b13c9fd886c302517cdba259db' = <built-in method hexdigest of _hashlib.HASH object at 0x1073bcfd0>()
+E        +    where <built-in method hexdigest of _hashlib.HASH object at 0x1073bcfd0> = <sha256 _hashlib.HASH object @ 0x1073bcfd0>.hexdigest
+
+tests/test_repairs_vh_snapshot_contract.py:18: AssertionError
+___________ test_old_snapshot_without_effective_digest_fails_closed ____________
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_old_snapshot_without_effe0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1073c4680>
+
+    def test_old_snapshot_without_effective_digest_fails_closed(tmp_path, monkeypatch):
+        rec = dict(schema='challenger-automation-receipt/v1', snapshot_before='before',
+                   snapshot_after='after', ledger='ledger', promotions='promotions',
+                   decision='REJECT', decision_evidence_path='evidence', benchmark_receipt='bench')
+        snap = dict(actor_capabilities={}, owner_policy_ids=[], validator_source_sha256='s',
+                    network_policy={}, taken_at='now')
+        monkeypatch.setattr(hygiene, '_head_json', lambda _, path: rec if 'RECEIPT' in path else snap)
+        def git(_, *args):
+            return subprocess.CompletedProcess(args, 0, stdout='b' if args[-1] == 'before' else 'a')
+        monkeypatch.setattr(hygiene, '_git', git)
+        monkeypatch.setattr(cs, '_validator_source_sha256', lambda _: 's')
+        monkeypatch.setattr(hygiene, '_head_src', lambda *_: '')
+        with pytest.raises(hygiene.Unmet, match='SNAPSHOT_FIELD_MISSING: effective_validator_source_sha256'):
+>           hygiene.check_self_improvement(tmp_path)
+
+tests/test_repairs_vh_snapshot_contract.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+repo = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5355/test_old_snapshot_without_effe0')
+
+    def check_self_improvement(repo: Path) -> dict:
+        """Snapshots before/after committed in that order and identical on capability fields;
+        validator sha recomputed; ledger is a hash chain whose every row names the benchmark
+        receipt (sha256 at HEAD); promotions are CAS moves of factory_v2/CHAMPION_POINTER
+        whose final state is read AT HEAD."""
+        import hashlib
+        rec = _head_json(repo, "factory_v2/receipts/CHALLENGER_AUTOMATION_RECEIPT.json")
+        if rec.get("schema") != "challenger-automation-receipt/v1":
+            raise Unreadable("SELF_IMPROVEMENT_SCHEMA")
+        for k in ("snapshot_before", "snapshot_after", "ledger", "promotions", "decision", "decision_evidence_path", "benchmark_receipt"):
+            if k not in rec:
+                raise Unreadable(f"SELF_IMPROVEMENT_FIELD_MISSING: {k}")
+        if _git(repo, "cat-file", "-e", "HEAD:factory_v2/capability_snapshot.py").returncode:
+            raise Unmet("PRODUCER_MISSING: factory_v2/capability_snapshot.py")
+        before, after = _head_json(repo, rec["snapshot_before"]), _head_json(repo, rec["snapshot_after"])
+        for k in ("actor_capabilities", "owner_policy_ids", "validator_source_sha256", "network_policy", "taken_at"):
+            if k not in before or k not in after:
+                raise Unmet(f"SNAPSHOT_FIELD_MISSING: {k}")
+        for k in ("actor_capabilities", "owner_policy_ids", "validator_source_sha256", "network_policy"):
+            if before[k] != after[k]:
+                raise Unmet(f"CAPABILITY_WIDENED: {k} changed between snapshots (D018/D019)")
+        cb = _git(repo, "log", "-1", "--format=%H", "--", rec["snapshot_before"]).stdout.strip()
+        ca = _git(repo, "log", "-1", "--format=%H", "--", rec["snapshot_after"]).stdout.strip()
+        if not cb or not ca or cb == ca or _git(repo, "merge-base", "--is-ancestor", cb, ca).returncode:
+            raise Unmet("SNAPSHOT_ORDER: snapshot_before must be committed strictly before snapshot_after")
+        # L5_factory_v2_rest_1-010: the digest covers the shim AND its effective
+        # targets — recompute it with the producer's own function, never a
+        # shim-only sha256 that two differing validator commits can share.
+        from factory_v2.capability_snapshot import _validator_source_sha256
+        if after["validator_source_sha256"] != _validator_source_sha256(repo):
+            raise Unmet("SNAPSHOT_STALE: validator_source_sha256 != digest(HEAD: VALIDATOR_SOURCES)")
+        bench_sha = hashlib.sha256(_head_src(repo, rec["benchmark_receipt"]).encode("utf-8")).hexdigest()
+        rows = [json.loads(l) for l in _head_src(repo, rec["ledger"]).splitlines() if l.strip()]
+        prev = ""
+        for i, r in enumerate(rows):
+            body = {k: v for k, v in r.items() if k != "row_hash"}
+            expect = hashlib.sha256((prev + json.dumps(body, sort_keys=True)).encode("utf-8")).hexdigest()
+            if r.get("row_hash") != expect:
+                raise Unmet(f"LEDGER_CHAIN_BROKEN at row {i}")
+            prev = r["row_hash"]
+            if r.get("validated") is not True:
+                raise Unmet(f"UNVALIDATED_SELF_MODIFICATION: row {i}")
+            if r.get("benchmark_receipt_sha256") != bench_sha:
+                raise Unmet(f"LEDGER_ROW_NOT_BOUND_TO_BENCHMARK: row {i}")
+            if not re.fullmatch(r"[0-9a-f]{40}", str(r.get("sha") or "")) or _git(repo, "merge-base", "--is-ancestor", r["sha"], "HEAD").returncode:
+                raise Unmet(f"LEDGER_ROW_SHA_INVALID: row {i}")
+        pointer = _head_src(repo, "factory_v2/CHAMPION_POINTER").strip()
+        for p in rec["promotions"]:
+>           sha = str(p.get("sha") or "")
+                      ^^^^^
+E           AttributeError: 'str' object has no attribute 'get'
+
+factory_v2/verify_factory_hygiene.py:818: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_self_improvement.py::test_snapshot_validator_sha_matches_git_show_head
+FAILED tests/test_repairs_vh_residuals.py::test_runrecord_exit_code_must_be_an_observed_integer[0.0]
+FAILED tests/test_repairs_vh_residuals.py::test_runrecord_exit_code_must_be_an_observed_integer[False]
+FAILED tests/test_repairs_vh_residuals.py::test_pytest_fixture_error_is_not_a_killed_mutation
+FAILED tests/test_repairs_vh_residuals.py::test_feedback_per_item_words_without_images_are_not_evidence
+FAILED tests/test_repairs_vh_residuals.py::test_absent_current_milestone_does_not_prove_next_open
+FAILED tests/test_repairs_vh_residuals.py::test_matching_head_does_not_certify_dirty_bytes[control]
+FAILED tests/test_repairs_vh_residuals.py::test_long_run_null_or_noncanonical_ids_do_not_count[milestones2]
+FAILED tests/test_repairs_vh_residuals.py::test_long_run_null_or_noncanonical_ids_do_not_count[milestones1]
+FAILED tests/test_repairs_vh_residuals.py::test_long_run_null_or_noncanonical_ids_do_not_count[milestones0]
+FAILED tests/test_repairs_vh_residuals.py::test_matching_head_does_not_certify_dirty_bytes[product]
+FAILED tests/test_repairs_vh_snapshot_contract.py::test_effective_digest_matches_independently_hashed_committed_bytes
+FAILED tests/test_repairs_vh_snapshot_contract.py::test_old_snapshot_without_effective_digest_fails_closed
+13 failed, 2 passed in 3.15s

@@ -1,0 +1,31 @@
+{
+  "schema": "factory-v3-run/v1",
+  "milestone": "TR_TICKER_INTELLIGENCE_V1",
+  "project": "projects/twitter-radar",
+  "repo": "/private/tmp/tr-product-v3",
+  "base_sha": "3f484e6b34217fafa0087588395a87958a4d16eb",
+  "worktree": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/v3-TR_TICKER_INTELLIGENCE_V1-ce7s755_",
+  "started_at": "2026-09-23T17:03:01Z",
+  "engine": {
+    "engine": "glm",
+    "model": "zai-coding-plan/glm-5.3",
+    "prompt_chars": 5367,
+    "argv0": "opencode",
+    "rc": -15,
+    "timed_out": false,
+    "elapsed_s": 1026.9,
+    "log": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/factory_v3/receipts/TR_TICKER_INTELLIGENCE_V1_20260923T170301Z.engine.log"
+  },
+  "tests": {
+    "cmd": "python3 -m pytest tests/ -q -k 'ticker or fundamental or liquidity or taxonomy'",
+    "rc": 2,
+    "elapsed_s": 49.2,
+    "tail": "...s..............................sss..........ssss...............s..... [ 65%]\n....F.......F.........sssss.........s.                                   [100%]\n=================================== FAILURES ===================================\n__________ test_lifecycle_latest_open_call_governs_over_older_closed ___________\n\n    def test_lifecycle_latest_open_call_governs_over_older_closed():\n        old_closed = ep(\"A\", \"X\", \"2026-06-01\", 100, closure_state=\"CLOSED_SOLD\")\n        fresh_open = ep(\"B\", \"X\", \"2026-09-08\", 200, closure_state=\"OPEN_AT_WINDOW_END\")\n        lc = compute_lifecycle([old_closed, fresh_open], AS_OF)\n>       assert lc[\"state\"] == \"NEW_CALL\"\nE       AssertionError: assert 'ACTIVE_CALL' == 'NEW_CALL'\nE         \nE         - NEW_CALL\nE         + ACTIVE_CALL\n\ntests/test_tr_ticker_intelligence.py:65: AssertionError\n__________________ test_lifecycle_new_call_within_seven_days ___________________\n\n    def test_lifecycle_new_call_within_seven_days():\n        lc = compute_lifecycle([ep(\"A\", \"X\", \"2026-09-05\", 100)], AS_OF)\n>       assert lc[\"state\"] == \"NEW_CALL\"\nE       AssertionError: assert 'ACTIVE_CALL' == 'NEW_CALL'\nE         \nE         - NEW_CALL\nE         + ACTIVE_CALL\n\ntests/test_tr_ticker_intelligence.py:91: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_tr_ticker_intelligence.py::test_lifecycle_latest_open_call_governs_over_older_closed\nFAILED tests/test_tr_ticker_intelligence.py::test_lifecycle_new_call_within_seven_days\n2 failed, 93 passed, 15 skipped, 1389 deselected in 48.25s"
+  },
+  "commit": null,
+  "tests_touched": [
+    "M tests/test_tr_ticker_intelligence.py"
+  ],
+  "finished_at": "2026-09-23T17:20:58Z",
+  "verdict": "RED"
+}

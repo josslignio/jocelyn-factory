@@ -1,0 +1,159 @@
+{
+  "arms": {
+    "1w": {
+      "engine_overlaps_total": 0,
+      "evidence": [
+        "run_0_1w.json",
+        "run_1_1w.json",
+        "run_2_1w.json"
+      ],
+      "isolation_all_runs": [
+        true,
+        true,
+        true
+      ],
+      "median_throughput": 0.15663,
+      "median_wall_s": 51.076,
+      "reliability_all_runs": [
+        true,
+        true,
+        true
+      ],
+      "reliability_clean_runs": 3,
+      "run_window_ids": [
+        "f52d04fdfb1248778a885964c1aa1194",
+        "2171c0052fda472ea4add09415d1955f",
+        "d538f20e7b014bcaa599e2da956c3bef"
+      ],
+      "runs": 3,
+      "throughputs_missions_per_s": [
+        0.15663,
+        0.15655,
+        0.15669
+      ],
+      "walls_s": [
+        51.076,
+        51.101,
+        51.056
+      ]
+    },
+    "2w": {
+      "engine_overlaps_total": 16,
+      "evidence": [
+        "run_0_2w.json",
+        "run_1_2w.json",
+        "run_2_2w.json"
+      ],
+      "isolation_all_runs": [
+        true,
+        true,
+        true
+      ],
+      "median_throughput": 0.26345,
+      "median_wall_s": 30.366,
+      "reliability_all_runs": [
+        false,
+        true,
+        true
+      ],
+      "reliability_clean_runs": 2,
+      "run_window_ids": [
+        "1bb72bdebe824a6d8c3a762cc1d36315",
+        "01c90cbdd8464355bd1d90e0a740e326",
+        "af0783a8fc3949dfb174b057554bcd36"
+      ],
+      "runs": 3,
+      "throughputs_missions_per_s": [
+        0.23223,
+        0.26345,
+        0.28413
+      ],
+      "walls_s": [
+        34.448,
+        30.366,
+        28.156
+      ]
+    },
+    "4w": {
+      "engine_overlaps_total": 50,
+      "evidence": [
+        "run_0_4w.json",
+        "run_1_4w.json",
+        "run_2_4w.json"
+      ],
+      "isolation_all_runs": [
+        true,
+        true,
+        true
+      ],
+      "median_throughput": 0.45424,
+      "median_wall_s": 17.612,
+      "reliability_all_runs": [
+        true,
+        true,
+        true
+      ],
+      "reliability_clean_runs": 3,
+      "run_window_ids": [
+        "2ef32675d7c143b883394d0751297cb1",
+        "5e6f3852aac345488c5ad48b052fe9cd",
+        "cbe5c02aa3d640d79889e9919d44d839"
+      ],
+      "runs": 3,
+      "throughputs_missions_per_s": [
+        0.45424,
+        0.45161,
+        0.47172
+      ],
+      "walls_s": [
+        17.612,
+        17.714,
+        16.959
+      ]
+    }
+  },
+  "backoff_ceiling_s": 1.0,
+  "chains": 4,
+  "d019": {
+    "fan_out_event": true,
+    "g1_g2_overlap": true,
+    "knowledge_sha_match": true,
+    "older_product_tree_unchanged": true,
+    "reused_from": "../older_product/knowledge/lesson.md",
+    "workers": 4
+  },
+  "linear_efficiency_threshold": 0.8,
+  "measured": {
+    "isolation_perfect_nw": true,
+    "real_parallelism_nw": true,
+    "reliability_nw_no_worse_than_2w": true,
+    "throughput_strictly_increasing": true
+  },
+  "mission_sleep_s": 6.0,
+  "n": 4,
+  "poll_interval_s": 0.05,
+  "repeats": 3,
+  "repo_clean_after": [
+    "M .factory_worktree_meta.json",
+    " M evidence/engine_registry.jsonl"
+  ],
+  "repo_clean_before": [
+    "M .factory_worktree_meta.json",
+    " M evidence/engine_registry.jsonl"
+  ],
+  "repo_untouched": true,
+  "same_workload": true,
+  "scaling": {
+    "efficiency_per_worker": 0.725,
+    "linear": false,
+    "linear_threshold_speedup": 3.2,
+    "speedup_nw_over_1w": 2.9,
+    "throughput_ratio_2w_over_1w": 1.682,
+    "throughput_ratio_nw_over_1w": 2.9,
+    "throughput_ratio_nw_over_2w": 1.724
+  },
+  "schema": "scale-n-benchmark-summary/v1",
+  "verdict": "SCALE_N_RECOMMENDED",
+  "verdict_rule": "SCALE_N_RECOMMENDED iff median throughput strictly increases 1w < 2w < Nw AND every isolation check passes on every Nw run AND reliability counters at Nw are no worse than at 2w on this same workload AND the Nw arm shows >= 1 real engine overlap; anything else is NO_SCALE (an honest measured outcome)",
+  "workload_id": "SCALE_N_W1"
+}

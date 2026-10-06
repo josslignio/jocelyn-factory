@@ -1,0 +1,28 @@
+{
+  "challenger_sha": "3548b4d6b40153ad945ad34efce5c246f7191948",
+  "champion_pointer_after": "5257c8c9689aba1e85eb7638b621458eb3a067e8",
+  "champion_pointer_before": "5257c8c9689aba1e85eb7638b621458eb3a067e8",
+  "champion_sha": "fbe9dff2107341692ebda6fbeb69a63bc4e9f4ee",
+  "decision": "REJECT",
+  "decision_evidence_path": "evidence/bench_dead_weight_purge_repair/DECISION_EVIDENCE.md",
+  "metrics": {
+    "challenger": {
+      "launches_lost": 2,
+      "probes": 6,
+      "restart_recovered": 0,
+      "settled": 5,
+      "wall_s": 23.772
+    },
+    "champion": {
+      "launches_lost": 2,
+      "probes": 6,
+      "restart_recovered": 0,
+      "settled": 5,
+      "wall_s": 21.605
+    }
+  },
+  "observations_dir": "evidence/bench_dead_weight_purge_repair",
+  "schema": "matched-benchmark-receipt/v1",
+  "start_sha": "2805d31254d4fbc3cc29f3e423861b79c48da09e",
+  "workload_id": "default"
+}

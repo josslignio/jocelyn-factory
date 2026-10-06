@@ -1,0 +1,702 @@
+{
+  "schema": "code-review-lot/v1",
+  "lot": "L4_resilience_review",
+  "engine": "codex",
+  "reviewed_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943",
+  "files_reviewed": [
+    {
+      "path": "factory_v2/engine_registry.py",
+      "lines": 314,
+      "verdict": "FINDINGS",
+      "summary": "Registre des processus moteurs, identité de naissance et sweep des orphelins. Un groupe absent peut être journalisé comme supprimé sans signal individuel."
+    },
+    {
+      "path": "factory_v2/golden_promotion.py",
+      "lines": 294,
+      "verdict": "FINDINGS",
+      "summary": "Validation isolée et promotion Git par CAS. Une panne du reçu après CAS laisse la référence avancée avec un résultat ERROR."
+    },
+    {
+      "path": "factory_v2/hot_reload.py",
+      "lines": 65,
+      "verdict": "FINDINGS",
+      "summary": "Politique de rechargement du daemon selon les fichiers modifiés. L’exclusion run_ omet un module pourtant chargé dans factoryd."
+    },
+    {
+      "path": "factory_v2/mission_evidence.py",
+      "lines": 310,
+      "verdict": "FINDINGS",
+      "summary": "Répertoires de preuve, heartbeats, test de vie et renouvellement. Le thread et le sidecar partagent un nom temporaire sujet aux collisions."
+    },
+    {
+      "path": "factory_v2/mission_receipt.py",
+      "lines": 194,
+      "verdict": "FINDINGS",
+      "summary": "Reçus de mission durables, intégrité et compatibilité de contrat. Une forme JSON non objet échappe à la gestion typée des preuves corrompues."
+    },
+    {
+      "path": "factory_v2/progress_truth.py",
+      "lines": 209,
+      "verdict": "CLEAN",
+      "summary": "Distingue activité et progrès, classe six incidents et fournit leur identité stable. Lecture intégrale ; aucun défaut démontré retenu dans ce périmètre."
+    },
+    {
+      "path": "factory_v2/quota_observer.py",
+      "lines": 523,
+      "verdict": "FINDINGS",
+      "summary": "Fusion des quotas propriétaires et CLI puis décision de capacité. Perte des métadonnées de fenêtre et réduction des signaux à un seul scope par moteur."
+    },
+    {
+      "path": "factory_v2/resilience.py",
+      "lines": 644,
+      "verdict": "FINDINGS",
+      "summary": "Classification des interruptions, sondes réseau, checkpoints Git et reprise. Restauration permissive en cas d’échec de sonde et double consommation possible du marqueur."
+    },
+    {
+      "path": "factory_v2/review_dispatch.py",
+      "lines": 664,
+      "verdict": "FINDINGS",
+      "summary": "Routage, lancement restreint, scellement et comptabilité des reviews. Le parseur peut transformer une sortie d’outil en acceptation."
+    },
+    {
+      "path": "factory_v2/telemetry/__init__.py",
+      "lines": 40,
+      "verdict": "CLEAN",
+      "summary": "Expose le vocabulaire public de télémétrie et ses invariants. Lecture intégrale ; exports cohérents, aucun défaut démontré propre à ce fichier."
+    },
+    {
+      "path": "factory_v2/telemetry/__main__.py",
+      "lines": 6,
+      "verdict": "CLEAN",
+      "summary": "Point d’entrée minimal de la CLI, transmet le code de retour de report.main. Lecture intégrale ; aucun défaut démontré retenu."
+    },
+    {
+      "path": "factory_v2/telemetry/adapters.py",
+      "lines": 1146,
+      "verdict": "FINDINGS",
+      "summary": "Parse les usages Claude, opencode et Codex en compteurs communs. Certains payloads sans mesures et dépassements de plafond restent annoncés COMPLETE."
+    },
+    {
+      "path": "factory_v2/telemetry/aggregate.py",
+      "lines": 721,
+      "verdict": "FINDINGS",
+      "summary": "Agrège usages, couverture, coûts, jalons et reprises. Mélange de splits pouvant planter et fusion erronée de jalons homonymes entre projets."
+    },
+    {
+      "path": "factory_v2/telemetry/capture.py",
+      "lines": 110,
+      "verdict": "FINDINGS",
+      "summary": "Capture de logs, lecture par lignes, buffer de queue et tee. Un chunk géant n’est pas borné dans la mémoire du TailBuffer."
+    },
+    {
+      "path": "factory_v2/telemetry/gate.py",
+      "lines": 240,
+      "verdict": "FINDINGS",
+      "summary": "Journalise durablement les ouvertures et fins de lancements, y compris exceptions. argv_head conserve du contenu de prompt sans masquage."
+    },
+    {
+      "path": "factory_v2/telemetry/inventory.py",
+      "lines": 313,
+      "verdict": "FINDINGS",
+      "summary": "Inventaire et sondes de couverture des voies de lancement. La voie réelle dispatch_review est absente de la couverture publiée."
+    },
+    {
+      "path": "factory_v2/telemetry/ledger.py",
+      "lines": 213,
+      "verdict": "FINDINGS",
+      "summary": "Ledger JSONL verrouillé, raffinement des observations et rotation. Un append après queue déchirée perd la ligne saine suivante ; un raffinement peut effacer une mesure."
+    },
+    {
+      "path": "factory_v2/telemetry/observe.py",
+      "lines": 221,
+      "verdict": "CLEAN",
+      "summary": "Pont de capture vers LaunchObservation et projection vers la comptabilité. Lecture intégrale des chemins de dégradation et de projection ; aucun défaut démontré retenu."
+    },
+    {
+      "path": "factory_v2/telemetry/record.py",
+      "lines": 514,
+      "verdict": "CLEAN",
+      "summary": "Définit les mesures, inconnus, identités, redaction argv et événements autorisés. Lecture intégrale ; aucun défaut démontré retenu pour ce fichier."
+    },
+    {
+      "path": "factory_v2/telemetry/report.py",
+      "lines": 1017,
+      "verdict": "FINDINGS",
+      "summary": "Construit rapports JSON/Markdown, imports historiques et CLI. Déduplication de session supprimant durées/appels, état terminal mal reconnu et texte Markdown contradictoire."
+    }
+  ],
+  "findings": [
+    {
+      "id": "L4_resilience_review-001",
+      "file": "factory_v2/engine_registry.py",
+      "line": 259,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "os.killpg(target, sig)",
+      "why": "Si le PGID n’a pas pu être lu à l’enregistrement (valeur -1), _signal_target essaie killpg(pid) même si le processus n’est pas chef de groupe. ESRCH est traité comme une disparition du processus : kill_orphans journalise ORPHAN_ENGINE_KILLED sans avoir envoyé de signal au PID encore vivant. La reproduction injecte exactement cette réponse OS ; aucun vrai processus n’est signalé.",
+      "recommendation": "Quand le groupe est inconnu ou absent, vérifier l’identité et l’existence du PID puis signaler ce PID. Ne journaliser une suppression que lorsque sa disparition est établie. Tester ESRCH du groupe avec PID toujours vivant.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef orphan_missing_group(p):\n    with patch.object(er.os,'killpg',side_effect=ProcessLookupError),patch.object(er.os,'kill') as kill,patch.object(er,'_pid_alive',return_value=True):\n        rows=er.kill_orphans(p,[{'pid':987654321,'pgid':-1,'birth_time':1}])\n        assert len(rows)==1 and rows[0]['event']==er.ORPHAN_EVENT and not kill.called\n    return 'group absent; individual kill calls=0; ORPHAN_ENGINE_KILLED records=1 while PID reported alive'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=orphan_missing_group(Path(tmp))\nprint('TEST orphan_missing_group: rc=0; '+result)\nPY\nSortie observée :\nTEST orphan_missing_group: rc=0; group absent; individual kill calls=0; ORPHAN_ENGINE_KILLED records=1 while PID reported alive",
+      "locations": [
+        {
+          "file": "factory_v2/engine_registry.py",
+          "line": 256,
+          "function": "_signal_target",
+          "evidence_line": 259,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef orphan_missing_group(p):\n    with patch.object(er.os,'killpg',side_effect=ProcessLookupError),patch.object(er.os,'kill') as kill,patch.object(er,'_pid_alive',return_value=True):\n        rows=er.kill_orphans(p,[{'pid':987654321,'pgid':-1,'birth_time':1}])\n        assert len(rows)==1 and rows[0]['event']==er.ORPHAN_EVENT and not kill.called\n    return 'group absent; individual kill calls=0; ORPHAN_ENGINE_KILLED records=1 while PID reported alive'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=orphan_missing_group(Path(tmp))\nprint('TEST orphan_missing_group: rc=0; '+result)\nPY",
+        "expected_output": "TEST orphan_missing_group: rc=0; group absent; individual kill calls=0; ORPHAN_ENGINE_KILLED records=1 while PID reported alive",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-002",
+      "file": "factory_v2/golden_promotion.py",
+      "line": 280,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "except Exception as exc:",
+      "why": "Après le CAS réussi, une erreur d’écriture du reçu de promotion tombe dans le même except que les erreurs antérieures au CAS. La référence golden est déjà avancée mais un reçu ERROR est écrit si la seconde tentative réussit. Le consommateur settlement.py traite ce statut comme PROMOTION_FAILED : état de promotion et état réel divergent. Démontré avec un vrai dépôt Git et une seule panne d’écriture injectée après une validation réelle rc=0.",
+      "recommendation": "Distinguer les erreurs avant/après CAS ; conserver durablement une intention et réconcilier le ref actuel avec le SHA validé avant de conclure ou réessayer. Ajouter une panne après update-ref au test de reprise, sans rollback aveugle du ref.",
+      "fix_effort": "M",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef git(p,*args):\n    return subprocess.check_output(['git','-C',str(p),*args],text=True,stderr=subprocess.PIPE).strip()\ndef repo(p):\n    p.mkdir(parents=True,exist_ok=True);git(p,'init','-q');git(p,'config','user.name','Fixture');git(p,'config','user.email','fixture@local');git(p,'config','core.hooksPath','/dev/null')\n    (p/'file').write_text('base');git(p,'add','file');git(p,'commit','-qm','base');return git(p,'rev-parse','HEAD')\ndef promotion_receipt_failure(p):\n    base=repo(p);git(p,'branch','golden',base);(p/'file').write_text('candidate');git(p,'commit','-qam','candidate');candidate=git(p,'rev-parse','HEAD')\n    real=gp.PromotionReceipt.write;count=0\n    def fail_once(self,path):\n        nonlocal count\n        count+=1\n        if count==1:raise OSError('injected receipt write failure')\n        return real(self,path)\n    with patch.object(gp.PromotionReceipt,'write',fail_once):\n        receipt=gp.GoldenPromotion(p,'refs/heads/golden').promote(candidate,base,{'body':{'milestone':'M','product_e2e':{'test_command':'true'}}},p/'proof')\n    assert receipt.status=='ERROR' and git(p,'rev-parse','golden')==candidate and receipt.promoted_sha==candidate\n    return 'validator rc=0; promotion receipt status=ERROR; golden already advanced to candidate; promoted_sha remains populated'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=promotion_receipt_failure(Path(tmp))\nprint('TEST promotion_receipt_failure: rc=0; '+result)\nPY\nSortie observée :\nTEST promotion_receipt_failure: rc=0; validator rc=0; promotion receipt status=ERROR; golden already advanced to candidate; promoted_sha remains populated",
+      "locations": [
+        {
+          "file": "factory_v2/golden_promotion.py",
+          "line": 206,
+          "function": "promote",
+          "evidence_line": 280,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef git(p,*args):\n    return subprocess.check_output(['git','-C',str(p),*args],text=True,stderr=subprocess.PIPE).strip()\ndef repo(p):\n    p.mkdir(parents=True,exist_ok=True);git(p,'init','-q');git(p,'config','user.name','Fixture');git(p,'config','user.email','fixture@local');git(p,'config','core.hooksPath','/dev/null')\n    (p/'file').write_text('base');git(p,'add','file');git(p,'commit','-qm','base');return git(p,'rev-parse','HEAD')\ndef promotion_receipt_failure(p):\n    base=repo(p);git(p,'branch','golden',base);(p/'file').write_text('candidate');git(p,'commit','-qam','candidate');candidate=git(p,'rev-parse','HEAD')\n    real=gp.PromotionReceipt.write;count=0\n    def fail_once(self,path):\n        nonlocal count\n        count+=1\n        if count==1:raise OSError('injected receipt write failure')\n        return real(self,path)\n    with patch.object(gp.PromotionReceipt,'write',fail_once):\n        receipt=gp.GoldenPromotion(p,'refs/heads/golden').promote(candidate,base,{'body':{'milestone':'M','product_e2e':{'test_command':'true'}}},p/'proof')\n    assert receipt.status=='ERROR' and git(p,'rev-parse','golden')==candidate and receipt.promoted_sha==candidate\n    return 'validator rc=0; promotion receipt status=ERROR; golden already advanced to candidate; promoted_sha remains populated'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=promotion_receipt_failure(Path(tmp))\nprint('TEST promotion_receipt_failure: rc=0; '+result)\nPY",
+        "expected_output": "TEST promotion_receipt_failure: rc=0; validator rc=0; promotion receipt status=ERROR; golden already advanced to candidate; promoted_sha remains populated",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-003",
+      "file": "factory_v2/hot_reload.py",
+      "line": 35,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "and not Path(str(f)).name.startswith((\"verify_\", \"run_\", \"test_\"))",
+      "why": "L’exclusion par préfixe run_ exclut run_windows.py alors que factoryd.py l’importe dans run_daemon_loop et le conserve jusqu’à close_run. Une correction de ce module chargé dans le daemon ne déclenche donc aucun rechargement. La preuve croise l’AST de l’import réel et le résultat False de reload_needed.",
+      "recommendation": "Définir les exclusions selon les modules réellement exécutés en sous-processus, ou ajouter run_windows.py aux chemins sensibles. Tester tous les modules importés durablement par factoryd.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef reload_import_omitted(p):\n    tree=ast.parse(Path('factory/bin/factoryd.py').read_text())\n    found=any(isinstance(n,ast.ImportFrom) and n.module=='factory_v2' and any(a.name=='run_windows' for a in n.names) for n in ast.walk(tree))\n    assert found and not hr.reload_needed(['factory_v2/run_windows.py'])\n    return 'factoryd imports factory_v2.run_windows in-process; reload_needed([factory_v2/run_windows.py])=False'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=reload_import_omitted(Path(tmp))\nprint('TEST reload_import_omitted: rc=0; '+result)\nPY\nSortie observée :\nTEST reload_import_omitted: rc=0; factoryd imports factory_v2.run_windows in-process; reload_needed([factory_v2/run_windows.py])=False",
+      "locations": [
+        {
+          "file": "factory_v2/hot_reload.py",
+          "line": 21,
+          "function": "reload_needed",
+          "evidence_line": 35,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef reload_import_omitted(p):\n    tree=ast.parse(Path('factory/bin/factoryd.py').read_text())\n    found=any(isinstance(n,ast.ImportFrom) and n.module=='factory_v2' and any(a.name=='run_windows' for a in n.names) for n in ast.walk(tree))\n    assert found and not hr.reload_needed(['factory_v2/run_windows.py'])\n    return 'factoryd imports factory_v2.run_windows in-process; reload_needed([factory_v2/run_windows.py])=False'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=reload_import_omitted(Path(tmp))\nprint('TEST reload_import_omitted: rc=0; '+result)\nPY",
+        "expected_output": "TEST reload_import_omitted: rc=0; factoryd imports factory_v2.run_windows in-process; reload_needed([factory_v2/run_windows.py])=False",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-004",
+      "file": "factory_v2/mission_evidence.py",
+      "line": 100,
+      "severity": "MEDIUM",
+      "category": "RACE",
+      "evidence": "tmp_path = d / \"heartbeat.json.tmp\"",
+      "why": "Le renewer en thread et le heartbeat_sidecar utilisent tous deux write_heartbeat pour la même mission. Le nom temporaire partagé permet au second écrivain de remplacer le fichier avant le rename du premier : ce dernier lève FileNotFoundError. L’écriture dite atomique ne sérialise pas les deux producteurs et peut perdre une mise à jour ; le test force cet entrelacement exact sans lancer de thread.",
+      "recommendation": "Employer un fichier temporaire unique par écriture, publié avec os.replace ; si l’ordre seq/génération doit être monotone, sérialiser et contrôler cette identité. Tester l’entrelacement des deux producteurs actifs.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef heartbeat_collision(p):\n    real=Path.rename;entered=False\n    def interleave(self,target):\n        nonlocal entered\n        if self.name=='heartbeat.json.tmp' and not entered:\n            entered=True\n            me.write_heartbeat(p,'M',123,pgid=123,birth_time='birth',seq=2)\n        return real(self,target)\n    with patch.object(Path,'rename',interleave):\n        try:me.write_heartbeat(p,'M',123,pgid=123,birth_time='birth',seq=1)\n        except FileNotFoundError:pass\n        else:raise AssertionError('expected collision')\n    assert me.read_heartbeat(p,'M')['heartbeat_seq']==2\n    return 'interleaved renewer/sidecar writes: second publishes seq=2; first raises FileNotFoundError on shared tmp'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=heartbeat_collision(Path(tmp))\nprint('TEST heartbeat_collision: rc=0; '+result)\nPY\nSortie observée :\nTEST heartbeat_collision: rc=0; interleaved renewer/sidecar writes: second publishes seq=2; first raises FileNotFoundError on shared tmp",
+      "locations": [
+        {
+          "file": "factory_v2/mission_evidence.py",
+          "line": 59,
+          "function": "write_heartbeat",
+          "evidence_line": 100,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef heartbeat_collision(p):\n    real=Path.rename;entered=False\n    def interleave(self,target):\n        nonlocal entered\n        if self.name=='heartbeat.json.tmp' and not entered:\n            entered=True\n            me.write_heartbeat(p,'M',123,pgid=123,birth_time='birth',seq=2)\n        return real(self,target)\n    with patch.object(Path,'rename',interleave):\n        try:me.write_heartbeat(p,'M',123,pgid=123,birth_time='birth',seq=1)\n        except FileNotFoundError:pass\n        else:raise AssertionError('expected collision')\n    assert me.read_heartbeat(p,'M')['heartbeat_seq']==2\n    return 'interleaved renewer/sidecar writes: second publishes seq=2; first raises FileNotFoundError on shared tmp'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=heartbeat_collision(Path(tmp))\nprint('TEST heartbeat_collision: rc=0; '+result)\nPY",
+        "expected_output": "TEST heartbeat_collision: rc=0; interleaved renewer/sidecar writes: second publishes seq=2; first raises FileNotFoundError on shared tmp",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-005",
+      "file": "factory_v2/mission_receipt.py",
+      "line": 112,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "return MissionExecutionReceipt(**{k: v for k, v in d.items()",
+      "why": "Le chargeur documenté comme tolérant aux reçus corrompus appelle d.items() sans vérifier que le JSON est un objet. Un fichier contenant [] remonte AttributeError jusque dans load_verified_mission_receipt, au lieu d’une erreur typée ReceiptVerificationError que settlement sait traiter. Cela empêche la voie normale de récupération des preuves invalides.",
+      "recommendation": "Valider la forme du JSON avant la construction, retourner None pour une forme invalide et laisser load_verified_mission_receipt produire son erreur typée. Couvrir liste, null et types de champs invalides.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef receipt_nonobject(p):\n    path=p/'evidence/receipts/M/a.json';path.parent.mkdir(parents=True);path.write_text('[]')\n    try:mr.load_verified_mission_receipt(p,'M','a')\n    except AttributeError as e:assert 'items' in str(e)\n    else:raise AssertionError('expected untyped exception')\n    return 'valid JSON array receipt -> AttributeError, not ReceiptVerificationError or None'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=receipt_nonobject(Path(tmp))\nprint('TEST receipt_nonobject: rc=0; '+result)\nPY\nSortie observée :\nTEST receipt_nonobject: rc=0; valid JSON array receipt -> AttributeError, not ReceiptVerificationError or None",
+      "locations": [
+        {
+          "file": "factory_v2/mission_receipt.py",
+          "line": 105,
+          "function": "load_mission_receipt",
+          "evidence_line": 112,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef receipt_nonobject(p):\n    path=p/'evidence/receipts/M/a.json';path.parent.mkdir(parents=True);path.write_text('[]')\n    try:mr.load_verified_mission_receipt(p,'M','a')\n    except AttributeError as e:assert 'items' in str(e)\n    else:raise AssertionError('expected untyped exception')\n    return 'valid JSON array receipt -> AttributeError, not ReceiptVerificationError or None'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=receipt_nonobject(Path(tmp))\nprint('TEST receipt_nonobject: rc=0; '+result)\nPY",
+        "expected_output": "TEST receipt_nonobject: rc=0; valid JSON array receipt -> AttributeError, not ReceiptVerificationError or None",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-006",
+      "file": "factory_v2/quota_observer.py",
+      "line": 317,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "\"source\": SOURCE_SCREENSHOT,",
+      "why": "refresh_from_cli stocke source=cli et observed_at par fenêtre, mais merged_view les remplace systématiquement par screenshot et l’heure globale du snapshot. La lecture persistée perd donc son origine et son âge propre ; les fenêtres CLI ordinaires n’entrent plus dans leur expiration à 5 heures. Une mesure à 95 % datée de 2000 bloque encore après relecture, alors que la même mesure CLI directe expire. Un ancien timestamp global peut aussi faire préférer une mesure plus ancienne à la dernière actualisation.",
+      "recommendation": "Préserver source et observed_at de chaque fenêtre, avec les métadonnées globales comme défaut seulement. Tester refresh→load→merge→allowance avant/après expiration et la comparaison avec un signal intermédiaire.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef quota_metadata_lost(p):\n    with patch.dict(os.environ,{'FACTORY_RUN_DIR':str(p)}):\n        assert qo.refresh_from_cli(p,'claude',utilisation=0.95,scope='five_hour',observed_at='2000-01-01T00:00:00Z')\n        view=qo.merged_view(qo.load_snapshot(p),{})['claude'];answer=qo.engine_allowance('claude',view)\n        direct=qo.engine_allowance('claude',{'five_hour':{'utilisation':.95,'source':'cli','observed_at':'2000-01-01T00:00:00Z'}})\n    assert view['five_hour']['source']=='screenshot' and not answer['allowed'] and direct['allowed']\n    return 'CLI snapshot reread as source=screenshot; year-2000 quota still refuses; identical source=cli expires and allows'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=quota_metadata_lost(Path(tmp))\nprint('TEST quota_metadata_lost: rc=0; '+result)\nPY\nSortie observée :\nTEST quota_metadata_lost: rc=0; CLI snapshot reread as source=screenshot; year-2000 quota still refuses; identical source=cli expires and allows",
+      "locations": [
+        {
+          "file": "factory_v2/quota_observer.py",
+          "line": 269,
+          "function": "merged_view",
+          "evidence_line": 317,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef quota_metadata_lost(p):\n    with patch.dict(os.environ,{'FACTORY_RUN_DIR':str(p)}):\n        assert qo.refresh_from_cli(p,'claude',utilisation=0.95,scope='five_hour',observed_at='2000-01-01T00:00:00Z')\n        view=qo.merged_view(qo.load_snapshot(p),{})['claude'];answer=qo.engine_allowance('claude',view)\n        direct=qo.engine_allowance('claude',{'five_hour':{'utilisation':.95,'source':'cli','observed_at':'2000-01-01T00:00:00Z'}})\n    assert view['five_hour']['source']=='screenshot' and not answer['allowed'] and direct['allowed']\n    return 'CLI snapshot reread as source=screenshot; year-2000 quota still refuses; identical source=cli expires and allows'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=quota_metadata_lost(Path(tmp))\nprint('TEST quota_metadata_lost: rc=0; '+result)\nPY",
+        "expected_output": "TEST quota_metadata_lost: rc=0; CLI snapshot reread as source=screenshot; year-2000 quota still refuses; identical source=cli expires and allows",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-007",
+      "file": "factory_v2/quota_observer.py",
+      "line": 235,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "prior = out.get(provider)",
+      "why": "Le dernier signal est retenu par provider, pas par fenêtre. Une observation five_hour à 10 % efface donc une observation seven_day à 100 % du même moteur. Sans screenshot de secours, engine_allowance autorise alors le lancement malgré la fenêtre hebdomadaire saturée. Les deux lignes de ledger sont valides et leur ordre temporel est explicite dans la reproduction.",
+      "recommendation": "Conserver le dernier signal par couple provider/scope et fusionner chaque fenêtre séparément avant la décision any-window. Ajouter un test avec fenêtre hebdomadaire saturée et mesure de session plus récente disponible.",
+      "fix_effort": "M",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef quota_window_lost(p):\n    path=p/'evidence/attempt_accounts.jsonl';path.parent.mkdir(parents=True)\n    rows=[{'attempt_key':'a','engine':'claude','quota_scope':'seven_day','quota_utilisation':1.0,'quota_observed_at':'2099-01-01T00:00:00Z'}, {'attempt_key':'b','engine':'claude','quota_scope':'five_hour','quota_utilisation':.1,'quota_observed_at':'2099-01-01T00:01:00Z'}]\n    path.write_text(''.join(json.dumps(r)+'\\n' for r in rows))\n    signals=qo.latest_cli_signals([p]);v=qo.merged_view({},signals)['claude'];a=qo.engine_allowance('claude',v)\n    assert 'seven_day' not in v and a['allowed']\n    return 'seven_day=100%, then five_hour=10%; latest_cli_signals drops seven_day; allowance=True'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=quota_window_lost(Path(tmp))\nprint('TEST quota_window_lost: rc=0; '+result)\nPY\nSortie observée :\nTEST quota_window_lost: rc=0; seven_day=100%, then five_hour=10%; latest_cli_signals drops seven_day; allowance=True",
+      "locations": [
+        {
+          "file": "factory_v2/quota_observer.py",
+          "line": 194,
+          "function": "latest_cli_signals",
+          "evidence_line": 235,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef quota_window_lost(p):\n    path=p/'evidence/attempt_accounts.jsonl';path.parent.mkdir(parents=True)\n    rows=[{'attempt_key':'a','engine':'claude','quota_scope':'seven_day','quota_utilisation':1.0,'quota_observed_at':'2099-01-01T00:00:00Z'}, {'attempt_key':'b','engine':'claude','quota_scope':'five_hour','quota_utilisation':.1,'quota_observed_at':'2099-01-01T00:01:00Z'}]\n    path.write_text(''.join(json.dumps(r)+'\\n' for r in rows))\n    signals=qo.latest_cli_signals([p]);v=qo.merged_view({},signals)['claude'];a=qo.engine_allowance('claude',v)\n    assert 'seven_day' not in v and a['allowed']\n    return 'seven_day=100%, then five_hour=10%; latest_cli_signals drops seven_day; allowance=True'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=quota_window_lost(Path(tmp))\nprint('TEST quota_window_lost: rc=0; '+result)\nPY",
+        "expected_output": "TEST quota_window_lost: rc=0; seven_day=100%, then five_hour=10%; latest_cli_signals drops seven_day; allowance=True",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-008",
+      "file": "factory_v2/resilience.py",
+      "line": 527,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if probe_tree and probe_tree != tree:",
+      "why": "Le refus d’écraser du travail non sauvegardé est conditionné à probe_tree non vide. Or checkpoint_worktree renvoie une chaîne vide lorsqu’une commande Git échoue. Dans ce cas restore_checkpoint continue avec read-tree puis git clean : la reproduction efface une nouvelle modification suivie et un nouveau fichier non suivi, sans force=True, dès que la sonde échoue.",
+      "recommendation": "Refuser la restauration lorsque le statut ou la sonde ne peuvent être établis. Ne lancer aucune opération destructive avant comparaison positive du tree ; vérifier aussi les codes de retour de la restauration et du nettoyage.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef git(p,*args):\n    return subprocess.check_output(['git','-C',str(p),*args],text=True,stderr=subprocess.PIPE).strip()\ndef repo(p):\n    p.mkdir(parents=True,exist_ok=True);git(p,'init','-q');git(p,'config','user.name','Fixture');git(p,'config','user.email','fixture@local');git(p,'config','core.hooksPath','/dev/null')\n    (p/'file').write_text('base');git(p,'add','file');git(p,'commit','-qm','base');return git(p,'rev-parse','HEAD')\ndef restore_probe_failure(p):\n    repo(p);(p/'file').write_text('checkpoint');sha=rs.checkpoint_worktree(p,'M');assert sha\n    (p/'file').write_text('valuable new work');(p/'new').write_text('uncheckpointed')\n    with patch.object(rs,'checkpoint_worktree',return_value=''):\n        result=rs.restore_checkpoint(p,'M')\n    assert result==sha and (p/'file').read_text()=='checkpoint' and not (p/'new').exists()\n    return 'dirty-state probe returns empty (failure); restore succeeds, overwrites new tracked work and deletes untracked new file'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=restore_probe_failure(Path(tmp))\nprint('TEST restore_probe_failure: rc=0; '+result)\nPY\nSortie observée :\nTEST restore_probe_failure: rc=0; dirty-state probe returns empty (failure); restore succeeds, overwrites new tracked work and deletes untracked new file",
+      "locations": [
+        {
+          "file": "factory_v2/resilience.py",
+          "line": 498,
+          "function": "restore_checkpoint",
+          "evidence_line": 527,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef git(p,*args):\n    return subprocess.check_output(['git','-C',str(p),*args],text=True,stderr=subprocess.PIPE).strip()\ndef repo(p):\n    p.mkdir(parents=True,exist_ok=True);git(p,'init','-q');git(p,'config','user.name','Fixture');git(p,'config','user.email','fixture@local');git(p,'config','core.hooksPath','/dev/null')\n    (p/'file').write_text('base');git(p,'add','file');git(p,'commit','-qm','base');return git(p,'rev-parse','HEAD')\ndef restore_probe_failure(p):\n    repo(p);(p/'file').write_text('checkpoint');sha=rs.checkpoint_worktree(p,'M');assert sha\n    (p/'file').write_text('valuable new work');(p/'new').write_text('uncheckpointed')\n    with patch.object(rs,'checkpoint_worktree',return_value=''):\n        result=rs.restore_checkpoint(p,'M')\n    assert result==sha and (p/'file').read_text()=='checkpoint' and not (p/'new').exists()\n    return 'dirty-state probe returns empty (failure); restore succeeds, overwrites new tracked work and deletes untracked new file'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=restore_probe_failure(Path(tmp))\nprint('TEST restore_probe_failure: rc=0; '+result)\nPY",
+        "expected_output": "TEST restore_probe_failure: rc=0; dirty-state probe returns empty (failure); restore succeeds, overwrites new tracked work and deletes untracked new file",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-009",
+      "file": "factory_v2/resilience.py",
+      "line": 467,
+      "severity": "HIGH",
+      "category": "RACE",
+      "evidence": "os.rename(orphan, path)",
+      "why": "Toute claim existante est adoptée comme orpheline sans vérifier si son lecteur est vivant. Si A a déjà lu sa claim mais n’a pas encore fait unlink, B la renomme, la lit et la consomme ; A retourne ensuite le même marqueur malgré son unlink manquant. Deux consommateurs obtiennent ainsi la même reprise, contrairement à la garantie exactement-un. La reproduction force cet ordonnancement de manière synchrone.",
+      "recommendation": "Protéger récupération et consommation par le même verrou interprocessus, ou valider la mort/identité du propriétaire avant adoption. Employer une identité de claim unique et tester deux lecteurs concurrents ainsi que la reprise après crash.",
+      "fix_effort": "M",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef marker_double_consume(p):\n    rs.write_interruption_marker(p,'M','base',rs.QUOTA_CUT)\n    real=Path.read_text;inner=[];entered=False;clock=iter([1.001,1.002])\n    def interleave(self,*a,**kw):\n        nonlocal entered\n        text=real(self,*a,**kw)\n        if '.claim-' in self.name and not entered:\n            entered=True;inner.append(rs.consume_interruption_marker(p,'M','base'))\n        return text\n    with patch.object(rs.time,'time',side_effect=lambda:next(clock)),patch.object(Path,'read_text',interleave):\n        outer=rs.consume_interruption_marker(p,'M','base')\n    assert outer and inner[0] and outer==inner[0]\n    return 'consumer A reads claimed marker; B adopts active claim as orphan; both consumers return same nonempty marker'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=marker_double_consume(Path(tmp))\nprint('TEST marker_double_consume: rc=0; '+result)\nPY\nSortie observée :\nTEST marker_double_consume: rc=0; consumer A reads claimed marker; B adopts active claim as orphan; both consumers return same nonempty marker",
+      "locations": [
+        {
+          "file": "factory_v2/resilience.py",
+          "line": 447,
+          "function": "consume_interruption_marker",
+          "evidence_line": 467,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef marker_double_consume(p):\n    rs.write_interruption_marker(p,'M','base',rs.QUOTA_CUT)\n    real=Path.read_text;inner=[];entered=False;clock=iter([1.001,1.002])\n    def interleave(self,*a,**kw):\n        nonlocal entered\n        text=real(self,*a,**kw)\n        if '.claim-' in self.name and not entered:\n            entered=True;inner.append(rs.consume_interruption_marker(p,'M','base'))\n        return text\n    with patch.object(rs.time,'time',side_effect=lambda:next(clock)),patch.object(Path,'read_text',interleave):\n        outer=rs.consume_interruption_marker(p,'M','base')\n    assert outer and inner[0] and outer==inner[0]\n    return 'consumer A reads claimed marker; B adopts active claim as orphan; both consumers return same nonempty marker'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=marker_double_consume(Path(tmp))\nprint('TEST marker_double_consume: rc=0; '+result)\nPY",
+        "expected_output": "TEST marker_double_consume: rc=0; consumer A reads claimed marker; B adopts active claim as orphan; both consumers return same nonempty marker",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-010",
+      "file": "factory_v2/review_dispatch.py",
+      "line": 305,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "spoken = _agent_text_lines(text)",
+      "why": "Lorsque _agent_text_lines ne trouve aucun message modèle, le parseur retombe sur tout le JSON brut. Un transcript Codex composé uniquement d’un command_execution affichant ACCEPT devient un verdict ACCEPT sans conclusion du reviewer. Les événements text d’opencode ne sont pas extraits non plus : une vraie conclusion BLOCK suivie d’un outil affichant ACCEPT est inversée. Ces deux cas sont reproduits sans appel modèle.",
+      "recommendation": "Détecter explicitement les formats structurés, extraire le texte de conclusion de chaque moteur, et retourner ERROR si ce texte manque. Ne jamais utiliser les sorties d’outils comme verdict ; couvrir Codex sans conclusion et opencode avec verdict contradictoire dans un outil.",
+      "fix_effort": "M",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef verdict_tool_output(p):\n    cases=[json.dumps({'type':'item.completed','item':{'type':'command_execution','aggregated_output':'ACCEPT','exit_code':0}}), '\\n'.join([json.dumps({'type':'text','part':{'text':'BLOCK: missing proof'}}),json.dumps({'type':'tool_use','part':{'output':'ACCEPT'}})])]\n    verdicts=[rd._extract_verdict(c) for c in cases]\n    assert verdicts==['ACCEPT','ACCEPT']\n    return 'Codex tool-only transcript=ACCEPT; opencode BLOCK text followed by tool output ACCEPT=ACCEPT'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=verdict_tool_output(Path(tmp))\nprint('TEST verdict_tool_output: rc=0; '+result)\nPY\nSortie observée :\nTEST verdict_tool_output: rc=0; Codex tool-only transcript=ACCEPT; opencode BLOCK text followed by tool output ACCEPT=ACCEPT",
+      "locations": [
+        {
+          "file": "factory_v2/review_dispatch.py",
+          "line": 289,
+          "function": "_extract_verdict",
+          "evidence_line": 305,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef verdict_tool_output(p):\n    cases=[json.dumps({'type':'item.completed','item':{'type':'command_execution','aggregated_output':'ACCEPT','exit_code':0}}), '\\n'.join([json.dumps({'type':'text','part':{'text':'BLOCK: missing proof'}}),json.dumps({'type':'tool_use','part':{'output':'ACCEPT'}})])]\n    verdicts=[rd._extract_verdict(c) for c in cases]\n    assert verdicts==['ACCEPT','ACCEPT']\n    return 'Codex tool-only transcript=ACCEPT; opencode BLOCK text followed by tool output ACCEPT=ACCEPT'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=verdict_tool_output(Path(tmp))\nprint('TEST verdict_tool_output: rc=0; '+result)\nPY",
+        "expected_output": "TEST verdict_tool_output: rc=0; Codex tool-only transcript=ACCEPT; opencode BLOCK text followed by tool output ACCEPT=ACCEPT",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-011",
+      "file": "factory_v2/telemetry/capture.py",
+      "line": 80,
+      "severity": "MEDIUM",
+      "category": "PERF",
+      "evidence": "while self._size > self.max_bytes and len(self._chunks) > 1:",
+      "why": "La boucle conserve toujours au moins un chunk, quelle que soit sa taille. Une seule ligne très longue reste donc intégralement en mémoire malgré max_bytes. Avec une borne de 8, le test conserve 1 000 000 caractères ; text() ne tronque que la valeur retournée. Des sorties structurées sur une ligne rendent cette promesse de mémoire bornée inexacte.",
+      "recommendation": "Tronquer le chunk avant conservation et définir clairement une limite en octets UTF-8 ou en caractères. Tester une ligne supérieure à la borne et des caractères multioctets ; borner aussi la lecture des lignes en amont.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef capture_not_bounded(p):\n    tail=cap.TailBuffer(8);tail.add('x'*1000000)\n    assert tail._size==1000000 and len(tail._chunks[0])==1000000 and len(tail.text())==8\n    return 'TailBuffer(max_bytes=8) retains 1000000 characters internally after one long line; returned tail length=8'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=capture_not_bounded(Path(tmp))\nprint('TEST capture_not_bounded: rc=0; '+result)\nPY\nSortie observée :\nTEST capture_not_bounded: rc=0; TailBuffer(max_bytes=8) retains 1000000 characters internally after one long line; returned tail length=8",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/capture.py",
+          "line": 77,
+          "function": "add",
+          "evidence_line": 80,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef capture_not_bounded(p):\n    tail=cap.TailBuffer(8);tail.add('x'*1000000)\n    assert tail._size==1000000 and len(tail._chunks[0])==1000000 and len(tail.text())==8\n    return 'TailBuffer(max_bytes=8) retains 1000000 characters internally after one long line; returned tail length=8'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=capture_not_bounded(Path(tmp))\nprint('TEST capture_not_bounded: rc=0; '+result)\nPY",
+        "expected_output": "TEST capture_not_bounded: rc=0; TailBuffer(max_bytes=8) retains 1000000 characters internally after one long line; returned tail length=8",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-012",
+      "file": "factory_v2/telemetry/adapters.py",
+      "line": 666,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "completeness = COMPLETE if clean_exit is True else PARTIAL_FLOOR",
+      "why": "Un step_finish sans aucun compteur produit des zéros mesurés et COMPLETE sur sortie propre. Le même défaut apparaît dans parse_codex_jsonl avec total_token_usage={} ; le stream Claude avec result/usage={} reste COMPLETE bien que tous ses champs soient inconnus. La reproduction de ces trois chemins donne une couverture exacte globale de 100 % sans un seul compteur émis, contredisant le contrat UNKNOWN plutôt que zéro.",
+      "recommendation": "Suivre la présence effective des compteurs et laisser inconnus les champs absents. Dégrader à ABSENT lorsqu’aucun compteur n’est observé, comme le fait déjà parse_claude_result_json. Tester les trois formats avec payload vide et partiellement renseigné.",
+      "fix_effort": "M",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef empty_usage_measured(p):\n    claude=ad.parse_claude_stream_json([json.dumps({'type':'result','usage':{}})])\n    glm=ad.parse_opencode_json([json.dumps({'type':'step_finish','part':{'id':'x','tokens':{}}})],clean_exit=True)\n    codex=ad.parse_codex_jsonl([json.dumps({'type':'token_count','info':{'total_token_usage':{}}})],clean_exit=True)\n    assert all(x.usage.completeness=='COMPLETE' for x in (claude,glm,codex))\n    assert value_of(glm.usage.input_tokens)==0 and value_of(codex.usage.output_tokens)==0\n    summary=ag.summarise([LaunchObservation(observation_key=str(i),usage=x.usage).as_dict() for i,x in enumerate((claude,glm,codex))])\n    assert summary['totals']['token_coverage_exact_pct']==100.0\n    return 'three empty usage payloads -> COMPLETE; GLM/Codex invent zero counters; aggregate exact coverage=100%'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=empty_usage_measured(Path(tmp))\nprint('TEST empty_usage_measured: rc=0; '+result)\nPY\nSortie observée :\nTEST empty_usage_measured: rc=0; three empty usage payloads -> COMPLETE; GLM/Codex invent zero counters; aggregate exact coverage=100%",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/adapters.py",
+          "line": 581,
+          "function": "parse_opencode_json",
+          "evidence_line": 666,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef empty_usage_measured(p):\n    claude=ad.parse_claude_stream_json([json.dumps({'type':'result','usage':{}})])\n    glm=ad.parse_opencode_json([json.dumps({'type':'step_finish','part':{'id':'x','tokens':{}}})],clean_exit=True)\n    codex=ad.parse_codex_jsonl([json.dumps({'type':'token_count','info':{'total_token_usage':{}}})],clean_exit=True)\n    assert all(x.usage.completeness=='COMPLETE' for x in (claude,glm,codex))\n    assert value_of(glm.usage.input_tokens)==0 and value_of(codex.usage.output_tokens)==0\n    summary=ag.summarise([LaunchObservation(observation_key=str(i),usage=x.usage).as_dict() for i,x in enumerate((claude,glm,codex))])\n    assert summary['totals']['token_coverage_exact_pct']==100.0\n    return 'three empty usage payloads -> COMPLETE; GLM/Codex invent zero counters; aggregate exact coverage=100%'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=empty_usage_measured(Path(tmp))\nprint('TEST empty_usage_measured: rc=0; '+result)\nPY",
+        "expected_output": "TEST empty_usage_measured: rc=0; three empty usage payloads -> COMPLETE; GLM/Codex invent zero counters; aggregate exact coverage=100%",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-013",
+      "file": "factory_v2/telemetry/adapters.py",
+      "line": 632,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if len(seen_parts) > MAX_TRACKED_MESSAGES:",
+      "why": "Après MAX_TRACKED_MESSAGES, les steps sont ignorés mais la complétude reste COMPLETE si rc=0 et aucune caveat d’overflow n’est ajoutée. À plafond réduit à 2 pour un test rapide, trois steps de 10 tokens donnent un total exact annoncé de 20. De plus les identifiants continuent d’être ajoutés à seen_parts avant le contrôle, donc ce plafond ne borne pas ce set.",
+      "recommendation": "Tester le plafond avant insertion, compter les événements écartés et marquer PARTIAL_FLOOR avec caveat. Ne jamais publier un total exact après abandon d’événements ; ajouter un test de dépassement de la borne.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef opencode_cap_exact(p):\n    lines=[json.dumps({'type':'step_finish','part':{'id':str(i),'tokens':{'input':10}}}) for i in range(3)]\n    with patch.object(ad,'MAX_TRACKED_MESSAGES',2):parsed=ad.parse_opencode_json(lines,clean_exit=True)\n    assert value_of(parsed.usage.input_tokens)==20 and parsed.usage.completeness=='COMPLETE' and not any('bound' in c.lower() or 'overflow' in c.lower() for c in parsed.usage.caveats)\n    return 'message ceiling=2; three 10-token steps -> 20 tokens labelled COMPLETE, no overflow caveat'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=opencode_cap_exact(Path(tmp))\nprint('TEST opencode_cap_exact: rc=0; '+result)\nPY\nSortie observée :\nTEST opencode_cap_exact: rc=0; message ceiling=2; three 10-token steps -> 20 tokens labelled COMPLETE, no overflow caveat",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/adapters.py",
+          "line": 581,
+          "function": "parse_opencode_json",
+          "evidence_line": 632,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef opencode_cap_exact(p):\n    lines=[json.dumps({'type':'step_finish','part':{'id':str(i),'tokens':{'input':10}}}) for i in range(3)]\n    with patch.object(ad,'MAX_TRACKED_MESSAGES',2):parsed=ad.parse_opencode_json(lines,clean_exit=True)\n    assert value_of(parsed.usage.input_tokens)==20 and parsed.usage.completeness=='COMPLETE' and not any('bound' in c.lower() or 'overflow' in c.lower() for c in parsed.usage.caveats)\n    return 'message ceiling=2; three 10-token steps -> 20 tokens labelled COMPLETE, no overflow caveat'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=opencode_cap_exact(Path(tmp))\nprint('TEST opencode_cap_exact: rc=0; '+result)\nPY",
+        "expected_output": "TEST opencode_cap_exact: rc=0; message ceiling=2; three 10-token steps -> 20 tokens labelled COMPLETE, no overflow caveat",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-014",
+      "file": "factory_v2/telemetry/ledger.py",
+      "line": 142,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "return incoming if _rank(incoming) >= _rank(current) else current",
+      "why": "À rang de complétude égal, le bloc usage entrant remplace entièrement le précédent. Une réobservation COMPLETE qui omet input_tokens efface donc une valeur 100 déjà mesurée, malgré la règle documentée de raffinement sans perte. La preuve conserve output_tokens mesuré pour montrer que les deux blocs COMPLETE sont plausibles.",
+      "recommendation": "Fusionner les champs selon leur présence et leur qualité, avec une règle explicite pour compteurs cumulatifs. Tester les raffinement COMPLETE→COMPLETE et PARTIAL_FLOOR→PARTIAL_FLOOR comportant des champs manquants.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef usage_refinement_loses_fields(p):\n    old={'observation_key':'k','usage':{'completeness':'COMPLETE','input_tokens':measured(100,source='x'),'output_tokens':measured(50,source='x')}}\n    new={'observation_key':'k','usage':{'completeness':'COMPLETE','input_tokens':unknown('NOT_EMITTED_BY_PROVIDER'),'output_tokens':measured(50,source='x')}}\n    folded=led.fold([old,new])[0]\n    assert value_of(folded['usage']['input_tokens']) is None\n    return 'same observation, same COMPLETE rank: input_tokens=100 overwritten by UNKNOWN on refinement'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=usage_refinement_loses_fields(Path(tmp))\nprint('TEST usage_refinement_loses_fields: rc=0; '+result)\nPY\nSortie observée :\nTEST usage_refinement_loses_fields: rc=0; same observation, same COMPLETE rank: input_tokens=100 overwritten by UNKNOWN on refinement",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/ledger.py",
+          "line": 136,
+          "function": "_better_usage",
+          "evidence_line": 142,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef usage_refinement_loses_fields(p):\n    old={'observation_key':'k','usage':{'completeness':'COMPLETE','input_tokens':measured(100,source='x'),'output_tokens':measured(50,source='x')}}\n    new={'observation_key':'k','usage':{'completeness':'COMPLETE','input_tokens':unknown('NOT_EMITTED_BY_PROVIDER'),'output_tokens':measured(50,source='x')}}\n    folded=led.fold([old,new])[0]\n    assert value_of(folded['usage']['input_tokens']) is None\n    return 'same observation, same COMPLETE rank: input_tokens=100 overwritten by UNKNOWN on refinement'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=usage_refinement_loses_fields(Path(tmp))\nprint('TEST usage_refinement_loses_fields: rc=0; '+result)\nPY",
+        "expected_output": "TEST usage_refinement_loses_fields: rc=0; same observation, same COMPLETE rank: input_tokens=100 overwritten by UNKNOWN on refinement",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-015",
+      "file": "factory_v2/telemetry/ledger.py",
+      "line": 48,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "fh.write(line + \"\\n\")",
+      "why": "La lecture ignore une dernière ligne déchirée, mais append ne répare pas l’absence de saut de ligne avant la prochaine écriture. Après un crash laissant un fragment JSON, la prochaine observation complète et fsyncée est collée au fragment ; read_rows ignore l’ensemble. La preuve perd ainsi la première observation saine suivant le crash sans aucun échec d’append.",
+      "recommendation": "Sous le verrou d’append, vérifier la terminaison du fichier et isoler ou tronquer uniquement la queue incomplète avant d’écrire. Conserver une trace de corruption ; tester crash partiel puis append et reconstruction.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef torn_tail_loses_next(p):\n    path=led.ledger_path(p);path.parent.mkdir(parents=True);path.write_text('{\"observation_key\":\"interrupted')\n    led.append({'observation_key':'durable-next','usage':{}},p)\n    assert led.read_rows(p)==[] and 'durable-next' in path.read_text()\n    return 'append after unterminated torn JSON tail fsyncs next observation onto corrupt line; read_rows returns zero rows'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=torn_tail_loses_next(Path(tmp))\nprint('TEST torn_tail_loses_next: rc=0; '+result)\nPY\nSortie observée :\nTEST torn_tail_loses_next: rc=0; append after unterminated torn JSON tail fsyncs next observation onto corrupt line; read_rows returns zero rows",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/ledger.py",
+          "line": 32,
+          "function": "append",
+          "evidence_line": 48,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef torn_tail_loses_next(p):\n    path=led.ledger_path(p);path.parent.mkdir(parents=True);path.write_text('{\"observation_key\":\"interrupted')\n    led.append({'observation_key':'durable-next','usage':{}},p)\n    assert led.read_rows(p)==[] and 'durable-next' in path.read_text()\n    return 'append after unterminated torn JSON tail fsyncs next observation onto corrupt line; read_rows returns zero rows'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=torn_tail_loses_next(Path(tmp))\nprint('TEST torn_tail_loses_next: rc=0; '+result)\nPY",
+        "expected_output": "TEST torn_tail_loses_next: rc=0; append after unterminated torn JSON tail fsyncs next observation onto corrupt line; read_rows returns zero rows",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-016",
+      "file": "factory_v2/telemetry/aggregate.py",
+      "line": 274,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "totals[f] = (totals.get(f) or 0) + v",
+      "why": "Un modèle présent à la fois dans une mesure globale et dans un split par modèle peut avoir UNKNOWN dans les tokens_exact du premier bucket. La fusion tente alors UNKNOWN + 10, car cette chaîne est truthy et ne devient pas zéro. summarise lève TypeError sur deux observations valides et empêche la génération complète du rapport.",
+      "recommendation": "Garder une couverture par champ et convertir seulement les valeurs numériques en accumulateurs ; distinguer inconnu et absence de contribution. Tester le même modèle avec une ligne sans split partiellement mesurée puis une ligne avec split.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef mixed_model_crash(p):\n    plain=LaunchObservation(observation_key='a',model_observed='same').as_dict()\n    split=LaunchObservation(observation_key='b',usage=Usage(completeness='COMPLETE',input_tokens=measured(10,source='x'),per_model={'same':{'input_tokens':10}})).as_dict()\n    # Include one measured field in the plain row, leaving input UNKNOWN, so tokens_exact is a dict.\n    plain['usage']['completeness']='COMPLETE';plain['usage']['output_tokens']=measured(1,source='x')\n    try:ag.summarise([plain,split])\n    except TypeError:pass\n    else:raise AssertionError('expected mixed-field crash')\n    return 'same model: whole-launch input UNKNOWN plus per-model input=10 -> TypeError in summarise'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=mixed_model_crash(Path(tmp))\nprint('TEST mixed_model_crash: rc=0; '+result)\nPY\nSortie observée :\nTEST mixed_model_crash: rc=0; same model: whole-launch input UNKNOWN plus per-model input=10 -> TypeError in summarise",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/aggregate.py",
+          "line": 232,
+          "function": "_by_model",
+          "evidence_line": 274,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef mixed_model_crash(p):\n    plain=LaunchObservation(observation_key='a',model_observed='same').as_dict()\n    split=LaunchObservation(observation_key='b',usage=Usage(completeness='COMPLETE',input_tokens=measured(10,source='x'),per_model={'same':{'input_tokens':10}})).as_dict()\n    # Include one measured field in the plain row, leaving input UNKNOWN, so tokens_exact is a dict.\n    plain['usage']['completeness']='COMPLETE';plain['usage']['output_tokens']=measured(1,source='x')\n    try:ag.summarise([plain,split])\n    except TypeError:pass\n    else:raise AssertionError('expected mixed-field crash')\n    return 'same model: whole-launch input UNKNOWN plus per-model input=10 -> TypeError in summarise'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=mixed_model_crash(Path(tmp))\nprint('TEST mixed_model_crash: rc=0; '+result)\nPY",
+        "expected_output": "TEST mixed_model_crash: rc=0; same model: whole-launch input UNKNOWN plus per-model input=10 -> TypeError in summarise",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-017",
+      "file": "factory_v2/telemetry/aggregate.py",
+      "line": 318,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "accepted_milestones = sorted({a.get(\"milestone\") for a in accepted",
+      "why": "Le rapport accepte plusieurs project_dirs, mais le dénominateur des jalons acceptés déduplique uniquement milestone. Deux projets distincts qui ont chacun accepté M1 comptent pour un jalon ; 20 secondes totales deviennent 20 s/jalon au lieu de 10. Le regroupement by_milestone et les latences de reprise utilisent aussi des identités sans projet et méritent le même contrôle.",
+      "recommendation": "Utiliser une identité composée project/milestone dans les dénominateurs, regroupements et corrélations. Tester deux projets aux IDs de jalons identiques pour éviter fusion de résultats indépendants.",
+      "fix_effort": "M",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef milestone_projects_collide(p):\n    accounts=[{'project':q,'milestone':'M1','independently_validated':True,'mission_pass':True} for q in ('A','B')]\n    rows=[LaunchObservation(observation_key=q,project=q,milestone='M1',wall_time_s=measured(10,source='clock',unit='s')).as_dict() for q in ('A','B')]\n    s=ag.summarise(rows,accounts)\n    assert s['accepted']['independently_accepted_milestones']==1 and s['per_accepted_milestone']['wall_time_s_per_accepted_milestone']==20\n    return 'projects A/M1 and B/M1 both accepted; denominator=1 instead of 2; wall cost per milestone=20s instead of 10s'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=milestone_projects_collide(Path(tmp))\nprint('TEST milestone_projects_collide: rc=0; '+result)\nPY\nSortie observée :\nTEST milestone_projects_collide: rc=0; projects A/M1 and B/M1 both accepted; denominator=1 instead of 2; wall cost per milestone=20s instead of 10s",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/aggregate.py",
+          "line": 298,
+          "function": "summarise",
+          "evidence_line": 318,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef milestone_projects_collide(p):\n    accounts=[{'project':q,'milestone':'M1','independently_validated':True,'mission_pass':True} for q in ('A','B')]\n    rows=[LaunchObservation(observation_key=q,project=q,milestone='M1',wall_time_s=measured(10,source='clock',unit='s')).as_dict() for q in ('A','B')]\n    s=ag.summarise(rows,accounts)\n    assert s['accepted']['independently_accepted_milestones']==1 and s['per_accepted_milestone']['wall_time_s_per_accepted_milestone']==20\n    return 'projects A/M1 and B/M1 both accepted; denominator=1 instead of 2; wall cost per milestone=20s instead of 10s'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=milestone_projects_collide(Path(tmp))\nprint('TEST milestone_projects_collide: rc=0; '+result)\nPY",
+        "expected_output": "TEST milestone_projects_collide: rc=0; projects A/M1 and B/M1 both accepted; denominator=1 instead of 2; wall cost per milestone=20s instead of 10s",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-018",
+      "file": "factory_v2/telemetry/report.py",
+      "line": 231,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "return [r for r in observations",
+      "why": "La suppression de snapshots cumulatifs redondants retire la ligne entière, donc aussi les lancements et durées indépendants qu’elle représente. Deux execves d’une session Codex coûtant 30 s et 40 s, avec compteurs cumulatifs 100 puis 150, deviennent un seul lancement de 40 s. Dédupliquer les tokens est correct, supprimer les autres unités sous-estime le coût réel.",
+      "recommendation": "Conserver une ligne par lancement et déduire des deltas pour les compteurs cumulatifs, ou agréger séparément les unités session et lancement. Tester que deux reprises comptent deux appels et 70 s tout en totalisant 150 tokens.",
+      "fix_effort": "M",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef resumed_launch_cost_lost(p):\n    rows=[]\n    for key,count,wall in [('a',100,30),('b',150,40)]:\n        rows.append(LaunchObservation(observation_key=key,engine='codex',session_id='same',wall_time_s=measured(wall,source='clock',unit='s'),usage=Usage(completeness='COMPLETE',input_tokens=measured(count,source='x'),session_log_semantics='CUMULATIVE_OR_REPLAY')).as_dict())\n    r=rep.build_report([],extra_observations=rows,include_inventory=False)\n    totals=r['summary']['totals'];assert totals['launches']==1 and totals['wall_time_s']==40 and totals['tokens_exact']['input_tokens']==150\n    return 'two resumed execves, wall 30s+40s, cumulative tokens 100->150: report keeps correct 150 tokens but only 1 launch and 40s'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=resumed_launch_cost_lost(Path(tmp))\nprint('TEST resumed_launch_cost_lost: rc=0; '+result)\nPY\nSortie observée :\nTEST resumed_launch_cost_lost: rc=0; two resumed execves, wall 30s+40s, cumulative tokens 100->150: report keeps correct 150 tokens but only 1 launch and 40s",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/report.py",
+          "line": 193,
+          "function": "_collapse_cumulative_sessions",
+          "evidence_line": 231,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef resumed_launch_cost_lost(p):\n    rows=[]\n    for key,count,wall in [('a',100,30),('b',150,40)]:\n        rows.append(LaunchObservation(observation_key=key,engine='codex',session_id='same',wall_time_s=measured(wall,source='clock',unit='s'),usage=Usage(completeness='COMPLETE',input_tokens=measured(count,source='x'),session_log_semantics='CUMULATIVE_OR_REPLAY')).as_dict())\n    r=rep.build_report([],extra_observations=rows,include_inventory=False)\n    totals=r['summary']['totals'];assert totals['launches']==1 and totals['wall_time_s']==40 and totals['tokens_exact']['input_tokens']==150\n    return 'two resumed execves, wall 30s+40s, cumulative tokens 100->150: report keeps correct 150 tokens but only 1 launch and 40s'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=resumed_launch_cost_lost(Path(tmp))\nprint('TEST resumed_launch_cost_lost: rc=0; '+result)\nPY",
+        "expected_output": "TEST resumed_launch_cost_lost: rc=0; two resumed execves, wall 30s+40s, cumulative tokens 100->150: report keeps correct 150 tokens but only 1 launch and 40s",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-019",
+      "file": "factory_v2/telemetry/report.py",
+      "line": 399,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "return measured(round(elapsed, 1), unit=\"s\",",
+      "why": "La décision terminale dépend uniquement de wall_time_s. Un sidecar qui contient rc=0 et ended_at mais dont le chronométrage manque est classé RUNNING et son temps écoulé continue à croître. Les preuves explicites de fin sont ignorées : une absence de métrique de durée devient un faux processus encore en cours.",
+      "recommendation": "Déterminer l’état terminal à partir de rc/ended_at/timed_out indépendamment de la disponibilité de wall_time_s. En absence de durée fiable, publier UNKNOWN sans inventer une activité en cours.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef terminal_sidecar_running(p):\n    side={'started_at':'2026-01-01T00:00:00Z','ended_at':'2026-01-01T00:00:01Z','rc':0}\n    wall,terminal=rep._sidecar_wall(side,1767225700);exit_class=rep._sidecar_exit_class(side,terminal)\n    assert not terminal and exit_class=='RUNNING'\n    return 'sidecar rc=0 plus ended_at, wall_time_s missing -> terminal=False and exit_class=RUNNING'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=terminal_sidecar_running(Path(tmp))\nprint('TEST terminal_sidecar_running: rc=0; '+result)\nPY\nSortie observée :\nTEST terminal_sidecar_running: rc=0; sidecar rc=0 plus ended_at, wall_time_s missing -> terminal=False and exit_class=RUNNING",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/report.py",
+          "line": 382,
+          "function": "_sidecar_wall",
+          "evidence_line": 399,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef terminal_sidecar_running(p):\n    side={'started_at':'2026-01-01T00:00:00Z','ended_at':'2026-01-01T00:00:01Z','rc':0}\n    wall,terminal=rep._sidecar_wall(side,1767225700);exit_class=rep._sidecar_exit_class(side,terminal)\n    assert not terminal and exit_class=='RUNNING'\n    return 'sidecar rc=0 plus ended_at, wall_time_s missing -> terminal=False and exit_class=RUNNING'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=terminal_sidecar_running(Path(tmp))\nprint('TEST terminal_sidecar_running: rc=0; '+result)\nPY",
+        "expected_output": "TEST terminal_sidecar_running: rc=0; sidecar rc=0 plus ended_at, wall_time_s missing -> terminal=False and exit_class=RUNNING",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-020",
+      "file": "factory_v2/telemetry/report.py",
+      "line": 738,
+      "severity": "LOW",
+      "category": "DOC_DRIFT",
+      "evidence": "add(f\"Root operator chat quota: **{UNKNOWN}** \"",
+      "why": "Le JSON sait annoncer OBSERVED_FOR_THIS_WORKSPACE quand un opérateur Codex a été importé, mais le Markdown imprime toujours UNKNOWN et affirme qu’aucune sortie lisible n’existe. La preuve génère les deux vues du même rapport et observe ces réponses contradictoires.",
+      "recommendation": "Rendre la section Markdown depuis summary.unobservable plutôt qu’une phrase constante. Tester les cas opérateur observé et absent en vérifiant la parité JSON/Markdown.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef markdown_contradiction(p):\n    row=LaunchObservation(observation_key='operator',engine='codex',role='cto_pilot',lineage='CTO_OVERHEAD').as_dict()\n    r=rep.build_report([],extra_observations=[row],include_inventory=False);md=rep.to_markdown(r)\n    assert r['summary']['unobservable']['root_operator_chat_quota']=='OBSERVED_FOR_THIS_WORKSPACE' and 'not emitted to anything readable here' in md\n    return 'JSON reports OBSERVED_FOR_THIS_WORKSPACE; Markdown says UNKNOWN / not emitted to anything readable here'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=markdown_contradiction(Path(tmp))\nprint('TEST markdown_contradiction: rc=0; '+result)\nPY\nSortie observée :\nTEST markdown_contradiction: rc=0; JSON reports OBSERVED_FOR_THIS_WORKSPACE; Markdown says UNKNOWN / not emitted to anything readable here",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/report.py",
+          "line": 575,
+          "function": "to_markdown",
+          "evidence_line": 738,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef markdown_contradiction(p):\n    row=LaunchObservation(observation_key='operator',engine='codex',role='cto_pilot',lineage='CTO_OVERHEAD').as_dict()\n    r=rep.build_report([],extra_observations=[row],include_inventory=False);md=rep.to_markdown(r)\n    assert r['summary']['unobservable']['root_operator_chat_quota']=='OBSERVED_FOR_THIS_WORKSPACE' and 'not emitted to anything readable here' in md\n    return 'JSON reports OBSERVED_FOR_THIS_WORKSPACE; Markdown says UNKNOWN / not emitted to anything readable here'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=markdown_contradiction(Path(tmp))\nprint('TEST markdown_contradiction: rc=0; '+result)\nPY",
+        "expected_output": "TEST markdown_contradiction: rc=0; JSON reports OBSERVED_FOR_THIS_WORKSPACE; Markdown says UNKNOWN / not emitted to anything readable here",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-021",
+      "file": "factory_v2/telemetry/inventory.py",
+      "line": 208,
+      "severity": "MEDIUM",
+      "category": "DOC_DRIFT",
+      "evidence": "for spec in _ROUTED:",
+      "why": "L’inventaire présenté comme exhaustif ne contient aucun site review_dispatch.dispatch_review, alors que ce module lance et compte réellement des reviews via runner(argv). La liste statique des sites rend cette voie invisible, plutôt que de la montrer instrumentée ou comme un trou de couverture. La reproduction croise l’AST du point de lancement et la sortie de probe, avec les sondes CLI neutralisées.",
+      "recommendation": "Ajouter les voies de review et vérifier leur persistance réelle ; faire contrôler les sites de lancement par un test d’inventaire afin que toute nouvelle voie apparaisse comme instrumentée ou explicitement manquante.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef inventory_review_absent(p):\n    # Keep the probe hermetic: no CLI discovery and no provider calls.\n    with patch.object(inv,'_routed_argv',return_value=['claude','--output-format','json']),patch.object(inv,'dispatcher_reachability',return_value={'reachable':True}):rows=inv.probe()\n    assert all('review_dispatch' not in r['site'] for r in rows)\n    tree=ast.parse(Path('factory_v2/review_dispatch.py').read_text())\n    calls=[n for n in ast.walk(tree) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='runner']\n    assert calls\n    return 'production dispatch_review has runner(argv, ...); inventory.probe has zero review_dispatch launch sites'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=inventory_review_absent(Path(tmp))\nprint('TEST inventory_review_absent: rc=0; '+result)\nPY\nSortie observée :\nTEST inventory_review_absent: rc=0; production dispatch_review has runner(argv, ...); inventory.probe has zero review_dispatch launch sites",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/inventory.py",
+          "line": 205,
+          "function": "probe",
+          "evidence_line": 208,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef inventory_review_absent(p):\n    # Keep the probe hermetic: no CLI discovery and no provider calls.\n    with patch.object(inv,'_routed_argv',return_value=['claude','--output-format','json']),patch.object(inv,'dispatcher_reachability',return_value={'reachable':True}):rows=inv.probe()\n    assert all('review_dispatch' not in r['site'] for r in rows)\n    tree=ast.parse(Path('factory_v2/review_dispatch.py').read_text())\n    calls=[n for n in ast.walk(tree) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='runner']\n    assert calls\n    return 'production dispatch_review has runner(argv, ...); inventory.probe has zero review_dispatch launch sites'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=inventory_review_absent(Path(tmp))\nprint('TEST inventory_review_absent: rc=0; '+result)\nPY",
+        "expected_output": "TEST inventory_review_absent: rc=0; production dispatch_review has runner(argv, ...); inventory.probe has zero review_dispatch launch sites",
+        "exit_code": 0
+      }
+    },
+    {
+      "id": "L4_resilience_review-022",
+      "file": "factory_v2/telemetry/gate.py",
+      "line": 158,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "\"argv_head\": [str(a) for a in (ee.get(\"argv\") or ee.get(\"argv0\") or [])][:4],",
+      "why": "Le journal de cycle de vie copie les quatre premiers arguments sans passer par redact_argv. Un appel claude -p <prompt> inscrit donc le prompt en clair dans argv_head, alors que la télémétrie interdit le contenu des prompts et possède déjà une routine de masquage. Le test utilise uniquement un marqueur fictif, jamais un secret réel.",
+      "recommendation": "Appliquer redact_argv avant de tronquer argv_head et limiter les erreurs persistées à des métadonnées sans contenu. Ajouter un test avec prompt en troisième argument et vérifier le journal écrit sur disque.",
+      "fix_effort": "S",
+      "detail": "Reproduction exécutée sur sources originales ; revue seule, aucun correctif autorisé et aucune preuve après correction revendiquée. Depuis la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef gate_raw_prompt(p):\n    marker='FAKE_PROMPT_DO_NOT_PERSIST'\n    gate.emit_launch_terminal(p,attempt_key='fixture',outcome='SUCCESS',engine_execution={'argv':['claude','-p',marker]})\n    raw=gate.events_path(p).read_text();assert marker in raw\n    return 'emit_launch_terminal stores synthetic prompt verbatim in argv_head of durable telemetry (no real secret used)'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=gate_raw_prompt(Path(tmp))\nprint('TEST gate_raw_prompt: rc=0; '+result)\nPY\nSortie observée :\nTEST gate_raw_prompt: rc=0; emit_launch_terminal stores synthetic prompt verbatim in argv_head of durable telemetry (no real secret used)",
+      "locations": [
+        {
+          "file": "factory_v2/telemetry/gate.py",
+          "line": 135,
+          "function": "emit_launch_terminal",
+          "evidence_line": 158,
+          "original_sha": "ed5d6bc60409c8ec4315dd2f79eaf26658ee2943"
+        }
+      ],
+      "reproduction": {
+        "command": "FACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom __future__ import annotations\nimport ast, contextlib, io, json, os, subprocess, sys, tempfile\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nsys.path.insert(0, str(Path.cwd()))\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nfrom factory_v2 import engine_registry as er, golden_promotion as gp, hot_reload as hr\nfrom factory_v2 import mission_evidence as me, mission_receipt as mr, quota_observer as qo\nfrom factory_v2 import resilience as rs, review_dispatch as rd\nfrom factory_v2.telemetry import adapters as ad, capture as cap, ledger as led, aggregate as ag, report as rep, inventory as inv, gate as gate\nfrom factory_v2.telemetry.record import measured, unknown, Usage, LaunchObservation, value_of\n\ndef gate_raw_prompt(p):\n    marker='FAKE_PROMPT_DO_NOT_PERSIST'\n    gate.emit_launch_terminal(p,attempt_key='fixture',outcome='SUCCESS',engine_execution={'argv':['claude','-p',marker]})\n    raw=gate.events_path(p).read_text();assert marker in raw\n    return 'emit_launch_terminal stores synthetic prompt verbatim in argv_head of durable telemetry (no real secret used)'\nwith tempfile.TemporaryDirectory(prefix='m9-repro-') as tmp:\n    result=gate_raw_prompt(Path(tmp))\nprint('TEST gate_raw_prompt: rc=0; '+result)\nPY",
+        "expected_output": "TEST gate_raw_prompt: rc=0; emit_launch_terminal stores synthetic prompt verbatim in argv_head of durable telemetry (no real secret used)",
+        "exit_code": 0
+      }
+    }
+  ]
+}

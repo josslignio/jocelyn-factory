@@ -1,0 +1,678 @@
+{
+  "schema": "code-review-lot/v1",
+  "lot": "L6_bin_lib_products_2",
+  "engine": "codex",
+  "reviewed_sha": "ab1733e22f702fa27e75983ae54dbfbcd6e68444",
+  "files_reviewed": [
+    {
+      "path": "factory/lib/qualification_runner.py",
+      "lines": 96,
+      "verdict": "FINDINGS",
+      "summary": "Lance pytest et construit le résultat de qualification ; la suite exécutée n’est pas liée au SHA annoncé."
+    },
+    {
+      "path": "factory/lib/required_state_resolver.py",
+      "lines": 192,
+      "verdict": "FINDINGS",
+      "summary": "Vérifie les capacités des dépendances avant dispatch ; les erreurs de schéma imbriqué ne sont pas toutes transformées en blocage typé."
+    },
+    {
+      "path": "factory/lib/research_reuse_gate.py",
+      "lines": 338,
+      "verdict": "FINDINGS",
+      "summary": "Classe les capacités majeures et conserve les décisions de réutilisation ; des registres invalides échappent au contrat de refus sans exception."
+    },
+    {
+      "path": "factory/lib/supervisor_state.py",
+      "lines": 81,
+      "verdict": "FINDINGS",
+      "summary": "Sérialise l’état du superviseur par remplacement atomique ; le temporaire partagé entre appels introduit une collision concurrente."
+    },
+    {
+      "path": "factory/lib/task_contract_validator.py",
+      "lines": 239,
+      "verdict": "FINDINGS",
+      "summary": "Valide sections Markdown et champs du plan ; les clôtures de code et les types vides permettent des faux contrats valides."
+    },
+    {
+      "path": "factory/lib/worktree_info.py",
+      "lines": 13,
+      "verdict": "CLEAN",
+      "summary": "Dataclass contenant identité, chemin, branche et commit de base du worktree ; lecture intégrale, aucun défaut concret retenu."
+    },
+    {
+      "path": "factory/lib/worktree_manager.py",
+      "lines": 327,
+      "verdict": "FINDINGS",
+      "summary": "Crée, récupère, archive et rafraîchit les worktrees Git ; une référence de base mobile peut diverger du commit enregistré."
+    },
+    {
+      "path": "products/__init__.py",
+      "lines": 0,
+      "verdict": "CLEAN",
+      "summary": "Fichier de package vide, zéro ligne confirmé ; aucune logique exécutable ni défaut à signaler."
+    },
+    {
+      "path": "products/twitter_radar/__init__.py",
+      "lines": 0,
+      "verdict": "CLEAN",
+      "summary": "Initialiseur de package vide, zéro ligne confirmé ; aucune logique exécutable ni défaut à signaler."
+    },
+    {
+      "path": "products/twitter_radar/_common.py",
+      "lines": 18,
+      "verdict": "CLEAN",
+      "summary": "Deux utilitaires locaux pour timestamp UTC et commande Git bornée ; lecture intégrale, aucun défaut concret retenu."
+    },
+    {
+      "path": "products/twitter_radar/product_verifiers.py",
+      "lines": 2535,
+      "verdict": "FINDINGS",
+      "summary": "Juges produit pour collecte, calls, KOL, radar, rafraîchissement, Web et reprise ; défauts reproduits dans les preuves H2 et la validation des sorties KOL/calls."
+    },
+    {
+      "path": "products/twitter_radar/run_tr_collection.py",
+      "lines": 412,
+      "verdict": "FINDINGS",
+      "summary": "Pilote une collecte observée puis reconstruit univers et couverture ; la couverture ignore les aliases de timestamp canoniques du corpus."
+    },
+    {
+      "path": "products/twitter_radar/tr_call.py",
+      "lines": 511,
+      "verdict": "FINDINGS",
+      "summary": "Extrait les épisodes LONG et calcule horizons, ajustements et clôtures ; carte sectorielle valide et timestamps mixtes provoquent des exceptions."
+    },
+    {
+      "path": "products/twitter_radar/tr_kol.py",
+      "lines": 291,
+      "verdict": "FINDINGS",
+      "summary": "Construit graphe, scores, cycles et découverte de comptes ; identité sensible à la casse et relectures quadratiques du corpus."
+    },
+    {
+      "path": "products/twitter_radar/tr_kol_records.py",
+      "lines": 285,
+      "verdict": "FINDINGS",
+      "summary": "Assemble les fiches KOL à partir du corpus et des artefacts ; le marqueur de découverte externe compare une chaîne à des objets."
+    },
+    {
+      "path": "products/twitter_radar/tr_presentation_verifiers.py",
+      "lines": 843,
+      "verdict": "FINDINGS",
+      "summary": "Juges des historiques, horizons, dossiers, pages et automatisations ; plusieurs critères de complétude et de fraîcheur sont acceptés sans preuve suffisante."
+    },
+    {
+      "path": "products/twitter_radar/tr_product_ready_observer.py",
+      "lines": 225,
+      "verdict": "FINDINGS",
+      "summary": "Orchestre deux runs avec kill/restart et commits de preuves ; le rollback d’une fenêtre calme efface aussi les modifications préexistantes du checkout."
+    },
+    {
+      "path": "products/twitter_radar/tr_radar_harness.py",
+      "lines": 339,
+      "verdict": "FINDINGS",
+      "summary": "Fournit corpus contrôlé, générations d’épisodes et exécution du radar ; l’ordre lexicographique des dates contredit l’ordre réel avec offsets différents."
+    },
+    {
+      "path": "products/twitter_radar/tr_ready_harness.py",
+      "lines": 103,
+      "verdict": "CLEAN",
+      "summary": "Charge reçus/logs hashés et extrait interventions, artefacts et doublons ; lecture intégrale, aucun constat supplémentaire retenu sur ce helper."
+    },
+    {
+      "path": "products/twitter_radar/tr_refresh_harness.py",
+      "lines": 131,
+      "verdict": "FINDINGS",
+      "summary": "Recalcule empreinte, compte et borne temporelle du corpus ; le maximum des chaînes ISO peut désigner un post plus ancien."
+    },
+    {
+      "path": "products/twitter_radar/tr_web_harness.py",
+      "lines": 198,
+      "verdict": "FINDINGS",
+      "summary": "Lance et interroge le Web local puis extrait lignes et épisodes du DOM ; les balises imbriquées de même nom ferment prématurément les lignes."
+    },
+    {
+      "path": "products/twitter_radar/twitter_radar_long_run.py",
+      "lines": 286,
+      "verdict": "FINDINGS",
+      "summary": "Déclenche et qualifie le long run Twitter Radar ; gate de jalon trop permissif et assertion de succès acceptant un résultat FAIL."
+    },
+    {
+      "path": "products/twitter_radar/verify_tr_weekly_operate.py",
+      "lines": 368,
+      "verdict": "FINDINGS",
+      "summary": "Vérifie deux observations scheduler et écrit leur preuve ; les reçus sont lus dans le worktree sans liaison de leurs octets à HEAD."
+    },
+    {
+      "path": "products/twitter_radar/weekly_observation.py",
+      "lines": 532,
+      "verdict": "FINDINGS",
+      "summary": "Observe les refreshes et persiste les reçus v1/v2 ; réutilisation de sorties anciennes et perte concurrente d’une entrée d’index reproduites."
+    }
+  ],
+  "findings": [
+    {
+      "id": "L6_bin_lib_products_2-001",
+      "file": "factory/lib/qualification_runner.py",
+      "line": 56,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "result = subprocess.run(cmd, cwd=str(repo_root), capture_output=True, text=True)\n    except OSError as exc:",
+      "why": "Le SHA demandé est recopié dans QualificationResult sans checkout ni vérification de HEAD ou du contenu testé. Une suite verte sur un autre commit qualifie ainsi un SHA dont la suite échoue. La reproduction exécute réellement pytest sur deux commits temporaires et redemande le SHA rouge depuis le checkout vert. Preuve exécutée : TEST qualification_wrong_sha : rc=0 | same requested SHA: original checkout passed=False; different HEAD passed=True, labelled with original failing SHA",
+      "recommendation": "Exécuter dans un worktree propre et détaché au SHA demandé ; enregistrer le SHA effectivement testé et refuser toute divergence ou modification des sources.",
+      "fix_effort": "M",
+      "reproduction_case": "qualification_wrong_sha"
+    },
+    {
+      "id": "L6_bin_lib_products_2-002",
+      "file": "factory/lib/required_state_resolver.py",
+      "line": 143,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "contained_set = set(contained) if isinstance(contained, list) else set()\n        states = data.get(\"capability_states\")",
+      "why": "Un registre JSON valide dont contained_capabilities contient un objet provoque TypeError dans set(contained). check() promet un résultat de blocage sans exception pour un registre invalide, mais cette corruption de schéma interrompt le contrôle des dépendances. Preuve exécutée : TEST required_state_invalid_registry : rc=0 | TypeError: unhashable type: 'dict' instead of DependencyGapResult(can_dispatch=False)",
+      "recommendation": "Valider que contained_capabilities est une liste de chaînes et retourner CHAIN_STATE_INVALID pour toute structure incorrecte ; ajouter ce cas au test du gate.",
+      "fix_effort": "S",
+      "reproduction_case": "required_state_invalid_registry"
+    },
+    {
+      "id": "L6_bin_lib_products_2-003",
+      "file": "factory/lib/research_reuse_gate.py",
+      "line": 278,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "except ValueError as exc:\n                raise ReuseRegistryError(f\"{path}: decisions[{i}]: {exc}\") from exc",
+      "why": "load_registry ne convertit que ValueError des décisions, alors que une entrée null provoque AttributeError dans from_dict. Une erreur de lecture comme IsADirectoryError remonte aussi brute. check_gate_for_dispatch ne capture pas ces exceptions malgré son contrat Never raises et ne produit donc aucun blocked_reason. Preuve exécutée : TEST reuse_invalid_registry : rc=0 | AttributeError on decisions=[null]; IsADirectoryError on unreadable registry, no blocked_reason",
+      "recommendation": "Valider chaque décision comme objet, convertir les erreurs de schéma et OSError en ReuseRegistryError, puis vérifier le résultat typé du point d’entrée de dispatch.",
+      "fix_effort": "S",
+      "reproduction_case": "reuse_invalid_registry"
+    },
+    {
+      "id": "L6_bin_lib_products_2-004",
+      "file": "factory/lib/task_contract_validator.py",
+      "line": 143,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if _FENCE_RE.match(line):\n                in_fence = not in_fence",
+      "why": "Toute séquence de trois backticks ou tildes inverse in_fence, sans mémoriser le caractère ni la longueur de la clôture ouverte. Un exemple Markdown ouvert avec quatre backticks et contenant trois backticks fait accepter des titres encore situés dans le bloc comme les sections réelles du contrat. Preuve exécutée : TEST task_fence_mismatch : rc=0 | valid=True although all required headings are inside an unclosed four-backtick code fence",
+      "recommendation": "Mémoriser caractère et longueur du délimiteur ouvrant ; ne fermer que sur un délimiteur compatible de longueur suffisante, sans texte après la clôture.",
+      "fix_effort": "S",
+      "reproduction_case": "task_fence_mismatch"
+    },
+    {
+      "id": "L6_bin_lib_products_2-005",
+      "file": "factory/lib/task_contract_validator.py",
+      "line": 170,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "elif plan[name] is None or (isinstance(plan[name], str)\n                                        and not plan[name].strip()):",
+      "why": "Le contrôle non vide exclut seulement None et les chaînes blanches. id=[], repo={}, test_cmd=[] et spec_level=[] sont acceptés par validate_mission avec un task_file lisible. Ces champs ne constituent ni un identifiant ni un dépôt ni une commande exécutables : le contrat invalide passe le gate préalable. Preuve exécutée : TEST task_empty_containers : rc=0 | valid=True for id=[], repo={}, test_cmd=[], spec_level=[]",
+      "recommendation": "Exiger des chaînes non vides pour ces champs et le vocabulaire autorisé de spec_level ; couvrir tableaux, objets, booléens et valeurs nulles.",
+      "fix_effort": "S",
+      "reproduction_case": "task_empty_containers"
+    },
+    {
+      "id": "L6_bin_lib_products_2-006",
+      "file": "factory/lib/supervisor_state.py",
+      "line": 68,
+      "severity": "MEDIUM",
+      "category": "RACE",
+      "evidence": "tmp = path.with_suffix(path.suffix + \".tmp\")\n    tmp.write_text(json.dumps(data, indent=2, sort_keys=True), encoding=\"utf-8\")",
+      "why": "Deux écritures du même état partagent exactement le même fichier .tmp. Avec les deux écritures terminées avant les remplacements, le premier remplacement consomme le temporaire et le second lève FileNotFoundError ; la valeur publiée peut aussi appartenir à l’autre appel. La reproduction impose cet entrelacement avec une barrière sans modifier les octets écrits. Preuve exécutée : TEST supervisor_tmp_collision : rc=0 | two concurrent atomic_write_json calls: one FileNotFoundError due to shared state.json.tmp",
+      "recommendation": "Créer un temporaire unique par opération dans le même répertoire, nettoyer ce temporaire en finally et sérialiser toute mise à jour dépendant de la version précédente.",
+      "fix_effort": "S",
+      "reproduction_case": "supervisor_tmp_collision"
+    },
+    {
+      "id": "L6_bin_lib_products_2-007",
+      "file": "factory/lib/worktree_manager.py",
+      "line": 133,
+      "severity": "MEDIUM",
+      "category": "RACE",
+      "evidence": "self._worktree_add(path, \"-b\", branch, base_branch)",
+      "why": "base_commit est résolu avant la création, mais git worktree add reçoit ensuite la référence mobile base_branch. Si HEAD avance entre les deux, le worktree contient le nouveau commit et sa métadonnée base_commit reste l’ancien. Le test avance réellement un dépôt temporaire juste avant _worktree_add ; aucun faux résultat Git n’est injecté. Preuve exécutée : TEST worktree_moving_base : rc=0 | base_commit pins initial SHA; created worktree HEAD is a later SHA after base_branch moved",
+      "recommendation": "Passer base_commit, déjà résolu, à git worktree add dans les branches de création ; vérifier ensuite que HEAD du worktree et les métadonnées concordent.",
+      "fix_effort": "S",
+      "reproduction_case": "worktree_moving_base"
+    },
+    {
+      "id": "L6_bin_lib_products_2-008",
+      "file": "products/twitter_radar/run_tr_collection.py",
+      "line": 205,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "dates.append(json.loads(line)[\"date\"])\n            except Exception:",
+      "why": "_coverage lit uniquement date, alors que le corpus et les autres lecteurs utilisent created_at ou timestamp. Deux posts valides portant created_at sont donc rapportés comme NO_POSTS, post_count=0. Le rapport devient incohérent avec le corpus et les contrôles de couverture. Preuve exécutée : TEST coverage_timestamp_alias : rc=0 | 2 canonical created_at posts -> post_count=0, coverage_status=NO_POSTS",
+      "recommendation": "Utiliser le même normalisateur de timestamp que le reste du produit (created_at, timestamp, puis date), compter les posts séparément des dates valides et typer les dates illisibles.",
+      "fix_effort": "S",
+      "reproduction_case": "coverage_timestamp_alias"
+    },
+    {
+      "id": "L6_bin_lib_products_2-009",
+      "file": "products/twitter_radar/tr_call.py",
+      "line": 369,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "peers = [s for tk, s in sector_map.items()\n                             if s == sector_map.get(t) and tk in market]",
+      "why": "La liste peers contient les valeurs de secteur s, puis le code les utilise comme clés market[tk]. Avec AAA et BBB dans Technology, le calcul sans carte sectorielle fonctionne mais la carte valide déclenche KeyError: Technology dès un horizon calculable. Le chemin annoncé avec ajustement sectoriel ne peut pas fonctionner dans ce cas normal. Preuve exécutée : TEST sector_key_error : rc=0 | KeyError: 'Technology'",
+      "recommendation": "Construire peers avec les symboles tk, puis tester au moins deux tickers du même secteur et un secteur insuffisant sur un ledger complet.",
+      "fix_effort": "S",
+      "reproduction_case": "sector_key_error"
+    },
+    {
+      "id": "L6_bin_lib_products_2-010",
+      "file": "products/twitter_radar/tr_call.py",
+      "line": 104,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "if c_ts is not None and o_ts is not None and c_ts != o_ts:\n        return c_ts > o_ts",
+      "why": "_parse_dt accepte à la fois les dates-heures avec et sans fuseau. La comparaison intrajournalière mélange ensuite datetime aware et naive et lève TypeError, interrompant tout build_ledger dès qu’un corpus mixte présente une clôture le même jour. Preuve exécutée : TEST closure_mixed_timezone : rc=0 | TypeError: can't compare offset-naive and offset-aware datetimes",
+      "recommendation": "Définir une politique explicite pour les timestamps sans fuseau : les refuser comme non ordonnables ou les normaliser au fuseau de la source ; comparer uniquement des instants UTC compatibles.",
+      "fix_effort": "S",
+      "reproduction_case": "closure_mixed_timezone"
+    },
+    {
+      "id": "L6_bin_lib_products_2-011",
+      "file": "products/twitter_radar/tr_kol.py",
+      "line": 65,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if uname in handles:\n                graph[author].setdefault(uname, {\"retweet\": 0, \"quote\": 0, \"reply\": 0})",
+      "why": "L’appartenance des comptes au graphe est sensible à la casse, contrairement aux handles X et aux comparaisons de comptes utilisées ailleurs dans ce module. Une réponse à Bob quand le corpus contient bob est classée comme découverte externe ; le compte connu perd son amplification entrante et son score est faussé. Preuve exécutée : TEST kol_case_mismatch : rc=0 | reply to Bob with bob corpus -> no internal edge; Bob falsely DISCOVERED outside",
+      "recommendation": "Indexer les handles connus par casefold, conserver une orthographe canonique et appliquer cette résolution aux arêtes ainsi qu’à la découverte depuis les comptes qualifiés.",
+      "fix_effort": "S",
+      "reproduction_case": "kol_case_mismatch"
+    },
+    {
+      "id": "L6_bin_lib_products_2-012",
+      "file": "products/twitter_radar/tr_kol.py",
+      "line": 86,
+      "severity": "MEDIUM",
+      "category": "PERF",
+      "evidence": "posts = [p for h, p in iter_posts(corpus_root) if h == handle]\n    if call_ledger is not None and not isinstance(call_ledger, dict):",
+      "why": "Chaque score_components relit et décode le corpus entier avant de filtrer son handle. build_ranking l’appelle pour chaque compte, puis relit encore le corpus pour chaque source qualifiée. Le cas minimal à trois comptes effectue douze lectures complètes pour seulement trois fichiers ; la phase de scoring seule effectue N² lectures de fichiers pour N comptes. Preuve exécutée : TEST kol_repeated_corpus_reads : rc=0 | 3 corpus files / 3 accounts: 12 complete file reads (3 graph + 3x3 scoring); N accounts imply N^2 scoring reads",
+      "recommendation": "Lire et grouper les posts par compte une fois dans build_ranking, puis réutiliser cet index pour scoring et découverte ; vérifier que le nombre de lectures croît linéairement avec le corpus.",
+      "fix_effort": "M",
+      "reproduction_case": "kol_repeated_corpus_reads"
+    },
+    {
+      "id": "L6_bin_lib_products_2-013",
+      "file": "products/twitter_radar/tr_kol_records.py",
+      "line": 174,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "\"outside\": h in (ranking.get(\"discovered_outside\") or []),\n                \"note\": \"discovery graph detail lands with TR_KOL V2\",",
+      "why": "discovered_outside est une liste d’objets {handle, inbound} produite par build_ranking. Tester h in cette liste compare une chaîne à des dictionnaires : outside reste faux pour un candidat réellement découvert et présent dans l’univers. La reproduction utilise un candidat sans corpus, distinct du compte déjà collecté. Preuve exécutée : TEST records_discovery_membership : rc=0 | discovered_outside=[{handle:bob,...}] -> bob.discovery_path.outside=False",
+      "recommendation": "Construire un ensemble des champs handle des candidats externes, normalisé selon la politique d’identité, et tester l’appartenance dans cet ensemble.",
+      "fix_effort": "S",
+      "reproduction_case": "records_discovery_membership"
+    },
+    {
+      "id": "L6_bin_lib_products_2-014",
+      "file": "products/twitter_radar/tr_refresh_harness.py",
+      "line": 98,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if ts > newest:\n                newest = ts",
+      "why": "La date du post le plus récent est sélectionnée par ordre lexicographique des chaînes ISO. Cet ordre ne respecte pas les instants quand les offsets diffèrent : 2026-01-02T00:30:00+02:00 est choisi devant 2026-01-01T23:00:00Z, pourtant trente minutes plus récent. Les reçus et contrôles d’avancement du corpus héritent de cette mauvaise borne. Preuve exécutée : TEST corpus_timestamp_order : rc=0 | newest=2026-01-02T00:30:00+02:00; actual latest=2026-01-01T23:00:00Z (30 minutes later)",
+      "recommendation": "Parser les dates, normaliser en UTC et comparer les datetime ; distinguer une date illisible et une absence de posts, puis sérialiser une forme canonique.",
+      "fix_effort": "S",
+      "reproduction_case": "corpus_timestamp_order"
+    },
+    {
+      "id": "L6_bin_lib_products_2-015",
+      "file": "products/twitter_radar/tr_radar_harness.py",
+      "line": 250,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "posts.sort(key=lambda p: (p[\"ts\"], p[\"id\"]))\n    return posts",
+      "why": "Le moteur de vérité trie les posts et compare les bornes sous forme de chaînes. Une ouverture à 00:30+02:00 suivie d’une vente à 23:00Z la veille calendaire est parcourue dans l’ordre inverse ; la génération reste OPEN. Le juge peut ainsi imposer une vérité incorrecte à un radar qui traite correctement les fuseaux. Preuve exécutée : TEST radar_timestamp_order : rc=0 | opening at 22:30Z then closing at 23:00Z -> ground truth leaves generation OPEN",
+      "recommendation": "Normaliser les instants avant le tri, les comparaisons de clôture et les fenêtres de watermark ; garder les identifiants comme départage stable.",
+      "fix_effort": "M",
+      "reproduction_case": "radar_timestamp_order"
+    },
+    {
+      "id": "L6_bin_lib_products_2-016",
+      "file": "products/twitter_radar/tr_web_harness.py",
+      "line": 99,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if row_stack and row_stack[-1][0] == tag:\n                rows.append(row_stack.pop()[1])",
+      "why": "Le parseur ferme une ligne dès qu’il rencontre une balise de même nom que son conteneur, sans suivre la profondeur DOM. Dans un div data-row contenant un div ordinaire, la fermeture du div interne termine la ligne trop tôt : les champs suivants disparaissent. Un HTML valide peut donc échouer aux contrôles de valeurs ou de liens. Preuve exécutée : TEST nested_dom : rc=0 | equivalent nested <div> row loses score field: [{\"handle\": \"alice\"}]",
+      "recommendation": "Suivre une pile réelle d’éléments/profondeurs et fermer les contextes row, episode et field uniquement à la fermeture de leur propre élément ; tester les balises imbriquées homonymes.",
+      "fix_effort": "M",
+      "reproduction_case": "nested_dom"
+    },
+    {
+      "id": "L6_bin_lib_products_2-017",
+      "file": "products/twitter_radar/tr_product_ready_observer.py",
+      "line": 177,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "_git_checked(repo, \"reset\", \"--hard\", original_head)\n        (repo / log2_rel).unlink(missing_ok=True)",
+      "why": "Un corpus identique entre les deux runs déclenche git reset --hard original_head sur tout le dépôt, sans précondition de propreté. Une modification locale préalable et étrangère à l’exercice est perdue. La reproduction remplace le lancement du pipeline et les observations par des stubs, mais exécute réellement exercise et son reset Git sur un dépôt temporaire sale. Preuve exécutée : TEST observer_reset_dirty_files : rc=0 | quiet-window branch executes real git reset --hard; pre-existing uncommitted owner.txt edit lost (pipeline stubbed, rollback real)",
+      "recommendation": "Faire l’exercice dans un worktree dédié ou refuser un checkout sale avant toute mutation ; restaurer seulement les sorties appartenant à l’exercice, jamais tout le checkout utilisateur.",
+      "fix_effort": "M",
+      "reproduction_case": "observer_reset_dirty_files"
+    },
+    {
+      "id": "L6_bin_lib_products_2-018",
+      "file": "products/twitter_radar/twitter_radar_long_run.py",
+      "line": 245,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if (current != \"FOUNDATIONAL_LONG_RUN_TWITTER_RADAR\"\n            and \"FOUNDATIONAL_LONG_RUN_TWITTER_RADAR\" in completed):",
+      "why": "Le gate ne vérifie pas que le jalon cible est courant ou prochain : il n’exclut que le cas où il est déjà complété et non courant. Avec long_run_ready=true, current_milestone=OTHER et aucune complétion, le lancement est autorisé, y compris avec une commande de stub malgré la condition documentée. Deux appels identiques relancent le travail deux fois ; le test remplace seulement le runner coûteux. Preuve exécutée : TEST longrun_wrong_milestone : rc=0 | current_milestone=OTHER, factoryd_stub command: 2 polls -> 2 launches",
+      "recommendation": "Résoudre explicitement le prochain jalon canonique, vérifier le jalon cible et l’identité de la commande, puis persister une acquisition/complétion empêchant les redémarrages indus.",
+      "fix_effort": "M",
+      "reproduction_case": "longrun_wrong_milestone"
+    },
+    {
+      "id": "L6_bin_lib_products_2-019",
+      "file": "products/twitter_radar/twitter_radar_long_run.py",
+      "line": 186,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if result.status == \"TIMEOUT\":\n        failures.append(f\"Timed out after {config.timeout_s}s\")",
+      "why": "L’assertion de succès ne refuse que status=TIMEOUT, jamais status=FAIL. Un résultat FAIL avec assez de jalons, d’engines et un artefact passe sans exception ; même crashed=False est accepté si restarted=True. Un appelant utilisant cette API de validation peut donc accepter un résultat déjà déclaré en échec. Preuve exécutée : TEST longrun_failed_result_passes : rc=0 | assert_twitter_radar_long_run_pass accepts status=FAIL, crashed=False",
+      "recommendation": "Exiger result.status == PASS et, si fault_injection est active, crashed et restarted vrais ; ajouter un résultat FAIL avec tous les compteurs suffisants aux tests existants.",
+      "fix_effort": "S",
+      "reproduction_case": "longrun_failed_result_passes"
+    },
+    {
+      "id": "L6_bin_lib_products_2-020",
+      "file": "products/twitter_radar/verify_tr_weekly_operate.py",
+      "line": 245,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if not _tracked_at_head(project_repo, path):\n        return \"RECEIPT_NOT_GIT_TRACKED\"",
+      "why": "Le reçu est lu dans le worktree, puis _tracked_at_head ne vérifie que l’existence du chemin à HEAD. Ses octets peuvent différer de la version commitée. Deux reçus commités à un jour d’intervalle échouent ; modifier seulement la date locale du second pour simuler sept jours suffit à obtenir rc=0 et un fichier de preuve, alors que HEAD conserve la date initiale. Preuve exécutée : TEST operate_dirty_receipt : rc=0 | committed 1-day gap rc=2; change receipt date only in working tree to 7-day gap -> rc=0 and proof written",
+      "recommendation": "Charger et hasher les reçus eux-mêmes depuis les blobs du HEAD figé, comme les artefacts au refresh_sha ; utiliser ces mêmes octets pour validation et preuve finale.",
+      "fix_effort": "M",
+      "reproduction_case": "operate_dirty_receipt"
+    },
+    {
+      "id": "L6_bin_lib_products_2-021",
+      "file": "products/twitter_radar/weekly_observation.py",
+      "line": 329,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if not receipt_path.is_file():\n        return None, \"NO_RECEIPT_PRODUCED\"",
+      "why": "Le runner accepte tout reçu préexistant après une commande terminée avec rc=0 ; aucun lien n’établit qu’il a été produit par cette exécution. La commande true, sans mutation du corpus, du rapport ni du log, obtient une nouvelle observation valide à partir de fichiers anciens. Une commande de refresh mal configurée peut donc être enregistrée comme nouvelle exécution observée. Preuve exécutée : TEST observation_stale_noop : rc=0 | command=true changes no artifact; pre-existing receipt/report/log -> new valid supervisor observation rc=0",
+      "recommendation": "Lier reçu et log à un identifiant d’exécution fourni au processus, aux instants observés et à son identité ; refuser la réutilisation d’un reçu ancien, sans imposer que le corpus change lors d’une semaine calme.",
+      "fix_effort": "M",
+      "reproduction_case": "observation_stale_noop"
+    },
+    {
+      "id": "L6_bin_lib_products_2-022",
+      "file": "products/twitter_radar/weekly_observation.py",
+      "line": 155,
+      "severity": "MEDIUM",
+      "category": "RACE",
+      "evidence": "index = _read_index(observation_dir)\n    index[oid] = chash",
+      "why": "L’index est mis à jour par lecture-modification-remplacement sans verrou. Deux stores réussis peuvent publier chacun une version issue du même index ; une observation durable devient alors invisible à list_valid_observations. La reproduction intercale un second store complet entre la lecture et la publication du premier : deux fichiers existent mais un seul reste autorisé par l’index. Preuve exécutée : TEST weekly_index_lost_update : rc=0 | 2 successful stores, 2 observation files, only 1 indexed/valid observation after interleaved read-modify-write",
+      "recommendation": "Verrouiller toute la transaction d’index, ou adopter un journal append-only avec reconstruction et contrôle d’intégrité ; utiliser aussi des temporaires uniques.",
+      "fix_effort": "M",
+      "reproduction_case": "weekly_index_lost_update"
+    },
+    {
+      "id": "L6_bin_lib_products_2-023",
+      "file": "products/twitter_radar/tr_presentation_verifiers.py",
+      "line": 775,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if len(days) < 3:\n        raise Unmet(\"KEEPALIVE_NOT_DAILY\")",
+      "why": "Le juge du keepalive dit prouver les trois derniers jours, mais n’exige que trois chaînes day distinctes parmi les dernières entrées. Trois dates de l’an 2000 espacées d’un mois, avec script_sha non valide, sont VERIFIED aujourd’hui. Une automatisation arrêtée depuis longtemps peut donc satisfaire ce jalon de fonctionnement quotidien. Preuve exécutée : TEST presentation_stale_keepalive : rc=0 | VERIFIED for three dates in 2000, one month apart, script_sha=not-a-sha",
+      "recommendation": "Parser les jours, exiger la fenêtre quotidienne attendue par rapport à une horloge injectée, et relier chaque exécution au script et aux artefacts réellement produits.",
+      "fix_effort": "S",
+      "reproduction_case": "presentation_stale_keepalive"
+    },
+    {
+      "id": "L6_bin_lib_products_2-024",
+      "file": "products/twitter_radar/tr_presentation_verifiers.py",
+      "line": 794,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if \"avant\" not in readme.lower() or \"après\" not in readme.lower() and \"apres\" not in readme.lower():\n            raise Unmet(\"README_WITHOUT_BEFORE_AFTER\")",
+      "why": "Le contrôle des retours propriétaire répète seulement la recherche globale des mots avant et après dans le README ; la clé calculée pour chaque item n’est jamais utilisée et aucune image n’est vérifiée. Trois cases cochées avec un README avant / après passent, même sans le moindre fichier image. Preuve exécutée : TEST presentation_feedback_without_images : rc=0 | 3 feedback items VERIFIED with README=\"avant / après\" and no image files",
+      "recommendation": "Exiger pour chaque item un identifiant et deux chemins d’images distincts, vérifier leurs blobs et leur correspondance au retour concerné, puis détecter les références manquantes.",
+      "fix_effort": "M",
+      "reproduction_case": "presentation_feedback_without_images"
+    },
+    {
+      "id": "L6_bin_lib_products_2-025",
+      "file": "products/twitter_radar/tr_presentation_verifiers.py",
+      "line": 729,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if page.is_file() and not re.search(r\"qui c.est\", \" \".join(_parse(page).parts), re.I):\n                raise Unmet(f\"KOL_CARD_MISSING: kols_{h}.html\")",
+      "why": "La présence de la carte est vérifiée seulement si le fichier de page existe. Un exporter qui termine normalement sans produire aucun HTML fait passer verify_kol_profile pour un compte évalué et un portrait vide. Le jalon est annoncé vérifié alors que la page destinée à l’utilisateur n’existe pas. Preuve exécutée : TEST presentation_missing_profile_page : rc=0 | 1 evaluated account VERIFIED with empty portrait and exporter producing zero pages",
+      "recommendation": "Refuser une page absente avant d’en inspecter le contenu, et exiger les champs non vides du portrait pour chaque compte évalué ; appliquer la même règle au juge company_brief.",
+      "fix_effort": "S",
+      "reproduction_case": "presentation_missing_profile_page"
+    },
+    {
+      "id": "L6_bin_lib_products_2-026",
+      "file": "products/twitter_radar/tr_presentation_verifiers.py",
+      "line": 168,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if first and first <= cutoff:\n            covered += 1",
+      "why": "Le compteur covered_2y dépend uniquement de la première date antérieure au cutoff. Un ticker avec un seul cours du 1er janvier 2024, sans autre séance ni données récentes, est considéré couvert sur deux ans au 1er septembre 2026. Le seuil de 90 % peut être satisfait sans historique exploitable pour les fenêtres demandées. Preuve exécutée : TEST presentation_market_sparse : rc=0 | one price from 2024-01-01, no other sessions -> covered_2y=1/1 at as_of=2026-09-01",
+      "recommendation": "Vérifier première et dernière dates, densité de séances et trous de données selon le calendrier et les exceptions documentées ; un point ancien isolé doit rester PARTIAL.",
+      "fix_effort": "M",
+      "reproduction_case": "presentation_market_sparse"
+    },
+    {
+      "id": "L6_bin_lib_products_2-027",
+      "file": "products/twitter_radar/tr_presentation_verifiers.py",
+      "line": 382,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "m = re.search(r'\"id\"\\s*:\\s*\"?(\\d{10,})', line)\n            if m:",
+      "why": "L’extraction des tweets du corpus n’accepte que la clé id avec une regex, alors que le format posts.jsonl des autres modules accepte id_str. Un post valide et commité avec seulement id_str disparaît de l’index et son catalyseur KOL_POST sera refusé comme absent du corpus. Preuve exécutée : TEST presentation_corpus_id_str : rc=0 | committed valid id_str post -> _corpus_tweet_ids returns empty set",
+      "recommendation": "Parser chaque ligne JSON et lire id_str ou id comme les autres lecteurs ; éviter aussi de créditer par regex un identifiant d’objet imbriqué au lieu du post racine.",
+      "fix_effort": "S",
+      "reproduction_case": "presentation_corpus_id_str"
+    },
+    {
+      "id": "L6_bin_lib_products_2-028",
+      "file": "products/twitter_radar/product_verifiers.py",
+      "line": 563,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if art_a.get(\"tier\", {}).get(\"tier\") != rec[\"tier\"][\"tier\"]:\n            inflated.append((h, art_a.get(\"tier\", {}).get(\"tier\"), rec[\"tier\"][\"tier\"]))",
+      "why": "verify_tr_kol recalcule les cycles et listes de découverte, mais ne compare que les composants et le nom du tier. Changer MONITORED en REJECTED et remplacer la découverte par un candidat fictif laisse rc=0. La sortie affirme pourtant une découverte et un lifecycle recomputés : des champs produit erronés restent livrables. Preuve exécutée : TEST product_kol_unchecked_lifecycle : rc=0 | valid ranking rc=0; lifecycle MONITORED->REJECTED and fabricated discovery list -> still rc=0",
+      "recommendation": "Comparer toutes les sorties contractuelles recomputées : lifecycle, preuves de lifecycle, découvertes et tiers complets ; ajouter des mutations indépendantes de chaque champ.",
+      "fix_effort": "M",
+      "reproduction_case": "product_kol_unchecked_lifecycle"
+    },
+    {
+      "id": "L6_bin_lib_products_2-029",
+      "file": "products/twitter_radar/product_verifiers.py",
+      "line": 618,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "art_eps = {(e.get(\"account\"), e.get(\"ticker\"), e.get(\"thesis\")): e\n               for e in art.get(\"episodes\", [])}",
+      "why": "La construction d’un dictionnaire par clé d’épisode écrase silencieusement les doublons de la liste. Le juge compare episode_count au compteur recomputé, sans comparer ce compteur à la longueur réelle de episodes. Un artefact contenant deux copies du même épisode et episode_count=1 passe ; les consommateurs de la liste peuvent ensuite doubler leurs statistiques. Preuve exécutée : TEST product_call_duplicate_episode : rc=0 | episode_count=1, episodes contains same episode twice -> verify_tr_call rc=0",
+      "recommendation": "Refuser les clés dupliquées avant l’indexation, comparer les cardinalités et recalculer les compteurs à partir de la liste soumise.",
+      "fix_effort": "S",
+      "reproduction_case": "product_call_duplicate_episode"
+    },
+    {
+      "id": "L6_bin_lib_products_2-030",
+      "file": "products/twitter_radar/product_verifiers.py",
+      "line": 211,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "[\"git\", \"ls-files\", \"--error-unmatch\", str(f)],\n                cwd=str(obs), capture_output=True, timeout=15,",
+      "why": "Le crédit des fenêtres H2 vérifie git ls-files, qui prouve une présence dans l’index, puis lit les octets courants du fichier. Un événement ajouté localement à un fichier déjà commité reçoit donc du crédit alors qu’il est absent de HEAD. Cela contredit précisément le contrat COMMITTED H2 et peut faire accepter des posts non couverts par les preuves durables. Preuve exécutée : TEST product_h2_uncommitted_event : rc=0 | committed event credits id=1; uncommitted appended event id=2 also credited",
+      "recommendation": "Énumérer et lire les blobs d’événements au commit superviseur explicitement épinglé ; ne jamais assimiler chemin suivi, index Git et contenu commité.",
+      "fix_effort": "M",
+      "reproduction_case": "product_h2_uncommitted_event"
+    }
+  ],
+  "review_method": {
+    "scope": "24 fichiers lus intégralement, 8363 lignes ; revue seule, aucune correction du code.",
+    "assignment": "projects/factory/ROADMAP.yaml:1531 et :1537",
+    "proof_semantics": "Chaque test rc=0 confirme le défaut actuel. Aucune prétention de correctif ou de validation après fix. Dépôts/données éphémères seulement ; les stubs et entrelacements sont explicités dans les constats.",
+    "clean_semantics": "CLEAN signifie aucun défaut concret retenu après lecture complète, pas une preuve d’absence de tout défaut."
+  },
+  "reproduction_suite": {
+    "language": "python3",
+    "source": "\"\"\"Local reproducible review probes. No production data, network or repository edits.\nRun from reviewed repository: python3 /tmp/.../probes.py [case].\nrc=0 means the CURRENT defect was reproduced, not that production is correct.\n\"\"\"\nimport contextlib, copy, hashlib, importlib.util, io, json, os, subprocess, sys, tempfile, threading, traceback\nfrom pathlib import Path\nfrom datetime import datetime, timezone\nfrom unittest.mock import patch\nROOT = Path.cwd()\nsys.path.insert(0, str(ROOT))\nsys.path.insert(0, str(ROOT / 'factory/lib'))\nfrom products.twitter_radar import tr_call as TC, tr_kol as TK, tr_kol_records as KR\nfrom products.twitter_radar import tr_refresh_harness as RF, tr_radar_harness as RA, tr_web_harness as WH\nfrom products.twitter_radar import tr_presentation_verifiers as PV, product_verifiers as V\nfrom products.twitter_radar import weekly_observation as WO, verify_tr_weekly_operate as OP\nfrom products.twitter_radar import twitter_radar_long_run as LR\nCASES = {}\ndef case(fn):\n    CASES[fn.__name__] = fn\n    return fn\n\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(value if isinstance(value, str) else json.dumps(value), encoding='utf-8')\n\ndef git(p, *args):\n    return subprocess.check_output(['git','-C',str(p),'-c','user.name=Review','-c','user.email=review@example.invalid','-c','commit.gpgsign=false',*args],text=True,stderr=subprocess.PIPE).strip()\n\ndef init(p):\n    p.mkdir(parents=True,exist_ok=True)\n    git(p,'init','-q')\n    write(p/'seed','seed\\n')\n    return commit(p)\n\ndef commit(p):\n    git(p,'add','-A')\n    git(p,'commit','-qm','fixture')\n    return git(p,'rev-parse','HEAD')\n\ndef posts(p, rows, handle='alice'):\n    write(p/'data/corpus'/handle/'posts.jsonl',''.join(json.dumps(r)+'\\n' for r in rows))\n\ndef market(p, tickers=('AAA','BBB'), n=24):\n    from datetime import date, timedelta\n    days=[str(date(2026,1,2)+timedelta(days=i)) for i in range(n)]\n    write(p/'market.csv','ticker,date,close\\n'+''.join(f'{t},{d},{100+i}\\n' for t in tickers for i,d in enumerate(days)))\n    return p/'market.csv'\n\ndef exception(fn, typ):\n    try: fn()\n    except typ as e: return type(e).__name__+': '+str(e)\n    raise AssertionError('expected '+typ.__name__)\n\n@case\ndef qualification_wrong_sha(p):\n    from qualification_runner import run_qualification\n    init(p)\n    write(p/'tests/test_sample.py','def test_sample():\\n    assert False\\n')\n    red_sha=commit(p)\n    red=run_qualification(red_sha,p)\n    write(p/'tests/test_sample.py','def test_sample():\\n    assert True\\n')\n    green_sha=commit(p)\n    got=run_qualification(red_sha,p)\n    assert not red.passed and got.passed and got.sha==red_sha and red_sha!=green_sha\n    return 'same requested SHA: original checkout passed=False; different HEAD passed=True, labelled with original failing SHA'\n\n@case\ndef required_state_invalid_registry(p):\n    from required_state_resolver import RequiredStateResolver\n    write(p/'state.json',{'contained_capabilities':[{}],'capability_states':{}})\n    msg=exception(lambda: RequiredStateResolver(p/'state.json').check('child',['upstream']),TypeError)\n    return msg+' instead of DependencyGapResult(can_dispatch=False)'\n\n@case\ndef reuse_invalid_registry(p):\n    from research_reuse_gate import check_gate_for_dispatch\n    path=p/'factory/cto/CTO_RESEARCH_REGISTRY.json'\n    write(path,{'decisions':[None]})\n    a=exception(lambda:check_gate_for_dispatch(p,'agent_orchestration'),AttributeError)\n    path.unlink();path.mkdir()\n    b=exception(lambda:check_gate_for_dispatch(p,'agent_orchestration'),IsADirectoryError)\n    return a.split(':')[0]+' on decisions=[null]; '+b.split(':')[0]+' on unreadable registry, no blocked_reason'\n\n@case\ndef task_fence_mismatch(p):\n    from task_contract_validator import TaskContractValidator\n    v=TaskContractValidator()\n    write(p/'task.md','````markdown\\n```\\n## Outcome\\n## Deliverables\\n## Depends On\\n````\\n')\n    r=v.validate_task_file(p/'task.md')\n    assert r.valid\n    return 'valid=True although all required headings are inside an unclosed four-backtick code fence'\n\n@case\ndef task_empty_containers(p):\n    from task_contract_validator import TaskContractValidator\n    write(p/'task.md','## Outcome\\n## Deliverables\\n## Depends On\\n')\n    r=TaskContractValidator().validate_mission({'id':[],'repo':{},'task_file':str(p/'task.md'),'test_cmd':[],'spec_level':[]})\n    assert r.valid\n    return 'valid=True for id=[], repo={}, test_cmd=[], spec_level=[]'\n\n@case\ndef supervisor_tmp_collision(p):\n    import supervisor_state as S\n    barrier=threading.Barrier(2); real=os.replace; errors=[]\n    def replace(a,b):\n        barrier.wait(timeout=5)\n        return real(a,b)\n    def worker(i):\n        try: S.atomic_write_json(p/'state.json',{'writer':i})\n        except Exception as e: errors.append(type(e).__name__)\n    with patch.object(S.os,'replace',replace):\n        threads=[threading.Thread(target=worker,args=(i,)) for i in range(2)]\n        for t in threads:t.start()\n        for t in threads:t.join(timeout=7)\n    assert errors==['FileNotFoundError']\n    return 'two concurrent atomic_write_json calls: one FileNotFoundError due to shared state.json.tmp'\n\n@case\ndef worktree_moving_base(p):\n    from worktree_manager import WorktreeManager\n    repo=p/'repo'; init(repo)\n    wm=WorktreeManager(repo,p/'trees'); original=git(repo,'rev-parse','HEAD'); real=wm._worktree_add\n    def advance(path,*args):\n        write(repo/'new','advanced\\n');commit(repo)\n        return real(path,*args)\n    with patch.object(wm,'_worktree_add',advance):\n        info=wm.create_worktree('mission')\n    actual=git(info.path,'rev-parse','HEAD')\n    assert info.base_commit==original and actual!=original\n    return 'base_commit pins initial SHA; created worktree HEAD is a later SHA after base_branch moved'\n\n@case\ndef coverage_timestamp_alias(p):\n    from products.twitter_radar.run_tr_collection import _coverage\n    posts(p,[{'id':'1','created_at':'2026-01-01T00:00:00Z'},{'id':'2','created_at':'2026-06-01T00:00:00Z'}])\n    r=_coverage(p/'data/corpus/alice/posts.jsonl')\n    assert r['post_count']==0 and r['coverage_status']=='NO_POSTS'\n    return '2 canonical created_at posts -> post_count=0, coverage_status=NO_POSTS'\n\n@case\ndef sector_key_error(p):\n    posts(p,[{'id':'1','created_at':'2026-01-01T10:00:00Z','text':'long $AAA'}])\n    m=market(p);write(p/'sectors.csv','ticker,sector\\nAAA,Technology\\nBBB,Technology\\n')\n    a=TC.build_ledger(p/'data/corpus',m)\n    assert a['episode_count']==1\n    return exception(lambda:TC.build_ledger(p/'data/corpus',m,p/'sectors.csv'),KeyError)\n\n@case\ndef closure_mixed_timezone(p):\n    return exception(lambda:TC._closure_after_opening({'tweet_date':'2026-01-01','tweet_ts':'2026-01-01T12:00:00Z'},{'tweet_date':'2026-01-01','tweet_ts':'2026-01-01T10:00:00'}),TypeError)\n\n@case\ndef kol_case_mismatch(p):\n    posts(p,[{'id':'1','inReplyToScreenName':'Bob'}])\n    posts(p,[{'id':'2'}],'bob')\n    g=TK.build_graph(p/'data/corpus')\n    assert g['edges']['alice']=={} and 'Bob' in g['discovered_outside']\n    return 'reply to Bob with bob corpus -> no internal edge; Bob falsely DISCOVERED outside'\n\n@case\ndef kol_repeated_corpus_reads(p):\n    for h in ['alice','bob','carol']:posts(p,[{'id':h}],h)\n    write(p/'universe.json',{'accounts':[]})\n    real=Path.read_text; reads=[]\n    def counted(path,*a,**kw):\n        if path.name=='posts.jsonl':reads.append(path)\n        return real(path,*a,**kw)\n    with patch.object(Path,'read_text',counted):TK.build_ranking(p/'data/corpus',p/'universe.json')\n    assert len(reads)==12\n    return '3 corpus files / 3 accounts: 12 complete file reads (3 graph + 3x3 scoring); N accounts imply N^2 scoring reads'\n\n@case\ndef records_discovery_membership(p):\n    posts(p,[{'id':'1'}],'alice')\n    write(p/'research/tr_kol_universe.json',{'accounts':[{'handle':'bob','lifecycle':'DISCOVERED'}]})\n    write(p/'research/tr_kol_ranking.json',{'accounts':[],'discovered_outside':[{'handle':'bob','inbound':{'reply':1}}]})\n    write(p/'research/tr_call_ledger.json',{'episodes':[]})\n    r=KR.build_records(p)\n    assert next(x for x in r['records'] if x['handle']=='bob')['discovery_path']['outside'] is False\n    return 'discovered_outside=[{handle:bob,...}] -> bob.discovery_path.outside=False'\n\n@case\ndef corpus_timestamp_order(p):\n    a='2026-01-02T00:30:00+02:00';b='2026-01-01T23:00:00Z'\n    posts(p,[{'id':'1','created_at':a},{'id':'2','created_at':b}])\n    got=RF.corpus_facts(p/'data/corpus')['corpus_timestamp_iso']\n    assert RF.parse_iso(b)>RF.parse_iso(a) and got==a\n    return 'newest='+got+'; actual latest=2026-01-01T23:00:00Z (30 minutes later)'\n\n@case\ndef radar_timestamp_order(p):\n    posts(p,[{'id':'open','created_at':'2026-01-02T00:30:00+02:00','text':'long $AAA'},\n             {'id':'close','created_at':'2026-01-01T23:00:00Z','text':'sold $AAA'}])\n    r=RA.compute_ground_truth(p/'data/corpus')\n    assert len(r.generations)==1 and r.generations[0].state=='OPEN'\n    return 'opening at 22:30Z then closing at 23:00Z -> ground truth leaves generation OPEN'\n\n@case\ndef nested_dom(p):\n    flat=WH.parse_dom('<div data-row=\"1\"><span data-field=\"handle\">alice</span><span data-field=\"score\">1</span></div>')\n    nested=WH.parse_dom('<div data-row=\"1\"><div><span data-field=\"handle\">alice</span></div><span data-field=\"score\">1</span></div>')\n    assert flat['rows'][0]['score']=='1' and 'score' not in nested['rows'][0]\n    return 'equivalent nested <div> row loses score field: '+json.dumps(nested['rows'])\n\n@case\ndef observer_reset_dirty_files(p):\n    from products.twitter_radar import tr_product_ready_observer as O\n    repo=p/'product';init(repo);write(repo/'owner.txt','committed\\n');commit(repo);write(repo/'owner.txt','uncommitted important work\\n')\n    old={'schema':'tr-product-ready-receipt/v2','runs':[{'corpus_sha':'same','events_log':{'path':'research/old.jsonl'}},{}]}\n    write(repo/'research/tr_product_ready_receipt.json',old)\n    class Process: pass\n    with patch.object(O,'CONTROL_ROOT',p/'control'),patch.object(O,'_spawn',return_value=Process()),patch.object(O,'_wait',return_value=0),patch.object(O,'_observe_weekly'),patch.object(O,'_run_record',return_value={'corpus_sha':'same'}):\n        msg=exception(lambda:O.exercise(repo,timeout_s=1,between_runs_s=0),RuntimeError)\n    assert 'QUIET_WINDOW_NO_DISTINCT_CORPUS' in msg and (repo/'owner.txt').read_text()=='committed\\n'\n    return 'quiet-window branch executes real git reset --hard; pre-existing uncommitted owner.txt edit lost (pipeline stubbed, rollback real)'\n\n@case\ndef longrun_wrong_milestone(p):\n    write(p/'PROJECT_STATE.json',{'long_run_ready':True,'current_milestone':'OTHER','completed_milestones':{}})\n    with patch.object(LR,'run_twitter_radar_long_run',return_value=LR.TwitterRadarLongRunResult(status='FAIL')) as run:\n        for _ in range(2): LR.auto_start_twitter_radar_if_ready(p,p,p,['factoryd_stub'])\n    assert run.call_count==2\n    return 'current_milestone=OTHER, factoryd_stub command: 2 polls -> 2 launches'\n\n@case\ndef longrun_failed_result_passes(p):\n    r=LR.TwitterRadarLongRunResult(status='FAIL',milestones_completed=['a','b','c'],engines_active_peak=2,restarted=True,crashed=False,artifacts=['artifact'])\n    LR.assert_twitter_radar_long_run_pass(r,LR.TwitterRadarLongRunConfig())\n    return 'assert_twitter_radar_long_run_pass accepts status=FAIL, crashed=False'\n\n@case\ndef operate_dirty_receipt(p):\n    init(p);write(p/'artifact','v1');s1=commit(p);write(p/'artifact','v2');s2=commit(p)\n    def rec(sha,body,date,corpus):\n        return {'schema':OP.SCHEMA,'project':'TR_WEEKLY_DEEP_REFRESH_V1','trigger_source':'scheduler','observed_at':date,'observed_by':'supervisor','rc':0,'command':'refresh','refresh_sha':sha,'corpus_sha':corpus*64,'artifacts':[{'path':'artifact','sha256':hashlib.sha256(body.encode()).hexdigest()}]}\n    a=rec(s1,'v1','2026-06-01T12:00:00Z','a');b=rec(s2,'v2','2026-06-02T12:00:00Z','b')\n    write(p/'receipts/1.json',a);write(p/'receipts/2.json',b);commit(p)\n    now=datetime(2026,6,15,tzinfo=timezone.utc)\n    before=OP.verify(p/'receipts',p,now=now)[0]\n    b['observed_at']='2026-06-08T12:00:00Z';write(p/'receipts/2.json',b)\n    after=OP.verify(p/'receipts',p,now=now)[0]\n    assert before==2 and after==0 and '2026-06-02' in git(p,'show','HEAD:receipts/2.json')\n    return 'committed 1-day gap rc=2; change receipt date only in working tree to 7-day gap -> rc=0 and proof written'\n\n@case\ndef observation_stale_noop(p):\n    posts(p,[{'id':'1','created_at':'2026-01-01T00:00:00Z'}])\n    write(p/'research/tr_weekly_report.json',{'old':True});write(p/'research/old.log','old run')\n    write(p/'research/tr_refresh_1_receipt.json',{'report_sha':hashlib.sha256((p/'research/tr_weekly_report.json').read_bytes()).hexdigest(),'log':{'path':'research/old.log'}})\n    obs,why=WO.observe_weekly_refresh(refresh_seq=1,command='true',cwd=p,repo=p,timeout=5)\n    assert not why and obs.is_valid()\n    return 'command=true changes no artifact; pre-existing receipt/report/log -> new valid supervisor observation rc=0'\n\n@case\ndef weekly_index_lost_update(p):\n    real_read=WO._read_index\n    # Deterministically interleave two complete stores at the index read boundary.\n    # Both operations succeed; no simultaneous temp write is needed for this loss.\n    first=WO.WeeklyRefreshObservation(WO.SCHEMA,WO.PROJECT,1,'scheduler','a'*64,'b'*64,'c'*64,'one',0,'supervisor')\n    second=WO.WeeklyRefreshObservation(WO.SCHEMA,WO.PROJECT,2,'scheduler','d'*64,'e'*64,'f'*64,'two',0,'supervisor')\n    fired=False\n    def nested(d):\n        nonlocal fired\n        data=real_read(d)\n        if not fired:\n            fired=True\n            WO.store_observation(second,d)\n        return data\n    with patch.object(WO,'_read_index',nested): WO.store_observation(first,p)\n    valid=WO.list_valid_observations(p)\n    assert len(list(p.glob('*.json')))==3 and len(valid)==1\n    return '2 successful stores, 2 observation files, only 1 indexed/valid observation after interleaved read-modify-write'\n\n@case\ndef presentation_stale_keepalive(p):\n    init(p)\n    write(p/'research/tr_keepalive_receipts.json',{'runs':[{'day':day,'collected_new_posts':0,'reanalysis_ok':True,'export_ok':True,'duration_s':1,'script_sha':'not-a-sha'} for day in ['2000-01-01','2000-02-01','2000-03-01']]})\n    commit(p);r=PV.verify_inter_refresh_keepalive(p)\n    assert r['runs']==3\n    return 'VERIFIED for three dates in 2000, one month apart, script_sha=not-a-sha'\n\n@case\ndef presentation_feedback_without_images(p):\n    init(p);write(p/'docs/OWNER_FEEDBACK.md','- [x] Item one\\n- [x] Item two\\n- [x] Item three\\n')\n    write(p/'docs/PRESENTATION_SCREENSHOTS/README.md','avant / après\\n');commit(p)\n    r=PV.verify_owner_feedback_iteration(p);assert r['items']==3\n    return '3 feedback items VERIFIED with README=\"avant / après\" and no image files'\n\n@case\ndef presentation_missing_profile_page(p):\n    init(p)\n    for rel,data in {'research/tr_kol_profile_facts.json':{'accounts':{'alice':{}}},'research/tr_kol_profile.json':{'accounts':{'alice':{}}},'research/tr_kol_universe.json':{'accounts':[{'handle':'alice'}]},'research/tr_kol_horizons.json':{'accounts':{'alice':{'good_calls':1}}}}.items():write(p/rel,data)\n    write(p/'app/export_static.py','pass\\n');commit(p)\n    r=PV.verify_kol_profile(p);assert r['evaluated']==1\n    return '1 evaluated account VERIFIED with empty portrait and exporter producing zero pages'\n\n@case\ndef presentation_market_sparse(p):\n    init(p);write(p/'data/market/daily_prices.csv','ticker,date,close,adj_close,source,retrieved_at\\nAAA,2024-01-01,1,1,fixture,2026-09-01\\n')\n    write(p/'research/tr_ticker_table.json',{'rows':[{'ticker':'AAA'}]})\n    write(p/'research/tr_market_history_coverage.json',{'schema':'tr-market-history-coverage/v1','as_of':'2026-09-01','corporate_action_policy':dict.fromkeys(['close','adj_close','splits','dividends','delistings'],'declared'),'source':'fixture','tickers':{'AAA':{'first_date':'2024-01-01','rows':1,'status':'OK'}},'summary':{'covered_2y_count':1,'total':1,'missing':[]}})\n    commit(p);r=PV.verify_market_history(p);assert r['covered_2y']==1\n    return 'one price from 2024-01-01, no other sessions -> covered_2y=1/1 at as_of=2026-09-01'\n\n@case\ndef presentation_corpus_id_str(p):\n    init(p);posts(p,[{'id_str':'2000000000000000001','text':'long $AAA'}]);commit(p)\n    r=PV._corpus_tweet_ids(p);assert not r\n    return 'committed valid id_str post -> _corpus_tweet_ids returns empty set'\n\n@case\ndef product_kol_unchecked_lifecycle(p):\n    posts(p,[{'id':'1','text':'hello'}]);write(p/'research/tr_kol_universe.json',{'accounts':[{'handle':'alice','lifecycle':'MONITORED'}]})\n    rank=TK.build_ranking(p/'data/corpus',p/'research/tr_kol_universe.json')\n    write(p/'research/tr_kol_ranking.json',rank);assert V.verify_tr_kol(p).code==0\n    rank['accounts'][0]['lifecycle']='REJECTED';rank['discovered_outside']=[{'handle':'phantom','inbound':{'retweet':999}}]\n    write(p/'research/tr_kol_ranking.json',rank);r=V.verify_tr_kol(p);assert r.code==0\n    return 'valid ranking rc=0; lifecycle MONITORED->REJECTED and fabricated discovery list -> still rc=0'\n\n@case\ndef product_call_duplicate_episode(p):\n    posts(p,[{'id':'1','created_at':'2026-01-01T10:00:00Z','text':'long $AAA'}]);m=market(p)\n    write(p/'data/market/daily_prices.csv',m.read_text())\n    ledger=TC.build_ledger(p/'data/corpus',p/'data/market/daily_prices.csv')\n    ledger['episodes']*=2\n    write(p/'research/tr_call_ledger.json',ledger)\n    r=V.verify_tr_call(p);assert r.code==0 and len(ledger['episodes'])==2 and ledger['episode_count']==1\n    return 'episode_count=1, episodes contains same episode twice -> verify_tr_call rc=0'\n\n@case\ndef product_h2_uncommitted_event(p):\n    init(p);write(p/'obs/.events_run.jsonl',json.dumps({'handle':'alice','post_id':'1','transport':'fixture'})+'\\n');commit(p)\n    f=p/'obs/.events_run.jsonl'\n    with f.open('a') as h:h.write(json.dumps({'handle':'alice','post_id':'2','transport':'fixture'})+'\\n')\n    got=V._h2_window_credited_ids(p/'obs','alice')\n    assert got=={'1','2'} and '\"2\"' not in git(p,'show','HEAD:obs/.events_run.jsonl')\n    return 'committed event credits id=1; uncommitted appended event id=2 also credited'\n\nif __name__=='__main__':\n    selected=sys.argv[1:];results=[]\n    for name,fn in CASES.items():\n        if selected and name not in selected:continue\n        try:\n            with tempfile.TemporaryDirectory(prefix='m2-review-') as d:detail=fn(Path(d))\n            row={'case':name,'rc':0,'output':detail}\n        except Exception:\n            row={'case':name,'rc':1,'output':traceback.format_exc()}\n        results.append(row);print('TEST '+name+' : rc='+str(row['rc'])+' | '+row['output'],flush=True)\n    if os.environ.get('M2_PROBE_RESULTS'):Path(os.environ['M2_PROBE_RESULTS']).write_text(json.dumps(results,indent=2)+'\\n')\n    sys.exit(any(r['rc'] for r in results))\n",
+    "source_sha256": "77951ea9d749dfca71e739f844dfe0a67db12ba3c5deb1f62e3cf8e65440b6dd",
+    "replay": "Depuis la racine du dépôt revu : python3 - <<'PY'\nimport json, pathlib, subprocess, sys, tempfile\nd=json.loads(pathlib.Path('factory_v2/audit/CODE_REVIEW_2026-09/L6_bin_lib_products_2.json').read_text())\nwith tempfile.TemporaryDirectory(prefix='m2-replay-') as t:\n p=pathlib.Path(t)/'probes.py'; p.write_text(d['reproduction_suite']['source'])\n raise SystemExit(subprocess.call([sys.executable,str(p)]))\nPY",
+    "results": [
+      {
+        "case": "qualification_wrong_sha",
+        "rc": 0,
+        "output": "same requested SHA: original checkout passed=False; different HEAD passed=True, labelled with original failing SHA"
+      },
+      {
+        "case": "required_state_invalid_registry",
+        "rc": 0,
+        "output": "TypeError: unhashable type: 'dict' instead of DependencyGapResult(can_dispatch=False)"
+      },
+      {
+        "case": "reuse_invalid_registry",
+        "rc": 0,
+        "output": "AttributeError on decisions=[null]; IsADirectoryError on unreadable registry, no blocked_reason"
+      },
+      {
+        "case": "task_fence_mismatch",
+        "rc": 0,
+        "output": "valid=True although all required headings are inside an unclosed four-backtick code fence"
+      },
+      {
+        "case": "task_empty_containers",
+        "rc": 0,
+        "output": "valid=True for id=[], repo={}, test_cmd=[], spec_level=[]"
+      },
+      {
+        "case": "supervisor_tmp_collision",
+        "rc": 0,
+        "output": "two concurrent atomic_write_json calls: one FileNotFoundError due to shared state.json.tmp"
+      },
+      {
+        "case": "worktree_moving_base",
+        "rc": 0,
+        "output": "base_commit pins initial SHA; created worktree HEAD is a later SHA after base_branch moved"
+      },
+      {
+        "case": "coverage_timestamp_alias",
+        "rc": 0,
+        "output": "2 canonical created_at posts -> post_count=0, coverage_status=NO_POSTS"
+      },
+      {
+        "case": "sector_key_error",
+        "rc": 0,
+        "output": "KeyError: 'Technology'"
+      },
+      {
+        "case": "closure_mixed_timezone",
+        "rc": 0,
+        "output": "TypeError: can't compare offset-naive and offset-aware datetimes"
+      },
+      {
+        "case": "kol_case_mismatch",
+        "rc": 0,
+        "output": "reply to Bob with bob corpus -> no internal edge; Bob falsely DISCOVERED outside"
+      },
+      {
+        "case": "kol_repeated_corpus_reads",
+        "rc": 0,
+        "output": "3 corpus files / 3 accounts: 12 complete file reads (3 graph + 3x3 scoring); N accounts imply N^2 scoring reads"
+      },
+      {
+        "case": "records_discovery_membership",
+        "rc": 0,
+        "output": "discovered_outside=[{handle:bob,...}] -> bob.discovery_path.outside=False"
+      },
+      {
+        "case": "corpus_timestamp_order",
+        "rc": 0,
+        "output": "newest=2026-01-02T00:30:00+02:00; actual latest=2026-01-01T23:00:00Z (30 minutes later)"
+      },
+      {
+        "case": "radar_timestamp_order",
+        "rc": 0,
+        "output": "opening at 22:30Z then closing at 23:00Z -> ground truth leaves generation OPEN"
+      },
+      {
+        "case": "nested_dom",
+        "rc": 0,
+        "output": "equivalent nested <div> row loses score field: [{\"handle\": \"alice\"}]"
+      },
+      {
+        "case": "observer_reset_dirty_files",
+        "rc": 0,
+        "output": "quiet-window branch executes real git reset --hard; pre-existing uncommitted owner.txt edit lost (pipeline stubbed, rollback real)"
+      },
+      {
+        "case": "longrun_wrong_milestone",
+        "rc": 0,
+        "output": "current_milestone=OTHER, factoryd_stub command: 2 polls -> 2 launches"
+      },
+      {
+        "case": "longrun_failed_result_passes",
+        "rc": 0,
+        "output": "assert_twitter_radar_long_run_pass accepts status=FAIL, crashed=False"
+      },
+      {
+        "case": "operate_dirty_receipt",
+        "rc": 0,
+        "output": "committed 1-day gap rc=2; change receipt date only in working tree to 7-day gap -> rc=0 and proof written"
+      },
+      {
+        "case": "observation_stale_noop",
+        "rc": 0,
+        "output": "command=true changes no artifact; pre-existing receipt/report/log -> new valid supervisor observation rc=0"
+      },
+      {
+        "case": "weekly_index_lost_update",
+        "rc": 0,
+        "output": "2 successful stores, 2 observation files, only 1 indexed/valid observation after interleaved read-modify-write"
+      },
+      {
+        "case": "presentation_stale_keepalive",
+        "rc": 0,
+        "output": "VERIFIED for three dates in 2000, one month apart, script_sha=not-a-sha"
+      },
+      {
+        "case": "presentation_feedback_without_images",
+        "rc": 0,
+        "output": "3 feedback items VERIFIED with README=\"avant / après\" and no image files"
+      },
+      {
+        "case": "presentation_missing_profile_page",
+        "rc": 0,
+        "output": "1 evaluated account VERIFIED with empty portrait and exporter producing zero pages"
+      },
+      {
+        "case": "presentation_market_sparse",
+        "rc": 0,
+        "output": "one price from 2024-01-01, no other sessions -> covered_2y=1/1 at as_of=2026-09-01"
+      },
+      {
+        "case": "presentation_corpus_id_str",
+        "rc": 0,
+        "output": "committed valid id_str post -> _corpus_tweet_ids returns empty set"
+      },
+      {
+        "case": "product_kol_unchecked_lifecycle",
+        "rc": 0,
+        "output": "valid ranking rc=0; lifecycle MONITORED->REJECTED and fabricated discovery list -> still rc=0"
+      },
+      {
+        "case": "product_call_duplicate_episode",
+        "rc": 0,
+        "output": "episode_count=1, episodes contains same episode twice -> verify_tr_call rc=0"
+      },
+      {
+        "case": "product_h2_uncommitted_event",
+        "rc": 0,
+        "output": "committed event credits id=1; uncommitted appended event id=2 also credited"
+      }
+    ]
+  }
+}

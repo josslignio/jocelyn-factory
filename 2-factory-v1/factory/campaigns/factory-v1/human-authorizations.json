@@ -1,0 +1,11 @@
+{
+  "schema": "factory-human-authorizations/v1",
+  "local_personal_data_use": true,
+  "network_personal_data_use": false,
+  "application_submission": false,
+  "merge_main": false,
+  "push": false,
+  "tag": false,
+  "deploy": false,
+  "lift_no_go": false
+}

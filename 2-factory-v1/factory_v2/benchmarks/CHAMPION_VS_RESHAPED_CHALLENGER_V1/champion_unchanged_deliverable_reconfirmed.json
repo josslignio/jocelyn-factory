@@ -1,0 +1,13 @@
+{
+  "engine_exercised": "NOT_EXERCISED",
+  "launches_lost": 1,
+  "notes": "verdict=DELIVERABLE_UNCHANGED product_base_sha_supported=False",
+  "probe_id": "unchanged_deliverable_reconfirmed",
+  "restart_recovered": false,
+  "settled": false,
+  "side": "champion",
+  "side_sha": "5257c8c9689aba1e85eb7638b621458eb3a067e8",
+  "start_sha": "798a9fff53280a478fbf049aae0bcd2cf68e4fd0",
+  "wall_s": 0.361,
+  "workload_id": "CHAMPION_VS_RESHAPED_CHALLENGER_V1"
+}

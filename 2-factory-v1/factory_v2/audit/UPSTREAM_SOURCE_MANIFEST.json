@@ -1,0 +1,182 @@
+{
+  "control_sha": "865de5703a2450b38bc4f166cbcfe835439c6c9a",
+  "control_sha_rebind_2026_09_19": "REBOUND 2026-09-19 (codex BLOCK 2f0e5bf3 repair, session 5): control_sha moved 57cd98e0->865de5703a2450b38bc4f166cbcfe835439c6c9a because intervening milestones (SAFE_SELF_IMPROVEMENT, FACTORY_CODE_REVIEW_SWEEP, FACTORY_DEEP_RESEARCH) committed real code after 2f0e5bf3 (git diff --name-only 2f0e5bf3..HEAD: factoryd.py, runtime.py, mission_dispatch.py, settlement.py, launch_gate.py, owner_routing_policy.py, tests/). Re-verified at the new binding: LOC re-measured fresh (wc -l; drift found and updated: runtime.py 4468->4475, factoryd.py 2343->2363; all other entries exact), line citations re-resolved (factoryd _reconcile_stale_active l.200, _load_or_create_state l.884 still exact), mechanical judge python3 factory_v2/verify_audit_repair.py . -> AUDIT_REPAIR_VERIFIED rc=0.",
+  "milestone": "FULL_CODEBASE_STATE_OF_ART_AUDIT",
+  "note": "Citations pinned to remote commit SHAs, each resolvable: SHA via api.github.com git/ref, excerpt via raw.githubusercontent.com/<repo>/<sha>/<file> (session 2026-09-18). The 2026-09-07 claim 'All repos cloned as shallow git clones into research/upstreams/' does not hold in this checkout — research/upstreams/ subdirectories exist but are empty (ls, 2026-09-18); the placeholders '(fetched via WebFetch, not cloned)' / 'N/A' / '(prior research, v0.8+)' have been replaced by measured SHAs. BMAD carries commit_sha null (unresolvable repo) and is not counted in any >=8 floor.",
+  "produced_at": "2026-09-07",
+  "research_dir": "research/upstreams/",
+  "schema": "upstream-source-manifest/v1",
+  "update_2026_09_18": {
+    "measured_at_head": "d256977f9bb00006fb5f5271a762b1c58354cfae",
+    "pinned_upstreams": 10,
+    "pinned_upstreams_recount_note": "session 3 : recompte exécuté (python3 : entrées upstreams dont commit_sha matche ^[0-9a-f]{40}$) = 10 — mini-swe-agent, SWE-ReX, Microsoft Agent Framework, Temporal, LangGraph, OpenHands SDK, MetaGPT, Goose, GitHub Spec Kit, SWE-agent ; l'ancien '9' était un compte faux (le receipt de recherche déclare 10 frameworks_inspected pinnés, cohérent)",
+    "reason": "Relecteur Claude BLOCK aa295959: 'N/A' et '(fetched via WebFetch)' ne sont pas des commit SHA ; Spec Kit confondu avec BMAD ; OpenHands/Goose/MetaGPT non pinnés.",
+    "reverified_second_pass": "Re-vérification fraîche (session codex-BLOCK 60d76f11) : chaque pinned_file de chaque upstream à SHA réel re-fetché par urllib — 10/10 extraits retrouvés sous-chaîne EXACTE du raw au SHA (mini-swe-agent default.py = 190 l. confirmé).",
+    "reverified_third_pass": "Re-vérification fraîche session 3 (BLOCK codex a4f12607) : re-fetch urllib des 10 pinned_file au SHA — 10/10 extraits sous-chaîne EXACTE du raw (exécution dans cette session, sortie citée dans FACTORY_F3_EXTERNAL_RESEARCH_RECEIPT.json.third_pass_2026_09_18).",
+    "unpinned_declared": [
+      "BMAD Method (repo introuvable, commit_sha null, non comptée)"
+    ]
+  },
+  "upstreams": [
+    {
+      "code_excerpt": "    def run(self, task: str = \"\", **kwargs) -> dict:\n        \"\"\"Run step() until agent is finished. Returns dictionary with exit_status, submission keys.\"\"\"\n        self.extra_template_vars |= {\"task\": task, **kwargs}\n        self.messages = []\n        self.add_messages(\n            self.model.format_message(role=\"system\", content=self._render_template(self.config.system_template)),\n            self.model.format_message(role=\"user\", content=self._render_template(self.config.instance_template)),\n        )\n        while True:\n            try:",
+      "commit_sha": "04d809ceab9df28f9adaed044884180159172930",
+      "key_insight": "DefaultAgent.run() is the minimal correct agent loop: messages + query() + execute_actions(). 160 LOC total for the agent core. Trajectory saved via serialize() to JSONL. No retry at agent level — retry is a policy concern above the agent. File measured 190 lines (wc -l on the fetched raw copy, 2026-09-18) — the '160 LOC' 2026-09-07 figure was the agent-core estimate.",
+      "license": "MIT (inferred from SWE-agent family)",
+      "license_file": "research/upstreams/mini-swe-agent/LICENSE (not present in clone — verify before vendoring)",
+      "local_path": "research/upstreams/mini-swe-agent/",
+      "name": "mini-swe-agent",
+      "pinned_file": "src/minisweagent/agents/default.py",
+      "relevant_modules": [
+        "src/minisweagent/agents/default.py (DefaultAgent — 160 LOC)",
+        "src/minisweagent/environments/local.py (LocalEnvironment)",
+        "src/minisweagent/environments/docker.py (DockerEnvironment)"
+      ],
+      "repo": "https://github.com/SWE-agent/mini-swe-agent",
+      "use_for": "agent execution core, trajectory schema"
+    },
+    {
+      "code_excerpt": "class BashAction(BaseModel):\n    command: str\n    \"\"\"The command to run.\"\"\"\n\n    session: str = \"default\"\n    \"\"\"The session to run the command in.\"\"\"\n\n    timeout: float | None = None\n    \"\"\"The timeout for the command. None means no timeout.\"\"\"",
+      "commit_sha": "5c995c365dfb1fd5bc56fda688be5d8538f9931f",
+      "key_insight": "BashAction is a typed Pydantic model (not free-form subprocess). LocalDeployment and DockerDeployment implement the same AbstractDeployment interface — swap runtime backend without changing agent code. is_alive() for health check.",
+      "license": "MIT (inferred — verify from LICENSE file before vendoring)",
+      "local_path": "research/upstreams/swe-rex/",
+      "name": "SWE-ReX",
+      "pinned_file": "src/swerex/runtime/abstract.py",
+      "relevant_modules": [
+        "src/swerex/runtime/abstract.py (AbstractRuntime, BashAction, BashObservation)",
+        "src/swerex/deployment/local.py (LocalDeployment)",
+        "src/swerex/deployment/docker.py (DockerDeployment)"
+      ],
+      "repo": "https://github.com/SWE-agent/SWE-ReX",
+      "use_for": "typed action model, runtime abstraction layer (local/docker swap)"
+    },
+    {
+      "code_excerpt": "class SupportsAgentRun(Protocol):\n    \"\"\"A protocol for an agent that can be invoked.\n\n    This protocol defines the interface that all agents must implement,\n    including properties for identification and methods for execution.\n\n    Note:\n        Protocols use structural subtyping (duck typing). Classes don't need\n        to explicitly inherit from this protocol to be considered compatible.",
+      "commit_sha": "fdf7e80ad6c8f6dbdd9b779d5d6923c74d8b583e",
+      "key_insight": "Enterprise-grade framework. AutoGen + Semantic Kernel merged into MAF 1.0 GA April 2026. AutoGen is now maintenance mode. MAF supports Python + .NET + Go. Too large for Factory's single-machine use case. The A2A (Agent-to-Agent) protocol and workflow primitives are interesting but over-engineered for Factory.",
+      "license": "MIT",
+      "license_file": "research/upstreams/agent-framework/LICENSE",
+      "local_path": "research/upstreams/agent-framework/",
+      "name": "Microsoft Agent Framework",
+      "pinned_file": "python/packages/core/agent_framework/_agents.py",
+      "relevant_modules": [
+        "python/packages/core/ (agent core, tool definitions)",
+        "python/packages/orchestrations/ (multi-agent orchestration patterns)",
+        "python/packages/declarative/ (declarative agent definitions)"
+      ],
+      "repo": "https://github.com/microsoft/agent-framework",
+      "sha_source": "pinned 2026-09-07 (fdf7e80a) — resolvable; re-verified by raw fetch in session 2026-09-18",
+      "use_for": "multi-agent handoff patterns (conceptual reference only); A2A protocol if Factory needs external agent interop"
+    },
+    {
+      "code_excerpt": "@dataclass\nclass RetryPolicy:\n    \"\"\"Options for retrying workflows and activities.\"\"\"\n\n    initial_interval: timedelta = timedelta(seconds=1)\n    \"\"\"Backoff interval for the first retry. Default 1s.\"\"\"\n\n    backoff_coefficient: float = 2.0",
+      "commit_sha": "5a1703a30295291f9c944c26ec193d468e200a3b",
+      "key_insight": "Deterministic workflow replay: _is_replaying=True during replay suppresses side effects. RetryPolicy is a declarative dataclass (initial_interval, backoff_coefficient, max_attempts, non_retryable_error_types). Activity heartbeat is a fire-and-forget push to Temporal server.",
+      "license": "MIT",
+      "local_path": "N/A",
+      "name": "Temporal Python SDK",
+      "pinned_file": "temporalio/common.py",
+      "relevant_modules": [
+        "temporalio/common.py (RetryPolicy dataclass)",
+        "temporalio/activity.py (heartbeat, is_cancelled, is_worker_shutdown)",
+        "temporalio/worker/_workflow_instance.py (replay via _is_replaying flag)"
+      ],
+      "repo": "https://github.com/temporalio/sdk-python",
+      "sha_source": "api.github.com/repos/temporalio/sdk-python/git/ref/heads/main (2026-09-18)",
+      "use_for": "RetryPolicy semantics for dispatcher retry policy; heartbeat pattern (already implemented in factory/lib/heartbeat.py)"
+    },
+    {
+      "code_excerpt": "class BaseCheckpointSaver(Generic[V]):\n    \"\"\"Base class for creating a graph checkpointer.\n\n    Checkpointers allow LangGraph agents to persist their state\n    within and across multiple interactions.\n",
+      "commit_sha": "c81c13533ee48c1ae0ef2de314737ef0c455f2be",
+      "key_insight": "Checkpoint schema: {id, ts, channel_values, channel_versions, pending_sends}. thread_id as primary idempotency key. put_writes() for intermediate task outputs (partial recovery). The interface is an abstraction over SQLite/Postgres/Redis backends.",
+      "license": "MIT",
+      "local_path": "N/A",
+      "name": "LangGraph",
+      "outcome": "INSPECTED_AND_ADAPTED — adapt pending_writes concept into RunRecords attempt trajectories",
+      "pinned_file": "libs/checkpoint/langgraph/checkpoint/base/__init__.py",
+      "relevant_modules": [
+        "libs/checkpoint/langgraph/checkpoint/base/__init__.py (BaseCheckpointSaver, Checkpoint TypedDict)"
+      ],
+      "repo": "https://github.com/langchain-ai/langgraph",
+      "sha_source": "api.github.com/repos/langchain-ai/langgraph/git/ref/heads/main (2026-09-18)",
+      "use_for": "Checkpoint interface concept; pending_sends pattern for partial mission recovery"
+    },
+    {
+      "code_excerpt": "class Event(DiscriminatedUnionMixin, ABC):\n    \"\"\"Base class for all events.\"\"\"\n\n    model_config: ClassVar[ConfigDict] = ConfigDict(extra=\"forbid\", frozen=True)\n    id: EventID = Field(\n        default_factory=lambda: str(uuid.uuid4()),\n        description=\"Unique event id (ULID/UUID)\",\n    )\n    timestamp: str = Field(",
+      "commit_sha": "28e8ed273617992e9556410804f54937cc059878",
+      "f4_action": "No code change. Factory's runtime.advance() + factoryd daemon already match the correct SDK/automation split.",
+      "license": "MIT",
+      "local_path": "N/A",
+      "name": "OpenHands (Software Agent SDK + Automation)",
+      "outcome": "INSPECTED_AND_ADAPTED — SDK/Automation split validates Factory's V2 architecture. Docker sandbox and REST server NOT adopted (single-machine). EventStream typed action concept already in ExecutionResult. Full dependency rejected — too heavyweight.",
+      "pinned_file": "openhands-sdk/openhands/sdk/event/base.py",
+      "relevant_modules": [
+        "openhands-sdk/openhands/sdk/event/ (typed Event base, llm_convertible)",
+        "openhands-sdk/openhands/sdk/agent/",
+        "openhands-sdk/openhands/sdk/conversation/"
+      ],
+      "repo": "https://github.com/OpenHands/software-agent-sdk",
+      "repo_rename_note": "All-Hands-AI/OpenHands monorepo split: desktop app remains at OpenHands/OpenHands; the agent SDK inspected here lives at OpenHands/software-agent-sdk (2026-09-18)"
+    },
+    {
+      "code_excerpt": "class Role(BaseRole, SerializationMixin, ContextMixin, BaseModel):\n    \"\"\"Role/Agent\"\"\"\n\n    model_config = ConfigDict(arbitrary_types_allowed=True, extra=\"allow\")\n\n    name: str = \"\"\n    profile: str = \"\"\n    goal: str = \"\"\n    constraints: str = \"\"\n    desc: str = \"\"",
+      "commit_sha": "11cdf466d042aece04fc6cfd13b28e1a70341b1f",
+      "f4_action": "No code change.",
+      "license": "Apache-2.0",
+      "local_path": "N/A",
+      "name": "MetaGPT",
+      "outcome": "INSPECTED_AND_REJECTED — multi-role document generation workflow, not relevant to Factory's execution continuity and authority management problems.",
+      "pinned_file": "metagpt/roles/role.py",
+      "repo": "https://github.com/FoundationAgents/MetaGPT",
+      "repo_rename_note": "formerly geekan/MetaGPT (GitHub redirect follows)"
+    },
+    {
+      "code_excerpt": "    pub async fn reply(\n        &self,\n        user_message: Message,\n        session_config: SessionConfig,\n        use_state_machine: bool,\n        cancel_token: Option<CancellationToken>,\n    ) -> Result<BoxStream<'_, Result<AgentEvent>>> {\n        let reply_span = tracing::Span::current();\n        let events = self",
+      "commit_sha": "1e83e89f556fc60fd396df1fd0f2992f8b2f2dc1",
+      "f4_action": "No code change.",
+      "license": "Apache-2.0",
+      "local_path": "N/A",
+      "name": "Goose (formerly Block, Inc)",
+      "outcome": "INSPECTED_AND_REJECTED — CLI agent with typed streamed events (reply() -> BoxStream<AgentEvent>); not a library for roadmap/portfolio orchestration.",
+      "pinned_file": "crates/goose/src/agents/agent.rs",
+      "repo": "https://github.com/aaif-goose/goose",
+      "repo_rename_note": "formerly block/goose (GitHub redirect follows)"
+    },
+    {
+      "code_excerpt": "/speckit-constitution Create principles focused on code quality, testing, and maintainability.\n/speckit-specify Build a photo organizer with albums grouped by date and a tile preview of each album.\n/speckit-plan Use Vite with vanilla JavaScript. Keep images local and store metadata in SQLite.\n/speckit-tasks",
+      "commit_sha": "5e952140659287106580d32f242ba71365a3862b",
+      "f4_action": "No code change. Structured acceptance criteria format considered for ROADMAP.yaml acceptance arrays.",
+      "key_insight": "Spec Kit is its own toolkit (specify-cli), NOT BMAD: per-feature slash-command flow /speckit-constitution -> /speckit-specify -> /speckit-plan -> /speckit-tasks -> implement -> converge. Acceptance criteria live in the spec templates.",
+      "license": "MIT",
+      "name": "GitHub Spec Kit",
+      "outcome": "INSPECTED_AND_ADAPTED (format des critères d'acceptation)",
+      "pinned_file": "README.md",
+      "repo": "https://github.com/github/spec-kit",
+      "sha_source": "api.github.com/repos/github/spec-kit/git/ref/heads/main (2026-09-18)",
+      "use_for": "acceptance criteria structure"
+    },
+    {
+      "code_excerpt": "    def run(self):\n        self._chooks.on_start()\n        self.logger.info(\"Starting environment\")\n        self.env.start()\n        self.logger.info(\"Running agent\")\n        self._chooks.on_instance_start(index=0, env=self.env, problem_statement=self.problem_statement)\n        output_dir = self.output_dir / self.problem_statement.id\n        output_dir.mkdir(parents=True, exist_ok=True)\n        if self.agent.replay_config is not None:  # type: ignore[attr-defined]\n            (output_dir / \"config.yaml\").write_text(yaml.dump(self.agent.replay_config.model_dump_json(), indent=2))  # type: ignore[attr-defined]\n        result = self.agent.run(",
+      "commit_sha": "3ea751c087f32b16e039a2233dd6eefecef325d5",
+      "key_insight": "RunSingle.run(): env.start() -> agent.run() -> hooks -> env.close(); per-problem trajectory JSONL under output_dir/problem_id — the trajectory schema adapted for RunRecords.",
+      "license": "MIT",
+      "name": "SWE-agent",
+      "outcome": "INSPECTED_AND_ADAPTED (schema de trajectoire)",
+      "pinned_file": "sweagent/run/run_single.py",
+      "repo": "https://github.com/SWE-agent/SWE-agent",
+      "repo_rename_note": "formerly princeton-nlp/SWE-agent (GitHub redirect follows)",
+      "use_for": "trajectory JSONL schema for RunRecords"
+    },
+    {
+      "commit_sha": null,
+      "f4_action": "No code change.",
+      "key_insight": "INSPECTED_AND_ADAPTED — Factory already implements core pattern: STRATEGY.md + SPEC.md + ROADMAP.yaml + freeze_contract. Sub-spec decomposition not yet implemented (F8 concern).",
+      "license": "N/A (methodology)",
+      "name": "BMAD Method",
+      "outcome": "INSPECTED_AS_METHODOLOGY — NOT pinned: no canonical repo resolvable on 2026-09-18 (bmad-method/bmad-method, bmad-code/BMAD-METHOD, saqirb/BMAD all 404 by curl). NOT counted toward the >=8 pinned floor.",
+      "repo": "https://github.com/bmad-method/bmad-method (unresolvable at fetch time)",
+      "use_for": "story template / acceptance checklist pattern (methodology reference only)"
+    }
+  ]
+}

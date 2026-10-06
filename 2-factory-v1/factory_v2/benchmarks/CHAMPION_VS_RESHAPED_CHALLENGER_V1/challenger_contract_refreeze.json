@@ -1,0 +1,13 @@
+{
+  "engine_exercised": "NOT_EXERCISED",
+  "launches_lost": 1,
+  "notes": "actions=['MILESTONE_SETTLED', 'MISSION_UNPROVEN_REEXECUTE', 'MILESTONE_SETTLED']",
+  "probe_id": "contract_refreeze",
+  "restart_recovered": false,
+  "settled": true,
+  "side": "challenger",
+  "side_sha": "d58dcfaa81accac37ad9e92b0154b19543841d08",
+  "start_sha": "798a9fff53280a478fbf049aae0bcd2cf68e4fd0",
+  "wall_s": 1.542,
+  "workload_id": "CHAMPION_VS_RESHAPED_CHALLENGER_V1"
+}

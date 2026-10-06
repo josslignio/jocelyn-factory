@@ -1,0 +1,198 @@
+[
+  {
+    "id": "L4_resilience_review-004",
+    "status": "FIXED",
+    "commit": "887f27d76f6716fa5afd416ff8c549a53aebf7b0",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L4_resilience_review_004_heartbeat_concurrent_writers_no_lost_update",
+    "note": "write_heartbeat publishes through a per-writer mkstemp temp + os.replace; interleaved renewer/sidecar writes both succeed, no FileNotFoundError, no temp residue."
+  },
+  {
+    "id": "L4_resilience_review-009",
+    "status": "FIXED",
+    "commit": "887f27d76f6716fa5afd416ff8c549a53aebf7b0",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L4_resilience_review_009_claimed_marker_consumed_exactly_once",
+    "note": "A .claim-<pid>-<ms> is adopted only when its reader pid is dead or the claim is older than CLAIM_ADOPT_GRACE_S; a live reader's claim is never re-consumed."
+  },
+  {
+    "id": "L1_advance-006",
+    "status": "FIXED",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L1_advance_006_trusted_local_verifier_not_blocked_by_spent_model_cap",
+    "note": "Pre-dispatch peek passes supervisor_proved_no_model=_trusted_local_command_uses_no_model(mission) instead of a constant False."
+  },
+  {
+    "id": "L1_advance-007",
+    "status": "FIXED",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L1_advance_007_engine_identity_unobserved_closes_account",
+    "note": "ENGINE_IDENTITY_UNOBSERVED now close_account(exit_class=PROVIDER_FAILURE) like MISSION_RECEIPT_WRITE_FAILED: OPEN + TERMINAL rows."
+  },
+  {
+    "id": "L2_runtime_core-004",
+    "status": "FIXED",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L2_runtime_core_004_unparseable_started_at_still_counts_toward_cap",
+    "note": "_started_counts_since: an unparseable started_at counts toward the cap; only a parseable instant before the freeze is excluded."
+  },
+  {
+    "id": "L2_runtime_core-009",
+    "status": "FIXED",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L2_runtime_core_009_last_reserved_launch_resumable_before_open",
+    "note": "consume re-validates a charged reservation with available(resuming_attempt_key=...) which excludes the attempt's own spend; no second spend row."
+  },
+  {
+    "id": "L2_runtime_core-010",
+    "status": "FIXED",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L2_runtime_core_010_standing_revoke_is_applied",
+    "note": "available_standing applies REVOKE_SCHEMA rows (refusal REVOKED) before selecting a standing authorization."
+  },
+  {
+    "id": "L2_runtime_core-011",
+    "status": "FIXED",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L2_runtime_core_011_token_aggregates_carry_completeness",
+    "note": "metrics publishes tokens_total_completeness / tokens_per_accepted_milestone_completeness (COMPLETE | PARTIAL_FLOOR | UNKNOWN) next to the sums."
+  },
+  {
+    "id": "L3-006",
+    "status": "FIXED",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L3_006_resume_after_max_turns_is_budgeted_and_counted",
+    "note": "_resume_allowed arbitrates the budget before every --resume (T0/T2/T3); T0 records the first launch before the resume and the resume separately."
+  },
+  {
+    "id": "L3-016",
+    "status": "WONTFIX",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L3_016_wontfix_canary_rationing_is_the_pinned_contract",
+    "note": "Faux positif au regard du contrat public epingle : tests/test_resilience.py::test_quota_routing_lookup_canary_matches_pinned_judge (juge resilience 9d5314f6) exige qu'avec cap=1 et un canari de routage la porte execve refuse. Exclure le canari du rationnement casse ce test, interdit de modification. Le canari est borne a UNE unite par fournisseur et par 24 h (ecrit seulement si le journal existe) : une decision aveugle compte, observation ou lancement. Correctif model_router retire ; la sonde de l'audit (cap=1, un canari, premier lancement refuse) decrit le comportement voulu."
+  },
+  {
+    "id": "L4_resilience_review-006",
+    "status": "FIXED",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L4_resilience_review_006_cli_window_keeps_source_and_age",
+    "note": "merged_view keeps each snapshot window's own source/observed_at (refresh_from_cli) and falls back to the global metadata only for screenshot windows."
+  },
+  {
+    "id": "L4_resilience_review-007",
+    "status": "FIXED",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L4_resilience_review_007_latest_cli_signal_kept_per_window",
+    "note": "latest_cli_signals keeps the latest signal per provider/scope in windows{}; merged_view merges every window before the any-window decision."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-026",
+    "status": "FIXED",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L5_factory_v2_rest_1_026_cap_fallback_counts_attempts_not_rows",
+    "note": "_standing_cap_for_project folds the ledger by attempt_key (resource_accounting.fold) before counting."
+  },
+  {
+    "id": "L6_bin_lib_products_1-012",
+    "status": "FIXED",
+    "commit": "a163d3a94173c4693f0b35a2e904c4ae4a6de9ff",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L6_bin_lib_products_1_012_retry_accumulates_spent_time",
+    "note": "MissionState.step adds the retry's duration to the duration already burnt instead of replacing it."
+  },
+  {
+    "id": "L2_runtime_core-005",
+    "status": "FIXED",
+    "commit": "0ae822b9aa2c3287be194906c629fee5d61ffd23",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L2_runtime_core_005_local_worker_group_stopped_on_heartbeat_error",
+    "note": "Any failure after Popen (heartbeat OSError included) terminates + reaps the worker group before clear_worker_state; same on the autopilot EXECUTOR_ERROR path."
+  },
+  {
+    "id": "L3-003",
+    "status": "FIXED",
+    "commit": "0ae822b9aa2c3287be194906c629fee5d61ffd23",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L3_003_process_group_reaped_after_parent_exit",
+    "note": "_run remembers the group created by setsid (pgid == child pid) and killpg's it after communicate instead of getpgid on a reaped pid."
+  },
+  {
+    "id": "L3-011",
+    "status": "FIXED",
+    "commit": "0ae822b9aa2c3287be194906c629fee5d61ffd23",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L3_011_argv_net_spares_engine_protected_by_live_lease",
+    "note": "The legacy PPID-1 argv net skips every pid known to the engine registry (protected_pids); registered engines are judged by the registry decision alone."
+  },
+  {
+    "id": "L3-012",
+    "status": "FIXED",
+    "commit": "0ae822b9aa2c3287be194906c629fee5d61ffd23",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L3_012_cmd_stop_refuses_pidfile_naming_another_process",
+    "note": "write_pid_file persists a birth-identity sidecar; cmd_stop verifies it (or a factoryd argv for legacy pidfiles) before any SIGTERM — FACTORYD_STALE_PIDFILE otherwise. Refinement 1078f3bda: a legacy pidfile is trusted only when the PROGRAM is factoryd (argv[0..1]), never on a mention in the command line."
+  },
+  {
+    "id": "L4_resilience_review-001",
+    "status": "FIXED",
+    "commit": "0ae822b9aa2c3287be194906c629fee5d61ffd23",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L4_resilience_review_001_unknown_pgid_signals_the_live_pid",
+    "note": "_signal_target signals the pid when the group is unknown/absent but the pid is alive; kill_orphans journals ORPHAN_ENGINE_KILLED only once the pid is gone. Refinement 1078f3bda: EPERM on a zombie-only group is absorbed and the pid signalled; disappearance = dead or zombie."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-012",
+    "status": "FIXED",
+    "commit": "0ae822b9aa2c3287be194906c629fee5d61ffd23",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L5_factory_v2_rest_1_012_collection_timeout_bounded_by_descendants",
+    "note": "observe_collection starts its own session, SIGKILLs the whole group on timeout and bounds the final drain (close pipes, wait)."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-012",
+    "status": "FIXED",
+    "commit": "0ae822b9aa2c3287be194906c629fee5d61ffd23",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L5_factory_v2_rest_2_012_reconcile_fences_reused_pid",
+    "note": "_child_alive (pid alive AND same birth) is the single predicate used by reconcile (both checks) and the envelope scan."
+  },
+  {
+    "id": "L6_bin_lib_products_1-018",
+    "status": "FIXED",
+    "commit": "0ae822b9aa2c3287be194906c629fee5d61ffd23",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L6_bin_lib_products_1_018_grandchild_ignoring_term_is_killed",
+    "note": "_terminate_group TERMs the group, waits on the GROUP (killpg 0) for the grace, then SIGKILLs the group; KeyboardInterrupt cleans up too."
+  },
+  {
+    "id": "L1_advance-017",
+    "status": "FIXED",
+    "commit": "b81ec8f69c6193d22b8847a230bf0e7881c78d1e",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L1_advance_017_settlement_uses_the_settling_missions_own_lease",
+    "note": "Settlement uses ctx._lease only when its mission_id is the settling mission's; otherwise the durable generation/token of that mission."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-028",
+    "status": "FIXED",
+    "commit": "b81ec8f69c6193d22b8847a230bf0e7881c78d1e",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L5_factory_v2_rest_1_028_injector_hits_the_lease_the_worker_uses",
+    "note": "inject_heartbeat_interrupt resolves the lease through WorkerLease._lease_path (normalised name)."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-015",
+    "status": "FIXED",
+    "commit": "b81ec8f69c6193d22b8847a230bf0e7881c78d1e",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L5_factory_v2_rest_3_015_stale_owner_cannot_renew_its_replacement",
+    "note": "renew/tick_heartbeat take generation + fencing_token (_owner_matches); anonymous calls only on leases never bound to a pid; HeartbeatRenewer/WorkerHeartbeat pass their identity. Refinement a1fda3641: an anonymous tick/renew stays allowed to the owner PROCESS itself (lease.pid == os.getpid())."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-016",
+    "status": "FIXED",
+    "commit": "b81ec8f69c6193d22b8847a230bf0e7881c78d1e",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L5_factory_v2_rest_3_016_adopt_refuses_unobservable_birth",
+    "note": "adopt returns None (no FENCE, no ADOPT) when the lease carries a birth identity but the live one is unobservable."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-017",
+    "status": "FIXED",
+    "commit": "b81ec8f69c6193d22b8847a230bf0e7881c78d1e",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L5_factory_v2_rest_3_017_tick_refused_on_time_expired_lease",
+    "note": "tick_heartbeat refuses lease.is_expired exactly like current_generation."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-018",
+    "status": "FIXED",
+    "commit": "b81ec8f69c6193d22b8847a230bf0e7881c78d1e",
+    "test": "tests/test_code_review_repairs_lot2a.py::test_L5_factory_v2_rest_3_018_lease_file_names_are_injective",
+    "note": "_safe_mission_id appends a sha256 suffix of the full id whenever normalisation/truncation alters it; _read_nolock verifies the stored mission_id; legacy names still read when the id matches."
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "mission_id": "LR5EXT",
+  "verdict": "ACCEPTED",
+  "candidate_branch": "candidate/LR5EXT",
+  "branch_exists_after": true,
+  "receipt_path": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/lr5_harness_qydjcczi/branch_receipt.json",
+  "observed_at": "2026-09-09T10:31:33Z"
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "real-ai-execution-receipt/v1",
+  "produced_at": "2026-09-07T17:48:36Z",
+  "milestone": "REAL_MULTI_AI_EXECUTION_V2",
+  "real_ai_missions": [
+    {
+      "mission_id": "CYCLE2_M1_UNIVERSE_SELECTOR",
+      "engine": "glm",
+      "model": "zai-coding-plan/glm-5.2",
+      "spec_level": "B",
+      "task_type": "feature",
+      "verdict": "ACCEPTED",
+      "candidate_sha": "4897b158de07e5f4d55d786bd5ba908e23ec307f",
+      "wall_time_s": 281.4,
+      "tests_passed": 16,
+      "tests_total": 16,
+      "pipeline": "AutopilotExecutor_v2 \u2192 dispatcher_v3 \u2192 glm",
+      "settled_at": "2026-09-07T19:15:15Z",
+      "settled_branch": "app007/t3-attribution-outcomes"
+    },
+    {
+      "mission_id": "FACTORY_D002_HEARTBEAT_FIX",
+      "engine": "claude",
+      "model": "claude-sonnet-5",
+      "spec_level": "A",
+      "task_type": "fix",
+      "verdict": "ACCEPTED",
+      "candidate_sha": "8d659aceb5a4e19a58dd6c02073041c49ac4c4a8",
+      "merge_sha": "8075dc93",
+      "wall_time_s": 392.4,
+      "tests_passed": 16,
+      "tests_total": 16,
+      "pipeline": "AutopilotExecutor_v2 \u2192 dispatcher_v3 \u2192 claude",
+      "settled_at": "2026-09-07T17:48:36Z",
+      "resolved_defect": "D002"
+    }
+  ],
+  "codex_review": {
+    "engine": "codex",
+    "model": "gpt-5.6-terra",
+    "role": "independent_validator",
+    "review_target": "FACTORY_D002_HEARTBEAT_FIX candidate",
+    "verdict": "APPROVED",
+    "approved": true,
+    "write_heartbeat_calls": 13,
+    "best_effort_wrapper": true,
+    "test_file_exists": true,
+    "notes": "1 direct call inside _write_heartbeat wrapper (try/except); wrapper invoked 12 times across dispatcher stages.",
+    "tokens_used": 7610
+  },
+  "engines_exercised": [
+    "glm",
+    "claude",
+    "codex"
+  ],
+  "distinct_engines": 3,
+  "pipeline": "V2 AutopilotExecutor \u2192 dispatcher_v3 \u2192 {engine}",
+  "human_interventions": 0,
+  "notes": "F1 gate: 3 real AI engines exercised on 2 independent real missions + 1 independent Codex review",
+  "independent_validator_verdict": "APPROVED \u2014 Codex (gpt-5.6-terra) confirmed 13 write_heartbeat sites, best-effort wrapper, test file exists"
+}

@@ -1,0 +1,871 @@
+# Factory V1 fault-injection manifest (order §14, extended by the mid-campaign P0.2 patch's
+# F023). The gate is mechanically derived from this file, never a narrated count:
+#   EXECUTED_FAULT_IDS == EXPECTED_FAULT_IDS == PASSED_FAULT_IDS
+# Each scenario's `status` is updated as it is actually run (NOT_YET_EXECUTED -> PASS/FAIL),
+# never batch-declared. F023 (prior session) and now F001 (this session, M3 proper) are
+# mechanically verified; F002-F022 remain honestly marked NOT_YET_EXECUTED rather than assumed.
+schema: factory-fault-injection-manifest/v1
+expected_fault_ids:
+  - F001
+  - F002
+  - F003
+  - F004
+  - F005
+  - F006
+  - F007
+  - F008
+  - F009
+  - F010
+  - F011
+  - F012
+  - F013
+  - F014
+  - F015
+  - F016
+  - F017
+  - F018
+  - F019
+  - F020
+  - F021
+  - F022
+  - F023
+
+scenarios:
+  - id: F001
+    title: faux receipt
+    status: PASS
+    mechanism: factory/bin/factoryctl.py::Factory._require_runtime_receipt
+    real_gap_found_and_fixed: >
+      _require_runtime_receipt called validate_runtime_receipt() without
+      expected_oracle_sha256, so a forged runtime_receipt with candidate_sha and
+      acceptance_lock_sha256 both correct (both public/derivable from the commit) but a
+      fabricated non-empty oracle_sha256 passed the qa/sha gate without the real committed
+      oracle ever running — a genuinely exploitable "faux receipt" path, not a hypothetical.
+      Fixed: _require_runtime_receipt now independently re-derives the real oracle hash from
+      the milestone's own worktree at record-time (scripts/verify_live_product_dod.py) and
+      pins the receipt to it, same as verify_runtime() already does at receipt-production
+      time; fails closed if the worktree/oracle is missing.
+    tested_by:
+      - tests/test_fault_f001_faux_receipt.py::test_forged_oracle_sha256_is_rejected
+      - tests/test_fault_f001_faux_receipt.py::test_real_oracle_sha256_is_accepted
+      - tests/test_fault_f001_faux_receipt.py::test_sha_stage_also_rejects_forged_oracle
+      - tests/test_fault_f001_faux_receipt.py::test_missing_receipt_entirely_is_rejected
+      - tests/test_fault_f001_faux_receipt.py::test_wrong_candidate_sha_in_receipt_is_rejected
+      - tests/test_fault_f001_faux_receipt.py::test_missing_worktree_oracle_fails_closed
+    red_before_fix: >
+      test_forged_oracle_sha256_is_rejected, test_sha_stage_also_rejects_forged_oracle and
+      test_missing_worktree_oracle_fails_closed all failed against the pre-fix code (confirmed
+      live, not narrated, before applying the fix).
+    full_suite: 110 passed -> 116 passed (6 new), zero regressions
+    real_limitation: >
+      Proves the qa/sha gate mechanically on a synthetic milestone via Factory.record directly;
+      does not re-run this against the already-closed M1/M2 historical milestones (already
+      retro_done/committed, unaffected by this forward-looking fix).
+  - id: F002
+    title: autre candidate SHA
+    status: PASS
+    mechanism: >
+      factory/bin/factoryctl.py::Factory.exact (outer verdict envelope's exact_sha, checked at
+      test/qa/sha stages) and Factory._require_runtime_receipt -> validate_runtime_receipt
+      (runtime_receipt's own embedded candidate_sha, checked at qa/sha stages) — two
+      independent guards against replaying a verdict/receipt produced for one candidate_sha
+      against a different one (e.g. the pre-repair candidate after a repair cycle produced a
+      new commit).
+    real_gap_found_and_fixed: >
+      None — both guards already existed and were already correctly wired in (exact() predates
+      this campaign; validate_runtime_receipt's candidate_sha check was one of the checks left
+      unaffected by the F001 fix, which only added the missing oracle_sha256 argument). This
+      scenario mechanically confirms, rather than assumes, that "replay against another
+      candidate_sha" is closed on both the outer-envelope path and the receipt-embedded path
+      independently — including the deeper case where the outer exact_sha is spoofed to match
+      the current candidate but the embedded receipt still carries the old one.
+    tested_by:
+      - tests/test_fault_f002_other_candidate_sha.py::test_stale_exact_sha_rejected_at_qa_stage
+      - tests/test_fault_f002_other_candidate_sha.py::test_stale_exact_sha_rejected_at_sha_stage
+      - tests/test_fault_f002_other_candidate_sha.py::test_replayed_old_candidate_receipt_with_spoofed_envelope_rejected
+      - tests/test_fault_f002_other_candidate_sha.py::test_matching_current_candidate_is_accepted
+    full_suite: 116 passed -> 120 passed (4 new), zero regressions
+    real_limitation: >
+      Proves the two candidate_sha guards mechanically on a synthetic two-commit milestone via
+      Factory.record directly (build stage not driven through record() itself — candidate_sha
+      is set directly in the fixture, same simplification as F001's init()); does not re-drive
+      the already-closed M1/M2 historical milestones through this scenario.
+  - id: F003
+    title: autre attempt
+    status: PASS
+    mechanism: >
+      factory/bin/factoryctl.py::Factory.prepare() (mints a fresh milestone_run_id on every
+      call) and Factory.record()'s staleness check (rejects a submitted artifact whose
+      milestone_run_id doesn't match the row's current one) — the mechanism a stale-attempt
+      verdict/receipt replay must go through.
+    real_gap_found_and_fixed: >
+      The staleness check only fired when the *submitted* artifact happened to carry
+      milestone_run_id at all (`if expected_run and data.get("milestone_run_id") and ...`).
+      Real, already-committed qa/sha verdict artifacts (e.g.
+      projects/csv-statistics/evidence/M1/m1_qa_artifact.json) never populate this field —
+      only `plan` artifacts historically do — so a qa/sha artifact produced under a stale
+      attempt (one prepare()d before the current one, e.g. a session-restart re-prepare) sailed
+      through unchecked as long as it simply omitted milestone_run_id, exactly the shape real
+      artifacts already use. Fixed: for kind in {qa, sha} specifically (the two stages that
+      gate promotion via _require_runtime_receipt), milestone_run_id is now required to be
+      present and match the row's current one whenever the row has one — fails closed instead
+      of treating an absent field as "not stale". `test`/`build`/`plan`/`retro` behavior is
+      unchanged (no evidence any of those are exposed to this replay shape).
+    tested_by:
+      - tests/test_fault_f003_other_attempt.py::test_current_attempt_run_id_is_accepted
+      - tests/test_fault_f003_other_attempt.py::test_stale_attempt_run_id_is_rejected
+      - tests/test_fault_f003_other_attempt.py::test_missing_milestone_run_id_is_currently_accepted_real_gap
+    full_suite: 135 passed -> 138 passed (3 new), zero regressions
+    red_before_fix: >
+      test_missing_milestone_run_id_is_currently_accepted_real_gap failed against the pre-fix
+      code (confirmed live: the artifact reached qa_accepted despite a second attempt already
+      being prepared) before the fix was applied.
+    real_limitation: >
+      Proves the fix mechanically on a synthetic single-milestone fixture via Factory.record/
+      Factory.prepare directly (same pattern as F001/F002); does not re-drive the already-closed
+      M1/M2 historical milestones through this scenario. `test`/`build`/`plan`/`retro` kinds
+      remain opt-in on this field (unchanged), since no real replay path through those specific
+      kinds has been demonstrated — narrowing the fix to qa/sha keeps it bounded to the
+      demonstrated gap rather than speculatively hardening every kind at once.
+  - id: F004
+    title: autre campaign ID
+    status: PASS
+    mechanism: >
+      factory/bin/factoryctl.py::Factory.verify_runtime (sole authoritative receipt producer,
+      now stamps receipt["mission_id"]=mid at production time) and
+      Factory._require_runtime_receipt -> validate_runtime_receipt (now independently checks
+      receipt.get("mission_id") against the mid being recorded against).
+    interpretation_note: >
+      This codebase has no first-class campaign_id per receipt (order §8's full field list,
+      including campaign_id/project_id/mission_id, lives only in the dead/unwired
+      factory/bin/runtime_receipt.py — D-35). Factory instances are scoped per (product repo,
+      project state dir), and the only real replay-target axis the live record() gate exposes is
+      mission/milestone identity (mid) — so this scenario is proven as "receipt from another
+      mission/capability replayed against a different one", the concrete, mechanically-testable
+      form order §8's own rejection list names ("receipt d'une autre campagne/mission/attempt/
+      SHA") in this architecture, same kind of terminology-to-real-architecture resolution
+      documented for M2.3 (D-33).
+    real_gap_found_and_fixed: >
+      candidate_sha, acceptance_lock_sha256 and oracle_sha256 can all genuinely coincide across
+      two DIFFERENT missions in this campaign (a shared "invariants" oracle reused across
+      capabilities per order §17, and HEAD frequently unchanged between successive milestone
+      prepares in this single-writer campaign) — none of those three checks ties a receipt to
+      which mission actually earned it. A receipt legitimately produced by verify_runtime for
+      mission M1 was accepted, unmodified, as mission M2's own qa proof, even though M2's own
+      verify_runtime was never run. Fixed: verify_runtime stamps mission_id=mid on every receipt
+      it produces (the one place receipts are authoritatively created — never trusts a
+      caller-supplied value); validate_runtime_receipt now rejects a mismatched or absent
+      mission_id whenever the caller (record-time, which always knows its own mid) supplies one
+      to check against.
+    tested_by:
+      - tests/test_fault_f004_other_campaign.py::test_receipt_matches_own_mission_is_accepted
+      - tests/test_fault_f004_other_campaign.py::test_receipt_from_another_mission_is_rejected
+      - tests/test_fault_f004_other_campaign.py::test_receipt_missing_mission_id_entirely_is_rejected
+    red_before_fix: >
+      test_receipt_from_another_mission_is_rejected and
+      test_receipt_missing_mission_id_entirely_is_rejected both failed against the pre-fix code
+      (confirmed live: M1's genuinely-produced receipt reached M2's qa_accepted unmodified)
+      before the fix was applied.
+    full_suite: 138 passed -> 141 passed (3 new), zero regressions (3 pre-existing F001/F002/F003
+      fixture receipts updated to include mission_id="M1", matching the mission they already
+      tested against — no behavior change to those scenarios' own assertions).
+    real_limitation: >
+      Proves the fix mechanically on a synthetic two-milestone-in-one-state fixture via the real
+      Factory.verify_runtime + Factory.record, same pattern as F001/F002/F003; does not prove
+      isolation across two entirely separate Factory *state directories* (e.g. two different
+      projects/<p> roots) sharing a product repo, which — while structurally the same gap and
+      structurally covered by the same mission_id check once each project's mids don't collide —
+      was not separately exercised this session. Does not touch the already-closed M1/M2
+      historical milestones (already retro_done/committed under the old code path).
+  - id: F005
+    title: oracle modifié après lock
+    status: PASS
+    mechanism: >
+      factory/bin/factoryctl.py::Factory.mark_spec_ready (now pins oracle_sha256 from
+      scripts/verify_live_product_dod.py at spec_ready time, when that file already exists) and
+      Factory.record's "build" transition (now rejects a divergence between that pinned hash and
+      the oracle's current on-disk hash, same rejection shape as the pre-existing
+      acceptance.lock.json-changed check).
+    real_gap_found_and_fixed: >
+      acceptance.lock.json pins spec_sha256/plan_sha256/tasks_sha256/network_policy_sha256/
+      toolchain_lock_sha256/negative_mutations — but never the oracle script's own hash. Both
+      places that compute an "expected" oracle hash (_require_runtime_receipt at record-qa-time,
+      and verify_runtime at receipt-production-time) always recompute it fresh from whatever is
+      on disk (worktree HEAD / the exact candidate_sha respectively) — neither compares against
+      anything pinned at spec_ready. An oracle edited and committed after mark_spec_ready (with
+      acceptance.lock.json itself left untouched) was therefore silently re-baselined as the new
+      "expected" oracle rather than rejected: the modified oracle produced a self-consistent,
+      genuinely-passing receipt with no detectable divergence anywhere in the pipeline. Fixed by
+      pinning oracle_sha256 at spec_ready (mirroring acceptance_lock_sha256) and checking it at
+      build, the same stage/shape as the existing lock-changed check.
+    tested_by:
+      - tests/test_fault_f005_oracle_modified_after_lock.py::test_oracle_unchanged_since_lock_is_accepted_at_build
+      - tests/test_fault_f005_oracle_modified_after_lock.py::test_oracle_modified_after_lock_is_rejected_at_build
+      - tests/test_fault_f005_oracle_modified_after_lock.py::test_lock_without_oracle_present_at_spec_ready_is_unaffected
+    red_before_fix: >
+      test_oracle_unchanged_since_lock_is_accepted_at_build (KeyError: no oracle_sha256 pinned at
+      all) and test_oracle_modified_after_lock_is_rejected_at_build (the weakened post-lock oracle
+      reached "built" with no rejection) both failed against the pre-fix code, confirmed live via
+      `git stash` of the factoryctl.py fix, before the fix was applied.
+    full_suite: 141 passed -> 144 passed (3 new), zero regressions.
+    real_limitation: >
+      Proves the fix mechanically on a fresh single-milestone fixture driven through the real
+      mark_spec_ready/record("plan")/record("build"), same rigor as F001-F004; does not re-drive
+      the already-closed M1/M2 historical milestones (already retro_done/committed, and M1/M2's
+      own real acceptance.lock.json files predate this fix so carry no oracle_sha256 — backward
+      compatible per test_lock_without_oracle_present_at_spec_ready_is_unaffected, not silently
+      tightened for them). Does not cover an oracle edited between build and qa/sha (a separate,
+      narrower window already fail-closed today because verify_runtime pins its receipt to the
+      exact immutable candidate_sha's disposable checkout, not the mutable worktree).
+  - id: F006
+    title: artefact modifié après receipt
+    status: PASS
+    mechanism: >
+      factory/bin/factoryctl.py::Factory.verify_events (event log's own internal hash-chain
+      check, pre-existing) and the new Factory.verify_evidence (cross-checks each event's
+      pinned artifact_sha256, now stamped at write-time by both Factory.record and
+      Factory.verify_runtime, against the referenced evidence file's current on-disk content).
+    real_gap_found_and_fixed: >
+      record() wrote each accepted artifact's bytes to self.evidence/<mid>/<name> and appended a
+      hash-chained event referencing its *path* (evidence=str(dst)) — but never a hash of its
+      *content*. verify_events() (the sole integrity check wired into status()) only proves the
+      event log is internally self-consistent; it never re-derives anything from the evidence
+      files those events point at. An already-accepted qa/sha artifact (or the pinned runtime-
+      receipt file verify_runtime() writes) could be edited or deleted directly on disk after
+      acceptance — after the receipt that earned it — with zero detection anywhere in the
+      system's own tamper-evidence surface. Confirmed empirically before fixing: recorded a real
+      qa artifact to qa_accepted, edited its evidence file's bytes directly, called
+      verify_events() again — still reports a perfectly healthy chain. Fixed: record() and
+      verify_runtime() now pin artifact_sha256 into their event's hash-chained meta at write-
+      time; a new Factory.verify_evidence() (wired into status()) re-derives each referenced
+      file's current hash and fails closed (TAMPERED_EVIDENCE) on any content divergence or
+      disappearance.
+    tested_by:
+      - tests/test_fault_f006_artifact_modified_after_receipt.py::test_untampered_evidence_passes_verify_evidence
+      - tests/test_fault_f006_artifact_modified_after_receipt.py::test_tampered_evidence_after_acceptance_is_detected
+      - tests/test_fault_f006_artifact_modified_after_receipt.py::test_deleted_evidence_after_acceptance_is_detected
+      - tests/test_fault_f006_artifact_modified_after_receipt.py::test_legacy_event_without_artifact_sha256_is_unaffected
+      - tests/test_fault_f006_artifact_modified_after_receipt.py::test_runtime_receipt_tampering_after_verify_runtime_is_detected
+    red_before_fix: >
+      test_untampered_evidence_passes_verify_evidence, test_tampered_evidence_after_acceptance_is_detected,
+      test_deleted_evidence_after_acceptance_is_detected, test_legacy_event_without_artifact_sha256_is_unaffected
+      and test_runtime_receipt_tampering_after_verify_runtime_is_detected all failed against the
+      pre-fix code (confirmed live via `git stash` of factoryctl.py alone: verify_evidence did
+      not exist at all, and the in-test control assertion `f.verify_events()` — called twice,
+      once before and once after tampering the evidence file — proved the pre-existing generic
+      chain check stays silent throughout) before the fix was applied.
+    full_suite: 144 passed -> 149 passed (5 new), zero regressions.
+    real_limitation: >
+      Proves the fix mechanically on synthetic single-milestone fixtures via the real
+      Factory.record/Factory.verify_runtime/Factory.verify_evidence, same rigor as F001-F005;
+      does not retroactively verify the already-closed M1/M2 historical evidence files (their
+      events predate this fix and carry no artifact_sha256 — by design unaffected, proven by
+      test_legacy_event_without_artifact_sha256_is_unaffected, not silently tightened for them).
+      Only covers evidence files written through record()/verify_runtime() themselves — does not
+      cover mark_spec_ready's spec_ready.json (out of scope for this fault ID; a narrower,
+      separately-scoped candidate if ever needed, same "don't speculatively harden untested
+      surfaces" precedent as F003/F005).
+  - id: F007
+    title: review sans runtime
+    status: PASS
+    mechanism: factory/bin/factoryctl.py::Factory.mark_spec_ready
+    real_gap_found_and_fixed: >
+      _require_runtime_receipt only enforces the runtime-receipt requirement at qa/sha when the
+      row already carries acceptance_lock_sha256, which mark_spec_ready previously only pinned
+      when specs/<mid>/acceptance.lock.json happened to exist on disk — silently treating a
+      missing lock file as an opt-out rather than the order rule 4 violation it actually is. A
+      milestone that simply never committed acceptance.lock.json could reach qa_accepted/
+      sha_accepted on a bare declarative verdict with the real committed oracle never executed
+      once — exactly the "review sans runtime" = INVALID_REVIEW shape order rule 10 forbids.
+      Fixed: mark_spec_ready now fails closed (same shape as its pre-existing missing/
+      incomplete/placeholder spec/plan/tasks checks) when acceptance.lock.json does not exist,
+      instead of silently treating it as legacy opt-out. Only affects future calls to
+      mark_spec_ready — does not retroactively touch already spec_ready/retro_done milestones
+      (JR-M1..M5, csv-statistics M1, SMOKE1), which never call it again.
+    tested_by:
+      - tests/test_fault_f007_review_without_runtime.py::test_milestone_without_acceptance_lock_at_spec_ready_is_rejected
+      - tests/test_fault_f007_review_without_runtime.py::test_bare_declarative_qa_verdict_is_rejected_once_lock_is_required
+      - tests/test_fault_f007_review_without_runtime.py::test_milestone_with_lock_present_is_unaffected
+    red_before_fix: >
+      test_milestone_without_acceptance_lock_at_spec_ready_is_rejected and
+      test_bare_declarative_qa_verdict_is_rejected_once_lock_is_required both failed against the
+      pre-fix code (confirmed live: mark_spec_ready succeeded with no lock present, then a bare
+      {"verdict": "QA_ACCEPT"} artifact with no runtime_receipt at all reached qa_accepted)
+      before the fix was applied.
+    full_suite: 149 passed -> 152 passed (3 new), zero regressions
+    real_limitation: >
+      Proves the fix on a synthetic single-milestone fixture via Factory.mark_spec_ready/record
+      directly; does not retroactively re-drive the already spec_ready JR-M* or csv-statistics
+      M1 milestones through this check (all already past that transition, unaffected by design,
+      same precedent as F001/F003/F005/F006).
+  - id: F008
+    title: reviewer écrit dans le repo
+    status: PASS
+    mechanism: factory/bin/factoryctl.py::Factory.verify_runtime
+    real_gap_found_and_fixed: >
+      workspace_tree_before/workspace_tree_after in verify_runtime() were computed with plain
+      `git status --porcelain`, which silently omits any write to a path matched by the product
+      repo's own `.gitignore`. An oracle/reviewer process could write real content anywhere under
+      a gitignored path (e.g. `__pycache__/`) inside the disposable clean-room worktree and the
+      tree-identity check never noticed — order §9's explicit reviewer-write prohibition and its
+      `REVIEWER_WRITE_VIOLATION` fail-closed guarantee were bypassed by anything landing on a
+      gitignored path, exactly the "reviewer écrit dans le repo" shape this fault names. Fixed
+      two parts together: (1) tree_before/tree_after now use `--ignored` so any mutation, tracked
+      or not, is caught; (2) `clean_env` now sets `PYTHONDONTWRITEBYTECODE=1` and
+      `PYTEST_ADDOPTS=-p no:cacheprovider` so a legitimate oracle run — which routinely creates
+      `__pycache__`/`.pytest_cache` as a harmless byproduct of running pytest — does not falsely
+      trip the newly-widened check. Switching to `--ignored` alone, without this suppression,
+      would have broken every real verify_runtime call, including the ones already proven for
+      F001-F007.
+    tested_by:
+      - tests/test_fault_f008_reviewer_writes_ignored_file.py::test_reviewer_write_to_gitignored_path_is_caught
+      - tests/test_fault_f008_reviewer_writes_ignored_file.py::test_legitimate_pytest_oracle_run_still_passes
+    red_before_fix: >
+      test_reviewer_write_to_gitignored_path_is_caught failed against the pre-fix code (confirmed
+      live via `git stash` of `factoryctl.py` alone: a real oracle wrote a file into a gitignored
+      `__pycache__/` path in the disposable worktree and verify_runtime() reported a clean run
+      with no violation raised) before the fix was applied.
+    full_suite: 152 passed -> 154 passed (2 new), zero regressions
+    real_limitation: >
+      Proves the fix against a synthetic single-milestone fixture with a real git repo/worktree/
+      oracle; does not retroactively re-verify already-accepted historical runtime receipts
+      (JR-M1..M5 etc.), unaffected by design since verify_runtime() is only invoked at build/qa/
+      sha time going forward, same precedent as F001/F005/F006/F007.
+  - id: F009
+    title: SHA divergent
+    status: PASS
+    mechanism: factory/bin/factoryctl.py::Factory._require_runtime_sha_agreement
+    real_gap_found_and_fixed: >
+      _require_runtime_sha_agreement (JR-LIVE-RECOVERY Phase 9.5) only rejected a *disagreement*
+      between recorded {provider}_runtime_sha fields and candidate_sha. When NO provider had
+      ever actually run verify_runtime, the disagreement set was empty and the check passed
+      vacuously. Combined with _require_runtime_receipt accepting an inline runtime_receipt
+      typed directly into the qa/sha artifact — never required to have been produced by a real
+      verify_runtime() call, since every field validate_runtime_receipt() checks (candidate_sha,
+      acceptance_lock_sha256, oracle_sha256, mission_id) is independently computable by anyone
+      with read access to the product repo, as F001's own positive-control test already
+      demonstrates (a hand-computed oracle_sha256 is sufficient) — a milestone could reach
+      sha_accepted AND pass promote()'s independent pre-merge gate on a 100% self-declared
+      receipt where the accepted SHA never actually agreed with any independently-executed
+      provider review at all. Fixed: whenever the milestone opted into the runtime-oracle
+      contract (acceptance_lock_sha256 set), the check now also fails closed if no canonical
+      provider (builder/z/codex) has recorded a matching runtime SHA — not just if one disagrees.
+    tested_by:
+      - tests/test_fault_f009_sha_divergent.py::test_sha_accepted_reachable_on_never_executed_receipt_real_gap
+      - tests/test_fault_f009_sha_divergent.py::test_promote_also_rejects_when_no_provider_ever_ran
+      - tests/test_fault_f009_sha_divergent.py::test_single_real_verify_runtime_run_is_sufficient
+      - tests/test_fault_f009_sha_divergent.py::test_real_cross_provider_divergence_already_caught_end_to_end
+    red_before_fix: >
+      test_sha_accepted_reachable_on_never_executed_receipt_real_gap and
+      test_promote_also_rejects_when_no_provider_ever_ran both failed against the pre-fix code
+      (confirmed live: record("M1","sha",...) reached sha_accepted, and promote() printed a real
+      merge SHA, with zero providers having ever run verify_runtime) before the fix was applied.
+      test_single_real_verify_runtime_run_is_sufficient and
+      test_real_cross_provider_divergence_already_caught_end_to_end already passed pre-fix,
+      confirming the pre-existing cross-provider mismatch check was already correctly wired for
+      the case where providers DO run verify_runtime (same precedent as F002).
+    full_suite: 154 passed -> 158 passed (4 new), zero regressions
+    real_limitation: >
+      Proves the fix on a synthetic single-milestone fixture with a real git repo/worktree/
+      oracle via Factory.record/verify_runtime/promote directly; does not retroactively re-check
+      the one already-accepted lock=True milestone in this repo (csv-statistics M1, retro_done)
+      — confirmed unaffected before applying the fix: it already has a real builder_runtime_sha
+      recorded that matches its candidate_sha, so the new check would pass for it unchanged.
+      Does not close the deeper, separate gap that an inline runtime_receipt's declarative
+      true/false fields (downloads_passed, cv_personalization_pass, etc.) are still never
+      independently verified against a real oracle run when at least one provider's SHA happens
+      to agree — that is a distinct "faux receipt" concern (F001's territory), out of scope here.
+  - id: F010
+    title: deux sorties identiques
+    status: PASS
+    mechanism: factory/bin/factoryctl.py::Factory.record (kind=="build")
+    real_gap_found_and_fixed: >
+      When a qa/sha verdict rejects a candidate, record() sends the milestone back to
+      plan_accepted with repairs incremented (order: at most 2 repairs before blocked), expecting
+      the builder to produce a genuinely fixed candidate. The build branch only ever checked that
+      the submitted exact_sha matched the worktree's actual git HEAD — it never compared the new
+      candidate against the previously-rejected one. A builder that resubmitted a build artifact
+      without having committed any real fix (worktree HEAD unchanged since the rejection) had the
+      exact same, already-rejected candidate_sha silently become the new "built" output again —
+      burning one of the milestone's two repair attempts on unchanged code, gambling that a
+      stochastic/lenient reviewer would accept it on a second look. Two identical build outputs
+      (pre- and post- "repair") were indistinguishable from a genuine fix. Fixed: the build branch
+      now fails closed with INVALID_REVIEW if repairs>0 (a repeat build after a rejection) and the
+      newly submitted exact_sha equals the milestone's own previously-recorded candidate_sha.
+    tested_by:
+      - tests/test_fault_f010_identical_repair_output.py::test_first_build_never_blocked_by_this_check
+      - tests/test_fault_f010_identical_repair_output.py::test_genuine_repair_with_new_sha_is_accepted
+      - tests/test_fault_f010_identical_repair_output.py::test_identical_resubmitted_output_after_rejection_is_rejected
+    red_before_fix: >
+      test_identical_resubmitted_output_after_rejection_is_rejected failed against the pre-fix
+      code (confirmed live: the resubmitted build with an unchanged worktree HEAD silently reached
+      "built" again, status advancing past plan_accepted with repairs already at 1, instead of
+      being rejected) before the fix was applied. test_first_build_never_blocked_by_this_check and
+      test_genuine_repair_with_new_sha_is_accepted already passed pre-fix, confirming the fix does
+      not affect first-time builds or genuine repairs with a real new commit SHA.
+    full_suite: 158 passed -> 161 passed (3 new), zero regressions
+    real_limitation: >
+      Proves the fix on a synthetic single-milestone fixture with a real git repo/worktree via
+      Factory.record's public API directly (build -> test -> qa-reject -> build again); does not
+      exercise this through the full campaign-run orchestrator (order §7.5, not yet built) or a
+      real multi-provider repair loop. Git SHA collision on genuinely different content is not
+      considered a realistic bypass vector (would require a SHA-1 second-preimage on the exact
+      commit object) — this fix targets the case that is actually exploitable: the worktree HEAD
+      truly not having moved between the rejection and the resubmission.
+  - id: F011
+    title: crash mid-run
+    status: PASS
+    mechanism: factory/bin/factoryctl.py::Factory.prepare
+    real_gap_found_and_fixed: >
+      prepare() creates the milestone's persistent build worktree via `git worktree add -b
+      <branch> <wt> <base>`, gated only by `if not wt.exists()`. Confirmed empirically with a
+      real git repo: a crash between worktree creation and the worktree being fully usable (or
+      an operator deleting a half-built worktree directory after a crash, to retry) leaves
+      `refs/heads/factory/<mid>` committed in the product repo while `wt` itself is gone (`git
+      worktree list` reports it `prunable`). A subsequent prepare() retry — exactly what the
+      campaign driver's next iteration does — permanently wedges: `wt.exists()` is false again,
+      so it re-attempts `git worktree add -b factory/<mid> ...`, which fails every time with "a
+      branch named 'factory/<mid>' already exists" (`-b` always demands a brand-new branch). No
+      automated recovery existed; the milestone was stuck forever without a manual `git branch
+      -D`. This is the "crash mid-run" shape order §14 names.
+    fix: >
+      prepare() now runs `git worktree prune` before attempting creation (clears the stale
+      administrative entry for a worktree directory that no longer exists), and if the branch
+      already exists (the crash-recovery case) reuses it via `git worktree add <wt> <branch>`
+      instead of `-b`, rather than unconditionally demanding a brand-new branch. A first-time
+      prepare (branch does not exist yet) is unaffected.
+    tested_by: tests/test_fault_f011_crash_mid_run.py
+    red_before_fix: >
+      test_crash_mid_run_worktree_lost_branch_survives_is_recovered failed against the pre-fix
+      code (confirmed live: after simulating the crash — `git worktree remove --force` on the
+      wt directory with the branch left intact — the retry raised "worktree creation failed" /
+      "a branch named 'factory/m1' already exists", exactly reproducing the permanent wedge).
+      test_first_prepare_never_affected_by_this_fix already passed pre-fix, confirming the fix
+      only changes the crash-recovery path.
+    full_suite: 161 passed -> 163 passed (2 new), zero regressions
+    real_limitation: >
+      Simulates the crash by deleting the worktree directory after a successful prepare() (the
+      real, confirmed-empirically state a killed/deleted worktree leaves behind: branch survives,
+      directory gone, git worktree list reports it prunable) rather than literally SIGKILLing the
+      factoryctl process mid-`git worktree add`. Does not cover a crash mid-write of the roadmap
+      JSONL itself (atomic_jsonl's tempfile+os.replace already makes that append atomic at the
+      filesystem level, a separate mechanism from this worktree-creation gap). Does not exercise
+      recovery through the full campaign-run orchestrator (order §7.5, not yet built).
+  - id: F015
+    title: toolchain différente
+    status: PASS
+    mechanism: >
+      factory/bin/factoryctl.py::Factory.mark_spec_ready, Factory.record (build branch),
+      Factory._require_runtime_receipt, Factory.verify_runtime, validate_runtime_receipt
+    real_gap_found_and_fixed: >
+      Order §2.4/§8 require toolchain-lock.json hashed into every receipt and "toolchain
+      différente" rejected, and lock_acceptance.py already computes toolchain_lock_sha256 as
+      evidence at lock-cutting time — but nothing downstream ever used it. mark_spec_ready never
+      pinned a toolchain baseline onto the roadmap row (unlike oracle_sha256/acceptance_lock_sha256
+      already pinned there for F001/F005); the build transition had no check against a post-lock
+      toolchain-lock.json edit; validate_runtime_receipt() had no expected_toolchain_lock_sha256
+      parameter at all, so a runtime receipt with either a fabricated toolchain_lock_sha256 or the
+      field omitted entirely sailed through qa/sha unchecked; and verify_runtime() (the real
+      oracle-execution path) never stamped the receipt with the toolchain actually present in the
+      disposable worktree it just ran the oracle in. Four independent silent-accept paths for the
+      same fault, same shape as F005's oracle gap but for the toolchain. Fixed: mark_spec_ready now
+      pins toolchain_lock_sha256 from the worktree's toolchain-lock.json (if present) onto the
+      roadmap row, same as oracle_sha256; Factory.record's build branch now rejects (INVALID_REVIEW)
+      if that pinned hash no longer matches the worktree's current toolchain-lock.json, same shape
+      as the existing oracle/lock checks; validate_runtime_receipt() gained an
+      expected_toolchain_lock_sha256 parameter checked the same way as oracle_sha256/mission_id;
+      _require_runtime_receipt now recomputes the expected toolchain hash fresh from the worktree
+      at record-time and passes it through; verify_runtime() now stamps receipt["toolchain_lock_sha256"]
+      from the disposable worktree's own toolchain-lock.json (never trusts a caller-supplied value,
+      same "stamp what actually happened" reasoning as the F004 mission_id fix). A milestone with no
+      toolchain-lock.json anywhere in its worktree at spec_ready is unaffected — legacy behavior,
+      unchanged, same backward-compat shape as F005/F007.
+    tested_by:
+      - tests/test_fault_f015_toolchain_differente.py::test_toolchain_unchanged_receipt_matching_is_accepted_at_qa
+      - tests/test_fault_f015_toolchain_differente.py::test_toolchain_modified_after_lock_is_rejected_at_build
+      - tests/test_fault_f015_toolchain_differente.py::test_fabricated_toolchain_hash_in_receipt_is_rejected_at_qa
+      - tests/test_fault_f015_toolchain_differente.py::test_receipt_missing_toolchain_field_is_rejected_at_qa
+      - tests/test_fault_f015_toolchain_differente.py::test_lock_without_toolchain_file_present_at_spec_ready_is_unaffected
+    red_before_fix: >
+      Confirmed live (not narrated) against the pre-fix code before applying any fix:
+      test_toolchain_modified_after_lock_is_rejected_at_build failed (a toolchain-lock.json
+      committed after spec_ready's lock was silently accepted at build, no rejection raised);
+      test_fabricated_toolchain_hash_in_receipt_is_rejected_at_qa failed (a receipt declaring an
+      arbitrary 64-char hex toolchain_lock_sha256 that matched nothing real reached qa_accepted);
+      test_receipt_missing_toolchain_field_is_rejected_at_qa failed (a receipt omitting
+      toolchain_lock_sha256 entirely also reached qa_accepted). The two control tests
+      (test_toolchain_unchanged_receipt_matching_is_accepted_at_qa,
+      test_lock_without_toolchain_file_present_at_spec_ready_is_unaffected) already passed
+      pre-fix, confirming the fix only touches the divergence-detection path.
+    full_suite: 172 passed -> 177 passed (5 new), zero regressions
+    real_limitation: >
+      Proves the gate mechanically via Factory.mark_spec_ready/record/verify_runtime against a
+      real git fixture repo with a synthetic toolchain-lock.json (no mocks), not against the
+      control repo's own committed toolchain-lock.json/VENDOR_LOCK.json contents. Like F005's
+      oracle check, this closes the "toolchain changed after lock, or receipt lies about it"
+      gap specifically — it does not itself verify that the *pinned* toolchain-lock.json content
+      correctly reflects what a given oracle run actually executed under (e.g. a receipt could
+      still declare a genuine, unmodified toolchain-lock.json's hash while the process that
+      produced it was actually invoked with a different interpreter than the lock file claims);
+      that would require executing the oracle inside a hermetically toolchain-pinned environment
+      (e.g. via `uv run` reading toolchain-lock.json), which order §2.4 specifies as the eventual
+      target but is not yet wired into verify_runtime()'s clean_env construction.
+  - id: F016
+    title: reviewer indisponible
+    status: PASS
+    mechanism: >
+      factory/bin/factoryctl.py::Factory._require_runtime_sha_agreement, Factory.infra_failure,
+      Factory.promote
+    real_gap_found_and_fixed: >
+      Order rule 2: "le provider qui a écrit un candidat ne peut pas être reviewer indépendant de
+      ce candidat." Order §5.6: "Reviewer indisponible → provider indépendant préqualifié, sinon
+      WAITING_INFRA." F009's fix made _require_runtime_sha_agreement fail closed when NO provider
+      (builder/z/codex) had ever recorded a matching runtime SHA — but it still counted "builder"
+      itself towards satisfying that check, even though builder is the writer of the very
+      candidate under review. A milestone could therefore reach sha_accepted — and pass
+      promote()'s pre-merge gate — purely on builder's own self-verification, with no independent
+      reviewer (z/codex) ever having run at all. verify_factory_dod.py::_check_builder_neq_reviewers
+      already names this exact invariant ("builder != reviewers ... at least one non-builder
+      reviewer actually ran") but only checks it as a periodic, after-the-fact DoD audit
+      (--scope full, run after M0/M1/M3/M5) — never as a fail-closed gate at the actual moment of
+      promotion. Fixed: added INDEPENDENT_REVIEW_PROVIDERS (RUNTIME_PROVIDERS minus "builder");
+      _require_runtime_sha_agreement now requires at least one independent provider (z or codex)
+      to have recorded a matching runtime SHA before sha_accepted. When missing, it routes through
+      the existing infra_failure() mechanism (30s/120s/300s backoff, blocked_infra after 3
+      retries — the same mechanism every other infra-unavailability path already uses) rather than
+      a bare INVALID_REVIEW, since a genuinely unavailable independent reviewer is a retriable
+      infra condition per order §5.6, not proof of tampering. Builder verifying IN ADDITION to an
+      independent reviewer is unaffected — the fix only rejects builder acting alone.
+    tested_by:
+      - tests/test_fault_f016_reviewer_indisponible.py::test_sha_accepted_blocked_on_builder_only_self_review_real_gap
+      - tests/test_fault_f016_reviewer_indisponible.py::test_promote_also_routes_to_waiting_infra_when_only_builder_verified
+      - tests/test_fault_f016_reviewer_indisponible.py::test_independent_provider_alone_is_sufficient
+      - tests/test_fault_f016_reviewer_indisponible.py::test_builder_plus_independent_reviewer_is_sufficient
+    red_before_fix: >
+      Confirmed live (via git stash of only factory/bin/factoryctl.py, not narrated) against the
+      pre-fix code before applying any fix:
+      test_sha_accepted_blocked_on_builder_only_self_review_real_gap failed (builder-only
+      self-review reached sha_accepted instead of WAITING_INFRA);
+      test_promote_also_routes_to_waiting_infra_when_only_builder_verified failed (promote()
+      merged a milestone whose only runtime review came from builder itself). The two control
+      tests (test_independent_provider_alone_is_sufficient,
+      test_builder_plus_independent_reviewer_is_sufficient) already passed pre-fix, confirming the
+      fix only touches the builder-alone path. Stash restored (git stash pop) immediately after
+      confirming red, before writing anything further.
+    full_suite: 181 passed (was 177 pre-fix baseline from F015 + 4 new F016 tests), zero regressions
+    real_limitation: >
+      Proves the gate mechanically via Factory._require_runtime_sha_agreement/promote() against a
+      real git fixture repo (no mocks), not against a live multi-provider handoff where z/codex
+      CLIs are genuinely absent from the machine (that is preflight-quota's concern, order §7.1,
+      not this gate's). This closes the "builder self-attests as its own independent reviewer"
+      gap specifically — it does not itself verify that z/codex, when they do run, are backed by
+      genuinely distinct model providers rather than the same underlying CLI misconfigured under
+      two names; that trust boundary is assumed, same as F009/F015's own stated scope.
+  - id: F017
+    title: port occupé
+    status: PASS
+    mechanism: factory/bin/factoryctl.py::Factory.verify_runtime
+    real_gap_found_and_fixed: >
+      verify_runtime() ran the committed oracle via a bare subprocess.run — no process-group
+      isolation, no timeout. Order §15 (M4b Notes API, M4c Reminder Scheduler) commits products
+      whose DoD oracle legitimately backgrounds a live server to drive e2e/Schemathesis checks
+      against. If that oracle backgrounds its server and then exits — crashes, or simply doesn't
+      wait for it — without ever writing the runtime receipt, verify_runtime() already correctly
+      raised ("oracle produced no receipt"), but the backgrounded server process itself was never
+      tracked or torn down: factoryctl only ever waited on the oracle's own pid, never the process
+      tree it spawned, so the server kept running (and kept the port bound) after verify_runtime()
+      returned. Order §14/§5.6's retry mechanism (infra_failure, 30s/120s/300s backoff) then
+      retries verify_runtime() for the exact same milestone — and the retried oracle, trying to
+      bind the same port for its own server, finds it already occupied by the factory's own
+      leaked prior attempt: a self-inflicted "port occupé" with no automated recovery. Fixed: the
+      oracle now runs via subprocess.Popen(..., start_new_session=True), putting it — and anything
+      it Popen's without itself detaching — into one process group whose pgid equals the oracle's
+      own pid. verify_runtime() now unconditionally tears down that whole group (SIGTERM then
+      SIGKILL) on every path — success, failure, or timeout — before returning, so no
+      oracle-spawned process can ever outlive the call. A genuinely hung oracle is now also
+      bounded by ORACLE_TIMEOUT_SEC (1800s) and routed through the same infra_failure() retriable
+      mechanism as F016, rather than blocking the factory process forever.
+    tested_by:
+      - tests/test_fault_f017_port_occupe.py::test_leaked_oracle_child_is_killed_by_verify_runtime
+      - tests/test_fault_f017_port_occupe.py::test_normal_successful_oracle_run_unaffected
+    red_before_fix: >
+      Confirmed live (via git stash of only factory/bin/factoryctl.py, not narrated) against the
+      pre-fix code before applying any fix: test_leaked_oracle_child_is_killed_by_verify_runtime
+      failed — the leaky oracle's backgrounded child (bound to a real TCP port) was still holding
+      that port ~1.1s after verify_runtime() returned, well before its own 6s sleep would have
+      released it naturally, proving the leak. test_normal_successful_oracle_run_unaffected
+      already passed pre-fix (the golden path was never broken, only the leak-cleanup was
+      missing). Stash restored (git stash pop) immediately after confirming red, before writing
+      anything further.
+    full_suite: 183 passed (was 181 pre-fix baseline from F016 + 2 new F017 tests), zero regressions
+    real_limitation: >
+      Proves the leak/cleanup mechanically against a real backgrounded TCP-listening process in a
+      real git fixture repo (no mocks, no M4 product built yet) — the general "an oracle can leak
+      a process, and the factory must reap the whole group it ran the oracle in" shape, not a
+      specific M4b/M4c live-server oracle implementation (none exists yet). It also does not
+      itself prevent a real network-level "port occupied by something outside this factory
+      process entirely" (an unrelated process on the host bound to the same fixed port) — that is
+      a genuine environmental precondition failure the oracle's own bind() must fail closed on;
+      this fix only guarantees the factory never causes that condition against itself via its own
+      leaked prior attempts.
+  - id: F018
+    title: timeout réseau
+    status: PASS
+    mechanism: >
+      factory/bin/factoryctl.py::validate_runtime_receipt, Factory._require_runtime_receipt,
+      Factory.infra_failure
+    real_gap_found_and_fixed: >
+      Order §2 network_policy / order line 70: "Panne réseau externe → WAITING_INFRA
+      (reason_code=LIVE_NETWORK_UNAVAILABLE), jamais PRODUCT_FAIL automatique." Each
+      acceptance.lock.json carries a hashed network_policy (offline|loopback|allowlist); Job
+      Radar's live canary profile is allowlist (real ATS/employer hosts, GET/HEAD only).
+      validate_runtime_receipt() treated ANY receipt["exit_code"] != 0 as a review problem, and
+      nothing anywhere ever read reason_code — so a receipt honestly reporting that the committed
+      oracle itself ran correctly, against the exact candidate/lock/mission, but failed only
+      because an external network call it depends on timed out or was unreachable, was
+      indistinguishable from a genuine product defect or a forged receipt. It surfaced as a bare
+      INVALID_REVIEW (implying tampering, which a network hiccup is not); had that check been
+      absent instead, it would have fallen through to record()'s ordinary qa/sha verdict path and
+      consumed one of the milestone's two repair attempts on an outage entirely outside the
+      product's control — the exact "PRODUCT_FAIL automatique" order line 70 forbids. Fixed:
+      validate_runtime_receipt() now exempts the exit_code!=0 check ONLY when the receipt also
+      declares reason_code=LIVE_NETWORK_UNAVAILABLE — every other identity/anti-spoofing check
+      (schema, candidate_sha, oracle_sha256, acceptance_lock_sha256, mission_id,
+      toolchain_lock_sha256) still applies unconditionally, so a spoofed reason_code cannot
+      bypass them. When a receipt clears every identity check but still declares that
+      reason_code, _require_runtime_receipt() now routes it through the same infra_failure()
+      mechanism (30s/120s/300s backoff, blocked_infra after 3 retries) used by F016/F017, instead
+      of either INVALID_REVIEW or a repair-consuming rejection.
+    tested_by:
+      - tests/test_fault_f018_timeout_reseau.py::test_qa_stage_network_unavailable_routes_to_waiting_infra_real_gap
+      - tests/test_fault_f018_timeout_reseau.py::test_sha_stage_network_unavailable_also_routes_to_waiting_infra
+      - tests/test_fault_f018_timeout_reseau.py::test_genuine_product_failure_without_reason_code_still_invalid_review
+      - tests/test_fault_f018_timeout_reseau.py::test_reason_code_does_not_bypass_identity_checks
+      - tests/test_fault_f018_timeout_reseau.py::test_normal_accept_without_reason_code_unaffected
+    red_before_fix: >
+      Confirmed live (via git stash of only factory/bin/factoryctl.py, not narrated) against the
+      pre-fix code before applying any fix: both
+      test_qa_stage_network_unavailable_routes_to_waiting_infra_real_gap and
+      test_sha_stage_network_unavailable_also_routes_to_waiting_infra failed — a receipt
+      declaring reason_code=LIVE_NETWORK_UNAVAILABLE with every identity field correct still
+      raised "INVALID_REVIEW (M1): receipt exit_code=1 != 0" instead of WAITING_INFRA. The three
+      control tests (genuine product failure without reason_code, reason_code not bypassing a
+      spoofed candidate_sha, and the ordinary exit_code=0 accept path) already passed pre-fix,
+      confirming the fix only touches the new reason_code path. Stash restored (git stash pop)
+      immediately after confirming red, before writing anything further.
+    full_suite: 188 passed (was 183 pre-fix baseline from F017 + 5 new F018 tests), zero regressions
+    real_limitation: >
+      Proves the receipt-classification gate mechanically (real git fixture repo, no mocks, no
+      M4b/M4c/Job-Radar-live-canary oracle built yet) — the general "a receipt can honestly
+      report an external network failure, and the factory must route that to WAITING_INFRA
+      instead of INVALID_REVIEW or a repair-consuming rejection" shape, not a specific live
+      oracle's own network-timeout detection logic (none exists yet, since no M4 live-server
+      product or Job Radar live canary has been built). It does not itself implement the network
+      call, timeout, or reason_code emission inside any oracle — that is each future live oracle's
+      own responsibility per its acceptance.lock.json network_policy; this fix only guarantees
+      factoryctl classifies a correctly-labeled receipt the way order line 70 requires once one
+      exists.
+  - id: F019
+    title: réponse réseau partielle
+    status: PASS
+    mechanism: >
+      factory/bin/factoryctl.py::validate_runtime_receipt, Factory._require_runtime_receipt
+    real_gap_found_and_fixed: >
+      Order line 82: Synthetic gates (network_policy.mode offline/loopback, e.g. "4
+      téléchargements HTTP valides") are "toujours bloquante" — always blocking, no network
+      excuse. Only the live-canary profile (mode=allowlist) genuinely depends on external
+      network calls that can time out (order line 70, fixed by F018). F018's
+      reason_code=LIVE_NETWORK_UNAVAILABLE exemption was unconditional — it never checked what
+      network_policy.mode the milestone's own committed acceptance.yaml actually declared. So an
+      offline/loopback milestone whose oracle only got a réponse réseau partielle (e.g. crashed
+      after 2 of the 4 required downloads, before ever writing downloads_passed into the
+      receipt) could still claim reason_code=LIVE_NETWORK_UNAVAILABLE and sail into
+      WAITING_INFRA — free retries, no repair consumed — silently bypassing the "toujours
+      bloquante" Synthetic gate, exactly the exemption order line 70 reserves for the live-canary
+      profile only. Fixed: _require_runtime_receipt now reads the milestone's own committed
+      specs/<mid>/acceptance.yaml (recomputed fresh from the worktree at record-time, same
+      reasoning as oracle_sha256/toolchain_lock_sha256) for network_policy.mode and passes it
+      into validate_runtime_receipt. The reason_code=LIVE_NETWORK_UNAVAILABLE exemption is now
+      only honored when that mode is allowlist, or unknown/absent (no acceptance.yaml —
+      preserves F018's own fixtures and any milestone not yet opted into this specific check,
+      zero-regression rule). For offline/loopback, the claim is rejected as an additional
+      problem (still INVALID_REVIEW, never silently waved through as infra).
+    tested_by:
+      - tests/test_fault_f019_reponse_reseau_partielle.py::test_offline_milestone_cannot_claim_network_unavailable_real_gap
+      - tests/test_fault_f019_reponse_reseau_partielle.py::test_loopback_milestone_also_cannot_claim_network_unavailable
+      - tests/test_fault_f019_reponse_reseau_partielle.py::test_allowlist_live_canary_still_gets_waiting_infra_regression_control
+      - tests/test_fault_f019_reponse_reseau_partielle.py::test_no_acceptance_yaml_preserves_f018_behavior_regression_control
+    red_before_fix: >
+      Confirmed live before applying any fix (new test file added, source untouched): both
+      test_offline_milestone_cannot_claim_network_unavailable_real_gap and
+      test_loopback_milestone_also_cannot_claim_network_unavailable failed — a receipt declaring
+      reason_code=LIVE_NETWORK_UNAVAILABLE under an offline/loopback acceptance.yaml still raised
+      WAITING_INFRA instead of INVALID_REVIEW. The two control tests (allowlist live-canary still
+      gets WAITING_INFRA; a milestone with no acceptance.yaml at all keeps F018's existing
+      behavior) already passed pre-fix, confirming the fix only touches the new
+      network-policy-mode path.
+    full_suite: 192 passed (was 188 pre-fix baseline from F018 + 4 new F019 tests), zero regressions
+    real_limitation: >
+      Proves the network-policy-mode-vs-reason_code consistency gate mechanically (real git
+      fixture repo, no mocks) — the general "a milestone with no real external network
+      dependency cannot honestly claim a live-network-unavailable reason_code" shape, not any
+      specific live oracle's own download-counting/partial-response detection logic (no
+      M4b/M4c live-server product or Job Radar live canary has been built yet, same "no M4
+      product built yet" scope note as F016-F018).
+  - id: F021
+    title: nonce rejoué
+    status: PASS
+    mechanism: factory/bin/runtime_receipt.py::validate (REJECT_REPLAYED_NONCE check) +
+      factory/bin/runtime_receipt.py::collect_consumed_nonces (new)
+    gap_found: >
+      order §7.3/§8 requires factory-runtime-receipt/v1 to carry run_nonce/idempotency_key and
+      to reject "nonce inconnu ou déjà consommé". validate()'s own REJECT_REPLAYED_NONCE check
+      (`if receipt["run_nonce"] in consumed_nonces`) already existed, but nothing anywhere in the
+      module or the repo could ever build a real `consumed_nonces` set from persisted history —
+      the only data source this module has (events_jsonl, already read by its own
+      _event_hash_exists) was never scanned for previously-consumed nonces. Every existing caller
+      (every test in tests/test_runtime_receipt.py) constructed consumed_nonces as a literal,
+      hand-built set. A real integrator following this module's own documented contract had no
+      available function to derive it from events_jsonl, so REJECT_REPLAYED_NONCE could never
+      fire against real history — replay protection was spec'd and half-wired, but a permanent
+      no-op in practice for anyone using the module exactly as documented.
+    fix: >
+      Added `collect_consumed_nonces(events_jsonl)` to factory/bin/runtime_receipt.py, scanning
+      the same events_jsonl _event_hash_exists already reads for any `run_nonce` field recorded
+      on a prior event (the durable trace a caller leaves once a receipt is accepted, mirroring
+      factoryctl.py's own F006 after-the-fact artifact_sha256 pinning pattern). A caller now has
+      a real function to compute consumed_nonces from persisted state instead of a fresh empty
+      set every call.
+    tested_by:
+      - tests/test_fault_f021_nonce_rejoue.py::test_replayed_nonce_is_caught_via_the_real_persisted_ledger
+      - tests/test_fault_f021_nonce_rejoue.py::test_fresh_nonce_after_a_prior_acceptance_is_still_accepted
+      - tests/test_fault_f021_nonce_rejoue.py::test_collect_consumed_nonces_returns_empty_set_for_missing_or_empty_events_file
+    red_before_fix: >
+      Confirmed live before applying any fix (git stash of just the runtime_receipt.py addition,
+      test file present, no mocks): all three tests failed with
+      `AttributeError: module 'runtime_receipt' has no attribute 'collect_consumed_nonces'`,
+      proving the function did not exist anywhere and no caller integrating this module as
+      documented had any way to derive a real consumed_nonces set from events_jsonl.
+    full_suite: 194 passed (F020 baseline) → 197 passed (3 new F021 tests), zero regressions
+    real_limitation: >
+      Proves the nonce-replay ledger mechanically against real on-disk events.jsonl for the
+      generic factory-runtime-receipt/v1 validator (runtime_receipt.py) — the schema order §7.3/
+      §8 actually specifies run_nonce/idempotency_key for. factoryctl.py's own production receipt
+      gate (RUNTIME_RECEIPT_SCHEMA="job-radar-runtime-receipt/v1", the legacy/product-specific
+      validator explicitly left untouched per runtime_receipt.py's own docstring and the
+      zero-regression rule) carries no run_nonce field at all and is unaffected by this fix; that
+      pipeline's own replay exposure was independently re-examined this session and found to
+      already be closed by the existing candidate_sha/mission_id/status-machine checks (F001/
+      F004/F010 fixes) — a receipt cannot be replayed across a repair cycle (candidate_sha moves)
+      or across milestones (mission_id pinned) or twice for the same mid+kind (the status machine
+      itself blocks re-entering an already-passed transition). This session's fix specifically
+      closes the one real, currently-exploitable gap: runtime_receipt.py's own documented
+      replay-protection contract had no way to be honored by any real caller. Does not yet wire
+      this generic validator into any live product pipeline (no M1-M5 product has been built
+      yet that uses it) — same "not yet wired to a real pipeline" scope note as F023's
+      writer_switch.py.
+  - id: F022
+    title: policy réseau modifiée
+    status: PASS
+    mechanism: factory/bin/factoryctl.py::mark_spec_ready, ::record (build branch),
+      ::validate_runtime_receipt, ::_require_runtime_receipt
+    gap_found: >
+      Each acceptance.yaml carries a hashed network_policy (order line 70/82: mode
+      offline/loopback/allowlist, allowed_hosts, etc.), and the runtime-receipt schema (order
+      §7.3) lists network_policy_sha256 among its minimum fields. lock_acceptance.py already
+      computes this hash as evidence at lock-cutting time, exactly like it does for
+      toolchain_lock_sha256 (F015) and the oracle (F005) — but nothing downstream ever pinned it
+      onto the roadmap row, and validate_runtime_receipt had no expected_network_policy_sha256
+      parameter at all. Two real, exploitable consequences: (1) acceptance.yaml's network_policy
+      could be edited after spec_ready (e.g. offline loosened to allowlist) without touching
+      acceptance.lock.json itself — acceptance.lock.json only stores the policy's hash, not the
+      raw policy, so the existing acceptance_lock_sha256 file-hash check at build never noticed;
+      (2) a runtime receipt could declare an arbitrary/fabricated or entirely absent
+      network_policy_sha256 and validate_runtime_receipt would never notice — the exact same
+      "toolchain différente" (F015) gap shape, but for the network policy.
+    fix: >
+      mark_spec_ready now pins network_policy_sha256 (sha256 of the real acceptance.yaml
+      network_policy dict, same hash function lock_acceptance.py uses) onto the roadmap row when
+      present. record(..., "build", ...) now rejects (INVALID_REVIEW, "policy réseau modifiée")
+      if the committed acceptance.yaml's current network_policy hash has drifted since that pin.
+      validate_runtime_receipt gained expected_network_policy_sha256 and rejects a receipt whose
+      declared network_policy_sha256 doesn't match. The receipt-time check is deliberately keyed
+      off the row's pinned value (from mark_spec_ready), not a fresh worktree re-read at
+      record-time — unlike expected_oracle_sha256/expected_toolchain_lock_sha256, which recompute
+      fresh — so a post-lock tamper is judged against the LOCKED contract, not the tampered one,
+      and it never collides with F019's separate fresh-read of network_policy.mode for the
+      reason_code exemption (F018/F019's own fixtures never call mark_spec_ready with a
+      network_policy present, so they stay entirely unaffected).
+    tested_by:
+      - tests/test_fault_f022_policy_reseau_modifiee.py::test_spec_ready_pins_network_policy_hash
+      - tests/test_fault_f022_policy_reseau_modifiee.py::test_network_policy_unchanged_receipt_matching_is_accepted_at_qa
+      - tests/test_fault_f022_policy_reseau_modifiee.py::test_network_policy_modified_after_lock_is_rejected_at_build
+      - tests/test_fault_f022_policy_reseau_modifiee.py::test_fabricated_network_policy_hash_in_receipt_is_rejected_at_qa
+      - tests/test_fault_f022_policy_reseau_modifiee.py::test_receipt_missing_network_policy_field_is_rejected_at_qa
+      - tests/test_fault_f022_policy_reseau_modifiee.py::test_no_network_policy_at_spec_ready_is_unaffected
+    red_before_fix: >
+      Confirmed live before applying any fix (git stash of just the factoryctl.py addition, test
+      file present, no mocks): test_spec_ready_pins_network_policy_hash,
+      test_network_policy_modified_after_lock_is_rejected_at_build,
+      test_fabricated_network_policy_hash_in_receipt_is_rejected_at_qa, and
+      test_receipt_missing_network_policy_field_is_rejected_at_qa all failed (4/6), proving
+      neither the pin, the build-time drift check, nor the receipt-level check existed anywhere.
+      The 2 that passed pre-fix (matching-hash positive control, no-policy-at-spec_ready
+      backward-compat control) were expected to be unaffected either way.
+    full_suite: 197 passed (F021 baseline) → 203 passed (6 new F022 tests), zero regressions
+    real_limitation: >
+      Proves the network-policy lock/drift/receipt-tamper mechanism mechanically against real
+      on-disk acceptance.yaml/acceptance.lock.json and a real Factory.mark_spec_ready/record
+      transition sequence — not by spinning up a real live-canary provider that actually attempts
+      an out-of-policy network call. Does not yet wire this check into any live M1-M5 product
+      pipeline (no product milestone has gone through mark_spec_ready with a real network_policy
+      yet) — same "not yet wired to a real pipeline" scope note as F021/F023.
+
+  - id: F023
+    title: WRITER_UNAVAILABLE_AT_SAFE_CHECKPOINT
+    status: PASS
+    added_by: "P0.2 patch, mid-campaign (order's original manifest only tested reviewer
+      unavailability, never writer unavailability at a safe checkpoint)"
+    mechanism: factory/bin/writer_switch.py::attempt_writer_switch
+    tested_by:
+      - tests/test_writer_switch.py::test_writer_switch_only_from_clean_checkpoint
+      - tests/test_writer_switch.py::test_writer_switch_rejects_dirty_worktree
+      - tests/test_writer_switch.py::test_writer_switch_rejects_lock_mismatch
+      - tests/test_writer_switch.py::test_writer_switch_rejects_unsafe_switch_flag
+      - tests/test_writer_switch.py::test_writer_switch_rejects_live_old_lease
+      - tests/test_writer_switch.py::test_writer_switch_accepts_stale_unreleased_lease
+      - tests/test_writer_switch.py::test_writer_switch_creates_new_attempt
+      - tests/test_writer_switch.py::test_writer_switch_replays_builder_validation
+      - tests/test_writer_switch.py::test_writer_switch_requires_resume_packet
+      - tests/test_writer_switch.py::test_writer_switch_waits_when_no_zero_cost_writer
+      - tests/test_writer_switch.py::test_writer_switch_ignores_non_prequalified_writer
+    fifteen_step_scenario_mapping:
+      "1_clean_checkpoint_committed": worktree_clean param, REJECT_DIRTY_CHECKPOINT on false
+      "2_acceptance_lock_intact": acceptance_lock_sha256_expected==actual check
+      "3_safe_writer_switch_true": safe_writer_switch param, REJECT_UNSAFE_SWITCH on false
+      "4_old_lease_explicitly_released": current_lease.released, checked by _lease_is_live
+      "5_writer_unavailability_injected": represented by the caller not supplying the old writer
+      "6_alternative_writer_prequalified_zero_cost": candidate_writers filter zero_cost+prequalified
+      "7_new_attempt_id_created": new_attempt_id param, returned verbatim on PASS
+      "8_latent_context_not_transferred": latent_context_transferred=False always
+      "9_reads_only_canonical_resume_packet": resume_packet_present required, REJECT_NO_RESUME_PACKET
+      "10_no_old_verdict_reuse": reused_old_builder_verdicts=False always
+      "11_full_builder_validation_replayed": requires_full_builder_revalidation=True always
+      "12_no_stale_pid_liveness_claim": _lease_is_live uses updated_utc freshness, never kill -0
+      "13_new_sha_normal_reviews": out of this pure function's scope — the caller (campaign-run,
+        not yet built) must submit the new writer's candidate_sha through the normal qa/sha path
+      "14_no_zero_cost_writer_waits_infra": WAITING_INFRA/NO_ZERO_COST_WRITER_AVAILABLE, never PASS
+      "15_never_pass_with_limitations": there is no partial-pass return value in this module —
+        only PASS or an explicit FAIL/WAITING_INFRA reason_code
+    real_limitation: >
+      This session proves the STATE-MACHINE LOGIC of the writer switch mechanically (11/11 tests,
+      all real assertions on real function output — not narrated). It does NOT prove a live
+      multi-provider handoff (an actual running Claude Code session becoming unavailable and a
+      real Codex/GLM CLI session picking up mid-campaign) — that requires the campaign-run
+      orchestrator (order §7.5, not yet built) and real provider CLIs, which is out of scope for
+      this session. Recorded here rather than silently claimed complete.
+
+passed_this_session: [F022]
+executed_fault_ids_this_session: [F022]
+invalid_promotions_this_session: 0
+passed_all_time: [F001, F002, F003, F004, F005, F006, F007, F008, F009, F010, F011, F012, F013, F014, F015, F016, F017, F018, F019, F020, F021, F022, F023]

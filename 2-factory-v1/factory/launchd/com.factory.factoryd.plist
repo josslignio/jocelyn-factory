@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- F5R1: OS_SERVICE_OWNERSHIP — factoryd as durable launchd agent.
+         launchd restarts factoryd after any abnormal exit (crash, SIGKILL)
+         but NOT after a clean exit (SuccessfulExit=false) so SAFETY_STOP
+         is respected: when the daemon exits cleanly, it stays down.
+         Factoryd runs in --foreground mode; launchd owns the process lifetime.
+
+         Install:  cp factory/launchd/com.factory.factoryd.plist ~/Library/LaunchAgents/
+                   launchctl load ~/Library/LaunchAgents/com.factory.factoryd.plist
+         Start:    launchctl start com.factory.factoryd
+         Stop:     launchctl stop com.factory.factoryd
+         Unload:   launchctl unload ~/Library/LaunchAgents/com.factory.factoryd.plist
+         Logs:     tail -f ~/Library/Logs/JocelynFactory/factoryd.stdout.log
+    -->
+
+    <key>Label</key>
+    <string>com.factory.factoryd</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Library/Frameworks/Python.framework/Versions/3.12/bin/python3</string>
+        <string>/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/factory/bin/factoryd.py</string>
+        <string>start</string>
+        <string>--foreground</string>
+        <string>--portfolio</string>
+        <string>/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/portfolio.json</string>
+        <string>--run-dir</string>
+        <string>/Users/jocelyngrosjean/Library/Application Support/JocelynFactory/run</string>
+        <string>--idle-poll-interval-s</string>
+        <string>30</string>
+        <string>--poll-interval-s</string>
+        <string>5</string>
+    </array>
+
+    <!-- Restart after crash/SIGKILL but NOT after clean exit (SAFETY_STOP compliance).
+         SuccessfulExit=false: clean exit → launchd leaves it down.
+         Otherwise (non-zero exit, signal) → restart after ThrottleInterval. -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+
+    <!-- Throttle restart storms: wait 10s before restarting after a crash -->
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <!-- Working directory = repo root so relative paths resolve correctly -->
+    <key>WorkingDirectory</key>
+    <string>/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2</string>
+
+    <!-- Persistent logs outside /tmp — survive reboots, not lost on TMPFS flush -->
+    <key>StandardOutPath</key>
+    <string>/Users/jocelyngrosjean/Library/Logs/JocelynFactory/factoryd.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/jocelyngrosjean/Library/Logs/JocelynFactory/factoryd.stderr.log</string>
+
+    <!-- Start after launchctl load and on each login/reboot -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- Environment: PYTHONUNBUFFERED ensures log lines flush immediately.
+         PATH must include engine binary dirs — launchd does not inherit the
+         user shell PATH. claude and codex live in ~/.local/bin, opencode in
+         /usr/local/bin. -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PYTHONUNBUFFERED</key>
+        <string>1</string>
+        <key>FACTORY_ROOT</key>
+        <string>/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2</string>
+        <key>PATH</key>
+        <string>/Users/jocelyngrosjean/.local/bin:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>/Users/jocelyngrosjean</string>
+        <!-- Owner decision 2026-09-12: Codex may build B-level missions (never A/S); reviewer != builder enforced by model_router. -->
+        <key>FACTORY_ALLOW_CODEX_BUILDER_B</key>
+        <string>1</string>
+        <!-- ORCH-02: state files are committed only on durable transitions, never per session stop. -->
+        <key>FACTORY_MAX_WORKERS</key>
+        <string>6</string>
+        <key>FACTORY_ADVANCES_PER_PROJECT</key>
+        <string>3</string>
+        <key>FACTORY_STATE_COMMIT_POLICY</key>
+        <string>durable_only</string>
+    </dict>
+</dict>
+</plist>

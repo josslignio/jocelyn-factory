@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "verdict",
+    "milestone",
+    "exact_sha",
+    "blocking_findings"
+  ],
+  "properties": {
+    "verdict": {
+      "enum": [
+        "QA_ACCEPT",
+        "QA_BLOCK"
+      ]
+    },
+    "milestone": {
+      "type": "string"
+    },
+    "exact_sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "blocking_findings": {
+      "type": "array"
+    },
+    "non_blocking_findings": {
+      "type": "array"
+    }
+  }
+}

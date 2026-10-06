@@ -1,0 +1,30 @@
+{
+  "name": "Factory Reconciler",
+  "role": "devops",
+  "title": "Deterministic Git/Ledger Reconciler",
+  "adapterType": "process",
+  "budgetMonthlyCents": 0,
+  "adapterConfig": {
+    "command": "python3",
+    "args": [
+      "<FACTORY_ROOT>/factory/bin/factoryctl.py",
+      "status",
+      "--repo",
+      "<JOB_RADAR_REPO>",
+      "--state-dir",
+      "<STATE_DIR>"
+    ],
+    "cwd": "<FACTORY_ROOT>",
+    "timeoutSec": 45,
+    "graceSec": 10
+  },
+  "runtimeConfig": {
+    "heartbeat": {
+      "enabled": true,
+      "intervalSec": 60,
+      "wakeOnAssignment": false,
+      "wakeOnOnDemand": true,
+      "wakeOnAutomation": true
+    }
+  }
+}

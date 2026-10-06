@@ -1,0 +1,252 @@
+{
+  "blocking": [
+    "MANUAL_AGENT_HANDOFFS",
+    "MANUAL_AUDIT_TRIGGERS",
+    "FALSE_SETTLEMENTS",
+    "CONTEXT_REEXPLANATIONS",
+    "MULTI_AI_DECISIONS_SYNTHESIZED"
+  ],
+  "context": {
+    "engine_stats": {
+      "note": "no ledger rows"
+    },
+    "progress_events": [
+      "AUDIT_CELL_SYNTHESIS_APPLIED",
+      "DERIVED_PLAN_APPLIED",
+      "GOLDEN_PROMOTED",
+      "MILESTONE_SETTLED",
+      "MISSION_DISPATCHED",
+      "MISSION_FAILED",
+      "MISSION_PASS",
+      "RECOVERY_WORK_COMPLETE",
+      "SAFETY_QUARANTINE_CLEARED",
+      "SETTLEMENT_LEDGER_ENTRY_WRITTEN",
+      "SETTLEMENT_RECORDED"
+    ]
+  },
+  "control_sha": "e7ed44b467dc9fe2d816f8a76d8b47e2037a58e0",
+  "decision": "NOT_READY",
+  "metrics": {
+    "CONTEXT_REEXPLANATIONS": {
+      "coverage": {
+        "channel": "",
+        "covered": false,
+        "detail": "UNPROVEN_BY_SETTLEMENT_TRUTH: RECEIPT_HAS_NO_INTEGRATION_SHA:['AUTOMATED_MULTI_AI_CTO_LOOP_V1#M1', 'AUTOMATED_MULTI_AI_CTO_LOOP_V1#M3'] \u2014 the product repo is under git, so a settlement must name the commit it reached",
+        "milestone": "AUTOMATED_MULTI_AI_CTO_LOOP_V1"
+      },
+      "dependency": "AUTOMATED_MULTI_AI_CTO_LOOP_V1",
+      "expected": "CONTEXT_REEXPLANATIONS==0",
+      "reason": "dependency receipt not independently covered: UNPROVEN_BY_SETTLEMENT_TRUTH: RECEIPT_HAS_NO_INTEGRATION_SHA:['AUTOMATED_MULTI_AI_CTO_LOOP_V1#M1', 'AUTOMATED_MULTI_AI_CTO_LOOP_V1#M3'] \u2014 the product repo is under git, so a settlement must name the commit it reached",
+      "sources": [
+        {
+          "record": "factory_v2/receipts/audit_cells/** (position fingerprints) + factory_v2/receipts/audit_cells/transitions.jsonl",
+          "verification": "git-intact at HEAD (IC5); drift across a handoff or a manual transition counts"
+        }
+      ],
+      "status": "UNKNOWN",
+      "value": null,
+      "window": "",
+      "zero_semantics": "0 means 0 observed over the named window, never risk-free"
+    },
+    "EXACT_SHA_REVIEWS_AUTOMATED": {
+      "detail": "ADAPTIVE_ROUTING_AGGREGATOR_BUILT@175158cef24c:ACCEPT(glm), FACTORY_CHAOS_DRILL_V1@175158cef24c:ACCEPT(claude), FACTORY_CHAOS_DRILL_V2@384510921dee:ACCEPT(glm), FACTORY_CONVERGENCE_RESHAPE@410002f0d4eb:ACCEPT(claude), FACTORY_CORE_REWRITE_FACTORYD_V1@363f817be4d9:ACCEPT(glm), FACTORY_DEEP_RESEARCH_3AI_V1@78e1e41e98be:ACCEPT(claude), FACTORY_QUOTA_THRIFT_V1@384510921dee:ACCEPT(glm), FACTORY_RELOAD_CANARY_V1@43bc021c4da9:ACCEPT(claude), FACTORY_REPAIR_FAIL_CLOSED_OBSERVATION_V1@0e44d3e0546f:ACCEPT(glm), FACTORY_REPAIR_LOT1B_V1@866d873db03b:ACCEPT(glm), FACTORY_REPAIR_LOT2A_V1@83c6a90fbadf:ACCEPT(glm), FACTORY_REPAIR_PIN_PROOF_TO_SHA_V1@1de9249ef00f:ACCEPT(glm), FACTORY_REPAIR_RACES_AND_SWALLOWED_ERRORS_V1@8b534d3ed3f2:ACCEPT(claude), FACTORY_REPAIR_UNBLOCK_SETTLEMENT_V1@2447b93d09bb:ACCEPT(glm), FACTORY_REPAIR_VERIFY_HARDENING_V1@6ffbf35091b6:ACCEPT(glm), FULL_CODEBASE_AUDIT_REVIEWED@08e1268a2a68:ACCEPT(glm), FULL_CODEBASE_AUDIT_REVIEWED@aa295959424e:ACCEPT(codex), SCALE_2@d4348d6a69e7:ACCEPT(claude), SCALE_N@d25d377bc852:ACCEPT(claude)",
+      "expected": "EXACT_SHA_REVIEWS_AUTOMATED>=1",
+      "sources": [
+        {
+          "record": "projects/factory/evidence/review_accounts.jsonl + attempt_accounts.jsonl",
+          "verification": "HMAC owner seal (IC4) + supervised-launch cross-check"
+        }
+      ],
+      "status": "SATISFIED",
+      "value": 19,
+      "window": "19 proven exact-SHA reviews (2026-09-17T20:13:34Z \u2192 2026-09-21T06:00:02Z); unproven rows excluded: ['claude:NO_SUPERVISED_LAUNCH', 'codex:NO_SUPERVISED_LAUNCH', 'codex:NO_SUPERVISED_LAUNCH', 'codex:NO_SUPERVISED_LAUNCH', 'codex:NO_SUPERVISED_LAUNCH', 'codex:NO_SUPERVISED_LAUNCH', 'claude:NO_SUPERVISED_LAUNCH', 'glm:NO_SUPERVISED_LAUNCH', 'glm:NO_SUPERVISED_LAUNCH']",
+      "zero_semantics": "0 means 0 observed over the named window, never risk-free"
+    },
+    "FACTORY_ADVANTAGE_MEASURED": {
+      "coverage": {
+        "channel": "settlement_truth",
+        "covered": true,
+        "detail": "verify_settlement proven (contract bb03b1255440a6c8)",
+        "milestone": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK"
+      },
+      "dependency": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK",
+      "detail": "factory verified_rate=1.00 fa=0 vs best single verified_rate=0.00 fa=3 \u2192 FACTORY_WINS (explicit either way; a non-gain is a valid measured result)",
+      "expected": "FACTORY_ADVANTAGE_MEASURED==1",
+      "sources": [
+        {
+          "record": "factory_v2/benchmarks/CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1/MANIFEST.json + observations",
+          "verification": "verified_rate/false_acceptances recomputed per arm from raw runs (IC3)"
+        }
+      ],
+      "status": "SATISFIED",
+      "value": 1,
+      "window": "matched 3-arm benchmark CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1 \u2014 advantage recomputed from 9 raw runs",
+      "zero_semantics": "0 means 0 observed over the named window, never risk-free"
+    },
+    "FALSE_SETTLEMENTS": {
+      "detail": "unproven: AUTOMATED_MULTI_AI_CTO_LOOP_V1(RECEIPT_HAS_NO_INTEGRATION_SHA:['AUTOMATED_MULTI_AI_CTO_LOOP_V1#M1', 'AUTOMATED_MULTI_AI_CTO_LOOP_V1#M3'] \u2014 the product repo is under git, so a settlement must name the commit it reached); CHAMPION_VS_RESHAPED_CHALLENGER(RECEIPT_HAS_NO_INTEGRATION_SHA:['CHAMPION_VS_RESHAPED_CHALLENGER#M2'] \u2014 the product repo is under git, so a settlement must name the commit it reached); FACTORY_AUTONOMOUS_CTO_BASE_READY(RECEIPT_HAS_NO_INTEGRATION_SHA:['FACTORY_AUTONOMOUS_CTO_BASE_READY#M2'] \u2014 the product repo is under git, so a settlement must name the commit it reached); FACTORY_CODE_REVIEW_SWEEP_V1(RECEIPT_HAS_NO_INTEGRATION_SHA:['FACTORY_CODE_REVIEW_SWEEP_V1#M3'] \u2014 the product repo is under git, so a settlement must name the commit it reached); FACTORY_LEDGER_ENGINE_KNOWN_V1(CONTRACT_NOT_ON_DISK:1b342eafdb114a07); FACTORY_REPAIR_RACES_AND_SWALLOWED_ERRORS_V1(RECEIPT_HAS_NO_INTEGRATION_SHA:['FACTORY_REPAIR_RACES_AND_SWALLOWED_ERRORS_V1#M1'] \u2014 the product repo is under git, so a settlement must name the commit it reached); FOUNDATIONAL_LONG_RUN_TWITTER_RADAR(SETTLEMENT_NAMES_NO_CONTRACT); FULL_CODEBASE_AUDIT_RECEIPT_CURRENT(RECEIPT_HAS_NO_INTEGRATION_SHA:['FULL_CODEBASE_AUDIT_RECEIPT_CURRENT#M2'] \u2014 the product repo is under git, so a settlement must name the commit it reached); FULL_CODEBASE_AUDIT_REVIEWED(RECEIPT_HAS_NO_INTEGRATION_SHA:['FULL_CODEBASE_AUDIT_REVIEWED#M2'] \u2014 the product repo is under git, so a settlement must name the commit it reached)",
+      "expected": "FALSE_SETTLEMENTS==0",
+      "sources": [
+        {
+          "record": "projects/factory/PROJECT_STATE.json + factory_v2/settlement_truth.py",
+          "verification": "IC1: every post-cutoff COMPLETE re-verified"
+        }
+      ],
+      "status": "VIOLATED",
+      "value": 9,
+      "window": "[2026-09-09T09:00:00Z \u2192 produced_at (aggregate/receipt timestamp)] \u2014 42 post-cutoff COMPLETE settlements re-verified; false settlements observed over that window: 9",
+      "zero_semantics": "0 means 0 observed over the named window, never risk-free"
+    },
+    "MANUAL_AGENT_HANDOFFS": {
+      "coverage": {
+        "channel": "",
+        "covered": false,
+        "detail": "UNPROVEN_BY_SETTLEMENT_TRUTH: RECEIPT_HAS_NO_INTEGRATION_SHA:['AUTOMATED_MULTI_AI_CTO_LOOP_V1#M1', 'AUTOMATED_MULTI_AI_CTO_LOOP_V1#M3'] \u2014 the product repo is under git, so a settlement must name the commit it reached",
+        "milestone": "AUTOMATED_MULTI_AI_CTO_LOOP_V1"
+      },
+      "dependency": "AUTOMATED_MULTI_AI_CTO_LOOP_V1",
+      "expected": "MANUAL_AGENT_HANDOFFS==0",
+      "reason": "dependency receipt not independently covered: UNPROVEN_BY_SETTLEMENT_TRUTH: RECEIPT_HAS_NO_INTEGRATION_SHA:['AUTOMATED_MULTI_AI_CTO_LOOP_V1#M1', 'AUTOMATED_MULTI_AI_CTO_LOOP_V1#M3'] \u2014 the product repo is under git, so a settlement must name the commit it reached",
+      "sources": [
+        {
+          "record": "factory_v2/receipts/audit_cells/transitions.jsonl",
+          "verification": "git-intact at HEAD (IC5), rows recounted"
+        }
+      ],
+      "status": "UNKNOWN",
+      "value": null,
+      "window": "",
+      "zero_semantics": "0 means 0 observed over the named window, never risk-free"
+    },
+    "MANUAL_AUDIT_TRIGGERS": {
+      "coverage": {
+        "channel": "",
+        "covered": false,
+        "detail": "UNPROVEN_BY_SETTLEMENT_TRUTH: RECEIPT_HAS_NO_INTEGRATION_SHA:['AUTOMATED_MULTI_AI_CTO_LOOP_V1#M1', 'AUTOMATED_MULTI_AI_CTO_LOOP_V1#M3'] \u2014 the product repo is under git, so a settlement must name the commit it reached",
+        "milestone": "AUTOMATED_MULTI_AI_CTO_LOOP_V1"
+      },
+      "dependency": "AUTOMATED_MULTI_AI_CTO_LOOP_V1",
+      "expected": "MANUAL_AUDIT_TRIGGERS==0",
+      "reason": "dependency receipt not independently covered: UNPROVEN_BY_SETTLEMENT_TRUTH: RECEIPT_HAS_NO_INTEGRATION_SHA:['AUTOMATED_MULTI_AI_CTO_LOOP_V1#M1', 'AUTOMATED_MULTI_AI_CTO_LOOP_V1#M3'] \u2014 the product repo is under git, so a settlement must name the commit it reached",
+      "sources": [
+        {
+          "record": "factory_v2/receipts/audit_cells/** (audit-cell-record/v1)",
+          "verification": "git-intact at HEAD (IC5), manual_triggers recounted"
+        }
+      ],
+      "status": "UNKNOWN",
+      "value": null,
+      "window": "",
+      "zero_semantics": "0 means 0 observed over the named window, never risk-free"
+    },
+    "MANUAL_DAEMON_RESTARTS": {
+      "coverage": {
+        "channel": "settlement_ledger_pre_cutoff",
+        "covered": true,
+        "detail": "ledger entry file_sha256 verified (e2bbdf57b146)",
+        "milestone": "EXTERNAL_SUPERVISOR_NO_MANUAL_RELAUNCH"
+      },
+      "dependency": "EXTERNAL_SUPERVISOR_NO_MANUAL_RELAUNCH",
+      "detail": "KILL_RESTART_RECOVERY=PASS, DUPLICATE_WRITERS=0",
+      "expected": "MANUAL_DAEMON_RESTARTS==0",
+      "sources": [
+        {
+          "record": "factory_v2/receipts/committed/SUPERVISOR_RUNTIME_RECEIPT.json",
+          "verification": "git-intact at HEAD (IC5); the recorded window must contain a forced kill"
+        }
+      ],
+      "status": "SATISFIED",
+      "value": 0,
+      "window": "supervisor runtime exercise ending 2026-09-09T16:11:07Z, containing forced SIGKILLs (worker_crash, supervisor_crash); manual daemon restarts observed over that window: 0",
+      "zero_semantics": "0 means 0 observed over the named window, never risk-free"
+    },
+    "MATCHED_BENCHMARK_RUNS_PER_ARM": {
+      "coverage": {
+        "channel": "settlement_truth",
+        "covered": true,
+        "detail": "verify_settlement proven (contract bb03b1255440a6c8)",
+        "milestone": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK"
+      },
+      "dependency": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK",
+      "expected": "MATCHED_BENCHMARK_RUNS_PER_ARM>=3",
+      "sources": [
+        {
+          "record": "factory_v2/benchmarks/CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1/MANIFEST.json + observations",
+          "verification": "per-arm run counts recounted from raw files (IC3)"
+        }
+      ],
+      "status": "SATISFIED",
+      "value": 3,
+      "window": "matched 3-arm benchmark CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1; hash-verified runs per arm {'claude_alone': 3, 'glm_alone': 3, 'factory': 3}",
+      "zero_semantics": "0 means 0 observed over the named window, never risk-free"
+    },
+    "MULTI_AI_DECISIONS_SYNTHESIZED": {
+      "coverage": {
+        "channel": "",
+        "covered": false,
+        "detail": "UNPROVEN_BY_SETTLEMENT_TRUTH: RECEIPT_HAS_NO_INTEGRATION_SHA:['AUTOMATED_MULTI_AI_CTO_LOOP_V1#M1', 'AUTOMATED_MULTI_AI_CTO_LOOP_V1#M3'] \u2014 the product repo is under git, so a settlement must name the commit it reached",
+        "milestone": "AUTOMATED_MULTI_AI_CTO_LOOP_V1"
+      },
+      "dependency": "AUTOMATED_MULTI_AI_CTO_LOOP_V1",
+      "expected": "MULTI_AI_DECISIONS_SYNTHESIZED>=1",
+      "reason": "dependency receipt not independently covered: UNPROVEN_BY_SETTLEMENT_TRUTH: RECEIPT_HAS_NO_INTEGRATION_SHA:['AUTOMATED_MULTI_AI_CTO_LOOP_V1#M1', 'AUTOMATED_MULTI_AI_CTO_LOOP_V1#M3'] \u2014 the product repo is under git, so a settlement must name the commit it reached",
+      "sources": [
+        {
+          "record": "factory_v2/receipts/audit_cells/** (cell-synthesis/v1)",
+          "verification": "git-intact at HEAD (IC5)"
+        }
+      ],
+      "status": "UNKNOWN",
+      "value": null,
+      "window": "",
+      "zero_semantics": "0 means 0 observed over the named window, never risk-free"
+    },
+    "ROUTINE_HUMAN_INTERVENTIONS": {
+      "coverage": {
+        "channel": "settlement_truth",
+        "covered": true,
+        "detail": "verify_settlement proven (contract bb03b1255440a6c8)",
+        "milestone": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK"
+      },
+      "dependency": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK",
+      "detail": "per-arm runs: {'claude_alone': 3, 'glm_alone': 3, 'factory': 3}",
+      "expected": "ROUTINE_HUMAN_INTERVENTIONS==0",
+      "sources": [
+        {
+          "record": "factory_v2/benchmarks/CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1/MANIFEST.json + run observations",
+          "verification": "per-file sha256 vs MANIFEST (IC3), human_interventions summed from raw runs"
+        }
+      ],
+      "status": "SATISFIED",
+      "value": 0,
+      "window": "matched 3-arm benchmark CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1 (9 runs across 3 arms, faults FI-1_BUILD_BROKEN, FI-2_FALSE_BAIT, FI-3_SIGKILL_MID_REPAIR); routine human interventions observed over that window: 0",
+      "zero_semantics": "0 means 0 observed over the named window, never risk-free"
+    },
+    "SAFE_SELF_IMPROVEMENT_DECISIONS": {
+      "coverage": {
+        "channel": "settlement_truth",
+        "covered": true,
+        "detail": "verify_settlement proven (contract e0464417ea1b727b)",
+        "milestone": "SAFE_SELF_IMPROVEMENT"
+      },
+      "dependency": "SAFE_SELF_IMPROVEMENT",
+      "detail": "validated+bound: ['af8f0ed276d3']; unbound/unvalidated rows (not counted): none",
+      "expected": "SAFE_SELF_IMPROVEMENT_DECISIONS>=1",
+      "sources": [
+        {
+          "record": "factory_v2/receipts/self_modification_ledger.jsonl",
+          "verification": "git-intact at HEAD (IC5); a row counts only when validated AND sha256-bound to factory_v2/receipts/BENCHMARK_RECEIPT.json"
+        }
+      ],
+      "status": "SATISFIED",
+      "value": 1,
+      "window": "self-modification ledger (1 rows, candidates af8f0ed276d3\u2026af8f0ed276d3); validated decisions sha256-bound to an existing benchmark receipt: 1",
+      "zero_semantics": "0 means 0 observed over the named window, never risk-free"
+    }
+  },
+  "milestone": "FACTORY_AUTONOMOUS_CTO_BASE_READY",
+  "produced_at": "2026-09-21T07:03:02Z",
+  "produced_by": "factory_v2.base_ready_aggregator.aggregate() \u2014 independent recompute from durable records; never authored, never an input",
+  "schema": "factory-base-ready-receipt/v1",
+  "unknown_semantics": "UNKNOWN = no independent source; UNKNOWN blocks readiness"
+}

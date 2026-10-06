@@ -1,0 +1,318 @@
+{
+  "control_sha": "865de5703a2450b38bc4f166cbcfe835439c6c9a",
+  "control_sha_rebind_2026_09_19": "REBOUND 2026-09-19 (codex BLOCK 2f0e5bf3 repair, session 5): control_sha moved 57cd98e0->865de5703a2450b38bc4f166cbcfe835439c6c9a because intervening milestones (SAFE_SELF_IMPROVEMENT, FACTORY_CODE_REVIEW_SWEEP, FACTORY_DEEP_RESEARCH) committed real code after 2f0e5bf3 (git diff --name-only 2f0e5bf3..HEAD: factoryd.py, runtime.py, mission_dispatch.py, settlement.py, launch_gate.py, owner_routing_policy.py, tests/). Re-verified at the new binding: LOC re-measured fresh (wc -l; drift found and updated: runtime.py 4468->4475, factoryd.py 2343->2363; all other entries exact), line citations re-resolved (factoryd _reconcile_stale_active l.200, _load_or_create_state l.884 still exact), mechanical judge python3 factory_v2/verify_audit_repair.py . -> AUDIT_REPAIR_VERIFIED rc=0.",
+  "dead_code": [
+    {
+      "deleted_in_commit": "b671efe7889fbd3b8b0004dd8c4ef1379efe790c",
+      "deletion_status": "DELETION EXECUTED 2026-09-13 by FACTORY_SIMPLIFY_S2 (b671efe7889fbd3b8b0004dd8c4ef1379efe790c) -- this 2026-09-07 dead-code finding was carried out for real",
+      "evidence": "Called only by factory/bin/campaign_run.py which is itself not called by factoryd.py or any live production path. campaign_run.py imports campaign_state but the execution path is: factoryd → backlog_refiller (not campaign_state). The campaign_run.py module is the deprecated execution path.",
+      "file": "factory/bin/campaign_state.py",
+      "id": "DC-001",
+      "loc": 243,
+      "loc_measured_cmd": "git show b671efe7889fbd3b8b0004dd8c4ef1379efe790c^:factory/bin/campaign_state.py | wc -l   (file absent from HEAD; measured at the parent of the deletion commit)",
+      "safe_to_delete": true,
+      "symbol": "Campaign.next_mission()"
+    },
+    {
+      "deleted_in_commit": "b671efe7889fbd3b8b0004dd8c4ef1379efe790c",
+      "deletion_status": "DELETION EXECUTED 2026-09-13 by FACTORY_SIMPLIFY_S2 (b671efe7889fbd3b8b0004dd8c4ef1379efe790c) -- this 2026-09-07 dead-code finding was carried out for real",
+      "evidence": "Deprecated execution path. factoryd.py replaced campaign_run.py with the autopilot.py path. No import from factoryd.py, supervisor.py, or any active V1/V2 path.",
+      "file": "factory/bin/campaign_run.py",
+      "id": "DC-002",
+      "loc": 384,
+      "loc_measured_cmd": "git show b671efe7889fbd3b8b0004dd8c4ef1379efe790c^:factory/bin/campaign_run.py | wc -l   (file absent from HEAD; measured at the parent of the deletion commit)",
+      "safe_to_delete": true,
+      "symbol": "entire file"
+    },
+    {
+      "evidence": "Campaign-specific RUN8 benchmark artifact. Not imported by any main factory/ or factory_v2/ module. Appears to be a general champion promotion function but is only relevant to the RUN8 gauntlet harness.",
+      "file": "campaigns/RUN8/factory_gauntlet/factory_gauntlet/champion.py",
+      "id": "DC-003",
+      "loc": 21,
+      "loc_measured_cmd": "wc -l campaigns/RUN8/factory_gauntlet/factory_gauntlet/champion.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, session 2026-09-18)",
+      "safe_to_delete": true,
+      "symbol": "decide(champion, challenger)"
+    },
+    {
+      "evidence": "Hardcodes XR04 Momentum Controls lane paths (/tmp/xr04-benchmark-lane-{a,d}/). Not a general Factory capability. Only called during XR04 campaign benchmark. The generic factory/bin/benchmark.py covers the same need for future campaigns.",
+      "file": "factory/bin/solo_benchmark_score.py",
+      "id": "DC-004",
+      "loc": 273,
+      "loc_measured_cmd": "wc -l factory/bin/solo_benchmark_score.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, session 2026-09-18)",
+      "note": "Keep in campaigns/app007/ or XR04 campaign dir. Remove from factory/bin/.",
+      "safe_to_delete": false,
+      "symbol": "entire file (XR04-specific paths)"
+    },
+    {
+      "evidence": "This specific check is superseded by V2 IndependentValidator which runs the product_e2e test_command directly. The convergence_gate version reads evidence directories and checks for specific files by convention — fragile and duplicates what the authoritative gate does.",
+      "file": "factory/lib/convergence_gate.py",
+      "id": "DC-005",
+      "loc": 15,
+      "loc_measured_cmd": "python3 -c 'ast.walk ConvergenceGate._check_task_complete_without_evidence -> lineno 157, end_lineno 171 (15 lines)' (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, session 2026-09-18)",
+      "loc_scope": "method only (file factory/lib/convergence_gate.py measured 401 lines by wc -l)",
+      "note": "Demote entire ConvergenceGate from settlement path. Move to Level-B audit tool for F8.",
+      "safe_to_delete": false,
+      "symbol": "ConvergenceGate._check_task_complete_without_evidence()"
+    }
+  ],
+  "duplicate_implementations": [
+    {
+      "canonical": "factory_v2/roadmap_resolver.py",
+      "concept": "Next-work determination",
+      "id": "DUP-001",
+      "implementations": [
+        {
+          "approach": "topological dependency sort from ROADMAP.yaml",
+          "file": "factory_v2/roadmap_resolver.py",
+          "loc": 200,
+          "loc_measured_cmd": "wc -l factory_v2/roadmap_resolver.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+          "status": "CANONICAL"
+        },
+        {
+          "approach": "queue head from APP007_CAMPAIGN_STATE.json",
+          "file": "factory/lib/backlog_refiller.py",
+          "loc": 61,
+          "loc_measured_cmd": "git show 2f5249abe3cab8ce80dd3ee628e190eff7ff8317^:factory/lib/backlog_refiller.py | wc -l (deleted in 2f5249abe3cab8ce80dd3ee628e190eff7ff8317 = FACTORY_SIMPLIFY_S4, le vrai commit de suppression : git log --diff-filter=D --format=%H -- factory/lib/backlog_refiller.py ; la citation antérieure 'deleted in b671efe7' était FAUSSE et citait le commit de suppression des AUTRES modules V1 — corrigé session 3)",
+          "status": "DEMOTE [EXECUTED: deleted]"
+        },
+        {
+          "approach": "H1/H2 horizon promotion from CTO_BACKLOG.json",
+          "file": "factory/bin/cto_planner.py",
+          "loc": 332,
+          "loc_measured_cmd": "git show b671efe7889fbd3b8b0004dd8c4ef1379efe790c^:factory/bin/cto_planner.py | wc -l (deleted in b671efe7889f)",
+          "status": "DEMOTE [EXECUTED: deleted]"
+        },
+        {
+          "approach": "DAG dependency walk from campaign state",
+          "file": "factory/bin/campaign_state.py:Campaign.next_mission()",
+          "loc": 243,
+          "loc_measured_cmd": "git show b671efe7889fbd3b8b0004dd8c4ef1379efe790c^:factory/bin/campaign_state.py | wc -l (deleted in b671efe7889f)",
+          "status": "DELETE [EXECUTED: deleted]"
+        }
+      ],
+      "resolution": "After F4: roadmap_resolver.py is the only next-work path. factoryd.py calls resolve() instead of backlog_refiller.select_next_mission()."
+    },
+    {
+      "canonical": "factory_v2/validation_contract.py + factory_v2/authority_gate.py",
+      "concept": "Validation / completion gate",
+      "id": "DUP-002",
+      "implementations": [
+        {
+          "approach": "hash-anchored frozen contract + IndependentValidator (RAISES)",
+          "file": "factory_v2/validation_contract.py + authority_gate.py",
+          "loc": 928,
+          "loc_measured_cmd": "wc -l factory_v2/validation_contract.py factory_v2/authority_gate.py -> 507 + 421 (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK; le 212 de 2026-09-07 additionnait les chiffres d'alors 87+125, jamais re-mesurés depuis)",
+          "status": "CANONICAL"
+        },
+        {
+          "approach": "structural markdown/plan validation at enqueue (advisory)",
+          "file": "factory/lib/task_contract_validator.py",
+          "loc": 239,
+          "loc_measured_cmd": "wc -l factory/lib/task_contract_validator.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+          "status": "DEMOTE"
+        },
+        {
+          "approach": "multi-signal post-settlement gate (advisory, does not RAISE)",
+          "file": "factory/lib/milestone_controller.py",
+          "loc": 302,
+          "loc_measured_cmd": "wc -l factory/lib/milestone_controller.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+          "status": "REPLACE"
+        }
+      ],
+      "resolution": "After F4: only V2 contract + IndependentValidator are on the settlement path. MilestoneController removed. TaskContractValidator kept as a linter (not a gate)."
+    },
+    {
+      "canonical": "factory_v2/runtime.py",
+      "concept": "Runtime control loop",
+      "id": "DUP-003",
+      "implementations": [
+        {
+          "approach": "stateless advance() — authority reload on every cycle, authoritative gates, idempotent settlement",
+          "file": "factory_v2/runtime.py",
+          "loc": 4468,
+          "loc_measured_cmd": "wc -l factory_v2/runtime.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+          "status": "CANONICAL"
+        },
+        {
+          "approach": "sequential mission runner from plan JSON, no authority reload between missions",
+          "file": "factory/bin/autopilot.py",
+          "loc": 423,
+          "loc_measured_cmd": "git show b671efe7889fbd3b8b0004dd8c4ef1379efe790c^:factory/bin/autopilot.py | wc -l (deleted in b671efe7889f)",
+          "status": "DEMOTE [EXECUTED: deleted]"
+        }
+      ],
+      "resolution": "After F4: factoryd.py calls V2 runtime.advance() in its poll loop instead of spawning autopilot.py. autopilot.py is retired."
+    },
+    {
+      "concept": "Canonical authority / brain loading",
+      "id": "DUP-004",
+      "implementations": [
+        {
+          "approach": "loads STRATEGY/SPEC/ROADMAP.yaml, SHA-256 per file, immutable dataclass",
+          "file": "factory_v2/project_authority.py",
+          "loc": 262,
+          "loc_measured_cmd": "wc -l factory_v2/project_authority.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+          "status": "CANONICAL for project authority"
+        },
+        {
+          "approach": "loads factory-internal CTO_STATE.json + CTO_*.jsonl, 13 invariants",
+          "file": "factory/lib/cto_kernel.py",
+          "loc": 472,
+          "loc_measured_cmd": "wc -l factory/lib/cto_kernel.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+          "status": "KEEP for factory-internal state"
+        }
+      ],
+      "note": "Different scopes — V2 is project authority, V1 is factory-internal state. Both needed but must cross-validate. Not a true duplicate — complementary.",
+      "resolution": "Cross-hash validation: CTOKernel.load() must verify its roadmap_sha matches ProjectAuthority.roadmap_sha. Fail-fast on divergence."
+    },
+    {
+      "concept": "State persistence / checkpoint",
+      "id": "DUP-005",
+      "implementations": [
+        {
+          "approach": "factory-internal current state snapshot",
+          "file": "factory/cto/CTO_STATE.json",
+          "loc": "N/A",
+          "status": "KEEP"
+        },
+        {
+          "approach": "daemon runtime state (workers, active missions)",
+          "file": "factory/run/supervisor_state.json",
+          "loc": "N/A",
+          "status": "KEEP"
+        },
+        {
+          "approach": "V2 project milestone state + authority hashes",
+          "file": "projects/factory/PROJECT_STATE.json",
+          "loc": "N/A",
+          "status": "CANONICAL"
+        },
+        {
+          "approach": "V1 campaign queue state",
+          "file": "factory/campaigns/app007/APP007_CAMPAIGN_STATE.json",
+          "loc": "N/A",
+          "status": "DEMOTE"
+        }
+      ],
+      "note": "After F4: campaign queue state is replaced by PROJECT_STATE.json-driven resolution. supervisor_state.json and CTO_STATE.json remain for their specific scopes.",
+      "resolution": "Target: 3 state stores (PROJECT_STATE + supervisor_state + CTO_STATE) instead of 4. Campaign queue derived from PROJECT_STATE on demand."
+    },
+    {
+      "concept": "Convergence/gap analysis",
+      "id": "DUP-006",
+      "implementations": [
+        {
+          "approach": "advisory spec/code gap analysis, creates repair missions",
+          "file": "factory/lib/convergence_gate.py",
+          "loc": 401,
+          "loc_measured_cmd": "wc -l factory/lib/convergence_gate.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+          "status": "DEMOTE to Level-B audit tool"
+        },
+        {
+          "approach": "authoritative product E2E gate, RAISES on failure",
+          "file": "factory_v2/authority_gate.py",
+          "loc": 421,
+          "loc_measured_cmd": "wc -l factory_v2/authority_gate.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+          "status": "CANONICAL"
+        }
+      ],
+      "note": "Different purposes — convergence_gate does spec/code divergence analysis (useful for F8 audit loop). authority_gate does authoritative settlement gating. Not redundant but convergence_gate must be removed from the settlement critical path.",
+      "resolution": "ConvergenceGate: demote to F8 AUTOMATED_AUDIT_RESEARCH_LOOP trigger. Remove from factoryd settlement path."
+    }
+  ],
+  "legacy_paths": [
+    {
+      "description": "V1 production execution path. Reads next mission from campaign queue. No dependency resolution. autopilot.py does not reload canonical authority between missions.",
+      "id": "LP-001",
+      "path": "factoryd → backlog_refiller → APP007_CAMPAIGN_STATE.json → autopilot.py → dispatcher_v3.py",
+      "replacement": "factoryd → roadmap_resolver → V2 runtime.advance() → dispatcher_v3.py (retained as executor backend)"
+    },
+    {
+      "description": "H1/H2 horizon management path. Written by cto_planner subprocess, read by backlog_refiller. Entire H1/H2 concept is superseded by topological roadmap resolution.",
+      "id": "LP-002",
+      "path": "cto_planner.py → CTO_BACKLOG.json → H1_READY → dispatch",
+      "replacement": "roadmap_resolver.resolve() returns next_milestone directly from ROADMAP.yaml dependency graph"
+    },
+    {
+      "description": "Post-settlement convergence analysis that creates repair missions in the V1 campaign queue. Mixes settlement logic with gap analysis.",
+      "id": "LP-003",
+      "path": "factoryd._handle_mission_settled → convergence_gate.analyze() → gap_missions → campaign_state.queued",
+      "replacement": "factoryd settlement → IndependentValidator (authoritative gate) → PROJECT_STATE settlement. Convergence analysis moves to F8 Level-B audit loop."
+    }
+  ],
+  "milestone": "FULL_CODEBASE_STATE_OF_ART_AUDIT",
+  "produced_at": "2026-09-07",
+  "schema": "dead-duplicate-code-report/v1",
+  "stale_state": [
+    {
+      "file": "factory/cto/CTO_STRATEGY.md",
+      "fix": "ContextCompiler must read from projects/<project>/STRATEGY.md as the primary source. CTO_STRATEGY.md demoted to a factory-internal historical artifact.",
+      "id": "SS-001",
+      "impact": "DISPATCH_WITHOUT_FRESH_CANONICAL_PROJECT_CONTEXT — workers may build toward stale strategy",
+      "issue": "Referenced by ContextCompiler as the authority source for strategy context injected into workers. But the canonical project strategy is now projects/factory/STRATEGY.md. Workers receive stale V1 strategy via CTO_STRATEGY.md instead of the canonical V2 document.",
+      "status_2026_09_19": "FIX EXECUTED — codex BLOCK 2f0e5bf3 flagged the present-tense claim as contradicting the code. Since F4 (commit c489224e2): ContextCompiler(project_dir=…) reads STRATEGY.md/SPEC.md from the project dir fail-closed (factory/lib/context_compiler.py:146-168), and factory/bin/dispatcher_v3.py:1096 passes project_dir on every V2 dispatch (factory_v2/executors.py:691 passes --project-dir). The CTO_STRATEGY.md read (:156) is reachable ONLY on the legacy project_dir=None path. V2-dispatched workers no longer receive V1 strategy. grep/sed re-executed 2026-09-19 at HEAD ed8cbfc37."
+    },
+    {
+      "file": "factory/cto/CTO_BACKLOG.json",
+      "fix": "After F4: stop writing to CTO_BACKLOG.json. The backlog is always derived from roadmap_resolver on demand.",
+      "id": "SS-002",
+      "impact": "DERIVED_ARTIFACT_OVERRIDES_CANONICAL_ROADMAP if CTO_BACKLOG.json is used as authority",
+      "issue": "CTOPlanner reads/writes this file for H1/H2 mission promotion. After roadmap_resolver becomes the sole next-work path, this file becomes stale — the actual next work is computed live from ROADMAP.yaml."
+    },
+    {
+      "file": "factory/lib/long_run_supervisor.py lines 61-65 (V1_DELIVERY_GATES list, re-measured 2026-09-18; the 2026-09-07 report cited lines 89-155)",
+      "fix": "Replace hardcoded gates with roadmap_resolver.resolve(authority, project_state).all_complete.",
+      "id": "SS-003",
+      "impact": "idle_recovery() will enqueue wrong repair actions for V2 projects",
+      "issue": "Hardcoded V1 delivery gates: ctok_chain_complete, full_regression_clean, m008_pass, solo_benchmark_complete, v1_seal_issued. These reference V1-specific milestones that no longer exist in the V2 canonical roadmap.",
+      "lines_measured_cmd": "grep -n 'ctok_chain_complete|full_regression_clean|m008_pass|solo_benchmark_complete|v1_seal_issued' factory/lib/long_run_supervisor.py -> l.61-65 (re-exécuté session 3 au HEAD fd70db5b7 : l.61-65 confirmées vivantes)"
+    }
+  ],
+  "summary": {
+    "dead_code_items": 5,
+    "duplicate_concept_groups": 6,
+    "estimated_loc_after_f4": 15500,
+    "estimated_loc_removable": 1500,
+    "legacy_execution_paths": 3,
+    "safe_to_delete_now": 3,
+    "stale_state_files": 3
+  },
+  "update_2026_09_12": {
+    "decision": "P2 architecture decision (RAPPORT_FINAL section 8): delete V1 path and orphaned scripts, move product code out of the runtime package, split _advance_locked — target 54043 -> ~43000 scoped lines. Not yet executed (FACTORY_CONVERGENCE_RESHAPE, downstream milestone).",
+    "measured_dead_or_unreachable": {
+      "files": 99,
+      "files_with_no_importer_and_no_test": 54,
+      "lines": 23811,
+      "pct_of_scoped_codebase": 44
+    },
+    "measured_hotspot": {
+      "asof_note_2026_09_18_s3": "figure de session 2026-09-12, historiquement exacte : _advance_locked = 1252 lignes exactement aux commits 3aabb645b584 / 5be3de94b49c / 04bd435c4460 (2026-09-11/12, re-vérifié par AST en parcourant l'historique git, session 3). Au HEAD courant _advance_locked = 86 lignes — la logique advance est décomposée dans le paquet factory_v2/advance/ (10 modules, 3507 l. mesurées find+wc) ; CC/if/except de 2026-09-12 ne sont pas re-mesurés ici (méthode CPX/CTL non re-exécutée).",
+      "cyclomatic_complexity": 184,
+      "except_count": 28,
+      "file": "factory_v2/runtime.py",
+      "function": "_advance_locked",
+      "if_count": 66,
+      "lines": 1252,
+      "method": "AST (CPX, CTL lenses)"
+    },
+    "note": "The 2026-09-07 report (5 dead_code items, ~1500 LOC removable) predates 91 commits / 4.5 days of factory_v2 growth (1008->36783 LOC in factory_v2 over 7 days, per RESEARCH_EXTERNE_2026-09-12.md scaffolding-growth finding) and was not re-run against the current tree; the 2026-09-12 figures above are the current AST-measured counts and supersede the smaller 09-07 estimate for planning purposes. The original dead_code/duplicate_implementations arrays below are left as historical record, not deleted. NOTE session 3 (2026-09-18) : RESEARCH_EXTERNE_2026-09-12.md n'est PAS dans le dépôt (jamais commité — git log --all --diff-filter=A → vide) ; le chiffre 36783 y cité est une mesure de session non re-validable ; re-mesure fraîche du périmètre : factory_v2/ = 47791 lignes Python (find -name '*.py' | xargs wc -l, session 3). Les comptes measured_dead_or_unreachable (99 fichiers / 23811 l. / 44 %) et la mesure 5-chaînes proviennent de la même source absente : non reproductibles depuis le dépôt, conservés comme as-of.",
+    "source": ".context/factory-tightening-audit-2026-09-12/RAPPORT_FINAL_2026-09-12.md (section 2, lens CPX, AST-measured) — source ABSENTE du dépôt (jamais commitée, voir note session 3 ci-dessus)"
+  },
+  "update_2026_09_18": {
+    "deleted_modules": {
+      "factory/bin/campaign_run.py": {
+        "deleted_in_commit": "b671efe7889fbd3b8b0004dd8c4ef1379efe790c",
+        "loc_at_deletion": 384
+      },
+      "factory/bin/campaign_state.py": {
+        "deleted_in_commit": "b671efe7889fbd3b8b0004dd8c4ef1379efe790c",
+        "loc_at_deletion": 243
+      }
+    },
+    "measured_at_head": "d256977f9bb00006fb5f5271a762b1c58354cfae",
+    "note": "DC-001/DC-002 : la suppression recommandée a été EXÉCUTÉE le 2026-09-13 (FACTORY_SIMPLIFY_S2) — les deux entrées portent désormais le SHA 40 hex du commit de suppression (git log --diff-filter=D --format=%H -- <path>) et leur loc est mesurée au parent du commit de suppression. DC-003/DC-004 : fichiers toujours présents, locs re-mesurées à HEAD (le symbole decide() de DC-003 reste tel quel, le fichier fait 21 l. mesurées contre 40 déclarés). DC-005 : la loc 45 déclarée portait sur le symbole; re-mesurée par AST = 15 lignes (méthode), périmètre explicite dans loc_scope.",
+    "reason": "Relecteur Claude BLOCK aa295959: DC-002 citait factory/bin/campaign_run.py sans commit de suppression; locs 2026-09-07 non re-mesurées. Re-mesure intégrale (chaque loc écrite = commande exécutée citée dans loc_measured_cmd).",
+    "second_remeasure_2026_09_18": "Re-mesure session 2 (BLOCK codex 60d76f11): DUP-002 canonical 212 -> 928 (507+421 mesurés, loc_measured_cmd ajoutée), DUP-003 runtime 4448 -> 4468 (fusion 4e553aab1), toutes les autres locs re-exécutées au HEAD d256977f9bb00006fb5f5271a762b1c58354cfae : inchangées.",
+    "third_pass_2026_09_18": "Session 3 (BLOCK codex a4f12607) : DUP-001 backlog_refiller — le vrai commit de suppression est 2f5249abe3ca (FACTORY_SIMPLIFY_S4, git log --diff-filter=D exécuté), la citation 'deleted in b671efe7' était fausse (61 l. identiques aux deux parents, seule l'attribution était erronée) ; SS-003 re-liée au HEAD courant ; sources .context/2026-09-12 annotées absentes du dépôt (jamais commitées) avec re-mesure du périmètre factory_v2 (47791 l.)."
+  }
+}

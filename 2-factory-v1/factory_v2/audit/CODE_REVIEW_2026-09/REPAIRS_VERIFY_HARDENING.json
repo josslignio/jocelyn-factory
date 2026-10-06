@@ -1,0 +1,261 @@
+[
+  {
+    "id": "L3-007",
+    "status": "FIXED",
+    "commit": "94ba55d73be747a879f19511205e19b45599007e",
+    "test": "tests/test_repairs_vh_dispatcher.py::test_l3_007_ineffective_repair_escalates_t3_instead_of_spec_conflict",
+    "note": "Un échec pytest réel répété à l'identique (real_pytest_report : footer de résumé ou short test summary) ne déclenche plus SPEC_TEST_CONFLICT : la réparation inefficace monte l'escalade bornée T3. Le court-circuit FD4/DSP-07 est préservé pour les sorties non-pytest répétées verbatim (tests publics verdict_taxonomy inchangés, 33 passed). Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_dispatcher.py::test_l3_007_ineffective_repair_escalates_t3_instead_of_spec_conflict ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L4_resilience_review-010",
+    "status": "FIXED",
+    "commit": "1c78627305440d221d0400929cbe6f12cc81af9d",
+    "test": "tests/test_repairs_vh_review.py::test_l4_010_tool_output_is_never_a_verdict",
+    "note": "Transcript structuré (type/item/message/part) sans texte du reviewer => ERROR fail-closed : une command_execution affichant ACCEPT n'est plus un verdict. Événements opencode type=text/part.text extraits : une conclusion BLOCK suivie d'un outil ACCEPT reste BLOCK. Tests publics review_dispatch 13/13 verts. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_review.py::test_l4_010_tool_output_is_never_a_verdict ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-001",
+    "status": "FIXED",
+    "commit": "069a4def0eb30fdf4e872cb312c26bc16ecb109d",
+    "test": "tests/test_repairs_vh_gates.py::test_l5_1_001_imports_only_without_calls_fails_gate",
+    "note": "Un IMPORT n'est pas une capacité : la gate A1/A6 (_a1a6_gate.py:73 seen = imports | calls) exige désormais de vrais noeuds Call (comme _wiring_gate). Un runtime qui importe les trois symboles sans jamais les appeler échoue (ok=False). Le dépôt réel passe toujours (test_g3_real_repo_still_passes_both_gates). Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_gates.py::test_l5_1_001_imports_only_without_calls_fails_gate ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-002",
+    "status": "FIXED",
+    "commit": "069a4def0eb30fdf4e872cb312c26bc16ecb109d",
+    "test": "tests/test_repairs_vh_gates.py::test_l5_1_002_ungated_ctx_runner_in_stage_module_fails",
+    "note": "launch_gate_precedes_execute (_wiring_gate.py:109) parcourt désormais runtime.py ET factory_v2/advance/*.py, et reconnaît <x>.runner.execute en plus du nom nu runner : un ctx.runner.execute non gardé dans advance/mission_dispatch.py fait échouer la gate. Les dépôts réels passent (preflight croisé _launch_preflight conservé). Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_gates.py::test_l5_1_002_ungated_ctx_runner_in_stage_module_fails ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-031",
+    "status": "FIXED",
+    "commit": "069a4def0eb30fdf4e872cb312c26bc16ecb109d",
+    "test": "tests/test_repairs_vh_gates.py::test_l5_1_031_gate_under_if_false_does_not_count",
+    "note": "Une gate sous un garde statiquement mort (if False:/while False:) n'est jamais exécutée : le contrôle d'ordre (_wiring_gate.py:157 min(gate_lines) >= min(exec_lines)) ignore désormais les appels non atteignables via un remontée de chaîne de parents AST sur les tests constants faux. La comparaison de numéros de ligne seule ne suffit plus. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_gates.py::test_l5_1_031_gate_under_if_false_does_not_count ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-010",
+    "status": "FIXED",
+    "commit": "ad42af456ff0ae00751113cabc5905a062c39fd9",
+    "test": "tests/test_repairs_vh_truth.py::test_l5_1_010_digest_covers_effective_verifiers_not_only_the_shim",
+    "note": "Le champ historique validator_source_sha256 conserve le SHA du shim (test public original restauré). Nouveau champ effective_validator_source_sha256 couvre shim + factory_verifiers.py + products/twitter_radar/product_verifiers.py à HEAD ; la gate exige, compare et recalcule ce champ. Baseline : deux implémentations ont le même digest (test rouge) ; corrigé : digests différents (test vert). Tests snapshot public et gate : 13 passed, rc=0. Voir SESSION_VERIFY_HARDENING_EVIDENCE.json."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-023",
+    "status": "FIXED",
+    "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+    "test": "tests/test_repairs_vh_truth.py::test_l5_1_023_pinned_sha_must_match_actual_head",
+    "note": "recompute_product_e2e (long_run_truth.py:126) confronte le HEAD réel du dépôt contrôle ET produit au SHA épinglé avant l'exécution et la re-vérifie après : SHA épinglé ≠ HEAD, ou arbre qui bouge pendant le run => Unproven typé. Les SHA ne sont plus décoratifs — un pass est attribuable aux arbres épinglés ou n'existe pas. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_truth.py::test_l5_1_023_pinned_sha_must_match_actual_head ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels. Complément : git diff HEAD des fichiers suivis doit rester vide avant/après ; un HEAD conforme avec octets suivis sales est refusé."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-004",
+    "status": "FIXED",
+    "commit": "34b52795ef0991d76734c358152f6194426de8e3",
+    "test": "tests/test_repairs_vh_runners.py::test_l5_2_004_freshness_probe_requires_observed_change",
+    "note": "_probe_context_freshness (run_f5_benchmark.py:79) exige désormais un CHANGEMENT observé : copie temporaire du projet, mutation de SPEC.md, rechargement — l'identité doit bouger avec les octets. Un loader qui sert toujours le même objet en cache échoue la sonde (reproduction : monkeypatch cache => passed=False). Le disque de production n'est pas touché. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_runners.py::test_l5_2_004_freshness_probe_requires_observed_change ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-010",
+    "status": "FIXED",
+    "commit": "34b52795ef0991d76734c358152f6194426de8e3",
+    "test": "tests/test_repairs_vh_exploit_context.py::test_fullsuite_settlement_uses_observed_wrapper_exit",
+    "note": "Le rc réel du wrapper est lu dans <log>.rc ; absence => refus. Test exécute un wrapper réel, stdout positif et rc=1 : ancien main() settle PASS/rc=0, corrigé FAIL/rc=1. Témoin rc=0 passe. Baseline 178ba6e1f : pytest tests/test_repairs_vh_exploit_context.py -q => 2 failed, 2 passed, rc=1 ; corrigé => 4 passed, rc=0. Voir SESSION_VERIFY_HARDENING_EVIDENCE.json."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-018",
+    "status": "FIXED",
+    "commit": "34b52795ef0991d76734c358152f6194426de8e3",
+    "test": "tests/test_repairs_vh_runners.py::test_l5_2_018_collect_only_after_every_pytest_token",
+    "note": "_with_collect_only (verifier_preflight.py:121) insère --collect-only après CHAQUE token pytest de la commande (re.sub global), pas seulement le premier : dans «pytest a && pytest b» les DEUX invocations sont réduites à la collection — la promesse «never executes a single test body» tient pour toute la commande composée. 45 tests publics preflight/single_flight verts. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_runners.py::test_l5_2_018_collect_only_after_every_pytest_token ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-020",
+    "status": "FIXED",
+    "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+    "test": "tests/test_repairs_vh_judges.py::test_l5_2_020_negative_settlements_and_null_level_a_fail",
+    "note": "verify_audit_loop.py vérifie désormais le schema verrouillé (EXPECTED_SCHEMA), refuse les entrées null/non-objet dans level_a_checks/level_b_events, et exige des compteurs ENTIERS strictement positifs (settlements_covered=-1 passait le «must be > 0» car seule l'égalité à zéro était testée ; bool rejetés). Reproduction : receipt schema arbitraire + [null,null] + -1 => rc!=0. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_judges.py::test_l5_2_020_negative_settlements_and_null_level_a_fail ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-022",
+    "status": "FIXED",
+    "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+    "test": "tests/test_repairs_vh_judges.py::test_l5_2_022_no_injected_outcome_is_not_a_pass",
+    "note": "verify_controlled_long_run : une liste de fault_records non vide ne suffit plus — PASS exige ≥1 enregistrement outcome=INJECTED (fault_records_persisted), et crash_restart_evidence PASS exige AUSSI un INJECTED : crashed/restarted booléens vrais + NOT_FOUND => FAIL «injection is claimed, not observed». 76 tests publics phase8/phase9/metrics/cto_review verts. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_judges.py::test_l5_2_022_no_injected_outcome_is_not_a_pass ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-023",
+    "status": "FIXED",
+    "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+    "test": "tests/test_repairs_vh_judges.py::test_l5_2_023_twenty_copies_of_one_handle_fail",
+    "note": "verify_cycle2_manifest : le seuil porte sur les handles DISTINCTS (dict.fromkeys) — vingt occurrences du même handle échouent avec le détail des doublons ; les doublons et handles vides sont des erreurs explicites ; qualifying compte les comptes distincts. Le chemin 20 handles distincts passe toujours. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_judges.py::test_l5_2_023_twenty_copies_of_one_handle_fail ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-024",
+    "status": "FIXED",
+    "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+    "test": "tests/test_repairs_vh_judges.py::test_l5_2_024_printed_human_go_is_recounted",
+    "note": "verify_cycle2_refresh recompte TOUJOURS les HUMAN_GO/HUMAN_GATE/WAITING_HUMAN du journal et affiche le compte réel («HUMAN_GO=N (recounted)») même sans --verify-no-human-gate ; le flag ne décide que pass/fail, plus de HUMAN_GO=0 affirmé sans avoir été observé. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_judges.py::test_l5_2_024_printed_human_go_is_recounted ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-026",
+    "status": "FIXED",
+    "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+    "test": "tests/test_repairs_vh_judges.py::test_l5_2_026_stage_mentioned_only_in_comment_is_not_wired",
+    "note": "STAGES_NOT_WIRED (verify_factory_hygiene.py:137) : un stage est câblé s'il est réellement IMPORTÉ dans l'AST de runtime.py (Import/ImportFrom, noms inclus), pas si son nom de fichier apparaît quelque part dans le source — cinq commentaires mentionnant des modules jamais importés échouent désormais. Le dépôt réel (from .advance import X, 9 stages) passe. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_judges.py::test_l5_2_026_stage_mentioned_only_in_comment_is_not_wired ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-027",
+    "status": "FIXED",
+    "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+    "test": "tests/test_repairs_vh_judges.py::test_l5_2_027_restarts_recomputed_without_home_log",
+    "note": "Le recomptage des restarts (RUNTIME_STARTED/CTO_STARTUP_CHECK/DAEMON_STARTED en fenêtre) n'est plus conditionné à l'existence de ~/Library/Logs/JocelynFactory/factoryd.stdout.log : il lit PROJECT_STATE — la source du producteur metrics_dashboard — sur toute machine. Reproduction : dashboard restarts=2 + PROJECT_STATE 2 événements + HOME sans log => ancien code Unmet(METRICS_MISMATCH 0), nouveau code PASS. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_judges.py::test_l5_2_027_restarts_recomputed_without_home_log ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-001",
+    "status": "FIXED",
+    "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+    "test": "tests/test_repairs_vh_exploit_context.py::test_distinct_milestones_with_other_evidence_proven",
+    "note": "Même settlement valide M1 répété trois fois : les autres vérificateurs sont isolés comme déjà verts pour tester cette frontière de comptage. Original affiche PASS: 3 milestones et rc=0 ; corrigé refuse à rc=1. Témoin M1,M2,M3 passe. Baseline 178ba6e1f : pytest tests/test_repairs_vh_exploit_context.py -q => 2 failed, 2 passed, rc=1 ; corrigé => 4 passed, rc=0. Voir SESSION_VERIFY_HARDENING_EVIDENCE.json."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-002",
+    "status": "FIXED",
+    "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+    "test": "tests/test_repairs_vh_longrun.py::test_l5_3_002_long_run_milestones_must_be_in_timeline",
+    "note": "Le cross-bundle §D annoncé au docstring existe désormais : le résultat de parse_kill_restart_evidence est conservé et les jalons comptés par le long-run doivent apparaître dans milestones_after de la timeline kill/restart (CROSS_BUNDLE_MILESTONES_NOT_IN_TIMELINE sinon ; timeline non parsable => CROSS_BUNDLE_NO_TIMELINE). milestones_completed n'est plus testé pour sa seule non-vacuité. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_longrun.py::test_l5_3_002_long_run_milestones_must_be_in_timeline ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-003",
+    "status": "FIXED",
+    "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+    "test": "tests/test_repairs_vh_longrun.py::test_l5_3_003_zero_digests_are_refused",
+    "note": "verify_long_run_ready confronte désormais evidence_sha256 aux OCTETS de chaque artefact d'observation (sha256 réel vs épinglé ; empreinte absente => OBSERVATION_EVIDENCE_UNBOUND) — deux empreintes toutes nulles sont refusées, alignant ce juge sur le hash-binding de verify_preflight_receipt. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_longrun.py::test_l5_3_003_zero_digests_are_refused ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-005",
+    "status": "FIXED",
+    "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+    "test": "tests/test_repairs_vh_longrun.py::test_l5_3_005_parse_long_run_requires_distinct_milestones",
+    "note": "parse_long_run_evidence (verify_preflight_receipt.py:111) exige trois jalons DISTINCTS : milestones_completed=[M1,M1,M1] lève ValueError — frontière distincte du juge verify_long_run, même règle. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_longrun.py::test_l5_3_005_parse_long_run_requires_distinct_milestones ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-006",
+    "status": "FIXED",
+    "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+    "test": "tests/test_repairs_vh_longrun.py::test_l5_3_006_application_commit_at_base_is_refused",
+    "note": "Le commit d'application doit être strictement POSTÉRIEUR à base_sha (base ancêtre du commit, égalité exclue) en plus d'être accessible depuis integration_sha : attribuer la suppression à base_sha — où le fichier existe encore — est refusé (fenêtre base < commit ≤ integration). Le chemin deleted_in_commit hérite de la même fenêtre via le contrôle deleted_in_commit/integration. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_longrun.py::test_l5_3_006_application_commit_at_base_is_refused ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-007",
+    "status": "FIXED",
+    "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+    "test": "tests/test_repairs_vh_longrun.py::test_l5_3_007_neutral_preamble_cannot_mask_final_failures",
+    "note": "re.finditer remplace re.search : TOUTE occurrence de « N failed »/« N error » non nulle refuse le reçu — un préambule '0 failed, 0 errors' ne masque plus un résumé final '1 failed, 1 error, 12 passed'. Le compteur passed prend le max de toutes les occurrences. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_longrun.py::test_l5_3_007_neutral_preamble_cannot_mask_final_failures ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-008",
+    "status": "FIXED",
+    "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+    "test": "tests/test_repairs_vh_longrun.py::test_l5_3_008_notinledger_entry_cannot_authorize_new_file",
+    "note": "declared_new n'est alimenté que par les entrées dont la clé (subsystem, file) appartient au LEDGER GELÉ : une entrée NotInLedger n'autorise plus surprise.py, qui ressort en « undeclared new file(s) added outside any ledger decision ». Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_longrun.py::test_l5_3_008_notinledger_entry_cannot_authorize_new_file ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-010",
+    "status": "FIXED",
+    "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+    "test": "tests/test_repairs_vh_longrun.py::test_l5_3_010_min_runs_applies_without_require_validated",
+    "note": "--min-runs s'applique au nombre total d'enregistrements même sans --require-validated : un seul fichier avec --min-runs 100 est refusé (le CLI n'affiche plus « PASS: 1 records »). Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_longrun.py::test_l5_3_010_min_runs_applies_without_require_validated ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-011",
+    "status": "FIXED",
+    "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+    "test": "tests/test_repairs_vh_longrun.py::test_l5_3_011_contradictory_validated_records_are_refused",
+    "note": "validated=True n'est compté que s'il est COHÉRENT avec ses propres preuves : validator_verdict ACCEPTED/PASS/VALIDATED, tests.exit_code=0, product_e2e.exit_code=0 — trois enregistrements REJECTED/exit_code=1 sont refusés explicitement (« a self-declared validation is not a validated run »). Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_longrun.py::test_l5_3_011_contradictory_validated_records_are_refused ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels. Complément : codes de sortie strictement entiers ; False et 0.0 ne sont pas des codes observés valides."
+  },
+  {
+    "id": "L6_bin_lib_products_1-016",
+    "status": "FIXED",
+    "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+    "test": "tests/test_repairs_vh_bin.py::test_l6_1_016_usage_error_rc_is_not_a_kill",
+    "note": "run_proof (prove_red_factory.py:198) ne classe KILLED qu'un rc pytest == 1 (échec d'assertion) : usage error 4, no tests collected 5, interrupted 2, internal error 3 sont SURVIVED avec raison explicite — une suite cassée ou un test inexistant n'exécute aucune assertion, ce n'est pas une mutation tuée. Le résultat porte returncode + reason. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_bin.py::test_l6_1_016_usage_error_rc_is_not_a_kill ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels. Complément : rc=1 doit être accompagné d’un rapport JUnit avec failure de test et aucune error de setup/teardown ; une fixture cassée ne tue pas la mutation (test résiduel rouge puis vert)."
+  },
+  {
+    "id": "L6_bin_lib_products_1-017",
+    "status": "FIXED",
+    "commit": "e7832a5996dee4eddd900fc367e00fc066ab9d4f",
+    "test": "tests/test_repairs_vh_bin.py::test_l6_1_017_receipt_exit_code_confronted_to_real_process_rc",
+    "note": "verify_runtime (receipt.py:198) confronte receipt.exit_code au returncode RÉEL du processus oracle : un oracle qui écrit exit_code=0 puis sort rc=7 est refusé (INVALID_REVIEW explicite) — plus de z_runtime_sha ni d'événement runtime_verified pour un run qui a échoué. Reproduction exécute le vrai Factory.verify_runtime sur un git repo jetable. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_bin.py::test_l6_1_017_receipt_exit_code_confronted_to_real_process_rc ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L6_bin_lib_products_1-019",
+    "status": "FIXED",
+    "commit": "e7832a5996dee4eddd900fc367e00fc066ab9d4f",
+    "test": "tests/test_repairs_vh_bin.py::test_l6_1_019_capability_id_mismatch_is_cross_scope",
+    "note": "capability_id (obligatoire dans REQUIRED_FIELDS mais absent de la boucle de comparaison) est désormais confronté à expected : un reçu OTHER pour une capacité EXPECTED de la même mission reçoit REJECT_CROSS_SCOPE, comme campaign/project/mission/attempt. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_bin.py::test_l6_1_019_capability_id_mismatch_is_cross_scope ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L6_bin_lib_products_1-034",
+    "status": "FIXED",
+    "commit": "e7832a5996dee4eddd900fc367e00fc066ab9d4f",
+    "test": "tests/test_repairs_vh_bin.py::test_l6_1_034_old_pass_cannot_mask_newer_dirty_regression",
+    "note": "_check_regression_clean (long_run_supervisor.py:83) s'arrête au PREMIER événement de régression en partant du plus récent : le dernier verdict décide seul. Un ancien FULL_REGRESSION_PASS ne masque plus un REGRESSION_IMPROVED_929_931 récent à failed>0 ; absence d'événement ⇒ False (fail-closed). 54 tests publics supervisor/runtime_receipt/cto_loop/stop_gate verts. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_bin.py::test_l6_1_034_old_pass_cannot_mask_newer_dirty_regression ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L6_bin_lib_products_1-035",
+    "status": "WONTFIX",
+    "commit": "e7832a5996dee4eddd900fc367e00fc066ab9d4f",
+    "test": "tests/test_repairs_vh_bin.py::test_l6_1_035_wontfix_demonstration",
+    "note": "Le code cité n'existe plus : le reshape (commit e54dacb30, décision REPLACE du ledger) a remplacé les 302 lignes du gate advisory par un wrapper déléguant à factory_v2/authority_gate.IndependentValidator qui EXÉCUTE le test_command du contrat gelé (rc observé). Le test démontre le défaut d'alors inaccessible : un reçu porteur d'une preuve product_e2e déclarative et sans contrat gelé rend INCOMPLETE (fail-closed) — aucune lecture de product_e2e.json ni de booléen de reçu, donc aucun PASS 'old' à réutiliser pour 'new'. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_bin.py::test_l6_1_035_wontfix_demonstration ; baseline 178ba6e1f : PASS (défaut absent) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L6_bin_lib_products_2-018",
+    "status": "FIXED",
+    "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+    "test": "tests/test_repairs_vh_products.py::test_l6_2_018_current_other_milestone_never_auto_starts",
+    "note": "Le gate d'auto-start (twitter_radar_long_run.py) est fail-closed : le lancement n'a lieu que si la cible EST le jalon courant, ou courant indéterminé ET cible non complétée (next-open). long_run_ready=true + current_milestone=OTHER sans complétion => refus documenté (return None) au lieu de lancer. Le chemin cible-courante passe toujours (test positif). Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_products.py::test_l6_2_018_current_other_milestone_never_auto_starts ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels. Complément : courant absent ne suffit plus ; le jalon prochain est lu dans ROADMAP, sinon refus. Cible déjà complétée toujours refusée."
+  },
+  {
+    "id": "L6_bin_lib_products_2-019",
+    "status": "FIXED",
+    "commit": "fdf865185a9a4a41c90f77cd58ad8db10eecbec6",
+    "test": "tests/test_repairs_vh_products.py::test_l6_2_019_status_fail_is_refused",
+    "note": "assert_twitter_radar_long_run_pass exige status==PASS (le message TIMEOUT historique est conservé pour ce cas précis, test public intact) et, avec fault_injection, un crash OBSERVÉ — restarted=True sans crashed=True est refusé (« a claimed restart »). Un FAIL avec 3 jalons, 2 engines et un artefact lève désormais. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_products.py::test_l6_2_019_status_fail_is_refused ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L6_bin_lib_products_2-024",
+    "status": "FIXED",
+    "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+    "test": "tests/test_repairs_vh_products.py::test_l6_2_024_global_words_without_per_item_pairs_fail",
+    "note": "verify_owner_feedback_iteration exige une paire avant/après PAR ITEM : la clé slug de chaque item cochée doit apparaître sur des lignes avant ET après du README, et chaque image référencée doit exister à HEAD (git cat-file). Une recherche globale des mots avec zéro capture échoue (FEEDBACK_ITEM_WITHOUT_BEFORE_AFTER). Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_products.py::test_l6_2_024_global_words_without_per_item_pairs_fail ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels. Complément : chaque groupe avant/après doit contenir au moins une référence d’image ; les lignes de mots sans images sont refusées (rouge→vert)."
+  },
+  {
+    "id": "L6_bin_lib_products_2-025",
+    "status": "FIXED",
+    "commit": "fdf865185a9a4a41c90f77cd58ad8db10eecbec6",
+    "test": "tests/test_repairs_vh_products.py::test_l6_2_025_exporter_producing_no_page_fails",
+    "note": "Une page kols_<handle>.html absente est un Unmet (KOL_PAGE_MISSING) : un exporter qui sort rc=0 sans produire aucun HTML ne fait plus passer verify_kol_profile pour un compte évalué — exit 0 sans sortie n'est pas un portrait. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_products.py::test_l6_2_025_exporter_producing_no_page_fails ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L6_bin_lib_products_2-026",
+    "status": "FIXED",
+    "commit": "fdf865185a9a4a41c90f77cd58ad8db10eecbec6",
+    "test": "tests/test_repairs_vh_products.py::test_l6_2_026_single_old_quote_is_not_2y_coverage",
+    "note": "covered_2y exige la fenêtre (first ≤ as_of-700j) ET la récence (last ≥ as_of-14j) : une seule cote du 1er janvier 2024 sans aucune séance récente est manquante, et status=OK lève STATUS_OK_WITHOUT_2Y avec la fenêtre réelle [first..last]. Une série profonde ET fraîche passe toujours. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_products.py::test_l6_2_026_single_old_quote_is_not_2y_coverage ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L6_bin_lib_products_2-028",
+    "status": "FIXED",
+    "commit": "fdf865185a9a4a41c90f77cd58ad8db10eecbec6",
+    "test": "tests/test_repairs_vh_products.py::test_l6_2_028_lifecycle_flip_in_artifact_is_refused",
+    "note": "verify_tr_kol compare désormais le lifecycle de chaque compte (MONITORED→REJECTED refusé) ET les graphes de découverte discovered_outside / discovery_from_qualified_kols à la recomputation — un candidat fictif hors corpus est refusé. L'artifact honnête (= recomputation exacte) passe toujours (tests positifs + 60 tests publics produits). Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_products.py::test_l6_2_028_lifecycle_flip_in_artifact_is_refused ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  },
+  {
+    "id": "L6_bin_lib_products_2-029",
+    "status": "FIXED",
+    "commit": "fdf865185a9a4a41c90f77cd58ad8db10eecbec6",
+    "test": "tests/test_repairs_vh_products.py::test_l6_2_029_duplicated_episodes_in_artifact_are_refused",
+    "note": "verify_tr_call refuse les doublons : la longueur réelle de episodes doit égaler le nombre de clés distinctes (account, ticker, thesis) — le dict par clé n'efface plus silencieusement une liste dupliquée qui continuait de satisfaire episode_count et la comparaison par clé. Revalidation Codex synchrone : python3 -m pytest -q --tb=short -p no:cacheprovider tests/test_repairs_vh_products.py::test_l6_2_029_duplicated_episodes_in_artifact_are_refused ; baseline 178ba6e1f : FAIL (défaut reproduit avant correctif) ; voir SESSION_VERIFY_HARDENING_EVIDENCE.json pour les commandes groupées et codes réels."
+  }
+]

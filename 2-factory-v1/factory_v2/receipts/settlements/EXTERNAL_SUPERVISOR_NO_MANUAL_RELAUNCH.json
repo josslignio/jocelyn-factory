@@ -1,0 +1,52 @@
+{
+  "authority_hashes": {
+    "roadmap": "fbd6a8a73db76fa9bf42c224b311bcae69f487ecb074c3063d80a9cf6f879f12",
+    "spec": "2ac7e8f706456ad7e0cdee1fca03be562a76d742ff8ecc3867a5dbf29ae885c9",
+    "strategy": "42d768f10752fd0a46501d062ac5c9955ba38eade2a15d46d87b8bd353590249"
+  },
+  "base_sha": "33038974da6602e1b5c0c1ac87b5460bbd0f6aa6",
+  "binding_sol_reject": "d0bff136743cd84be4c6ad7ba200dad1ecc4d51f",
+  "candidate_sha": "2d51d491aab618d8151a9460c5dfb7ce3cc8ac8d",
+  "contract": {
+    "frozen_at": "2026-09-09T05:42:22Z",
+    "id": "96b41ce1b7a0c2bc8f0d1dcc",
+    "path": "projects/factory/validation_contracts/ext_supervisor_containment_frozen.json"
+  },
+  "evidence": {
+    "active_verify": [
+      {
+        "command": "python3 -m pytest tests/test_external_supervisor_proof.py tests/test_verifier_external_supervisor.py -q",
+        "observed_at": "see gate response",
+        "output": "targeted suite in detached exact-SHA worktree",
+        "rc": 0
+      }
+    ],
+    "backfill": true,
+    "backfilled_from": "backfilled from durable untracked evidence (gate responses under .context/glm-primary-overnight/reviews, live PROJECT_STATE notes, per-machine validation-job receipts, full-suite logs under .context/glm-primary-overnight)",
+    "full_suite": {
+      "command": "full suite in detached worktree",
+      "counts": "1617 passed, 4 skipped",
+      "duration_s": 977.0,
+      "rc": 0,
+      "sha": "2d51d491",
+      "validation_key": "2179ae132febb80ec589ecde"
+    },
+    "gate": {
+      "note": "gate6 ACCEPT x3 (reviewer ran tests+verifiers live); safe-clear v2 hardening landed later at 6780fb75",
+      "response_context": "gate response (untracked .context reviews dir)",
+      "reviewer": "claude-sonnet-5",
+      "rounds": 1,
+      "verdict": "ACCEPT"
+    }
+  },
+  "honest_residual": [
+    "production factoryd install deferred (isolated launchd namespace proof only)",
+    "safe-clear v1 text bypass closed at 6780fb75 (Sol R1)",
+    "boundary is state-dir scoped (Sol R6) — credentials/egress outside it not observed"
+  ],
+  "milestone": "EXTERNAL_SUPERVISOR_NO_MANUAL_RELAUNCH",
+  "project": "factory",
+  "recorded_at": "2026-09-09T09:09:12Z",
+  "schema": "settlements/v1",
+  "settled_at": "2026-09-09"
+}

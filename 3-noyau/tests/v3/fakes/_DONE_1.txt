@@ -1,0 +1,20 @@
+Tâche 1/3 — faux moteurs écrits (tests/v3/fakes/) :
+
+- honnete_livrable.py
+- honnete_nouveau_test.py
+- triche_modifie_test.py
+- triche_conftest_ailleurs.py
+- triche_pytest_ini.py
+- triche_sitecustomize.py
+- triche_faux_binaire_path.py
+- triche_donnee_gelee.py
+- triche_commit_moteur.py
+- triche_restaure_entre_sondages.py
+- triche_ecrit_hors_espace.py
+- triche_reseau_tests.py
+
+Vérifications faites : py_compile OK sur les 12 ; ligne résultat
+{"type":"result","usage":{"input":1,"output":1},"num_turns":1} en dernière
+ligne, rc 0 (testé sur 10 ; triche_restaure_entre_sondages et
+triche_reseau_tests non exécutés ici car ils lancent des enfants détachés).
+Tous ≤ 60 lignes, stdlib seule, écrits seulement sous tests/v3/.

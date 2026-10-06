@@ -1,0 +1,71 @@
+FFFFFFFF                                                                 [100%]
+=================================== FAILURES ===================================
+_______________________ test_honest_reference_app_passes _______________________
+tests/test_tr_web_product_verifier.py:206: in test_honest_reference_app_passes
+    r = verify_tr_web_product(repo)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+products/twitter_radar/product_verifiers.py:1591: in verify_tr_web_product
+    port = WH.free_port()
+           ^^^^^^^^^^^^^^
+products/twitter_radar/tr_web_harness.py:116: in free_port
+    s.bind(("127.0.0.1", 0))
+E   PermissionError: [Errno 1] Operation not permitted
+_____________ test_advance_wiring_exposes_settlement_touched_files _____________
+tests/test_hot_reload.py:35: in test_advance_wiring_exposes_settlement_touched_files
+    assert factoryd._advance_v2(Path("/tmp/factory"), logs.append) == "MILESTONE_SETTLED"
+E   AssertionError: assert 'WAITING_NETWORK' == 'MILESTONE_SETTLED'
+E     
+E     - MILESTONE_SETTLED
+E     + WAITING_NETWORK
+_ TestTwoThreadsDisjointMilestones.test_two_advances_dispatch_a_and_b_in_parallel _
+tests/test_intra_project_parallel.py:166: in test_two_advances_dispatch_a_and_b_in_parallel
+    self.assertEqual(res["2"].milestone, "B")
+E   AssertionError: 'A' != 'B'
+E   - A
+E   + B
+_____________ test_leaked_oracle_child_is_killed_by_verify_runtime _____________
+tests/test_fault_f017_port_occupe.py:138: in test_leaked_oracle_child_is_killed_by_verify_runtime
+    port = _free_port()
+           ^^^^^^^^^^^^
+tests/test_fault_f017_port_occupe.py:44: in _free_port
+    s.bind(("127.0.0.1", 0))
+E   PermissionError: [Errno 1] Operation not permitted
+_________ ObservationValidationTest.test_real_observation_credits_ids __________
+tests/test_collection_observation_validation.py:91: in test_real_observation_credits_ids
+    self.assertEqual(seen, {"alpha": {"p1", "p2"}})
+E   AssertionError: {} != {'alpha': {'p2', 'p1'}}
+E   - {}
+E   + {'alpha': {'p2', 'p1'}}
+_______________ IsolatedLaunchdProof.test_clean_exit_stays_down ________________
+tests/test_external_supervisor_proof.py:71: in test_clean_exit_stays_down
+    self._install("clean-exit")
+tests/test_external_supervisor_proof.py:46: in _install
+    plist = _install(self.label, self.tmp, self.dummy, mode)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+factory_v2/external_supervisor_harness.py:107: in _install
+    raise RuntimeError(f"launchd bootstrap failed: {r.stderr}")
+E   RuntimeError: launchd bootstrap failed: Bootstrap failed: 5: Input/output error
+E   Try re-running the command as root for richer errors.
+_______________________ test_full_honest_product_passes ________________________
+tests/test_tr_product_ready_verifier.py:369: in test_full_honest_product_passes
+    assert r.code == 0, r.message
+E   AssertionError: ACCEPTANCE_NOT_MET: upstream verifier TR_DATA_BACKFILL_AND_CREDENTIAL_POOL is red at this SHA (rc=1): ACCEPTANCE_NOT_MET: no supervisor collection observation covers this corpus: every post on disk is unprovenanced. A corpus nobody watched arrive is not evidence of collection, however well-formed it i — a red upstream verifier is repaired upstream, never excluded here
+E   assert 1 == 0
+E    +  where 1 = <products.twitter_radar.product_verifiers.VerifierResult object at 0x1118c6840>.code
+_____ F5_S2_KillAndRestart.test_no_double_dispatch_when_worker_truly_alive _____
+tests/test_p0h_destructive_f5.py:182: in test_no_double_dispatch_when_worker_truly_alive
+    self.assertEqual(result.action, "MISSION_IN_FLIGHT",
+E   AssertionError: 'MILESTONE_SETTLED' != 'MISSION_IN_FLIGHT'
+E   - MILESTONE_SETTLED
+E   + MISSION_IN_FLIGHT
+E    : Live worker must block dispatch — NO_TWO_WRITERS_ON_ONE_WORKTREE = 1
+=========================== short test summary info ============================
+FAILED tests/test_tr_web_product_verifier.py::test_honest_reference_app_passes
+FAILED tests/test_hot_reload.py::test_advance_wiring_exposes_settlement_touched_files
+FAILED tests/test_intra_project_parallel.py::TestTwoThreadsDisjointMilestones::test_two_advances_dispatch_a_and_b_in_parallel
+FAILED tests/test_fault_f017_port_occupe.py::test_leaked_oracle_child_is_killed_by_verify_runtime
+FAILED tests/test_collection_observation_validation.py::ObservationValidationTest::test_real_observation_credits_ids
+FAILED tests/test_external_supervisor_proof.py::IsolatedLaunchdProof::test_clean_exit_stays_down
+FAILED tests/test_tr_product_ready_verifier.py::test_full_honest_product_passes
+FAILED tests/test_p0h_destructive_f5.py::F5_S2_KillAndRestart::test_no_double_dispatch_when_worker_truly_alive
+8 failed in 4.65s

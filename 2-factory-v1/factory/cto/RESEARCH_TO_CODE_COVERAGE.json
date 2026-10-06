@@ -1,0 +1,172 @@
+{
+  "schema": "research-to-code-coverage/v1",
+  "produced_at": "2026-09-06T11:20:00Z",
+  "authority": "CTO004 will maintain this via ContextCompiler; CTO000B will formally audit it",
+  "note": "Maps every external research finding (competitor, OSS, paper) to implementation status. Gap = found but not yet implemented OR not explicitly rejected.",
+
+  "entries": [
+    {
+      "source": "OpenHands",
+      "pattern": "Controller + persistent State + EventStream",
+      "why_useful": "Durable supervisor that survives restarts, owns mission lifecycle",
+      "decision": "ADOPT",
+      "our_component": "factoryd + SupervisorState",
+      "paths": ["factory/bin/factoryd.py", "factory/lib/supervisor_state.py"],
+      "status": "IMPLEMENTED",
+      "tests": ["tests/test_supervisor.py (27 tests)"],
+      "qualified_sha": "d6398b21",
+      "gap": null
+    },
+    {
+      "source": "LangGraph",
+      "pattern": "Durable execution / checkpoints / recovery after kill-9",
+      "why_useful": "Worker kill must not lose work — state persists to disk",
+      "decision": "ADOPT",
+      "our_component": "CTO002B restart recovery + supervisor_state.json on-disk",
+      "paths": ["factory/lib/supervisor_state.py", "factory/bin/factoryd.py"],
+      "status": "IMPLEMENTED",
+      "tests": ["tests/test_supervisor.py::RestartRecovery*"],
+      "qualified_sha": "d6398b21",
+      "gap": null
+    },
+    {
+      "source": "LangGraph",
+      "pattern": "Stall-aware durable workflow / progress detection",
+      "why_useful": "Process alive ≠ making progress — need real progress signals",
+      "decision": "ADOPT",
+      "our_component": "F005 ProgressWatchdog",
+      "paths": ["factory/lib/progress_watchdog.py"],
+      "status": "IMPLEMENTED",
+      "tests": ["tests/test_stall_recovery.py (7 tests)"],
+      "qualified_sha": null,
+      "gap": "SOAK_6H qualification pending (not yet a qualified SHA)"
+    },
+    {
+      "source": "AutoGen / Agent Framework",
+      "pattern": "Event-driven multi-agent orchestration",
+      "why_useful": "Agents react to events, not polling; CTO loop driven by CTO_EVENTS",
+      "decision": "ADOPT",
+      "our_component": "CTO_EVENTS.jsonl + factoryd event emission + cto_planner",
+      "paths": ["factory/cto/CTO_EVENTS.jsonl", "factory/bin/cto_planner.py", "factory/bin/factoryd.py"],
+      "status": "IMPLEMENTED",
+      "tests": ["tests/test_cto_loop.py"],
+      "qualified_sha": "d6398b21",
+      "gap": null
+    },
+    {
+      "source": "SWE-agent",
+      "pattern": "Optimized agent-computer interface / concise execution loop",
+      "why_useful": "Agent receives focused context + task, not noise",
+      "decision": "ADAPT",
+      "our_component": "CTO004 ContextCompiler",
+      "paths": ["factory/lib/context_compiler.py"],
+      "status": "IN_PROGRESS",
+      "tests": ["tests/test_context_injection.py"],
+      "qualified_sha": null,
+      "gap": "CTO004 building now (mission active). Unblocked after F005 ACCEPTED."
+    },
+    {
+      "source": "git worktrees (git core)",
+      "pattern": "Isolated working trees per agent — no cross-contamination",
+      "why_useful": "4 parallel writers need isolation to avoid merge conflicts",
+      "decision": "ADOPT",
+      "our_component": "F002 WorktreeManager + F003 dispatcher integration",
+      "paths": ["factory/lib/worktree_manager.py", "factory/bin/dispatcher_v3.py"],
+      "status": "IMPLEMENTED",
+      "tests": ["tests/test_worktree_manager.py (8 tests)", "tests/test_dispatcher_worktree.py (6 tests)"],
+      "qualified_sha": "d6398b21",
+      "gap": null
+    },
+    {
+      "source": "statsmodels (OSS)",
+      "pattern": "OLS market model for abnormal returns (AR/CAR)",
+      "why_useful": "eventstudy rejected (GPL-3.0). statsmodels: BSD, proven, OLS directly",
+      "decision": "ADOPT",
+      "our_component": "XR03 AbnormalReturnsEngine",
+      "paths": ["research/xr03_abnormal_returns.py"],
+      "status": "IMPLEMENTED",
+      "tests": ["XR03_RECEIPT.json verdict=ACCEPTED"],
+      "qualified_sha": null,
+      "gap": "Twitter repo, not factory repo — no stop_gate qualification"
+    },
+    {
+      "source": "NetworkX (OSS)",
+      "pattern": "Graph analytics for social network analysis",
+      "why_useful": "Account relationship graph, PageRank, community detection",
+      "decision": "ADOPT",
+      "our_component": "XR02 social graph engine",
+      "paths": ["research/xr02_social_graph.py"],
+      "status": "IMPLEMENTED",
+      "tests": ["XR02 ACCEPTED 8/8 tests"],
+      "qualified_sha": null,
+      "gap": "Twitter repo — qualification tracked separately"
+    },
+    {
+      "source": "purgedcv (OSS)",
+      "pattern": "Purged k-fold cross-validation for financial time series",
+      "why_useful": "Prevents lookahead bias in OOS validation",
+      "decision": "ADOPT_PENDING_API_VERIFY",
+      "our_component": "XR05 OOS validation",
+      "paths": ["research/xr05_oos_validation.py (planned)"],
+      "status": "PLANNED",
+      "tests": null,
+      "qualified_sha": null,
+      "gap": "XR01 flagged: API not identical to paper — needs verification before use"
+    },
+    {
+      "source": "Bailey PSR/DSR/PBO (paper)",
+      "pattern": "Probabilistic Sharpe Ratio / Deflated SR / Probability of Backtest Overfitting",
+      "why_useful": "Statistical credibility: performance positive + statistically valid",
+      "decision": "ADOPT",
+      "our_component": "XR06 statistical confidence",
+      "paths": ["research/xr06_statistical_confidence.py (planned)"],
+      "status": "PLANNED",
+      "tests": null,
+      "qualified_sha": null,
+      "gap": "Queued after XR05"
+    },
+    {
+      "source": "fcntl.flock (POSIX)",
+      "pattern": "Atomic file mutations via exclusive file lock",
+      "why_useful": "4 parallel workers writing CandidateRegistry without corruption",
+      "decision": "ADOPT",
+      "our_component": "F004 CandidateRegistry",
+      "paths": ["factory/lib/candidate_registry.py"],
+      "status": "IMPLEMENTED",
+      "tests": ["tests/test_candidate_lifecycle.py (25 tests, 10 concurrent writers)"],
+      "qualified_sha": "dcee0f22",
+      "gap": null
+    },
+    {
+      "source": "eventstudy (OSS)",
+      "pattern": "Event study framework",
+      "why_useful": "Initial candidate for AR/CAR",
+      "decision": "REJECT",
+      "our_component": "N/A",
+      "paths": [],
+      "status": "REJECTED",
+      "tests": null,
+      "qualified_sha": null,
+      "gap": null,
+      "rejection_reason": "GPL-3.0 — incompatible license. XR01 finding → ADR007. Replaced by statsmodels OLS."
+    }
+  ],
+
+  "summary": {
+    "total_entries": 12,
+    "implemented": 8,
+    "in_progress": 1,
+    "planned": 2,
+    "planned_frozen": 0,
+    "rejected": 1,
+    "gaps_open": 3
+  },
+
+  "open_gaps": [
+    "F005 ProgressWatchdog: IMPLEMENTED but unqualified — SOAK_6H pending",
+    "CTO004 ContextCompiler: IN_PROGRESS — active mission",
+    "purgedcv API: ADOPT_PENDING_API_VERIFY — must validate before XR05"
+  ],
+
+  "counter_audit_status": "PENDING — CTO000B scheduled after F005+SOAK_6H to formally close audit"
+}

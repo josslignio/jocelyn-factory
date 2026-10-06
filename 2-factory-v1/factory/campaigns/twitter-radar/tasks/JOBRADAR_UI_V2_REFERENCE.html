@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JobRadar · UI V2 · par JOÃO.AI</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(160deg,#0b0e1a,#12172e 55%,#1a1440);min-height:100vh;color:#e8eaf0;font:13.5px -apple-system,"Helvetica Neue",sans-serif;padding-bottom:60px}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.3;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22/><feColorMatrix values=%220 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0%22/></filter><rect width=%22120%22 height=%22120%22 filter=%22url(%23n)%22/></svg>')}
+  .top{display:flex;align-items:center;gap:14px;padding:16px 26px;border-bottom:1px solid rgba(255,255,255,.07);position:relative;z-index:2}
+  .brand{font-weight:800;font-size:19px;letter-spacing:.5px}
+  .brand b{color:#6ea8ff}.brand span{color:#8b93a8;font-weight:600;font-size:12px;margin-left:8px}
+  .spacer{flex:1}
+  .refresh{font-size:12px;color:#8b93a8}
+  .btn{background:linear-gradient(120deg,#6ea8ff,#c96eff);color:#fff;font-weight:800;font-size:12.5px;border-radius:10px;padding:8px 16px;border:none;cursor:pointer}
+  .stats{display:flex;gap:14px;padding:18px 26px;position:relative;z-index:2;flex-wrap:wrap}
+  .stat{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 18px;min-width:150px}
+  .stat .n{font-size:24px;font-weight:800}
+  .stat .l{font-size:11px;color:#8b93a8;margin-top:2px}
+  .stat.good .n{color:#3ddc85}.stat.warn .n{color:#ffb454}.stat.info .n{color:#6ea8ff}
+  .pipe{display:flex;gap:8px;padding:0 26px 14px;position:relative;z-index:2;font-size:11.5px;color:#8b93a8;align-items:center;flex-wrap:wrap}
+  .stage{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:5px 13px}
+  .stage b{color:#e8eaf0}
+  .arrow{opacity:.4}
+  .wrap{display:flex;gap:18px;padding:4px 26px;position:relative;z-index:2;align-items:flex-start}
+  .list{flex:1;display:flex;flex-direction:column;gap:12px;min-width:0}
+  .secttl{font-size:11px;font-weight:800;letter-spacing:1px;color:#8b93a8;margin:6px 0 2px}
+  .card{background:rgba(13,15,26,.72);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:16px 18px;display:flex;gap:16px;transition:.15s;backdrop-filter:blur(8px)}
+  .card:hover{border-color:rgba(110,168,255,.45);transform:translateY(-1px)}
+  .score{flex:none;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;position:relative}
+  .score i{position:absolute;inset:4px;background:#12162a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal}
+  .body{flex:1;min-width:0}
+  .jtitle{font-size:15px;font-weight:800;margin-bottom:1px}
+  .jco{font-size:12.5px;color:#8b93a8;margin-bottom:8px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+  .chip{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:12px;border:1px solid}
+  .c-geo{color:#3ddc85;border-color:rgba(61,220,133,.4);background:rgba(61,220,133,.07)}
+  .c-fresh{color:#6ea8ff;border-color:rgba(110,168,255,.4);background:rgba(110,168,255,.07)}
+  .c-src{color:#c9a7ff;border-color:rgba(201,167,255,.4);background:rgba(201,167,255,.07)}
+  .c-fam{color:#ffb454;border-color:rgba(255,180,84,.4);background:rgba(255,180,84,.07)}
+  .c-warn{color:#ff8a8a;border-color:rgba(255,138,138,.45);background:rgba(255,138,138,.08)}
+  .why{font-size:12px;color:#b9c2d4;line-height:1.5;margin-bottom:10px}
+  .why b{color:#e8eaf0}
+  .acts{display:flex;gap:8px;align-items:center}
+  .a1{background:linear-gradient(120deg,#6ea8ff,#c96eff);color:#fff;font-weight:800;font-size:11.5px;border-radius:9px;padding:6px 13px;border:none;cursor:pointer}
+  .a2{background:none;border:1px solid rgba(255,255,255,.16);color:#cfd6e4;font-size:11.5px;border-radius:9px;padding:6px 12px;text-decoration:none;display:inline-block}
+  .a3{background:none;border:none;color:#8b93a8;font-size:11.5px;cursor:pointer}
+  .mr{border-left:3px solid #ffb454}
+  .panel{width:340px;flex:none;background:rgba(13,15,26,.75);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:18px;backdrop-filter:blur(8px);position:sticky;top:14px}
+  .panel h3{margin:0 0 3px;font-size:15px}
+  .panel .co{color:#8b93a8;font-size:12px;margin-bottom:12px}
+  .kv{display:flex;justify-content:space-between;font-size:12px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .kv span:first-child{color:#8b93a8}
+  .ok{color:#3ddc85}.warn2{color:#ffb454}
+  .panel .sub{font-size:11px;font-weight:800;letter-spacing:.8px;color:#8b93a8;margin:14px 0 6px}
+  .match{font-size:12px;line-height:1.6}
+  .match li{margin-bottom:3px}
+  .pkg{margin-top:14px;background:rgba(61,220,133,.07);border:1px solid rgba(61,220,133,.3);border-radius:12px;padding:11px 13px;font-size:12px}
+  .pkg b{color:#3ddc85}
+  .note{padding:16px 26px;color:#8b93a8;font-size:12px;position:relative;z-index:2;line-height:1.6;max-width:900px}
+</style></head><body>
+<div id="app" style="padding:26px;color:#8b93a8">Chargement du dashboard…</div>
+<script>
+let JOBRADAR_TOKEN = '';
+(function(){
+  const m = /token=([^&]+)/.exec(location.hash);
+  if(m) JOBRADAR_TOKEN = decodeURIComponent(m[1]);
+  if(window.history && history.replaceState) history.replaceState(null, '', location.pathname + location.search);
+})();
+async function api(path, payload){
+  const r = await fetch(path, {method:'POST', headers:{'Content-Type':'application/json',
+    'X-JobRadar-Token': JOBRADAR_TOKEN}, body: JSON.stringify(payload)});
+  return r.json();
+}
+async function downloadArtifact(url, fallbackName){
+  try {
+    const r = await fetch(url, {headers:{'X-JobRadar-Token': JOBRADAR_TOKEN}});
+    if(!r.ok){ alert('téléchargement refusé (' + r.status + ')'); return false; }
+    const cd = r.headers.get('Content-Disposition') || '';
+    const m = /filename="([^"]+)"/.exec(cd);
+    const blob = await r.blob();
+    const objUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = objUrl; a.download = m ? m[1] : fallbackName;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(objUrl), 4000);
+  } catch(e) { alert('erreur téléchargement: ' + e); }
+  return false;
+}
+function setStatus(btn, txt, disabled){ btn.textContent = txt; btn.disabled = !!disabled; }
+function keyOf(btn){ const c = btn.closest('.card'); return c ? c.dataset.key : ''; }
+function companyOf(btn){ const c = btn.closest('.card'); return c ? (c.dataset.company||'') : ''; }
+async function genPackage(btn, kind){
+  const key = keyOf(btn), company = companyOf(btn);
+  if(kind==='package' && !confirm("Discipline — 1 candidature active max par entreprise.\n"
+     + "Générer pour « "+company+" » engage son unique slot. Ashby : 3 applies/60j, no re-apply 180j.\n\n"
+     + "Confirmer la génération pour "+company+" ?")) return false;
+  const old = btn.textContent; setStatus(btn, '⏳ génération en cours…', true);
+  try {
+    const res = await api('/api/generate', {key, kind});
+    if(res.ok){
+      const acts = btn.parentElement;
+      setStatus(btn, (kind==='cv'?'CV':kind==='letter'?'Lettre':'Package')+' prêt ✓'+(res.anti_fake_all_pass?'':' ⚠'), true);
+      if(res.open){ res.open.forEach(u=>{ const b=document.createElement('button'); b.className='a2';
+        const isLetter = u.includes('kind=letter');
+        b.textContent = 'Télécharger ' + (isLetter?'lettre':'CV') + ' ↓';
+        b.onclick = () => downloadArtifact(u, isLetter?'Lettre.pdf':'CV.pdf');
+        acts.appendChild(b); }); }
+    } else { setStatus(btn, '⚠ échec', false); btn.textContent=old; alert(res.error||'échec'); }
+  } catch(e) { setStatus(btn, old, false); alert('erreur: '+e); }
+  return false;
+}
+async function dismissCard(btn){
+  const res = await api('/api/dismiss', {key: keyOf(btn)});
+  if(res.ok){ const card = btn.closest('.card'); card.style.transition='.3s'; card.style.opacity='0';
+    setTimeout(()=>{ boot(); }, 350); }
+  return false;
+}
+async function undismiss(btn){
+  const res = await api('/api/undismiss', {key: keyOf(btn)});
+  if(res.ok){ boot(); }
+  return false;
+}
+async function markApplied(btn){
+  const notes = prompt("Note (optionnel) pour le suivi de cette candidature :", "") || "";
+  const res = await api('/api/applied', {key: keyOf(btn), notes});
+  if(res.ok){ setStatus(btn, '✅ postulé — dans Suivi', true); btn.style.color='#3ddc85'; }
+  return false;
+}
+function sortCards(mode){
+  const list = document.getElementById('toplist'); if(!list) return;
+  const cards = Array.from(list.querySelectorAll('.card'));
+  const val = c => mode==='salary' ? +c.dataset.salary : mode==='fresh' ? -(+c.dataset.fresh) : +c.dataset.score;
+  cards.sort((a,b)=> val(b)-val(a)).forEach(c=>list.appendChild(c));
+}
+async function advanceStage(btn, stage){
+  const res = await api('/api/status_update', {key: btn.dataset.key, stage});
+  if(res.ok){ boot(); }
+  return false;
+}
+async function applyAssist(btn){
+  if(!confirm("🚀 Apply Assist — préremplissage assisté.\n\nUn navigateur VISIBLE va s'ouvrir sur la "
+     + "page de candidature officielle et remplir les champs depuis ton package + ledger. Le bot ne "
+     + "clique JAMAIS Submit — tu vérifies et soumets toi-même.\n\nLancer ?")) return false;
+  const old = btn.textContent; setStatus(btn, '⏳ préremplissage…', true);
+  const res = await api('/api/apply_assist', {key: keyOf(btn)});
+  setStatus(btn, res.ok ? '🚀 navigateur ouvert — à toi de vérifier + Submit' : '⚠ échec', !res.ok ? false : true);
+  if(!res.ok) btn.textContent = old;
+  return false;
+}
+async function reclassify(btn, verdict){
+  const res = await api('/api/reclassify', {key: keyOf(btn), verdict});
+  if(res.ok){ const card = btn.closest('.card');
+    card.querySelector('.acts')?.insertAdjacentHTML('beforeend',
+      ' <span style="color:'+(verdict==='confirm_eligible'?'#3ddc85':'#ff8a8a')+';font-size:11px">'
+      +(verdict==='confirm_eligible'?'✓ confirmé éligible':'✗ rejeté')+' (au prochain rebuild)</span>');
+    btn.disabled=true; }
+  return false;
+}
+// CV-SEC-CORE V2.2 FIX-D (CA21-P1-4) — boot() is the ONE authenticated
+// refresh path, callable repeatedly (initial load AND every normal in-app
+// action below), never a `location.reload()` / full navigation. The #app
+// wrapper is never replaced (innerHTML, not outerHTML) so it stays a valid
+// target for every later call. NORMAL_IN_APP_ACTIONS_PRESERVE_TOKEN=true:
+// dismiss/undismiss/status-update all call boot() instead of reloading, so
+// the in-memory JOBRADAR_TOKEN survives every one of them.
+// MANUAL_BROWSER_REFRESH=REOPEN_LAUNCH_URL_REQUIRED: a real browser refresh
+// (F5 / Cmd-R) is a full navigation this code cannot intercept — the URL
+// fragment was already stripped by history.replaceState() at first load, so
+// JOBRADAR_TOKEN is genuinely empty afterward and boot() falls into the
+// branch below, which shows the exact instruction to reopen the launch URL.
+// TOKEN_PERSISTED_IN_BROWSER_STORAGE=false: the token is NEVER written to
+// sessionStorage/localStorage/a cookie — memory-only by design, so it does
+// NOT and must NOT be claimed to survive a manual refresh.
+async function boot(){
+  const app = document.getElementById('app');
+  if(!app) return;
+  if(!JOBRADAR_TOKEN){
+    app.removeAttribute('style');
+    app.innerHTML = '<p style="padding:26px;color:#ff8a8a">Session expirée — le jeton est volontairement '
+      + 'gardé en mémoire seulement (jamais dans le navigateur) et a été perdu au rechargement. '
+      + 'Rouvre l\'URL affichée au démarrage du serveur (contient #token=...) pour te reconnecter.</p>';
+    return;
+  }
+  try {
+    const r = await fetch('/api/dashboard-html', {headers:{'X-JobRadar-Token': JOBRADAR_TOKEN}});
+    if(!r.ok){ app.innerHTML = '<p style="padding:26px;color:#ff8a8a">Non autorisé (token invalide).</p>'; return; }
+    app.removeAttribute('style');
+    app.innerHTML = await r.text();
+  } catch(e) { app.innerHTML = '<p style="padding:26px;color:#ff8a8a">Erreur de chargement.</p>'; }
+}
+boot();
+</script>
+</body></html>

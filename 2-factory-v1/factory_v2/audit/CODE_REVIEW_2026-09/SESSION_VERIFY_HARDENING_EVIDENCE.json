@@ -1,0 +1,1917 @@
+{
+  "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+  "code_sha": "db79e4768a47e23eab95e0cab414c07fb5ade32d",
+  "outcome": "PARTIAL",
+  "original_run": {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "-m",
+      "pytest",
+      "-q",
+      "--tb=short",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml=/tmp/vh-original-results.xml",
+      "tests/test_repairs_vh_dispatcher.py::test_l3_007_ineffective_repair_escalates_t3_instead_of_spec_conflict",
+      "tests/test_repairs_vh_review.py::test_l4_010_tool_output_is_never_a_verdict",
+      "tests/test_repairs_vh_gates.py::test_l5_1_001_imports_only_without_calls_fails_gate",
+      "tests/test_repairs_vh_gates.py::test_l5_1_002_ungated_ctx_runner_in_stage_module_fails",
+      "tests/test_repairs_vh_gates.py::test_l5_1_031_gate_under_if_false_does_not_count",
+      "tests/test_repairs_vh_truth.py::test_l5_1_010_digest_covers_effective_verifiers_not_only_the_shim",
+      "tests/test_repairs_vh_truth.py::test_l5_1_023_pinned_sha_must_match_actual_head",
+      "tests/test_repairs_vh_runners.py::test_l5_2_004_freshness_probe_requires_observed_change",
+      "tests/test_repairs_vh_runners.py::test_l5_2_010_rc1_wrapper_printing_passed_is_not_pass",
+      "tests/test_repairs_vh_runners.py::test_l5_2_018_collect_only_after_every_pytest_token",
+      "tests/test_repairs_vh_judges.py::test_l5_2_020_negative_settlements_and_null_level_a_fail",
+      "tests/test_repairs_vh_judges.py::test_l5_2_022_no_injected_outcome_is_not_a_pass",
+      "tests/test_repairs_vh_judges.py::test_l5_2_023_twenty_copies_of_one_handle_fail",
+      "tests/test_repairs_vh_judges.py::test_l5_2_024_printed_human_go_is_recounted",
+      "tests/test_repairs_vh_judges.py::test_l5_2_026_stage_mentioned_only_in_comment_is_not_wired",
+      "tests/test_repairs_vh_judges.py::test_l5_2_027_restarts_recomputed_without_home_log",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_001_same_milestone_three_times_is_not_three",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_002_long_run_milestones_must_be_in_timeline",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_003_zero_digests_are_refused",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_005_parse_long_run_requires_distinct_milestones",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_006_application_commit_at_base_is_refused",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_007_neutral_preamble_cannot_mask_final_failures",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_008_notinledger_entry_cannot_authorize_new_file",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_010_min_runs_applies_without_require_validated",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_011_contradictory_validated_records_are_refused",
+      "tests/test_repairs_vh_bin.py::test_l6_1_016_usage_error_rc_is_not_a_kill",
+      "tests/test_repairs_vh_bin.py::test_l6_1_017_receipt_exit_code_confronted_to_real_process_rc",
+      "tests/test_repairs_vh_bin.py::test_l6_1_019_capability_id_mismatch_is_cross_scope",
+      "tests/test_repairs_vh_bin.py::test_l6_1_034_old_pass_cannot_mask_newer_dirty_regression",
+      "tests/test_repairs_vh_bin.py::test_l6_1_035_wontfix_demonstration",
+      "tests/test_repairs_vh_products.py::test_l6_2_018_current_other_milestone_never_auto_starts",
+      "tests/test_repairs_vh_products.py::test_l6_2_019_status_fail_is_refused",
+      "tests/test_repairs_vh_products.py::test_l6_2_024_global_words_without_per_item_pairs_fail",
+      "tests/test_repairs_vh_products.py::test_l6_2_025_exporter_producing_no_page_fails",
+      "tests/test_repairs_vh_products.py::test_l6_2_026_single_old_quote_is_not_2y_coverage",
+      "tests/test_repairs_vh_products.py::test_l6_2_028_lifecycle_flip_in_artifact_is_refused",
+      "tests/test_repairs_vh_products.py::test_l6_2_029_duplicated_episodes_in_artifact_are_refused"
+    ],
+    "cwd": "/tmp/vh-original-178ba6e1f",
+    "baseline": "178ba6e1f",
+    "rc": 1
+  },
+  "checks": [
+    {
+      "id": "L3-007",
+      "status": "FIXED",
+      "commit": "94ba55d73be747a879f19511205e19b45599007e",
+      "test": "tests/test_repairs_vh_dispatcher.py::test_l3_007_ineffective_repair_escalates_t3_instead_of_spec_conflict",
+      "original_location": {
+        "file": "factory/bin/dispatcher_v3.py",
+        "line": 2456,
+        "function": "dispatch_v3",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 3358,
+        "window": [
+          3355,
+          3361
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory/bin/dispatcher_v3.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    if detect_spec_test_conflict(test_out_1, test_out_2):"
+        ],
+        "grep_rc": 0,
+        "grep_output": "3358:    if detect_spec_test_conflict(test_out_1, test_out_2):"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: ineffective repair mislabelled SPEC_TEST_CONFLICT (steps=['build_glm', 'factory_capture', 'candidate_capture_gate', 'test_1', 'repair_glm', 'factory_capture', 'candidate_capture_gate', 'test_2'])\nassert 'SPEC_TEST_CONFLICT' != 'SPEC_TEST_CONFLICT'",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L4_resilience_review-010",
+      "status": "FIXED",
+      "commit": "1c78627305440d221d0400929cbe6f12cc81af9d",
+      "test": "tests/test_repairs_vh_review.py::test_l4_010_tool_output_is_never_a_verdict",
+      "original_location": {
+        "file": "factory_v2/review_dispatch.py",
+        "line": 289,
+        "function": "_extract_verdict",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 305,
+        "window": [
+          302,
+          308
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/review_dispatch.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    spoken = _agent_text_lines(text)"
+        ],
+        "grep_rc": 0,
+        "grep_output": "305:    spoken = _agent_text_lines(text)"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: Codex transcript with only a command_execution displaying ACCEPT must not become an ACCEPT verdict\nassert 'ACCEPT' == 'ERROR'\n  \n  - ERROR\n  + ACCEPT",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-001",
+      "status": "FIXED",
+      "commit": "069a4def0eb30fdf4e872cb312c26bc16ecb109d",
+      "test": "tests/test_repairs_vh_gates.py::test_l5_1_001_imports_only_without_calls_fails_gate",
+      "original_location": {
+        "file": "factory_v2/_a1a6_gate.py",
+        "line": 42,
+        "function": "audit_cell_reachable_from_runtime",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 73,
+        "window": [
+          70,
+          76
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/_a1a6_gate.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    seen = imports | calls"
+        ],
+        "grep_rc": 0,
+        "grep_output": "73:    seen = imports | calls"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: imports without a single call must not satisfy the A1/A6 gate (A1/A6: all three capabilities present in the production dispatch path apply=['mark_result_applied'], execute=['run_audit_cell'], trigger=['persist_audit_cell_request'])\nassert True is False",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-002",
+      "status": "FIXED",
+      "commit": "069a4def0eb30fdf4e872cb312c26bc16ecb109d",
+      "test": "tests/test_repairs_vh_gates.py::test_l5_1_002_ungated_ctx_runner_in_stage_module_fails",
+      "original_location": {
+        "file": "factory_v2/_wiring_gate.py",
+        "line": 109,
+        "function": "launch_gate_precedes_execute",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 123,
+        "window": [
+          120,
+          126
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/_wiring_gate.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    tree = ast.parse(path.read_text(encoding=\"utf-8\"))"
+        ],
+        "grep_rc": 0,
+        "grep_output": "123:    tree = ast.parse(path.read_text(encoding=\"utf-8\"))"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: ungated ctx.runner.execute in a stage module must fail the wiring gate (all 1 spending path(s) gated: recovery()@3)\nassert True is False",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-031",
+      "status": "FIXED",
+      "commit": "069a4def0eb30fdf4e872cb312c26bc16ecb109d",
+      "test": "tests/test_repairs_vh_gates.py::test_l5_1_031_gate_under_if_false_does_not_count",
+      "original_location": {
+        "file": "factory_v2/_wiring_gate.py",
+        "line": 109,
+        "function": "launch_gate_precedes_execute",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 157,
+        "window": [
+          154,
+          160
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/_wiring_gate.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "        elif min(gate_lines) >= min(exec_lines):"
+        ],
+        "grep_rc": 0,
+        "grep_output": "157:        elif min(gate_lines) >= min(exec_lines):"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: a gate under `if False:` is never executed and must not count (all 1 spending path(s) gated: dispatch()@4)\nassert True is False",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-010",
+      "status": "FIXED",
+      "commit": "ad42af456ff0ae00751113cabc5905a062c39fd9",
+      "test": "tests/test_repairs_vh_truth.py::test_l5_1_010_digest_covers_effective_verifiers_not_only_the_shim",
+      "original_location": {
+        "file": "factory_v2/capability_snapshot.py",
+        "line": 91,
+        "function": "_validator_source_sha256",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 92,
+        "window": [
+          89,
+          95
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/capability_snapshot.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    return hashlib.sha256(_head_bytes(repo, \"factory_v2/product_verifiers.py\")).hexdigest()"
+        ],
+        "grep_rc": 0,
+        "grep_output": "92:    return hashlib.sha256(_head_bytes(repo, \"factory_v2/product_verifiers.py\")).hexdigest()"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: two commits whose EFFECTIVE verifiers differ must not share the same validator digest (shim unchanged) — got 8b89978eabf693f3ff1a0b1c49ed8a4b1ab7e6aed68f77c83e77e52a12ca1a58 == 8b89978eabf693f3ff1a0b1c49ed8a4b1ab7e6aed68f77c83e77e52a12ca1a58\nassert '8b89978eabf693f3ff1a0b1c49ed8a4b1ab7e6aed68f77c83e77e52a12ca1a58' != '8b89978eabf693f3ff1a0b1c49ed8a4b1ab7e6aed68f77c83e77e52a12ca1a58'",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-023",
+      "status": "FIXED",
+      "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+      "test": "tests/test_repairs_vh_truth.py::test_l5_1_023_pinned_sha_must_match_actual_head",
+      "original_location": {
+        "file": "factory_v2/long_run_truth.py",
+        "line": 120,
+        "function": "recompute_product_e2e",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 126,
+        "window": [
+          123,
+          129
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/long_run_truth.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    \"\"\""
+        ],
+        "grep_rc": 0,
+        "grep_output": "27:    \"\"\"Typed refusal: the claim cannot be established from independent evidence.\"\"\"\n47:    \"\"\"A restart is 'recovered from the canonical brain alone' only if the supervisor\n53:    \"\"\"\n92:    \"\"\"Count owner/control inputs from supervisor-owned events inside the run window.\n96:    \"\"\"\n123:    \"\"\"Re-run the frozen product verifier at the exact dual-pinned SHAs.\n126:    \"\"\""
+      },
+      "original_result": "FAIL",
+      "original_output": "Failed: DID NOT RAISE Unproven",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-004",
+      "status": "FIXED",
+      "commit": "34b52795ef0991d76734c358152f6194426de8e3",
+      "test": "tests/test_repairs_vh_runners.py::test_l5_2_004_freshness_probe_requires_observed_change",
+      "original_location": {
+        "file": "factory_v2/run_f5_benchmark.py",
+        "line": 72,
+        "function": "_probe_context_freshness",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 79,
+        "window": [
+          76,
+          82
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/run_f5_benchmark.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "        \"auth1_hashes\": auth1.identity.as_dict(),"
+        ],
+        "grep_rc": 0,
+        "grep_output": "79:        \"auth1_hashes\": auth1.identity.as_dict(),"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: a stale cached loader survived the freshness probe: {'passed': True, 'auth1_hashes': {'project': 'p', 'strategy_sha': '21933aa92f2e8815f8b1a47e81b1243112e2c0f25b6cceaf7936e977a7713d28', 'spec_sha': '1b355baa30768cee67e2f1f9ff2d45584cb42f9413881d9104579d26cff1d2e8', 'roadmap_sha': '3d4a124b77dd78dc8c6a5fabf3dc1fe9c66f7e18d8720e10fe367500416a967f'}, 'auth2_hashes': {'project': 'p', 'strategy_sha': '21933aa92f2e8815f8b1a47e81b1243112e2c0f25b6cceaf7936e977a7713d28', 'spec_sha': '1b355baa30768cee67e2f1f9ff2d45584cb42f9413881d9104579d26cff1d2e8', 'roadmap_sha': '3d4a124b77dd78dc8c6a5fabf3dc1fe9c66f7e18d8720e10fe367500416a967f'}, 'note': 'load_authority() is stateless — same disk content = identical hashes'}\nassert True is False\n +  where True = <built-in method get of dict object at 0x106a84840>('passed')\n +    where <built-in method get of dict object at 0x106a84840> = {'passed': True, 'auth1_hashes': {'project': 'p', 'strategy_sha': '21933aa92f2e8815f8b1a47e81b1243112e2c0f25b6cceaf793...1fe9c66f7e18d8720e10fe367500416a967f'}, 'note': 'load_authority() is stateless — same disk content = identical hashes'}.get",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-010",
+      "status": "FIXED",
+      "commit": "34b52795ef0991d76734c358152f6194426de8e3",
+      "test": "tests/test_repairs_vh_exploit_context.py::test_fullsuite_settlement_uses_observed_wrapper_exit",
+      "original_location": {
+        "file": "factory_v2/settle_fullsuite.py",
+        "line": 20,
+        "function": "main",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 39,
+        "window": [
+          36,
+          42
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/settle_fullsuite.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    rc = 0 if (\"passed\" in last and \"failed\" not in last"
+        ],
+        "grep_rc": 0,
+        "grep_output": "39:    rc = 0 if (\"passed\" in last and \"failed\" not in last"
+      },
+      "original_result": "FAIL",
+      "original_output": "assert 0 == 1",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "context reproduction red-to-green verified",
+      "red_command_record": "context-original",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-018",
+      "status": "FIXED",
+      "commit": "34b52795ef0991d76734c358152f6194426de8e3",
+      "test": "tests/test_repairs_vh_runners.py::test_l5_2_018_collect_only_after_every_pytest_token",
+      "original_location": {
+        "file": "factory_v2/verifier_preflight.py",
+        "line": 103,
+        "function": "_with_collect_only",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 121,
+        "window": [
+          118,
+          124
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verifier_preflight.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    return f\"{test_command[:end]} --collect-only -q{test_command[end:]}\""
+        ],
+        "grep_rc": 0,
+        "grep_output": "121:    return f\"{test_command[:end]} --collect-only -q{test_command[end:]}\""
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: python3 -m pytest --collect-only -q tests/a.py -q && python3 -m pytest tests/b.py -q\nassert 1 == 2",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-020",
+      "status": "FIXED",
+      "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+      "test": "tests/test_repairs_vh_judges.py::test_l5_2_020_negative_settlements_and_null_level_a_fail",
+      "original_location": {
+        "file": "factory_v2/verify_audit_loop.py",
+        "line": 15,
+        "function": "main",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 48,
+        "window": [
+          45,
+          51
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_audit_loop.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    if settlements == 0:"
+        ],
+        "grep_rc": 0,
+        "grep_output": "48:    if settlements == 0:"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: arbitrary schema + null level_a entries + settlements_covered=-1 must FAIL, got rc=0 with stdout='OK: 2 Level-A checks, 1 auto-triggered Level-B events\\nOK: -1 settlements covered, human_triggered_audits=0\\n'\nassert 0 != 0\n +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178... 2 Level-A checks, 1 auto-triggered Level-B events\\nOK: -1 settlements covered, human_triggered_audits=0\\n', stderr='').returncode",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-022",
+      "status": "FIXED",
+      "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+      "test": "tests/test_repairs_vh_judges.py::test_l5_2_022_no_injected_outcome_is_not_a_pass",
+      "original_location": {
+        "file": "factory_v2/verify_controlled_long_run.py",
+        "line": 56,
+        "function": "verify_long_run",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 160,
+        "window": [
+          157,
+          163
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_controlled_long_run.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "            injected = [r for r in long_run_result.fault_records"
+        ],
+        "grep_rc": 0,
+        "grep_output": "160:            injected = [r for r in long_run_result.fault_records"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: [VerificationCheck(check='milestone_count', status='PASS', detail='reported=1 >= required=1'), VerificationCheck(check...t files: ['a.json']\"), VerificationCheck(check='fault_records_persisted', status='PASS', detail='0/1 faults injected')]\nassert 'PASS' == 'FAIL'\n  \n  - FAIL\n  + PASS",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-023",
+      "status": "FIXED",
+      "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+      "test": "tests/test_repairs_vh_judges.py::test_l5_2_023_twenty_copies_of_one_handle_fail",
+      "original_location": {
+        "file": "factory_v2/verify_cycle2_manifest.py",
+        "line": 19,
+        "function": "verify",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 40,
+        "window": [
+          37,
+          43
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_cycle2_manifest.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    for acct in accounts:"
+        ],
+        "grep_rc": 0,
+        "grep_output": "40:    for acct in accounts:"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: 20 copies of the SAME handle must not satisfy ≥20 distinct accounts (rc=0, stdout='CYCLE2_MANIFEST PASS: 20 accounts with ≥30 calls, corpus_sha=aaaaaaaaaaaa\\n')\nassert 0 != 0\n +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178....json'], returncode=0, stdout='CYCLE2_MANIFEST PASS: 20 accounts with ≥30 calls, corpus_sha=aaaaaaaaaaaa\\n', stderr='').returncode",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-024",
+      "status": "FIXED",
+      "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+      "test": "tests/test_repairs_vh_judges.py::test_l5_2_024_printed_human_go_is_recounted",
+      "original_location": {
+        "file": "factory_v2/verify_cycle2_refresh.py",
+        "line": 14,
+        "function": "main",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 58,
+        "window": [
+          55,
+          61
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_cycle2_refresh.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    print(f\"PASS: {len(refreshes)} refreshes, all distinct report_shas, HUMAN_GO=0\")"
+        ],
+        "grep_rc": 0,
+        "grep_output": "58:    print(f\"PASS: {len(refreshes)} refreshes, all distinct report_shas, HUMAN_GO=0\")"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: the qualification message must print the RECOUNTED human-gate count, not an unverified HUMAN_GO=0: 'PASS: 2 refreshes, all distinct report_shas, HUMAN_GO=0\\n'\nassert 'HUMAN_GO=1' in 'PASS: 2 refreshes, all distinct report_shas, HUMAN_GO=0\\n'\n +  where 'PASS: 2 refreshes, all distinct report_shas, HUMAN_GO=0\\n' = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178..._human_go0/cycle2.jsonl'], returncode=0, stdout='PASS: 2 refreshes, all distinct report_shas, HUMAN_GO=0\\n', stderr='').stdout",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-026",
+      "status": "FIXED",
+      "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+      "test": "tests/test_repairs_vh_judges.py::test_l5_2_026_stage_mentioned_only_in_comment_is_not_wired",
+      "original_location": {
+        "file": "factory_v2/verify_factory_hygiene.py",
+        "line": 101,
+        "function": "check_split_advance",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 137,
+        "window": [
+          134,
+          140
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_factory_hygiene.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    called = [p for p in stages if Path(p).stem in src]"
+        ],
+        "grep_rc": 0,
+        "grep_output": "137:    called = [p for p in stages if Path(p).stem in src]"
+      },
+      "original_result": "FAIL",
+      "original_output": "Failed: DID NOT RAISE Exception",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-027",
+      "status": "FIXED",
+      "commit": "a71f8ec337b419e7e5fbdf6a97cb53dc9557b933",
+      "test": "tests/test_repairs_vh_judges.py::test_l5_2_027_restarts_recomputed_without_home_log",
+      "original_location": {
+        "file": "factory_v2/verify_factory_hygiene.py",
+        "line": 278,
+        "function": "check_metrics_dashboard",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 327,
+        "window": [
+          324,
+          330
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_factory_hygiene.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    if log.is_file():"
+        ],
+        "grep_rc": 0,
+        "grep_output": "327:    if log.is_file():"
+      },
+      "original_result": "FAIL",
+      "original_output": "factory_v2.verify_factory_hygiene.Unmet: METRICS_MISMATCH: settlements/parked/loops/restarts recomputed=0/0/0/0",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-001",
+      "status": "FIXED",
+      "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+      "test": "tests/test_repairs_vh_exploit_context.py::test_distinct_milestones_with_other_evidence_proven",
+      "original_location": {
+        "file": "factory_v2/verify_long_run.py",
+        "line": 13,
+        "function": "main",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 30,
+        "window": [
+          27,
+          33
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_long_run.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    if not isinstance(settled, list) or len(settled) < 3:"
+        ],
+        "grep_rc": 0,
+        "grep_output": "30:    if not isinstance(settled, list) or len(settled) < 3:"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: assert 0 == 1\n +  where 0 = <function main at 0x1090e65c0>()\n +    where <function main at 0x1090e65c0> = <module 'factory_v2.verify_long_run' from '/private/tmp/vh-original-178ba6e1f/factory_v2/verify_long_run.py'>.main",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "context reproduction red-to-green verified",
+      "red_command_record": "context-original",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-002",
+      "status": "FIXED",
+      "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+      "test": "tests/test_repairs_vh_longrun.py::test_l5_3_002_long_run_milestones_must_be_in_timeline",
+      "original_location": {
+        "file": "factory_v2/verify_long_run_ready.py",
+        "line": 42,
+        "function": "main",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 113,
+        "window": [
+          110,
+          116
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_long_run_ready.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "        milestones = long_run.get(\"milestones_completed\") or []"
+        ],
+        "grep_rc": 0,
+        "grep_output": "113:        milestones = long_run.get(\"milestones_completed\") or []"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: long-run milestone M9 absent from the kill/restart timeline passed §D (rc=0, out='LONG_RUN_READY_VERIFIER: ALL CHECKS PASS\\n{\"integration_sha\": \"37ceb78106ec624d2ac0c8957975114bd1c6f3d1\"}\\n')\nassert 0 != 0\n +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '-m', 'factory_v2.verify_long...ONG_RUN_READY_VERIFIER: ALL CHECKS PASS\\n{\"integration_sha\": \"37ceb78106ec624d2ac0c8957975114bd1c6f3d1\"}\\n', stderr='').returncode",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-003",
+      "status": "FIXED",
+      "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+      "test": "tests/test_repairs_vh_longrun.py::test_l5_3_003_zero_digests_are_refused",
+      "original_location": {
+        "file": "factory_v2/verify_long_run_ready.py",
+        "line": 42,
+        "function": "main",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 80,
+        "window": [
+          77,
+          83
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_long_run_ready.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "                parse_kill_restart_evidence(repo / path)"
+        ],
+        "grep_rc": 0,
+        "grep_output": "80:                parse_kill_restart_evidence(repo / path)"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: all-zero pinned digests must be refused (rc=0, out='LONG_RUN_READY_VERIFIER: ALL CHECKS PASS\\n{\"integration_sha\": \"0278603ae4718d70efc29919e35f836b54ff5a0b\"}\\n')\nassert 0 != 0\n +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '-m', 'factory_v2.verify_long...ONG_RUN_READY_VERIFIER: ALL CHECKS PASS\\n{\"integration_sha\": \"0278603ae4718d70efc29919e35f836b54ff5a0b\"}\\n', stderr='').returncode",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-005",
+      "status": "FIXED",
+      "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+      "test": "tests/test_repairs_vh_longrun.py::test_l5_3_005_parse_long_run_requires_distinct_milestones",
+      "original_location": {
+        "file": "factory_v2/verify_preflight_receipt.py",
+        "line": 98,
+        "function": "parse_long_run_evidence",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 111,
+        "window": [
+          108,
+          114
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_preflight_receipt.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    if not isinstance(ms, list) or len(ms) < 3:"
+        ],
+        "grep_rc": 0,
+        "grep_output": "111:    if not isinstance(ms, list) or len(ms) < 3:"
+      },
+      "original_result": "FAIL",
+      "original_output": "Failed: DID NOT RAISE ValueError",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-006",
+      "status": "FIXED",
+      "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+      "test": "tests/test_repairs_vh_longrun.py::test_l5_3_006_application_commit_at_base_is_refused",
+      "original_location": {
+        "file": "factory_v2/verify_reshape_receipt.py",
+        "line": 225,
+        "function": "verify",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 282,
+        "window": [
+          279,
+          285
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_reshape_receipt.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "        if commit_sha != base_sha and not _is_ancestor(repo, commit_sha, integration_sha):"
+        ],
+        "grep_rc": 0,
+        "grep_output": "282:        if commit_sha != base_sha and not _is_ancestor(repo, commit_sha, integration_sha):"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: attributing the deletion to base_sha (where the file still exists) passed — only reachability from integration_sha was checked\nassert 0 != 0",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-007",
+      "status": "FIXED",
+      "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+      "test": "tests/test_repairs_vh_longrun.py::test_l5_3_007_neutral_preamble_cannot_mask_final_failures",
+      "original_location": {
+        "file": "factory_v2/verify_reshape_receipt.py",
+        "line": 225,
+        "function": "verify",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 377,
+        "window": [
+          374,
+          380
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_reshape_receipt.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    fail_match = re.search(r\"(\\d+)\\s+failed\", log_text)"
+        ],
+        "grep_rc": 0,
+        "grep_output": "377:    fail_match = re.search(r\"(\\d+)\\s+failed\", log_text)"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: a '0 failed, 0 errors' preamble masked the final '1 failed, 1 error' summary — re.search only read the first occurrence\nassert 0 != 0",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-008",
+      "status": "FIXED",
+      "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+      "test": "tests/test_repairs_vh_longrun.py::test_l5_3_008_notinledger_entry_cannot_authorize_new_file",
+      "original_location": {
+        "file": "factory_v2/verify_reshape_receipt.py",
+        "line": 225,
+        "function": "verify",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 351,
+        "window": [
+          348,
+          354
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_reshape_receipt.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    declared_new = set()"
+        ],
+        "grep_rc": 0,
+        "grep_output": "351:    declared_new = set()"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: an applied entry NOT in the frozen ledger authorized surprise.py as a declared new file\nassert 0 != 0",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-010",
+      "status": "FIXED",
+      "commit": "ce8e4f4bb1eeb54c0e620ac90e1e2916ce8c092a",
+      "test": "tests/test_repairs_vh_longrun.py::test_l5_3_010_min_runs_applies_without_require_validated",
+      "original_location": {
+        "file": "factory_v2/verify_runrecords.py",
+        "line": 22,
+        "function": "main",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 57,
+        "window": [
+          54,
+          60
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_runrecords.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    if args.require_validated and len(validated) < args.min_runs:"
+        ],
+        "grep_rc": 0,
+        "grep_output": "57:    if args.require_validated and len(validated) < args.min_runs:"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: --min-runs 100 with a single record must FAIL without --require-validated (rc=0, out=\"PASS: 1 records, 1 validated, engines=['glm']\\n\")\nassert 0 != 0\n +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178..._applies0/rr', '--min-runs', '100'], returncode=0, stdout=\"PASS: 1 records, 1 validated, engines=['glm']\\n\", stderr='').returncode",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L5_factory_v2_rest_3-011",
+      "status": "FIXED",
+      "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+      "test": "tests/test_repairs_vh_longrun.py::test_l5_3_011_contradictory_validated_records_are_refused",
+      "original_location": {
+        "file": "factory_v2/verify_runrecords.py",
+        "line": 22,
+        "function": "main",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 53,
+        "window": [
+          50,
+          56
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory_v2/verify_runrecords.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "        if r.get(\"validated\") is True:"
+        ],
+        "grep_rc": 0,
+        "grep_output": "53:        if r.get(\"validated\") is True:"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: validated=True with REJECTED/exit_code=1 must not count as validated (rc=0, out=\"PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']\\n\")\nassert 0 != 0\n +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178...-min-runs', '3'], returncode=0, stdout=\"PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']\\n\", stderr='').returncode",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_1-016",
+      "status": "FIXED",
+      "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+      "test": "tests/test_repairs_vh_bin.py::test_l6_1_016_usage_error_rc_is_not_a_kill",
+      "original_location": {
+        "file": "factory/bin/prove_red_factory.py",
+        "line": 178,
+        "function": "run_proof",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 198,
+        "window": [
+          195,
+          201
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory/bin/prove_red_factory.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "        killed = cp.returncode != 0"
+        ],
+        "grep_rc": 0,
+        "grep_output": "198:        killed = cp.returncode != 0"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: a pytest usage error (rc=4, no assertion ran) counted as KILLED — only a real assertion failure may kill\nassert 'KILLED' == 'SURVIVED'\n  \n  - SURVIVED\n  + KILLED",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_1-017",
+      "status": "FIXED",
+      "commit": "e7832a5996dee4eddd900fc367e00fc066ab9d4f",
+      "test": "tests/test_repairs_vh_bin.py::test_l6_1_017_receipt_exit_code_confronted_to_real_process_rc",
+      "original_location": {
+        "file": "factory/bin/receipt.py",
+        "line": 137,
+        "function": "verify_runtime",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 198,
+        "window": [
+          195,
+          201
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory/bin/receipt.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "            oracle_returncode=proc.returncode"
+        ],
+        "grep_rc": 0,
+        "grep_output": "198:            oracle_returncode=proc.returncode"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: an oracle writing exit_code=0 then exiting rc=7 was recorded as verified (z_runtime_sha/runtime_verified event)",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_1-019",
+      "status": "FIXED",
+      "commit": "e7832a5996dee4eddd900fc367e00fc066ab9d4f",
+      "test": "tests/test_repairs_vh_bin.py::test_l6_1_019_capability_id_mismatch_is_cross_scope",
+      "original_location": {
+        "file": "factory/bin/runtime_receipt.py",
+        "line": 61,
+        "function": "validate",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 79,
+        "window": [
+          76,
+          82
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory/bin/runtime_receipt.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    for key in (\"campaign_id\", \"project_id\", \"mission_id\", \"attempt_id\", \"candidate_sha\","
+        ],
+        "grep_rc": 0,
+        "grep_output": "79:    for key in (\"campaign_id\", \"project_id\", \"mission_id\", \"attempt_id\", \"candidate_sha\","
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: []\nassert False\n +  where False = any(<generator object test_l6_1_019_capability_id_mismatch_is_cross_scope.<locals>.<genexpr> at 0x10688f780>)",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_1-034",
+      "status": "FIXED",
+      "commit": "e7832a5996dee4eddd900fc367e00fc066ab9d4f",
+      "test": "tests/test_repairs_vh_bin.py::test_l6_1_034_old_pass_cannot_mask_newer_dirty_regression",
+      "original_location": {
+        "file": "factory/lib/long_run_supervisor.py",
+        "line": 77,
+        "function": "_check_regression_clean",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 83,
+        "window": [
+          80,
+          86
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:factory/lib/long_run_supervisor.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "            if isinstance(failed, int) and failed == 0:"
+        ],
+        "grep_rc": 0,
+        "grep_output": "83:            if isinstance(failed, int) and failed == 0:"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: an OLD FULL_REGRESSION_PASS masked a NEWER non-clean regression event\nassert True is False\n +  where True = <function _check_regression_clean at 0x106ed4cc0>([{'event': 'FULL_REGRESSION_PASS', 'failed': 0}, {'event': 'REGRESSION_IMPROVED_929_931', 'failed': 2}])\n +    where <function _check_regression_clean at 0x106ed4cc0> = <module 'lrs_vh' from '/private/tmp/vh-original-178ba6e1f/factory/lib/long_run_supervisor.py'>._check_regression_clean",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_1-035",
+      "status": "WONTFIX",
+      "commit": "e7832a5996dee4eddd900fc367e00fc066ab9d4f",
+      "test": "tests/test_repairs_vh_bin.py::test_l6_1_035_wontfix_demonstration",
+      "original_location": {
+        "file": "factory/lib/milestone_controller.py",
+        "audit_line": 282,
+        "note": "Fonction historique supprimée avant baseline ; WONTFIX démontré."
+      },
+      "original_result": "PASS",
+      "original_output": "",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_2-018",
+      "status": "FIXED",
+      "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+      "test": "tests/test_repairs_vh_products.py::test_l6_2_018_current_other_milestone_never_auto_starts",
+      "original_location": {
+        "file": "products/twitter_radar/twitter_radar_long_run.py",
+        "line": 207,
+        "function": "auto_start_twitter_radar_if_ready",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 245,
+        "window": [
+          242,
+          248
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:products/twitter_radar/twitter_radar_long_run.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    if (current != \"FOUNDATIONAL_LONG_RUN_TWITTER_RADAR\""
+        ],
+        "grep_rc": 0,
+        "grep_output": "245:    if (current != \"FOUNDATIONAL_LONG_RUN_TWITTER_RADAR\""
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: long_run_ready=True with current_milestone=OTHER (target neither current nor next-open) launched the long run: TwitterRadarLongRunResult(status='FAIL', phase8_sha='', milestones_completed=[], engines_active_peak=0, crashed=False, restarted=False, artifacts=[], fault_records=[], started_at='2026-09-20T10:05:34Z', completed_at='2026-09-20T10:05:34Z', evidence_path='')\nassert TwitterRadarLongRunResult(status='FAIL', phase8_sha='', milestones_completed=[], engines_active_peak=0, crashed=False,...tifacts=[], fault_records=[], started_at='2026-09-20T10:05:34Z', completed_at='2026-09-20T10:05:34Z', evidence_path='') is None",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_2-019",
+      "status": "FIXED",
+      "commit": "fdf865185a9a4a41c90f77cd58ad8db10eecbec6",
+      "test": "tests/test_repairs_vh_products.py::test_l6_2_019_status_fail_is_refused",
+      "original_location": {
+        "file": "products/twitter_radar/twitter_radar_long_run.py",
+        "line": 182,
+        "function": "assert_twitter_radar_long_run_pass",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 186,
+        "window": [
+          183,
+          189
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:products/twitter_radar/twitter_radar_long_run.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    if result.status == \"TIMEOUT\":"
+        ],
+        "grep_rc": 0,
+        "grep_output": "186:    if result.status == \"TIMEOUT\":"
+      },
+      "original_result": "FAIL",
+      "original_output": "Failed: DID NOT RAISE TwitterRadarLongRunFailed",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_2-024",
+      "status": "FIXED",
+      "commit": "86eb24d5a2c0fb82d8dd2e6ec0c3242c2984e482",
+      "test": "tests/test_repairs_vh_products.py::test_l6_2_024_global_words_without_per_item_pairs_fail",
+      "original_location": {
+        "file": "products/twitter_radar/tr_presentation_verifiers.py",
+        "line": 797,
+        "function": "verify_owner_feedback_iteration",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 811,
+        "window": [
+          808,
+          814
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:products/twitter_radar/tr_presentation_verifiers.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "        if \"avant\" not in readme.lower() or \"après\" not in readme.lower() and \"apres\" not in readme.lower():"
+        ],
+        "grep_rc": 0,
+        "grep_output": "811:        if \"avant\" not in readme.lower() or \"après\" not in readme.lower() and \"apres\" not in readme.lower():"
+      },
+      "original_result": "FAIL",
+      "original_output": "Failed: DID NOT RAISE Unmet",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_2-025",
+      "status": "FIXED",
+      "commit": "fdf865185a9a4a41c90f77cd58ad8db10eecbec6",
+      "test": "tests/test_repairs_vh_products.py::test_l6_2_025_exporter_producing_no_page_fails",
+      "original_location": {
+        "file": "products/twitter_radar/tr_presentation_verifiers.py",
+        "line": 689,
+        "function": "verify_kol_profile",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 729,
+        "window": [
+          726,
+          732
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:products/twitter_radar/tr_presentation_verifiers.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "            if page.is_file() and not re.search(r\"qui c.est\", \" \".join(_parse(page).parts), re.I):"
+        ],
+        "grep_rc": 0,
+        "grep_output": "729:            if page.is_file() and not re.search(r\"qui c.est\", \" \".join(_parse(page).parts), re.I):"
+      },
+      "original_result": "FAIL",
+      "original_output": "Failed: DID NOT RAISE Unmet",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_2-026",
+      "status": "FIXED",
+      "commit": "fdf865185a9a4a41c90f77cd58ad8db10eecbec6",
+      "test": "tests/test_repairs_vh_products.py::test_l6_2_026_single_old_quote_is_not_2y_coverage",
+      "original_location": {
+        "file": "products/twitter_radar/tr_presentation_verifiers.py",
+        "line": 139,
+        "function": "verify_market_history",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 168,
+        "window": [
+          165,
+          171
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:products/twitter_radar/tr_presentation_verifiers.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "        if first and first <= cutoff:"
+        ],
+        "grep_rc": 0,
+        "grep_output": "168:        if first and first <= cutoff:"
+      },
+      "original_result": "FAIL",
+      "original_output": "Failed: DID NOT RAISE Unmet",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_2-028",
+      "status": "FIXED",
+      "commit": "fdf865185a9a4a41c90f77cd58ad8db10eecbec6",
+      "test": "tests/test_repairs_vh_products.py::test_l6_2_028_lifecycle_flip_in_artifact_is_refused",
+      "original_location": {
+        "file": "products/twitter_radar/product_verifiers.py",
+        "line": 516,
+        "function": "verify_tr_kol",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 563,
+        "window": [
+          560,
+          566
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:products/twitter_radar/product_verifiers.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "        if art_a.get(\"tier\", {}).get(\"tier\") != rec[\"tier\"][\"tier\"]:"
+        ],
+        "grep_rc": 0,
+        "grep_output": "563:        if art_a.get(\"tier\", {}).get(\"tier\") != rec[\"tier\"][\"tier\"]:"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: flipping every lifecycle MONITORED→REJECTED in the artifact passed the judge: <products.twitter_radar.product_verifiers.VerifierResult object at 0x106a4a7b0>\nassert 0 != 0\n +  where 0 = <products.twitter_radar.product_verifiers.VerifierResult object at 0x106a4a7b0>.code",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    },
+    {
+      "id": "L6_bin_lib_products_2-029",
+      "status": "FIXED",
+      "commit": "fdf865185a9a4a41c90f77cd58ad8db10eecbec6",
+      "test": "tests/test_repairs_vh_products.py::test_l6_2_029_duplicated_episodes_in_artifact_are_refused",
+      "original_location": {
+        "file": "products/twitter_radar/product_verifiers.py",
+        "line": 590,
+        "function": "verify_tr_call",
+        "baseline": "178ba6e1f5d1ac3172139196a587385059fe95a3",
+        "bug_line": 618,
+        "window": [
+          615,
+          621
+        ],
+        "grep_command": [
+          "git",
+          "show",
+          "178ba6e1f5d1ac3172139196a587385059fe95a3:products/twitter_radar/product_verifiers.py",
+          "|",
+          "grep",
+          "-nF",
+          "--",
+          "    art_eps = {(e.get(\"account\"), e.get(\"ticker\"), e.get(\"thesis\")): e"
+        ],
+        "grep_rc": 0,
+        "grep_output": "618:    art_eps = {(e.get(\"account\"), e.get(\"ticker\"), e.get(\"thesis\")): e"
+      },
+      "original_result": "FAIL",
+      "original_output": "AssertionError: duplicating every episode in the artifact list passed: <products.twitter_radar.product_verifiers.VerifierResult object at 0x1068eb410>\nassert 0 != 0\n +  where 0 = <products.twitter_radar.product_verifiers.VerifierResult object at 0x1068eb410>.code",
+      "current_result": "PASS; official judge rc=0 at db79e4768a47e23eab95e0cab414c07fb5ade32d",
+      "qualification": "semantic failure inspected",
+      "red_command_record": "original_run",
+      "green_command_record": "judge-final"
+    }
+  ],
+  "residual-red": {
+    "command": [
+      "python3",
+      "-m",
+      "pytest",
+      "tests/test_repairs_vh_snapshot_contract.py",
+      "tests/test_repairs_vh_residuals.py",
+      "tests/test_self_improvement.py::test_snapshot_validator_sha_matches_git_show_head",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "rc": 1,
+    "log": "/tmp/vh-residual-red.log"
+  },
+  "residual-green": {
+    "command": [
+      "python3",
+      "-m",
+      "pytest",
+      "tests/test_repairs_vh_residuals.py",
+      "tests/test_repairs_vh_snapshot_contract.py",
+      "tests/test_self_improvement.py",
+      "tests/test_repairs_vh_truth.py",
+      "tests/test_repairs_vh_bin.py",
+      "tests/test_repairs_vh_products.py",
+      "tests/test_repairs_vh_longrun.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "rc": 0,
+    "log": "/tmp/vh-residual-green.log"
+  },
+  "snapshot-only-green": {
+    "command": [
+      "python3",
+      "-m",
+      "pytest",
+      "tests/test_self_improvement.py",
+      "tests/test_repairs_vh_snapshot_contract.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "rc": 0,
+    "log": "/tmp/vh-snapshot-only-green.log"
+  },
+  "judge-final": {
+    "command": [
+      "python3",
+      "factory_v2/verify_code_review_repairs.py",
+      "--project-repo",
+      ".",
+      "--ids-file",
+      "factory/config/code_review_repair_verify_hardening_ids.json",
+      "--repairs-file",
+      "factory_v2/audit/CODE_REVIEW_2026-09/REPAIRS_VERIFY_HARDENING.json"
+    ],
+    "rc": 0,
+    "log": "/tmp/vh-judge-final.log"
+  },
+  "context-original": {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "-m",
+      "pytest",
+      "tests/test_repairs_vh_exploit_context.py",
+      "-q",
+      "--tb=short",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml=/tmp/vh-context-original.xml"
+    ],
+    "cwd": "/tmp/vh-original-178ba6e1f",
+    "rc": 1,
+    "baseline": "178ba6e1f",
+    "env": {
+      "PYTHONPATH": "/tmp/vh-original-178ba6e1f"
+    }
+  },
+  "context-green": {
+    "command": [
+      "python3",
+      "-m",
+      "pytest",
+      "tests/test_repairs_vh_exploit_context.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "rc": 0,
+    "log": "/tmp/vh-context-green.log"
+  },
+  "library-red": {
+    "command": [
+      "python3",
+      "-m",
+      "pytest",
+      "tests/test_repairs_vh_library_unknown.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "rc": 1,
+    "log": "/tmp/vh-library-red.log"
+  },
+  "library-green": {
+    "command": [
+      "python3",
+      "-m",
+      "pytest",
+      "tests/test_verify_lib.py",
+      "tests/test_repairs_vh_library_unknown.py",
+      "tests/test_repairs_vh_judges.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "rc": 0,
+    "log": "/tmp/vh-library-green.log"
+  },
+  "public": {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml=/tmp/vh-public-results.xml",
+      "--ignore=tests/test_stabilization_proof.py",
+      "--ignore=tests/test_external_supervisor_production_path.py",
+      "--ignore=tests/test_lr4_interprocess.py",
+      "--ignore=tests/test_p0_supervision_repairs.py",
+      "--ignore=tests/test_sol_ladder_fairness.py",
+      "--ignore=tests/test_telemetry_integration.py",
+      "--ignore=tests/test_tr_weekly_refresh_verifier.py"
+    ],
+    "rc": 1,
+    "duration_s": 1479.24,
+    "log": "/tmp/vh-public.log"
+  },
+  "public-exact": {
+    "command": "python3 factory_v2/verify_code_review_repairs.py --project-repo . --ids-file factory/config/code_review_repair_verify_hardening_ids.json --repairs-file factory_v2/audit/CODE_REVIEW_2026-09/REPAIRS_VERIFY_HARDENING.json && python3 -m pytest tests -q -p no:cacheprovider -x --ignore=tests/test_stabilization_proof.py --ignore=tests/test_external_supervisor_production_path.py --ignore=tests/test_lr4_interprocess.py --ignore=tests/test_p0_supervision_repairs.py --ignore=tests/test_sol_ladder_fairness.py --ignore=tests/test_telemetry_integration.py --ignore=tests/test_tr_weekly_refresh_verifier.py",
+    "code_sha": "db79e4768a47e23eab95e0cab414c07fb5ade32d",
+    "rc": 1,
+    "duration_s": 43.21,
+    "log": "/tmp/vh-public-exact.log"
+  },
+  "cli": [
+    {
+      "case": "judge-default-paths",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_code_review_repairs.py"
+      ],
+      "cwd": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/judge",
+      "rc": 0,
+      "output": "CODE_REVIEW_REPAIRS_VERIFIED: {\"ids\": 1, \"fixed\": 1, \"tests\": 1}"
+    },
+    {
+      "case": "judge-explicit-paths",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_code_review_repairs.py",
+        "--project-repo",
+        "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/judge",
+        "--ids-file",
+        "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/judge/factory/config/code_review_repair_lot1_ids.json",
+        "--repairs-file",
+        "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/judge/factory_v2/audit/CODE_REVIEW_2026-09/REPAIRS.json"
+      ],
+      "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+      "rc": 0,
+      "output": "CODE_REVIEW_REPAIRS_VERIFIED: {\"ids\": 1, \"fixed\": 1, \"tests\": 1}"
+    },
+    {
+      "case": "min-runs-default-3",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_runrecords.py",
+        "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/records"
+      ],
+      "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+      "rc": 0,
+      "output": "PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']"
+    },
+    {
+      "case": "min-runs-100",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_runrecords.py",
+        "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/records",
+        "--min-runs",
+        "100"
+      ],
+      "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+      "rc": 1,
+      "output": "FAIL: only 3 records, need ≥100"
+    },
+    {
+      "case": "require-validated-present",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_runrecords.py",
+        "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/records",
+        "--require-validated"
+      ],
+      "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+      "rc": 0,
+      "output": "PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']"
+    },
+    {
+      "case": "human-gate-flag-absent",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_cycle2_refresh.py",
+        "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/cycle2.jsonl"
+      ],
+      "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+      "rc": 0,
+      "output": "PASS: 2 refreshes, all distinct report_shas, HUMAN_GO=1 (recounted)"
+    },
+    {
+      "case": "human-gate-flag-present",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_cycle2_refresh.py",
+        "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/cycle2.jsonl",
+        "--verify-no-human-gate"
+      ],
+      "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+      "rc": 1,
+      "output": "FAIL: 1 HUMAN_GO event(s) found — routine human gate violated: {'event': 'HUMAN_GO', 'timestamp': '2026-09-14T11:00:00Z'}"
+    },
+    {
+      "case": "compound-collect-only",
+      "command": [
+        "sh",
+        "-c",
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m pytest --collect-only -q -q /var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/test_body.py && /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m pytest --collect-only -q -q /var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/test_body.py"
+      ],
+      "cwd": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az",
+      "rc": 0,
+      "output": "test_body.py: 1\n\ntest_body.py: 1"
+    },
+    {
+      "case": "pytest-without-collect-only",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/test_body.py"
+      ],
+      "cwd": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az",
+      "rc": 0,
+      "output": ".                                                                        [100%]\n1 passed in 0.23s"
+    }
+  ],
+  "logs": {
+    "original-red": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/original-red.log",
+      "sha256": "36898350c491f89cfad102a07ccf44542490119ef2cfef66d6d6069ae5d69263"
+    },
+    "context-original": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/context-original.log",
+      "sha256": "713fb75dfdf13420601ea181c42355c8983f25ca5010b43e191eee970855b3f1"
+    },
+    "context-green": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/context-green.log",
+      "sha256": "698857960888a8b7dfacbbedaa34caceac2111f4575220562fe736c8ada79c50"
+    },
+    "residual-red": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/residual-red.log",
+      "sha256": "6da4a5a86f38e4aa44b2321c89379bc4161b8b1822b3e5acab58f6b446516096"
+    },
+    "residual-green": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/residual-green.log",
+      "sha256": "060d4bdac68b0c2a00d05207f78fbf30707fbb2cb411f0317c3e9a438f939efd"
+    },
+    "snapshot-only-green": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/snapshot-only-green.log",
+      "sha256": "16ecf17a81242ae26c4b34357d13b9935d53e100d635e5e4884e145582c34b6b"
+    },
+    "library-red": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/library-red.log",
+      "sha256": "2fedaf536f8f266773eb47dffbf464318f448dad43e9ae95fa0013fdcb5c18f2"
+    },
+    "library-green": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/library-green.log",
+      "sha256": "3631f0185127c775cde31387d4dcccd6eac0e334a29e863b2f0fba6ee35f504c"
+    },
+    "targeted-final": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/targeted-final.log",
+      "sha256": "05b4120df485ad9d61e6fded26a12eafc17559779587a312a80a70a3b29902b4"
+    },
+    "judge-final": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/judge-final.log",
+      "sha256": "eef932916a75f9516775e133ee63ccf3448c3e44f60e69bfc19c97ef398290c4"
+    },
+    "baseline-public": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/baseline-public.log",
+      "sha256": "5a95b3e5a0bcc974baec56fb5850991e4100f79c63f89018fdd58c538efd8b24"
+    },
+    "baseline-exact-failure": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/baseline-exact-failure.log",
+      "sha256": "f88500709b29634c9c7976012daca8e22055a7f8235f32408cc2001911c100df"
+    },
+    "public-exact": {
+      "path": "factory_v2/audit/CODE_REVIEW_2026-09/VERIFY_HARDENING_SESSION_LOGS/public-exact.log",
+      "sha256": "56e5a9a5a096cbdfc70bba8302fd3947767aed4aa4de008bf192aa5b0e05fca4"
+    }
+  },
+  "original-red": {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "-m",
+      "pytest",
+      "-q",
+      "--tb=short",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml=/tmp/vh-original-results.xml",
+      "tests/test_repairs_vh_dispatcher.py::test_l3_007_ineffective_repair_escalates_t3_instead_of_spec_conflict",
+      "tests/test_repairs_vh_review.py::test_l4_010_tool_output_is_never_a_verdict",
+      "tests/test_repairs_vh_gates.py::test_l5_1_001_imports_only_without_calls_fails_gate",
+      "tests/test_repairs_vh_gates.py::test_l5_1_002_ungated_ctx_runner_in_stage_module_fails",
+      "tests/test_repairs_vh_gates.py::test_l5_1_031_gate_under_if_false_does_not_count",
+      "tests/test_repairs_vh_truth.py::test_l5_1_010_digest_covers_effective_verifiers_not_only_the_shim",
+      "tests/test_repairs_vh_truth.py::test_l5_1_023_pinned_sha_must_match_actual_head",
+      "tests/test_repairs_vh_runners.py::test_l5_2_004_freshness_probe_requires_observed_change",
+      "tests/test_repairs_vh_runners.py::test_l5_2_010_rc1_wrapper_printing_passed_is_not_pass",
+      "tests/test_repairs_vh_runners.py::test_l5_2_018_collect_only_after_every_pytest_token",
+      "tests/test_repairs_vh_judges.py::test_l5_2_020_negative_settlements_and_null_level_a_fail",
+      "tests/test_repairs_vh_judges.py::test_l5_2_022_no_injected_outcome_is_not_a_pass",
+      "tests/test_repairs_vh_judges.py::test_l5_2_023_twenty_copies_of_one_handle_fail",
+      "tests/test_repairs_vh_judges.py::test_l5_2_024_printed_human_go_is_recounted",
+      "tests/test_repairs_vh_judges.py::test_l5_2_026_stage_mentioned_only_in_comment_is_not_wired",
+      "tests/test_repairs_vh_judges.py::test_l5_2_027_restarts_recomputed_without_home_log",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_001_same_milestone_three_times_is_not_three",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_002_long_run_milestones_must_be_in_timeline",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_003_zero_digests_are_refused",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_005_parse_long_run_requires_distinct_milestones",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_006_application_commit_at_base_is_refused",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_007_neutral_preamble_cannot_mask_final_failures",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_008_notinledger_entry_cannot_authorize_new_file",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_010_min_runs_applies_without_require_validated",
+      "tests/test_repairs_vh_longrun.py::test_l5_3_011_contradictory_validated_records_are_refused",
+      "tests/test_repairs_vh_bin.py::test_l6_1_016_usage_error_rc_is_not_a_kill",
+      "tests/test_repairs_vh_bin.py::test_l6_1_017_receipt_exit_code_confronted_to_real_process_rc",
+      "tests/test_repairs_vh_bin.py::test_l6_1_019_capability_id_mismatch_is_cross_scope",
+      "tests/test_repairs_vh_bin.py::test_l6_1_034_old_pass_cannot_mask_newer_dirty_regression",
+      "tests/test_repairs_vh_bin.py::test_l6_1_035_wontfix_demonstration",
+      "tests/test_repairs_vh_products.py::test_l6_2_018_current_other_milestone_never_auto_starts",
+      "tests/test_repairs_vh_products.py::test_l6_2_019_status_fail_is_refused",
+      "tests/test_repairs_vh_products.py::test_l6_2_024_global_words_without_per_item_pairs_fail",
+      "tests/test_repairs_vh_products.py::test_l6_2_025_exporter_producing_no_page_fails",
+      "tests/test_repairs_vh_products.py::test_l6_2_026_single_old_quote_is_not_2y_coverage",
+      "tests/test_repairs_vh_products.py::test_l6_2_028_lifecycle_flip_in_artifact_is_refused",
+      "tests/test_repairs_vh_products.py::test_l6_2_029_duplicated_episodes_in_artifact_are_refused"
+    ],
+    "cwd": "/tmp/vh-original-178ba6e1f",
+    "baseline": "178ba6e1f",
+    "rc": 1
+  },
+  "targeted-final": {
+    "command": [
+      "python3",
+      "-m",
+      "pytest",
+      "tests/test_repairs_vh_bin.py",
+      "tests/test_repairs_vh_dispatcher.py",
+      "tests/test_repairs_vh_exploit_context.py",
+      "tests/test_repairs_vh_gates.py",
+      "tests/test_repairs_vh_judges.py",
+      "tests/test_repairs_vh_library_unknown.py",
+      "tests/test_repairs_vh_longrun.py",
+      "tests/test_repairs_vh_products.py",
+      "tests/test_repairs_vh_residuals.py",
+      "tests/test_repairs_vh_review.py",
+      "tests/test_repairs_vh_runners.py",
+      "tests/test_repairs_vh_snapshot_contract.py",
+      "tests/test_repairs_vh_truth.py",
+      "tests/test_verify_lib.py",
+      "tests/test_self_improvement.py",
+      "tests/test_review_dispatch.py",
+      "tests/test_verify_reshape_receipt.py",
+      "tests/test_runtime_receipt.py",
+      "tests/test_long_run_truth.py",
+      "tests/test_phase9_twitter_radar_long_run.py",
+      "tests/test_tr_presentation_verifiers.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "rc": 0,
+    "log": "/tmp/vh-targeted-final.log"
+  },
+  "baseline-public": {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "-m",
+      "pytest",
+      "-q",
+      "--tb=short",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml=/tmp/vh-baseline-public.xml",
+      "tests/test_p0h_destructive_f5.py::F5_S2_KillAndRestart::test_no_double_dispatch_when_worker_truly_alive",
+      "tests/test_hot_reload.py::test_advance_wiring_exposes_settlement_touched_files",
+      "tests/test_tr_web_product_verifier.py::test_honest_reference_app_passes",
+      "tests/test_tr_product_ready_verifier.py::test_full_honest_product_passes",
+      "tests/test_collection_observation_validation.py::ObservationValidationTest::test_real_observation_credits_ids",
+      "tests/test_external_supervisor_proof.py::IsolatedLaunchdProof::test_clean_exit_stays_down",
+      "tests/test_intra_project_parallel.py::TestTwoThreadsDisjointMilestones::test_two_advances_dispatch_a_and_b_in_parallel",
+      "tests/test_fault_f017_port_occupe.py::test_leaked_oracle_child_is_killed_by_verify_runtime"
+    ],
+    "cwd": "/tmp/vh-original-178ba6e1f",
+    "rc": 1,
+    "baseline": "178ba6e1f"
+  },
+  "baseline-exact-failure": {
+    "command": [
+      "python3",
+      "-m",
+      "pytest",
+      "tests/test_repairs_lot1_pool_recovery.py::test_advance_still_runs_after_host_reload_shutdown",
+      "-q",
+      "--tb=short",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "rc": 1,
+    "log": "/tmp/vh-baseline-exact-failure.log"
+  },
+  "environment": {
+    "process_identity": {
+      "error_type": "PermissionError",
+      "error": "[Errno 1] Operation not permitted: 'ps'"
+    },
+    "provider_dns": {
+      "error_type": "gaierror",
+      "error": "[Errno 8] nodename nor servname provided, or not known"
+    }
+  },
+  "public_suite": {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--junitxml=/tmp/vh-public-results.xml",
+      "--ignore=tests/test_stabilization_proof.py",
+      "--ignore=tests/test_external_supervisor_production_path.py",
+      "--ignore=tests/test_lr4_interprocess.py",
+      "--ignore=tests/test_p0_supervision_repairs.py",
+      "--ignore=tests/test_sol_ladder_fairness.py",
+      "--ignore=tests/test_telemetry_integration.py",
+      "--ignore=tests/test_tr_weekly_refresh_verifier.py"
+    ],
+    "rc": 1,
+    "duration_s": 1479.24,
+    "log": "/tmp/vh-public.log",
+    "summary": "58 failed, 3199 passed, 6 skipped, 4 subtests passed in 1478.23s",
+    "code_sha": "86eb24d5a",
+    "note": "Passage complet avant le dernier durcissement de verify_lib ; celui-ci est couvert par 183 tests ciblés et la commande publique exacte au code_sha final.",
+    "log_sha256": "ba6d433d47c78ba03a71684e34896b0a87258fc3ad5d70cb130810edd46e2b1f",
+    "failed_cases": [
+      "tests.test_portfolio_quarantine_isolation::test_quarantined_project_and_healthy_product_both_get_turns_after_restart",
+      "tests.test_p0h_destructive_f5.F5_S2_KillAndRestart::test_no_double_dispatch_when_worker_truly_alive",
+      "tests.test_hot_reload::test_advance_wiring_exposes_settlement_touched_files",
+      "tests.test_d1_final_r2_quarantine::test_r4_production_quarantine_self_repairs_through_real_factoryd",
+      "tests.test_lr2_interprocess.TestHeartbeatSurvivesFactorydKill::test_heartbeat_increases_across_factoryd_death",
+      "tests.test_s017_resume_truth::test_s017_08_worker_heartbeat_survives_factoryd_sigkill",
+      "tests.test_tr_web_product_verifier::test_filter_lying_about_rows_is_rejected",
+      "tests.test_tr_web_product_verifier::test_blanked_typed_state_is_rejected",
+      "tests.test_tr_web_product_verifier::test_incoherent_episode_is_rejected",
+      "tests.test_tr_web_product_verifier::test_opaque_score_is_rejected",
+      "tests.test_tr_web_product_verifier::test_trading_path_is_rejected",
+      "tests.test_tr_web_product_verifier::test_credential_in_page_is_rejected",
+      "tests.test_tr_web_product_verifier::test_decorative_filter_is_rejected",
+      "tests.test_tr_web_product_verifier::test_rendering_ceiling_is_rejected",
+      "tests.test_tr_web_product_verifier::test_dropped_subject_is_rejected",
+      "tests.test_tr_web_product_verifier::test_episode_missing_on_one_side_is_rejected",
+      "tests.test_tr_web_product_verifier::test_off_host_egress_is_rejected",
+      "tests.test_tr_web_product_verifier::test_missing_drilldown_is_rejected",
+      "tests.test_tr_web_product_verifier::test_page_recomputing_truth_is_rejected",
+      "tests.test_tr_web_product_verifier::test_honest_reference_app_passes",
+      "tests.test_repairs_lot1_pool_recovery::test_advance_still_runs_after_host_reload_shutdown",
+      "tests.test_fault_f017_port_occupe::test_leaked_oracle_child_is_killed_by_verify_runtime",
+      "tests.test_scale_n_benchmark::test_real_4w_run_tiny",
+      "tests.test_intra_project_parallel.TestTwoThreadsDisjointMilestones::test_two_advances_dispatch_a_and_b_in_parallel",
+      "tests.test_intra_project_parallel.TestOverlappingDeliverables::test_directory_prefix_overlap_second_waits",
+      "tests.test_intra_project_parallel.TestOverlappingDeliverables::test_same_file_second_waits",
+      "tests.test_intra_project_parallel.TestSameMissionSingleFlight::test_second_advance_same_mission_one_launch",
+      "tests.test_intra_project_parallel.TestWorkersOneDisablesAlternate::test_max_workers_one_second_waits_even_if_disjoint",
+      "tests.test_sol_r2_tr_call_closure_and_observation_forge.TestObservationForge::test_real_observed_run_credits_ids",
+      "tests.test_engine_registry::test_factoryd_sweep_kills_only_the_closed_lease_orphan",
+      "tests.test_engine_registry::test_closed_lease_flagged_and_killed",
+      "tests.test_engine_registry::test_production_killable_guards",
+      "tests.test_external_supervisor_proof.ContainmentProof::test_containment_proof_all_criteria",
+      "tests.test_external_supervisor_proof.IsolatedLaunchdProof::test_clean_exit_stays_down",
+      "tests.test_external_supervisor_proof.IsolatedLaunchdProof::test_kill_is_relaunched_by_launchd_with_new_identity",
+      "tests.test_chaos_drill::test_chaos_scenario_absorbed_without_human[RELOAD_DURING_BUILD]",
+      "tests.test_collection_observation_validation.ObservationValidationTest::test_load_observations_backward_compat_reports_validated_only",
+      "tests.test_collection_observation_validation.ObservationValidationTest::test_mixed_real_and_forged_credit_only_the_real_one",
+      "tests.test_collection_observation_validation.ObservationValidationTest::test_real_observation_credits_ids",
+      "tests.test_p1_closure_counterproofs::test_f5_heartbeat_with_matching_birth_time_is_alive",
+      "tests.test_p1_closure_counterproofs::test_f5_sidecar_writes_birth_time",
+      "tests.test_d029_b1_b2_fail_closed.TestB1OrphanReconciliationExactlyOnce::test_20_concurrent_reconcilers_append_exactly_one_observation",
+      "tests.test_factory_v2.P0D_StableEvidenceOrphanRecovery::test_advance_refuses_double_dispatch_when_worker_alive",
+      "tests.test_factory_v2.P0D_StableEvidenceOrphanRecovery::test_alive_pid_returns_true",
+      "tests.test_tr_product_ready_verifier::test_tampered_weekly_observation_blocks_product_ready",
+      "tests.test_tr_product_ready_verifier::test_broken_chain_to_weekly_receipts_is_rejected",
+      "tests.test_tr_product_ready_verifier::test_log_hash_drift_is_rejected",
+      "tests.test_tr_product_ready_verifier::test_missing_weekly_observation_blocks_product_ready",
+      "tests.test_tr_product_ready_verifier::test_distinct_supervisor_stores_pass",
+      "tests.test_tr_product_ready_verifier::test_stale_settlement_sha_is_rejected",
+      "tests.test_tr_product_ready_verifier::test_human_event_reconstructs_an_intervention",
+      "tests.test_tr_product_ready_verifier::test_restart_with_same_pid_is_rejected",
+      "tests.test_tr_product_ready_verifier::test_red_upstream_verifier_blocks_the_proof",
+      "tests.test_tr_product_ready_verifier::test_duplicated_emission_across_kill_is_rejected",
+      "tests.test_tr_product_ready_verifier::test_missing_receipt_fails",
+      "tests.test_tr_product_ready_verifier::test_full_honest_product_passes",
+      "tests.test_tr_product_ready_verifier::test_v2_receipt_pins_observed_parent_without_self_hash",
+      "tests.test_tr_product_ready_verifier::test_resume_from_memory_is_rejected"
+    ]
+  },
+  "integrity": {
+    "unchanged_public_tests": {
+      "command": [
+        "git",
+        "diff",
+        "178ba6e1f",
+        "HEAD",
+        "--diff-filter=M",
+        "--name-only",
+        "--",
+        "tests"
+      ],
+      "rc": 0,
+      "output": ""
+    },
+    "whitespace": {
+      "command": [
+        "git",
+        "diff",
+        "HEAD~3",
+        "HEAD",
+        "--check"
+      ],
+      "rc": 0,
+      "output": ""
+    },
+    "protected_authority": {
+      "command": [
+        "git",
+        "diff",
+        "--name-only",
+        "HEAD",
+        "--",
+        "**/ROADMAP.yaml",
+        "**/PROJECT_STATE.json"
+      ],
+      "rc": 0,
+      "output": ""
+    }
+  },
+  "review": {
+    "mode": "Codex synchronous review + self-review; no separate reviewer agent",
+    "diff_command": "git diff HEAD~3 HEAD; git diff 178ba6e1f HEAD",
+    "status": "BLOCKED_PUBLIC_SUITE",
+    "baseline_failures_reproduced": 9,
+    "other_public_failures_not_individually_baselined": 49
+  }
+}

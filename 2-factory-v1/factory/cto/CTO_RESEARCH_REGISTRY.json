@@ -1,0 +1,167 @@
+{
+  "schema": "cto-research-registry/v1",
+  "last_updated": "2026-09-06T20:45:00Z",
+  "note": "A research already performed must not be repeated. Check this before triggering a new research mission.",
+  "libraries": {
+    "networkx": {
+      "version": ">=3.3",
+      "license": "BSD-3-Clause",
+      "use": "account social graph — PageRank (global importance), HITS (originator vs amplifier), Louvain (independent clusters)",
+      "decision": "ADOPT",
+      "decision_date": "2026-09-06",
+      "validated_by": "XR01_OPEN_SOURCE_INTAKE — installed, stub tested, 1/4 tests green",
+      "source": "deep_research_20260906",
+      "integration_cost": "LOW — pure Python, no external deps",
+      "risks": "Louvain non-deterministic without seed — always pass seed=42",
+      "status": "ADOPTED_XR01"
+    },
+    "purgedcv": {
+      "version": "0.1.6",
+      "version_note": "SPEC HALLUCINATION CORRECTED: spec said >=0.4, max PyPI version is 0.1.6",
+      "license": "MIT",
+      "use": "OOS validation — walk-forward purging, embargo, CPCV, PSR/DSR/PBO computation",
+      "decision": "ADOPT",
+      "decision_date": "2026-09-06",
+      "validated_by": "XR01_OPEN_SOURCE_INTAKE + XR_EDGE_RESEARCH — API verified against installed 0.1.6",
+      "source": "deep_research_20260906 + Marcos López de Prado 'Advances in Financial Machine Learning'",
+      "verified_api": {
+        "PurgedKFold": "PurgedKFold(n_splits, *, prediction_times, evaluation_times, purge_horizon, embargo_fraction)",
+        "CombinatorialPurgedCV": "CombinatorialPurgedCV(n_splits, n_test_groups, ...)",
+        "PSR": "probabilistic_sharpe_ratio(returns_array, benchmark_skill) — NOT scalars. Uses raw kurtosis (normal=3.0).",
+        "DSR": "deflated_sharpe_ratio(returns, benchmark_SR, ..., bars_per_year=252) — must pass bars_per_year",
+        "PITFALL_PSR": "L015 — API takes raw returns array, not (SR,n,skew,kurt) scalars. Test vector: SR=0.1, n=100 → PSR=0.8395",
+        "PITFALL_DSR": "L016 — must pass bars_per_year=252, else DSR≈0 always"
+      },
+      "integration_cost": "MEDIUM — requires t1 column (end of investment period per observation)",
+      "test_vectors": "factory/campaigns/app007/evidence/XR_EDGE_RESEARCH/XR_EDGE_TEST_VECTORS.json",
+      "status": "ADOPTED_VERIFIED_XR01_XR_EDGE"
+    },
+    "oos-lab": {
+      "version": "latest",
+      "license": "MIT",
+      "use": "OOS validation framework — compare vs purgedcv, alternative walk-forward methods",
+      "decision": "EVALUATE_COMPARE",
+      "decision_date": "2026-09-06",
+      "validated_by": "XR01_OPEN_SOURCE_INTAKE — installed, stub tested",
+      "source": "deep_research_20260906",
+      "integration_cost": "MEDIUM",
+      "risks": "May overlap with purgedcv — evaluate before adopting both",
+      "status": "ADOPTED_XR01"
+    },
+    "eventstudy": {
+      "version": "0.1a12 (alpha only)",
+      "license": "GPL-3.0",
+      "license_note": "SPEC HALLUCINATION CORRECTED: spec said MIT, real license is GPL-3.0 (copyleft — incompatible with closed product without explicit ADR)",
+      "use": "Cumulative Abnormal Return (CAR), Average Abnormal Return (AAR), sector-adjusted event study",
+      "decision": "BLOCKED_GPL",
+      "decision_date": "2026-09-06",
+      "validated_by": "XR01_OPEN_SOURCE_INTAKE — stub runs but license blocks production adoption",
+      "source": "deep_research_20260906",
+      "key_formula": "CAR = Σ(R_actual - E[R_market_model]) over event window [t+1, t+N]",
+      "alternative": "Implement CAR on statsmodels (BSD-3-Clause) or scipy — formula is simple, no external library required",
+      "human_gate_required": null,
+      "resolution": "RESOLVED_BY_POLICY — conservative decision (statsmodels) needs no human gate. ADR007 created.",
+      "status": "REJECT_CORE_DEPENDENCY_GPL"
+    },
+    "qlib": {
+      "version": ">=0.9",
+      "license": "MIT",
+      "use": "Research pipeline framework, walk-forward backtesting, factor analysis",
+      "decision": "ADAPT_SELECTIVE",
+      "decision_date": "2026-09-06",
+      "source": "deep_research_20260906",
+      "integration_cost": "HIGH — large framework, significant setup",
+      "risks": "Overkill for current use case — use only specific components (Alpha360, walk-forward)",
+      "status": "XR01_PENDING_VALIDATION"
+    },
+    "finbert": {
+      "license": "MIT",
+      "use": "NLP financial sentiment classification",
+      "decision": "CHALLENGER_ONLY",
+      "decision_date": "2026-09-06",
+      "note": "Does NOT replace M008H POSITION_EVENT classifier. Challenger benchmark only.",
+      "status": "NOT_ADOPTED"
+    },
+    "fingpt": {
+      "license": "MIT",
+      "use": "LLM-based financial analysis",
+      "decision": "CHALLENGER_ONLY",
+      "decision_date": "2026-09-06",
+      "note": "Does NOT replace M008H POSITION_EVENT classifier. Challenger benchmark only.",
+      "status": "NOT_ADOPTED"
+    }
+  },
+  "papers": {
+    "PSR_DSR": {
+      "title": "The Probability of Backtest Overfitting",
+      "authors": "Bailey, Borwein, López de Prado, Zhu",
+      "year": 2017,
+      "key_formula": "PSR = P(SR* > SR_benchmark | SR_observed, n_obs, skew, kurt)",
+      "reference_impl": "purgedcv.PSR() — VERIFY before using",
+      "status": "XR06_PENDING"
+    },
+    "CPCV": {
+      "title": "A Robust Estimator of the Efficient Frontier",
+      "authors": "López de Prado",
+      "year": 2019,
+      "key_formula": "CombinatoricalPurgedKFold — combinatorial path generation for SR distribution",
+      "reference_impl": "purgedcv.CombinatoricalPurgedKFold",
+      "status": "XR05_PENDING"
+    }
+  },
+  "mission_decisions": {
+    "CTOK006C_REQUIRED_STATE_RESOLVER": {
+      "committed_before_code": true,
+      "committed_at": "2026-09-06T20:55:00Z",
+      "decisions": [
+        {
+          "question": "Does CTOK001's cto_kernel.py already read CTOK_CHAIN_STATE.json?",
+          "answer": "BUILD",
+          "evidence": "find . -name '*cto_kernel*' → aucun fichier cto_kernel.py dans le dépôt (seul campaigns/RUN8/harness/vnext/factory_kernel.py : zone gelée, sémantique différente, non importable dans le runtime factory). grep -rn CTOK_CHAIN_STATE factory/ --include='*.py' → lecteur unique factory/hooks/stop_gate.py:60 (liste de fichiers figés, pas de lecture de capability_states). → BUILD d'un lecteur dédié factory/lib/required_state_resolver.py avec chemin injectable (défaut <repo>/factory/cto/CTOK_CHAIN_STATE.json)."
+        },
+        {
+          "question": "Is there an existing dependency check in dispatcher_v3.py or factoryd.py?",
+          "answer": "BUILD",
+          "evidence": "grep -n dependency_mission_ids factory/bin/dispatcher_v3.py → l.273/279/288 : lu UNIQUEMENT pour l'injection de contexte (_prepare_context_package → context_compiler.compile), aucune vérification de capability_state. grep -n 'E2E_PROVEN' factory/bin/*.py factory/lib/*.py → zéro match runtime (seul CTOK_CHAIN_STATE.json contient ce vocabulaire). factoryd.py n'a ni _dispatch() ni _refill_slot() nommés ainsi — l'équivalent est la boucle de dispatch de do_poll_iteration (l.570-589 sur base 993955b4) : le point d'injection est AVANT worker = dispatch(mission_id, cs_path, run_dir) (l.582). → BUILD RequiredStateResolver + wiring gate avant dispatch, en réutilisant le mécanisme existant de skip no_plan (set + next non-bloquant) pour 'move to next in backlog'."
+        },
+        {
+          "question": "Should missing CTOK_CHAIN_STATE.json fail-closed or fail-open?",
+          "answer": "FAIL_CLOSED",
+          "evidence": "Invariant de sécurité (spec A4 : 'BLOCKED (fail-closed; do not dispatch without certainty)') + mission 'Always fail-CLOSED (security invariant)'. Registre manquant/corrompu + deps non vides → can_dispatch=False, toutes les deps dans missing_from_registry, reason=CHAIN_STATE_UNREADABLE. Cas limite deps=[] : can_dispatch=True car la formule spec (« can_dispatch = True iff both lists are empty ») le mandate et l'invariant CHILD_BASE_NOT_ACCEPTED n'est pas engagé sans deps (test_empty_deps_list_allows_dispatch)."
+        }
+      ]
+    },
+    "CTOK006B_TASK_CONTRACT_VALIDATOR": {
+      "committed_before_code": true,
+      "committed_at": "2026-09-06T20:30:00Z",
+      "decisions": [
+        {
+          "question": "Existing task-file parser (e.g. dispatcher_v3.py preflight)?",
+          "answer": "ADAPT",
+          "evidence": "factory/bin/check_task.py:47-110 OUTCOME_MARKERS + _check_task_file — substring-based, OUTCOME only, would count '## Outcome' inside a code block (fails A1). check_task stays the dispatch-time preflight (different lifecycle); the enqueue-time validator reuses the marker philosophy but anchors headings (^##s+Name$) outside fenced code blocks and requires 3 sections (## Outcome, ## Deliverables, ## Depends On)."
+        },
+        {
+          "question": "Injection point: rolling_backlog.py or factoryd.py?",
+          "answer": "ADAPT rolling_backlog.py",
+          "evidence": "rolling_backlog.py owns the queue (BacklogState.queued, append_queued, generate_next); factoryd dispatches FROM that queue — blocking at enqueue provably keeps missions out of factoryd active slots (A4). Constraint: public tests test_rolling_backlog.py (FD5_01..10, FD7_08..13) drive generate_next() with /fake/... nonexistent task_files, so enforcement there is opt-in (enforce_contract=False default preserves baseline). New strict gate: RollingBacklog.enqueue_mission() — validates before append, raises ContractViolationError, emits CTO event, increments counter."
+        },
+        {
+          "question": "Canonical ContractViolationError base class to extend?",
+          "answer": "BUILD",
+          "evidence": "grep repo-wide: only campaigns/RUN8/harness/vnext/ has a ContractViolation DATACLASS (different semantics, frozen zone, not importable in factory runtime). New exception built in factory/lib/task_contract_validator.py, carrying the ValidationResult violations list."
+        }
+      ]
+    },
+    "CTOK004_MILESTONE_PRODUCT_E2E": {
+      "committed_before_code": true,
+      "committed_at": "2026-09-06T19:05:00Z",
+      "decisions": [
+        {
+          "question": "Stale candidate conductor_milestone_controller @ 9cbf8ef7 — rebuild or adapt?",
+          "answer": "REUSE (adapt onto correct base)",
+          "evidence": "Stale candidate 9cbf8ef7 (pre-CTOK003_Q): factory/lib/milestone_controller.py + tests/test_milestone_controller.py (22 tests incl. the 5 required names) + factoryd advisory gate wiring. Code is valid and standalone (no cross-file conflicts with CTOK003_Q additions). Only adaptation work: apply onto factory/e1-probe HEAD (5aed1f2c), run fresh test suites."
+        }
+      ]
+    }
+  }
+}

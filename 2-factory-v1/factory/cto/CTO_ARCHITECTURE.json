@@ -1,0 +1,151 @@
+{
+  "schema": "cto-architecture/v1",
+  "last_updated": "2026-09-06T03:30:00Z",
+  "note": "Component registry. Check this before building any new module. Update after every mission.",
+
+  "factory": {
+    "factory.autopilot": {
+      "path": "factory/bin/autopilot.py",
+      "purpose": "Long-run loop: poll → dispatch → monitor → stop/continue",
+      "status": "QUALIFIED",
+      "owner": "FD5+FD7",
+      "inputs": ["plan_file.json"],
+      "outputs": ["evidence/", "autopilot_receipt.json"],
+      "callers": ["human CLI", "factoryd (planned CTO002)"],
+      "tech_debt": "Does not emit events for CTO loop — CTO002 will add event emission"
+    },
+    "factory.dispatcher_v3": {
+      "path": "factory/bin/dispatcher_v3.py",
+      "purpose": "Execute one mission: preflight → build → test → verdict → stop_gate",
+      "status": "QUALIFIED",
+      "owner": "FD1-FD9",
+      "inputs": ["mission plan", "task file"],
+      "outputs": ["receipt", "evidence files"],
+      "callers": ["autopilot.py"],
+      "tech_debt": "No context injection (CTO004) — agent starts without CTO global context"
+    },
+    "factory.model_router": {
+      "path": "factory/lib/model_router.py",
+      "purpose": "Route mission to Claude (spec_level=A) or GLM (spec_level=B)",
+      "status": "QUALIFIED",
+      "routing": "STATIC: A→claude, B→glm",
+      "tech_debt": "Static routing — will become dynamic in CTO006 (model performance optimizer)"
+    },
+    "factory.stop_gate": {
+      "path": "factory/hooks/stop_gate.py",
+      "purpose": "PreToolUse hook — blocks git commit if diff not in BOOKKEEPING_SAFE_PREFIXES and no qualified runtime subject",
+      "status": "QUALIFIED",
+      "safe_prefixes": ["factory/projects/", "factory/campaigns/", "memory/", "PLAN.md", "REPORT.json"],
+      "owner": "core + FD9 patches"
+    },
+    "factory.supervisor": {
+      "path": "factory/bin/factoryd.py",
+      "purpose": "Persistent supervisor daemon: start/stop/status, flock, PID file, double-fork, SIGTERM",
+      "status": "ACCEPTED_F001",
+      "tests": "tests/test_supervisor.py — 27 tests",
+      "tech_debt": "E2E autonomous chain (TEST_AUTONOMOUS_CHAIN_001) not yet proven — factoryd exists but auto-dispatch chain unvalidated",
+      "owner": "F001"
+    },
+    "factory.completion_detector": {
+      "path": "factory/lib/completion_detector.py",
+      "purpose": "is_worker_dead(pid), is_worker_stalled(pid, heartbeat_path)",
+      "status": "ACCEPTED_F001",
+      "key_invariant": "except OverflowError: return True — pid > pid_t range cannot exist"
+    },
+    "factory.backlog_refiller": {
+      "path": "factory/lib/backlog_refiller.py",
+      "purpose": "CampaignState.from_dict(), should_refill(), select_next_mission()",
+      "status": "ACCEPTED_F001",
+      "note": "Reads campaign state field 'state' (RUNNING/IDLE), not 'campaign'"
+    },
+    "factory.rolling_backlog": {
+      "path": "factory/lib/rolling_backlog.py",
+      "purpose": "H2→H1 backlog promotion, REFILL_THRESHOLD=4, REFILL_TARGET=6",
+      "status": "ACCEPTED_FD5_FD7"
+    },
+    "factory.cto_planner": {
+      "path": "factory/lib/cto_planner.py",
+      "purpose": "Persistent CTO planner — replan triggers, atomic persistence, JSONL audit trail",
+      "status": "ACCEPTED_FD8",
+      "tech_debt": "Not event-driven — CTO002 will wire it to campaign events"
+    },
+    "factory.verdict_taxonomy": {
+      "path": "factory/lib/verdict_taxonomy.py",
+      "purpose": "ACCEPTED/BLOCKED/VIOLATED/DEPENDENCY_MISSING/AUTH_REQUIRED/etc.",
+      "status": "ACCEPTED_FD3"
+    }
+  },
+
+  "twitter": {
+    "twitter.position_event": {
+      "path": "scripts/t2_rule_classifier.py",
+      "path_correction": "CTO000 AUDIT: actual path is scripts/, NOT src/joss_orchestrator/ (that path doesn't exist)",
+      "purpose": "POSITION_EVENT model — classify tweets as CALL/WATCHLIST/MENTION/OPINION",
+      "status": "ACCEPTED_M008H — FROZEN",
+      "key_invariant": "is_call(): actor==AUTHOR AND modality IN (COMMITTED,PAST) AND polarity==AFFIRMED AND source IN (DIRECT,QUOTE_TWEET)",
+      "tests": ["tests/test_position_event.py", "tests/test_human_review_v7.py"],
+      "consumers": ["thesis_engine (planned X103)", "outcome_ledger (planned X104)"],
+      "owner": "M008H",
+      "frozen": true
+    },
+    "twitter.radar": {
+      "path": "src/joss_orchestrator/radar.py",
+      "purpose": "CLI — --corpus-dir, per-account provenance, CORPUS_MISSING guard",
+      "status": "ACCEPTED_M007B",
+      "owner": "M007B"
+    },
+    "twitter.corpus": {
+      "path": "data/corpus/",
+      "purpose": "Raw posts — 10802 posts (CKCapitalxx 3600, PhotonBull 3601, RJCcapital 3601)",
+      "status": "ACCEPTED_M008A — READ-ONLY",
+      "sha256": "CORPUS_MANIFEST.json"
+    },
+    "twitter.canonical_universe": {
+      "path": "recovery/CANONICAL_ACCOUNT_UNIVERSE.csv",
+      "purpose": "6433 historical accounts with scores — canonical reference after X000C",
+      "status": "ACCEPTED_X000C",
+      "owner": "X000C"
+    },
+    "twitter.r5_scorer": {
+      "path": "scripts/r5_scoring.py",
+      "path_correction": "CTO000 AUDIT: actual path is scripts/r5_scoring.py, NOT scoring/r5_scorer.py",
+      "purpose": "Multi-criteria scoring framework",
+      "status": "RECOVERED_NEEDS_WIRING",
+      "tech_debt": "Not yet wired to M008H semantic signals — raw counts only"
+    },
+    "twitter.ledger": {
+      "path": "scripts/r5_ledger.py",
+      "path_correction": "CTO000 AUDIT: actual path is scripts/r5_ledger.py",
+      "purpose": "P&L framework",
+      "status": "RECOVERED_NEEDS_WIRING",
+      "tech_debt": "Not wired to real entry/exit signals from M008H. MFE/MAE absent."
+    },
+    "twitter.social_graph": {
+      "status": "NOT_YET_BUILT",
+      "planned": "XR02 — NetworkX PageRank/HITS/Louvain"
+    },
+    "twitter.thesis_engine": {
+      "status": "NOT_YET_BUILT",
+      "planned": "X103 — state machine OPEN→ADD→REDUCE→CLOSE per ticker per account"
+    },
+    "twitter.edge_validator": {
+      "status": "NOT_YET_BUILT",
+      "planned": "XR03-XR06 — CAR + momentum controls + OOS + PSR/DSR/PBO"
+    }
+  },
+
+  "cto_control_plane": {
+    "cto.state": {"path": "factory/cto/CTO_STATE.json", "status": "CREATED_2026-09-06"},
+    "cto.strategy": {"path": "factory/cto/CTO_STRATEGY.md", "status": "CREATED_2026-09-06"},
+    "cto.architecture": {"path": "factory/cto/CTO_ARCHITECTURE.json", "status": "CREATED_2026-09-06"},
+    "cto.decisions": {"path": "factory/cto/CTO_DECISIONS.jsonl", "status": "CREATED_2026-09-06"},
+    "cto.lessons": {"path": "factory/cto/CTO_LESSONS.jsonl", "status": "CREATED_2026-09-06"},
+    "cto.model_performance": {"path": "factory/cto/CTO_MODEL_PERFORMANCE.json", "status": "CREATED_2026-09-06"},
+    "cto.research_registry": {"path": "factory/cto/CTO_RESEARCH_REGISTRY.json", "status": "CREATED_2026-09-06"},
+    "cto.status_latest": {"path": "factory/cto/CTO_STATUS_LATEST.md", "status": "PENDING_CTO003"},
+    "cto.event_loop": {"status": "NOT_YET_BUILT", "planned": "CTO002"},
+    "cto.context_injection": {"status": "NOT_YET_BUILT", "planned": "CTO004"},
+    "cto.review_matrix": {"status": "NOT_YET_BUILT", "planned": "CTO005"},
+    "cto.research_broker": {"status": "NOT_YET_BUILT", "planned": "CTO006"}
+  }
+}

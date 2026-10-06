@@ -1,0 +1,107 @@
+[
+  {
+    "id": "L5_factory_v2_rest_1-011",
+    "status": "FIXED",
+    "commit": "62cabb4dec183d874adb4c63f6039b398bf73542",
+    "test": "tests/test_repairs_lot1_guards.py::test_cas_corrupt_ledger_does_not_reset_promotion",
+    "note": "Réparé au lot 1 (62cabb4de, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. _read_ledger réserve le ledger vide à FileNotFoundError ; un ledger présent mais illisible lève LedgerCorruptError et check_and_record_promotion refuse (la protection unique ne se réinitialise plus)."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-016",
+    "status": "FIXED",
+    "commit": "62cabb4dec183d874adb4c63f6039b398bf73542",
+    "test": "tests/test_repairs_lot1_guards.py::test_supervisor_corrupt_quarantine_stays_quarantined",
+    "note": "Réparé au lot 1 (62cabb4de, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. is_quarantined : marqueur présent mais illisible ⇒ enregistrement GLOBAL_QUARANTINE synthétique (spawn refusé) ; seul un fichier absent ou un record valide non-quarantaine retourne None."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-019",
+    "status": "FIXED",
+    "commit": "c3a7200c54cc97bd91e43cd2c3aecb26b1ec0697",
+    "test": "tests/test_repairs_lot1b_preflight.py::test_preflight_inspects_actual_lease_state",
+    "note": "Lot 1 (62cabb4de) avait rendu l'erreur de lecture FAIL mais importait un LeaseState inexistant : l'ImportError avalée rendait no_stale_lease TOUJOURS FAIL (tout démarrage refusé, bail actif jamais inspecté). Lot 1b : comparaison sur l'état chaîne \"ACTIVE\" de WorkerLease ; rouge→vert sur absent=PASS, expiré=PASS, actif=FAIL(generation), illisible=FAIL."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-002",
+    "status": "FIXED",
+    "commit": "5597202c27976d7a6552343ff4ec85ad9eac7584",
+    "test": "tests/test_repairs_lot1_run_harness.py::test_chatty_daemon_does_not_block_on_pipes",
+    "note": "Réparé au lot 1 (5597202c2, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. lancement ET redémarrage du daemon redirigés vers evidence/long_run/*.log : plus aucun PIPE jamais drainé, un daemon bavard ne bloque plus avant son jalon."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-003",
+    "status": "FIXED",
+    "commit": "5597202c27976d7a6552343ff4ec85ad9eac7584",
+    "test": "tests/test_repairs_lot1_run_harness.py::test_kill_proc_reaps_the_whole_group",
+    "note": "Réparé au lot 1 (5597202c2, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. _kill_proc tue le groupe de processus possédé (killpg, fallback PID seul) : les descendants ne survivent plus à la fin du run."
+  },
+  {
+    "id": "L6_bin_lib_products_1-006",
+    "status": "FIXED",
+    "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+    "test": "tests/test_repairs_lot1_bin_a.py::test_frozen_zone_guard_unknown_state_keeps_freeze",
+    "note": "Réparé au lot 1 (aabf3f71b, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. la levée du gel exige un état inactif EXPLICITE (IDLE/DONE/FAIL) ; absent/illisible/inconnu → CAMPAIGN_STATE_UNKNOWN, gel maintenu."
+  },
+  {
+    "id": "L6_bin_lib_products_1-027",
+    "status": "FIXED",
+    "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+    "test": "tests/test_repairs_lot1_lib.py::test_completion_detector_tolerates_truncated_receipt",
+    "note": "Réparé au lot 1 (f67153a27, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. check_mission_completion capture OSError/JSONDecodeError/UnicodeDecodeError : reçu tronqué ⇒ done=False avec verdict RECEIPT_UNREADABLE typé, la boucle de polling des autres missions continue."
+  },
+  {
+    "id": "L6_bin_lib_products_1-031",
+    "status": "FIXED",
+    "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+    "test": "tests/test_repairs_lot1_lib.py::test_convergence_gate_absent_sources_block",
+    "note": "Réparé au lot 1 (f67153a27, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. une autorité de campagne absente/illisible produit un gap P0 SOURCE_UNREADABLE (jamais is_converged=True) ; l'absence de plan par mission garde sa sémantique épinglée par la suite publique."
+  },
+  {
+    "id": "L3-004",
+    "status": "FIXED",
+    "commit": "c97cdc2f947590582a46fbd363086fddeecac343",
+    "test": "tests/test_repairs_lot1_dispatcher.py::test_l3_004_timeout_preserves_flushed_diagnostics",
+    "note": "Réparé au lot 1 (c97cdc2f9, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. TimeoutExpired : killpg puis communicate() draine stdout/stderr ; les diagnostics flushés avant le délai sont rendus, marqueur TIMEOUT conservé sur stderr."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-004",
+    "status": "FIXED",
+    "commit": "2ac58e7b84ffa8dffa2603876a200a51f0c1358b",
+    "test": "tests/test_repairs_lot1_io_authority.py::test_io_read_json_invalid_utf8_returns_none",
+    "note": "Réparé au lot 1 (2ac58e7b8, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. _read_json capture ValueError (couvre UnicodeDecodeError) : un octet UTF-8 invalide retourne None conformément au contrat."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-005",
+    "status": "FIXED",
+    "commit": "5597202c27976d7a6552343ff4ec85ad9eac7584",
+    "test": "tests/test_repairs_lot1_run_harness.py::test_human_interventions_unavailable_is_not_zero",
+    "note": "Réparé au lot 1 (5597202c2, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. _derive_human_interventions conserve les erreurs (observation_errors), observation_available=False et routine_human_interventions=None : une observation indisponible n'est plus une mesure de zéro."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-007",
+    "status": "FIXED",
+    "commit": "d9353fa9b02f740fa7082faebe1b99a498d78bfe",
+    "test": "tests/test_repairs_lot1_ledgers.py::test_runrecords_truncated_tail_keeps_valid_rows",
+    "note": "Réparé au lot 1 (d9353fa9b, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. read_runs saute les lignes JSON invalides comme les lecteurs de phases : une queue d'append interrompue ne rend plus les statistiques moteur indisponibles."
+  },
+  {
+    "id": "L6_bin_lib_products_1-036",
+    "status": "FIXED",
+    "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+    "test": "tests/test_repairs_lot1_lib.py::test_watchdog_accepts_offset_free_iso_timestamps",
+    "note": "Réparé au lot 1 (f67153a27, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. _parse_dt normalise les ISO sans fuseau en UTC (politique explicite) : plus de TypeError naive-vs-aware dans snapshot."
+  },
+  {
+    "id": "L6_bin_lib_products_2-002",
+    "status": "FIXED",
+    "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+    "test": "tests/test_repairs_lot1_lib.py::test_required_state_resolver_invalid_registry_blocks",
+    "note": "Réparé au lot 1 (f67153a27, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. contained_capabilities doit être une liste de chaînes, sinon DependencyGapResult(can_dispatch=False, reason=CHAIN_STATE_INVALID) — plus de TypeError de set()."
+  },
+  {
+    "id": "L6_bin_lib_products_2-003",
+    "status": "FIXED",
+    "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+    "test": "tests/test_repairs_lot1_lib.py::test_reuse_gate_invalid_registry_is_typed_block",
+    "note": "Réparé au lot 1 (f67153a27, ancêtre de HEAD) ; revalidé au lot 1b : exploit d'audit rejoué et échoue, test frais vert. load_registry refuse les entrées non-objets et convertit les OSError (IsADirectoryError…) en ReuseRegistryError ; check_gate_for_dispatch rend un blocked_reason typé sans lever."
+  }
+]

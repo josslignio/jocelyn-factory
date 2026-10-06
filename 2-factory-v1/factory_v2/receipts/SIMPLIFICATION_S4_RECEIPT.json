@@ -1,0 +1,13 @@
+{
+  "batch": "S4",
+  "control_sha": "2f5249abe3cab8ce80dd3ee628e190eff7ff8317",
+  "deleted_paths": [
+    "factory/lib/backlog_refiller.py"
+  ],
+  "loc_baseline": 66833,
+  "loc_delta_vs_baseline": 938,
+  "loc_now": 65895,
+  "loc_removed_measured": 61,
+  "result": "BATCH_VERIFIED",
+  "schema": "simplification-batch-receipt/v1"
+}

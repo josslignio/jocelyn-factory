@@ -1,0 +1,53 @@
+{
+ "schema": "audit-loop-receipt/v2",
+ "produced_at": "2026-09-09T21:35:19Z",
+ "milestone": "AUTOMATED_MULTI_AI_CTO_LOOP_V1",
+ "contract_id": "0a08a045b599b62ea796de35",
+ "cell_schema": "audit-cell-record/v1",
+ "trigger": {
+  "kind": "REPEATED_EQUIVALENT_FAILURE",
+  "source": "real two-phase RunRecords failure signal (2 distinct strategies, same frozen fingerprint)",
+  "failure_count": 2,
+  "strategies": [
+   "direct-join",
+   "windowed-backfill"
+  ],
+  "manual": false
+ },
+ "candidate_sha": "4a289796472b16bc2439379e0fbbdfee3ad01ae1",
+ "cell_record": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/factory_v2/receipts/audit_cells/exercise-gen10-r1-20260909T213515Z/sandbox/ctrl/factory_v2/receipts/audit_cells/6f49592a-f21f-498d-a9d5-1d7254623e7e.json",
+ "cell_id": "6f49592a-f21f-498d-a9d5-1d7254623e7e",
+ "synthesis_sha16": "d3a96437167902a4",
+ "decision": "ACCEPT_CONTINUE",
+ "fault_transitions": {
+  "ROLE_CRASH": "d1bac3af-4529-49f9-b642-89a2e6b399f7",
+  "BUDGET_EXCEEDED": "2596e328-100f-4b1f-aca8-38a89d572254",
+  "REVIEWER_REJECT": "1af25482-5566-4845-b5fe-cc2e9a817b6a",
+  "REVIEWER_QUARANTINE": "07b59de0-bb3e-4186-8ad6-a4252cf06d68",
+  "PROVIDER_EXHAUSTED": "720ff68f-ee14-47df-ae5a-e65e16d18822"
+ },
+ "probes_path": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/factory_v2/receipts/audit_cells/exercise-gen10-r1-20260909T213515Z/probes.json",
+ "checks": {
+  "capability_unknown_tool_denied": true,
+  "capability_readonly_write_denied": true,
+  "credential_leak_refused": true,
+  "single_flight_no_duplicate": true,
+  "synthesis_deterministic": true,
+  "peer_consensus_cannot_override_failed_gate": true,
+  "rounds_capped": true,
+  "position_preserved": true,
+  "challenger_read_only": true,
+  "real_role_processes": true,
+  "zero_manual": true,
+  "continuation_edges_all_branches": true,
+  "continuation_transitions_durable_bounded": true,
+  "continuation_position_preserved": true
+ },
+ "exercise_argv": [
+  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+  "-m",
+  "factory_v2.audit_cell_exercise"
+ ],
+ "wall_s": 3.58,
+ "all_checks_pass": true
+}

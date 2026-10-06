@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- LOT C17 — owner decision 2026-09-12: the real Twitter Radar weekly
+         refresh is triggered BY THE FACTORY (this schedule), not by the
+         product's own scheduler, because `factoryctl weekly-refresh-observed`
+         (factory/bin/factoryctl.py) is the only entry point that runs
+         WeeklyRefreshObservedExecutor, which alone is authorized to produce
+         and commit the weekly-refresh-observation/v2 receipts
+         TR_WEEKLY_OPERATE_V1's verifier requires.
+
+         `--scheduled-at` is deliberately OMITTED: launchd's ProgramArguments
+         is not a shell, so it cannot evaluate `$(date ...)` — factoryctl
+         itself computes the current UTC ISO instant when the flag is absent.
+
+         `--refresh-seq 2` matches the roadmap's second (poll-every-KOL,
+         commit_outputs: true) leg — the one that produces committed evidence.
+         Running refresh_seq 1 (the corpus-freezing leg) is a one-time,
+         owner-triggered operation, not part of the recurring schedule.
+
+         Only ONE weekly refresh runs at a time: factoryctl's single-flight
+         file lock (factory/run/weekly_refresh_observed.lock) refuses a
+         concurrent invocation (rc=2) rather than double-running a real,
+         network-touching refresh.
+
+         Install:  factory/launchd/install_tr_weekly_refresh.sh
+         Start now (manual, out of schedule): launchctl start com.factory.tr-weekly-refresh
+         Unload:   launchctl bootout gui/$(id -u)/com.factory.tr-weekly-refresh
+         Logs:     tail -f ~/Library/Logs/JocelynFactory/tr-weekly-refresh.stdout.log
+    -->
+
+    <key>Label</key>
+    <string>com.factory.tr-weekly-refresh</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Library/Frameworks/Python.framework/Versions/3.12/bin/python3</string>
+        <string>/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/factory/bin/factoryctl.py</string>
+        <string>weekly-refresh-observed</string>
+        <string>--project</string>
+        <string>projects/twitter-radar</string>
+        <string>--refresh-seq</string>
+        <string>2</string>
+    </array>
+
+    <!-- Weekly: every Monday 08:00 local time. -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Weekday</key>
+        <integer>1</integer>
+        <key>Hour</key>
+        <integer>8</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <!-- Not a persistent daemon: one bounded run per schedule tick, never
+         restarted on exit (success or failure) and never started at load
+         time — StartCalendarInterval alone owns when this runs. -->
+    <key>KeepAlive</key>
+    <false/>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <!-- Working directory = control-repo root so `projects/twitter-radar`
+         (--project) and factoryctl's own relative lookups resolve correctly. -->
+    <key>WorkingDirectory</key>
+    <string>/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2</string>
+
+    <!-- Persistent logs outside /tmp — survive reboots, not lost on TMPFS flush -->
+    <key>StandardOutPath</key>
+    <string>/Users/jocelyngrosjean/Library/Logs/JocelynFactory/tr-weekly-refresh.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/jocelyngrosjean/Library/Logs/JocelynFactory/tr-weekly-refresh.stderr.log</string>
+
+    <!-- Environment: PYTHONUNBUFFERED ensures log lines flush immediately.
+         PATH must include /opt/homebrew/bin (launchd does not inherit the
+         user shell PATH) and the Python Framework bin dir, where `twscrape`
+         (the real refresh script's scraper dependency) is installed
+         (`which twscrape` → /Library/Frameworks/Python.framework/Versions/3.12/bin/twscrape). -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PYTHONUNBUFFERED</key>
+        <string>1</string>
+        <key>FACTORY_ROOT</key>
+        <string>/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin:/Users/jocelyngrosjean/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>/Users/jocelyngrosjean</string>
+    </dict>
+</dict>
+</plist>

@@ -1,0 +1,63 @@
+{
+  "id": "claude",
+  "cli": "/Users/jocelyngrosjean/.local/share/claude/versions/2.1.274",
+  "argv": [
+    "claude",
+    "-p",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--model",
+    "{model}",
+    "--max-turns",
+    "{max_turns}",
+    "--max-budget-usd",
+    "{budget_usd}",
+    "--dangerously-skip-permissions",
+    "{prompt}"
+  ],
+  "defauts": {
+    "model": "claude-sonnet-5",
+    "max_turns": 80,
+    "budget_usd": 10
+  },
+  "format_sortie": "claude_stream_json",
+  "usage": {
+    "type": "result",
+    "cumul": false,
+    "champs": {
+      "input": "usage.input_tokens",
+      "cache_read": "usage.cache_read_input_tokens",
+      "cache_write": "usage.cache_creation_input_tokens",
+      "output": "usage.output_tokens",
+      "turns": "num_turns",
+      "cost_usd": "total_cost_usd"
+    }
+  },
+  "plafonds": {
+    "mecanisme": "natif",
+    "drapeaux": [
+      "--max-turns {max_turns}",
+      "--max-budget-usd {budget_usd}"
+    ]
+  },
+  "arret": {
+    "signal_1": "SIGINT",
+    "grace_s": 10,
+    "signal_2": "SIGKILL"
+  },
+  "auth": {
+    "env": [
+      "CLAUDE_CODE_OAUTH_TOKEN"
+    ]
+  },
+  "env_allowlist": [
+    "CLAUDE_CODE_OAUTH_TOKEN"
+  ],
+  "env_fixe": {
+    "CLAUDE_CONFIG_DIR": "{home}/.claude",
+    "DISABLE_AUTOUPDATER": "1",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "CLAUDE_CODE_TMPDIR": "{home}"
+  }
+}

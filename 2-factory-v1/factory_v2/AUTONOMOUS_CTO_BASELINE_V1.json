@@ -1,0 +1,117 @@
+{
+  "schema": "autonomous-cto-baseline/v2",
+  "name": "AUTONOMOUS_CTO_BASELINE_V2",
+  "frozen_at": "2026-09-07T19:30:00Z",
+  "description": "Canonical brain baseline v2 — 6 corrections applied (counter-audit 2026-09-07). FOUNDATIONAL_LONG_RUN added, Codex gated in REAL_MULTI_AI, SCALE_2 removed from final_dod, AUTHORITATIVE+CONTINUOUSLY_ENFORCED maturity levels restored, D002/D005 block FOUNDATIONAL_LONG_RUN, INSUFFICIENT_QUALIFIED_ACCOUNTS added to Twitter Radar.",
+  "supersedes": "AUTONOMOUS_CTO_BASELINE_V1 (frozen_at 2026-09-07T19:15:00Z, sha256 of manifest: see git history)",
+  "canonical_documents": {
+    "factory_strategy": {
+      "path": "projects/factory/STRATEGY.md",
+      "sha256": "307fff5d6ea74934728973e4c6abf061a8dd012c306d0496bd64f942c3fcce0c",
+      "version": "v3",
+      "key_changes_from_v2": [
+        "Politique opérationnelle permanente ajoutée (boucle, human gate policy, Level A/B audit triggers, invariants qualité)",
+        "Master Directive constitutionnelle 2026-09-07 absorbée — plus besoin de la re-coller",
+        "Note: ce cerveau porte maintenant la directive de façon durable"
+      ]
+    },
+    "factory_spec": {
+      "path": "projects/factory/SPEC.md",
+      "sha256": "188ba596060706d11c49e79d9967b7049c8f11ed2f416e7d1f306e0216660932",
+      "version": "v2",
+      "key_changes_from_v1": [
+        "AUTHORITATIVE + CONTINUOUSLY_ENFORCED maturity levels added to capability table",
+        "D002 and D005 marked as FOUNDATIONAL_LONG_RUN blockers",
+        "D004 marked as SCALE_2 blocker",
+        "automated audit/research loop capability row added"
+      ]
+    },
+    "factory_roadmap": {
+      "path": "projects/factory/ROADMAP.yaml",
+      "sha256": "8e6c381e5a60cb4cd5ae78474ce10dfc9254ba95ba9d3d5253a49d44e7997bc0",
+      "version": "v2",
+      "key_changes_from_v1": [
+        "FOUNDATIONAL_LONG_RUN_TWITTER_RADAR added (F2, right after REAL_MULTI_AI_EXECUTION_V2)",
+        "FULL_CODEBASE_STATE_OF_ART_AUDIT added (F3, after benchmark promotion)",
+        "FACTORY_CONVERGENCE_RESHAPE added (F4, after audit)",
+        "AUTOMATED_AUDIT_RESEARCH_LOOP added (between ADAPTIVE_ROUTING and SAFE_SELF_IMPROVEMENT)",
+        "SCALE_N added as final milestone after SCALE_2",
+        "SCALE_2 removed from final_dod.requires_milestones (scaling is post-AUTONOMOUS_CTO_BASE_READY)",
+        "REAL_MULTI_AI_EXECUTION_V2 acceptance now requires Codex explicitly",
+        "FOUNDATIONAL_LONG_RUN has explicit D002/D005 blockers",
+        "BENCHMARK_PROMOTION now depends on FOUNDATIONAL_LONG_RUN (not just REAL_MULTI_AI)",
+        "LONG_RUN_PROOF_2 is now 'repeated run' proving improvement (not foundational)"
+      ]
+    },
+    "twitter_strategy": {
+      "path": "projects/twitter-radar/STRATEGY.md",
+      "sha256": "4398b03966e6c86fb944138ca886bc5d4cfde9cbcc3e547e04a6c9c5de8aef10",
+      "version": "v2",
+      "unchanged_from_v1": true
+    },
+    "twitter_spec": {
+      "path": "projects/twitter-radar/SPEC.md",
+      "sha256": "e7f02a7d4d545afd907c8bb50e908abd6697da308c9d08b466ca3b5124eb37ac",
+      "version": "v2",
+      "unchanged_from_v1": true
+    },
+    "twitter_roadmap": {
+      "path": "projects/twitter-radar/ROADMAP.yaml",
+      "sha256": "b289a8511154cd8a82c3830ba05715df8b87a93174aebeaad76f17b44958d49d",
+      "version": "v2",
+      "key_changes_from_v1": [
+        "final_dod product_definition updated: target ≥10 accounts BUT INSUFFICIENT_QUALIFIED_ACCOUNTS verdict allowed if fewer qualify statistically",
+        "OOS_FAIL and OOS_INCONCLUSIVE are valid verdicts — product never fabricates an edge that doesn't exist"
+      ]
+    }
+  },
+  "audit_results": {
+    "CANONICAL_CONTENT_CONFLICTS": 0,
+    "DUPLICATE_ACTIVE_ROADMAPS": 0,
+    "DUPLICATE_ACTIVE_SPECS": 0,
+    "DUPLICATE_ACTIVE_STRATEGIES": 0,
+    "FALSE_SATISFIED_VECTORS_NEW": 0,
+    "FALSE_SATISFIED_VECTORS_HISTORICAL": "PRESENT — historical milestones (FACTORY_V1_SEALED, CANONICAL_AUTHORITY_AUDIT) use 'test -f' DoD. These are already settled and immutable. They are not re-validated. The claim FALSE_SATISFIED_VECTORS=0 applies to future milestones only.",
+    "STALE_AUTHORITY_REFERENCES": 0
+  },
+  "verify_scripts_committed": [
+    "factory_v2/verify_real_ai_receipt.py",
+    "factory_v2/verify_benchmark_receipt.py",
+    "factory_v2/verify_runrecords.py",
+    "factory_v2/verify_adaptive_routing.py",
+    "factory_v2/verify_self_improvement.py",
+    "factory_v2/verify_long_run.py",
+    "factory_v2/verify_scale_benchmark.py",
+    "factory_v2/verify_cycle2_manifest.py",
+    "factory_v2/verify_cycle2_refresh.py",
+    "factory_v2/verify_audit_receipt.py",
+    "factory_v2/verify_reshape_receipt.py",
+    "factory_v2/verify_audit_loop.py",
+    "factory_v2/verify_scale_n_benchmark.py"
+  ],
+  "current_milestone": {
+    "factory": "REAL_MULTI_AI_EXECUTION_V2",
+    "twitter_radar": "CYCLE_2_INGESTION_ELASTIQUE"
+  },
+  "roadmap_order": [
+    "FACTORY_V1_SEALED (COMPLETE)",
+    "CANONICAL_AUTHORITY_AUDIT (COMPLETE)",
+    "FACTORY_V2_RESHAPE_BUILT (COMPLETE)",
+    "REAL_MULTI_AI_EXECUTION_V2 ← CURRENT (requires Claude+GLM+Codex)",
+    "FOUNDATIONAL_LONG_RUN_TWITTER_RADAR (≥3 milestones, kill/restart, 0 HUMAN GO)",
+    "FACTORY_V2_RESHAPE_BENCHMARK_PROMOTION",
+    "FULL_CODEBASE_STATE_OF_ART_AUDIT (multi-AI + deep research vs Temporal/OpenHands/LangGraph/etc)",
+    "FACTORY_CONVERGENCE_RESHAPE (KEEP/REPLACE/DELETE based on audit)",
+    "RUN_RECORDS",
+    "ADAPTIVE_ROUTING",
+    "AUTOMATED_AUDIT_RESEARCH_LOOP",
+    "SAFE_SELF_IMPROVEMENT",
+    "LONG_RUN_PROOF_2 (repeated run proving improvement)",
+    "─── FACTORY_AUTONOMOUS_CTO_BASE_READY ───",
+    "SCALE_2",
+    "SCALE_N"
+  ],
+  "canonical_git_sha": "4d5d18d2",
+  "branch": "factory/e1-probe",
+  "rule": "This baseline freezes product intent. Product-direction changes require versioned authority change with new hashes. canonical_git_sha = the commit containing this file and all 6 canonical documents."
+}

@@ -1,0 +1,323 @@
+{
+  "control_sha": "865de5703a2450b38bc4f166cbcfe835439c6c9a",
+  "control_sha_rebind_2026_09_19": "REBOUND 2026-09-19 (codex BLOCK 2f0e5bf3 repair, session 5): control_sha moved 57cd98e0->865de5703a2450b38bc4f166cbcfe835439c6c9a because intervening milestones (SAFE_SELF_IMPROVEMENT, FACTORY_CODE_REVIEW_SWEEP, FACTORY_DEEP_RESEARCH) committed real code after 2f0e5bf3 (git diff --name-only 2f0e5bf3..HEAD: factoryd.py, runtime.py, mission_dispatch.py, settlement.py, launch_gate.py, owner_routing_policy.py, tests/). Re-verified at the new binding: LOC re-measured fresh (wc -l; drift found and updated: runtime.py 4468->4475, factoryd.py 2343->2363; all other entries exact), line citations re-resolved (factoryd _reconcile_stale_active l.200, _load_or_create_state l.884 still exact), mechanical judge python3 factory_v2/verify_audit_repair.py . -> AUDIT_REPAIR_VERIFIED rc=0.",
+  "matrix": [
+    {
+      "decision": "ADAPT",
+      "f4_action": "Refactor dispatcher_v3 to adopt DefaultAgent's message-loop shape. Extract T0/T2/T3 retry to factory/lib/retry_policy.py. Target: <400 LOC for dispatch core. Keep Factory-specific: context injection, receipt, heartbeat, budget. Remove: hardcoded retry constants, unstructured subprocess calls.",
+      "factory": {
+        "files": [
+          "factory/bin/dispatcher_v3.py"
+        ],
+        "files_note_2026_09_12": "Paths corrected to bare git-resolvable paths (were combined with inline line-number/description text, or named a wrong directory / nonexistent module, e.g. factory/lib/dispatcher_v3.py -> factory/bin/dispatcher_v3.py, and factory/lib/attempt_store.py + factory/lib/event_store.py [do not exist in production] -> factory/lib/supervisor_state.py [actual durable-restart state module, factory/bin/factoryd.py:_load_or_create_state()]). Original value: ['factory/lib/dispatcher_v3.py'].",
+        "known_bugs": [
+          "T0/T2/T3 stage-retry logic inlined (T3_REPAIR_* constants l.271-273, prompt T3 l.276+ — plage 220-280 de 2026-09-07 dérivée, re-citée au HEAD)",
+          "no typed action model (raw subprocess)"
+        ],
+        "loc": 3646,
+        "loc_measured_cmd": "wc -l factory/bin/dispatcher_v3.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+        "runtime_callers": [
+          "factory_v2/executors.py:576 AutopilotExecutor (WRAP dispatcher_v3 — execute() l.604, commande dispatcher construite l.667) — l'ancienne citation 'factory/bin/autopilot.py:AutopilotExecutor._dispatch_mission()' nommait le fichier V1 SUPPRIMÉ (b671efe7), corrigé 2026-09-18"
+        ],
+        "state_owned": "per-dispatch attempt log, worktree path, budget remaining",
+        "tests": "tests/test_dispatcher_v3.py (13 tests) + famille test_dispatcher_*.py (checkpoint/heartbeat/research_gate/resume_after_max_turns/stream_json/task_kind/worktree/worktree_purge/worktree_refresh) — l'ancien 'test_dispatcher.py (14 tests)' nommait un fichier qui n'existe pas (corrigé 2026-09-18)"
+      },
+      "factory_stronger_at": [
+        "Per-stage retry policy (T0→T2→T3)",
+        "Budget tracking",
+        "Context package injection",
+        "Receipt generation",
+        "Heartbeat writing"
+      ],
+      "subsystem": "Agent execution loop",
+      "upstream": {
+        "commit": "04d809ceab9df28f9adaed044884180159172930",
+        "files": [
+          "src/minisweagent/agents/default.py (DefaultAgent, 160 LOC)",
+          "src/minisweagent/environments/local.py"
+        ],
+        "known_issues": "No retry at agent level (intentional — retry is the caller's responsibility)",
+        "relevant_behavior": "run() → while True: step() → query(LLM) + execute_actions(). FormatError counter. Trajectory saved on every step. Exit on exit message. Cost+step limits enforced.",
+        "repo": "mini-swe-agent"
+      },
+      "upstream_stronger_at": [
+        "Core loop minimalism (src/minisweagent/agents/default.py measured 190 lines by wc -l on the raw fetch at the pinned SHA, vs dispatcher_v3 3646 measured at HEAD)",
+        "Clean separation: messages list + query() + execute_actions()",
+        "Trajectory schema typed (mini-swe-agent-1.1)",
+        "No retry inside agent (correct boundary)"
+      ]
+    },
+    {
+      "decision": "ADAPT",
+      "f4_action": "Create factory/types/execution_action.py with ExecutionAction(command, timeout_s, check_mode) and ExecutionObservation(output, exit_code, failure_reason). Refactor dispatcher_v3 subprocess layer to use these typed models. Net: explicit contract, testable, no ad-hoc exit code checking.",
+      "factory": {
+        "files": [
+          "factory/bin/dispatcher_v3.py"
+        ],
+        "files_note_2026_09_12": "Paths corrected to bare git-resolvable paths (were combined with inline line-number/description text, or named a wrong directory / nonexistent module, e.g. factory/lib/dispatcher_v3.py -> factory/bin/dispatcher_v3.py, and factory/lib/attempt_store.py + factory/lib/event_store.py [do not exist in production] -> factory/lib/supervisor_state.py [actual durable-restart state module, factory/bin/factoryd.py:_load_or_create_state()]). Original value: ['factory/lib/dispatcher_v3.py lines 400-520 (untyped subprocess + Popen)'].",
+        "known_bugs": [
+          "exit code checking is ad-hoc",
+          "check= not consistently applied",
+          "timeout not always enforced"
+        ],
+        "loc": "120 LOC of subprocess wrangling",
+        "runtime_callers": [
+          "dispatcher_v3.py internal"
+        ],
+        "state_owned": "stdout/stderr as raw strings",
+        "tests": "no dedicated tests for the subprocess layer"
+      },
+      "factory_stronger_at": [
+        "Already integrated with Factory auth, heartbeat, budget"
+      ],
+      "subsystem": "Typed execution actions",
+      "upstream": {
+        "commit": "5c995c365dfb1fd5bc56fda688be5d8538f9931f",
+        "files": [
+          "src/swerex/runtime/abstract.py (BashAction, BashObservation, AbstractRuntime)",
+          "src/swerex/deployment/local.py (LocalDeployment)"
+        ],
+        "known_issues": "None for the local backend",
+        "relevant_behavior": "BashAction(command, session, timeout, check='raise'). BashObservation(output, exit_code, failure_reason). check='raise' throws on non-zero. check='ignore' continues. check='silent' suppresses output. LocalDeployment.is_alive() for health check.",
+        "repo": "SWE-ReX"
+      },
+      "upstream_stronger_at": [
+        "Typed Pydantic model (not free-form subprocess)",
+        "check literal ('raise'/'ignore'/'silent') — exhaustive, no ad-hoc if/else",
+        "is_alive() for deployment health",
+        "local/docker swap without agent code change"
+      ]
+    },
+    {
+      "decision": "ADAPT",
+      "f4_action": "KEEP file-based state (no Temporal server). ADAPT: (1) Add replay_mode flag to factoryd poll loop — skip already-settled missions on restart. (2) Create factory/lib/retry_policy.py with RetryPolicy dataclass (Temporal semantics, no dependency). (3) Replace hardcoded V1 gates in long_run_supervisor with roadmap_resolver.resolve().all_complete check.",
+      "factory": {
+        "files": [
+          "factory/bin/factoryd.py",
+          "factory/lib/supervisor_state.py",
+          "factory/lib/long_run_supervisor.py"
+        ],
+        "files_note_2026_09_12": "Paths corrected to bare git-resolvable paths (were combined with inline line-number/description text, or named a wrong directory / nonexistent module, e.g. factory/lib/dispatcher_v3.py -> factory/bin/dispatcher_v3.py, and factory/lib/attempt_store.py + factory/lib/event_store.py [do not exist in production] -> factory/lib/supervisor_state.py [actual durable-restart state module, factory/bin/factoryd.py:_load_or_create_state()]). Original value: ['factory/bin/factoryd.py:_load_or_create_state() (lines 180-230)', 'factory/lib/attempt_store.py', 'factory/lib/event_store.py', 'factory/lib/long_run_supervisor.py'].",
+        "known_bugs": [
+          "hardcoded V1 gates in long_run_supervisor (lines 89-155)",
+          "no replay flag — re-executes already-completed work on restart"
+        ],
+        "loc": 2825,
+        "loc_breakdown_2026_09_18": "factoryd 2343 + supervisor_state 81 + long_run_supervisor 381",
+        "loc_breakdown_2026_09_19": "factoryd 2363 + supervisor_state 81 + long_run_supervisor 381 (re-measured at HEAD 865de5703a2450b38bc4f166cbcfe835439c6c9a; 2026-09-18 breakdown was 2343+81+381=2805, factoryd gained 20 lines)",
+        "loc_measured_cmd": "wc -l factory/bin/factoryd.py factory/lib/supervisor_state.py factory/lib/long_run_supervisor.py -> 2343 + 81 + 381 (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+        "runtime_callers": [
+          "factoryd.py poll loop"
+        ],
+        "state_owned": "supervisor_state.json (workers, missions), attempt log (jsonl), event log (jsonl)",
+        "tests": "tests/test_supervisor.py (18 fonctions test comptées par grep -c 'def test_' au HEAD — l'ancien '(8 tests)' datait de 2026-09-07)"
+      },
+      "factory_stronger_at": [
+        "Self-contained (no external server)",
+        "File-based state matches Factory's single-machine model",
+        "Integrated with Factory auth and project state"
+      ],
+      "subsystem": "Durable restart / crash recovery",
+      "upstream": {
+        "commit": "5a1703a30295291f9c944c26ec193d468e200a3b",
+        "files": [
+          "temporalio/common.py (RetryPolicy)",
+          "temporalio/activity.py (heartbeat)",
+          "temporalio/worker/_workflow_instance.py (_is_replaying flag)"
+        ],
+        "known_issues": "Requires Temporal server (external dependency). Full adoption = massive infra change.",
+        "relevant_behavior": "RetryPolicy(initial_interval, backoff_coefficient, max_attempts, non_retryable_error_types). heartbeat(*details) pushes incremental state to server. _is_replaying=True suppresses side-effects during deterministic replay. Event history is the source of truth for workflow position.",
+        "repo": "temporalio/sdk-python (pinned via api.github.com git/ref/heads/main, 2026-09-18)"
+      },
+      "upstream_alt": {
+        "files": [
+          "langgraph/checkpoint/base/__init__.py (BaseCheckpointSaver.put/get_tuple, Checkpoint TypedDict)"
+        ],
+        "relevant_behavior": "Checkpoint(id, ts, channel_values, channel_versions, pending_sends). thread_id as idempotency key. put_writes() for partial task outputs (don't redo completed sub-tasks after failure).",
+        "repo": "langchain-ai/langgraph @ c81c13533ee48c1ae0ef2de314737ef0c455f2be (pinned 2026-09-18)"
+      },
+      "upstream_stronger_at": [
+        "Temporal: _is_replaying suppresses re-execution — Factory has no equivalent flag",
+        "LangGraph: pending_sends enables partial recovery — Factory retries the whole mission",
+        "Temporal: RetryPolicy is declarative — Factory's retry is hardcoded T0/T2/T3 constants"
+      ]
+    },
+    {
+      "decision": "ADAPT",
+      "f4_action": "[Status 2026-09-19: EXECUTED — the P6 fix landed in F4 (commit c489224e2) as a `project_dir` constructor param rather than the sketched Optional[ProjectAuthority] object: factory/lib/context_compiler.py:135-168 V2 fail-closed path (STRATEGY :146-155, SPEC :158-168, CTO_STRATEGY.md fallback :156 only when project_dir=None), factory/bin/dispatcher_v3.py:1096 passes project_dir. CTO_STRATEGY.md is already demoted to legacy-path-only.] Original 2026-09-07 prescription: Fix P6: ContextCompiler must accept project_authority: Optional[ProjectAuthority]. When provided, read from authority.strategy_path and authority.spec_path as primary source. CTO_STRATEGY.md becomes secondary fallback only. No new files — modify factory/lib/context_compiler.py.",
+      "factory": {
+        "files": [
+          "factory_v2/project_authority.py",
+          "factory/lib/cto_kernel.py",
+          "factory/lib/context_compiler.py"
+        ],
+        "files_note_2026_09_12": "Paths corrected to bare git-resolvable paths (were combined with inline line-number/description text, or named a wrong directory / nonexistent module, e.g. factory/lib/dispatcher_v3.py -> factory/bin/dispatcher_v3.py, and factory/lib/attempt_store.py + factory/lib/event_store.py [do not exist in production] -> factory/lib/supervisor_state.py [actual durable-restart state module, factory/bin/factoryd.py:_load_or_create_state()]). Original value: ['factory_v2/project_authority.py (111 LOC, STRATEGY/SPEC/ROADMAP.yaml loader)', 'factory/lib/cto_kernel.py (481 LOC, CTO_STATE.json loader)', 'factory/lib/context_compiler.py (reads CTO_STRATEGY.md as primary — P6 bug)'].",
+        "known_bugs": [
+          "P6: ContextCompiler reads CTO_STRATEGY.md as primary source instead of projects/factory/STRATEGY.md [FIXED in F4, commit c489224e2 — project_dir param, fail-closed V2 path context_compiler.py:146-168, CTO_STRATEGY.md fallback only when project_dir=None (dispatcher_v3.py:1096 passes project_dir on every V2 dispatch); grep re-executed 2026-09-19]"
+        ],
+        "loc": 1130,
+        "loc_measured_cmd": "wc -l factory_v2/project_authority.py factory/lib/cto_kernel.py factory/lib/context_compiler.py -> 262 + 472 + 396 (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+        "runtime_callers": [
+          "factory_v2/runtime.py:advance() uses ProjectAuthority",
+          "factory/lib/dispatcher_v3.py uses ContextCompiler"
+        ],
+        "state_owned": "SHA-256 per authority file",
+        "tests": "pas de test_project_authority.py dédié (l'ancienne citation nommait un fichier inexistant) — ProjectAuthority couvert par tests/test_factory_v2.py (78 tests) et tests/test_canonical_authority_immutable.py (8 tests), comptés au HEAD"
+      },
+      "factory_stronger_at": [
+        "SHA-256 authority hash locking (drift detection)",
+        "Immutable ProjectAuthority dataclass",
+        "Roadmap-driven dependency resolution"
+      ],
+      "subsystem": "Project brain / canonical authority",
+      "upstream": {
+        "files": [
+          "README.md (flow /speckit-constitution -> /speckit-specify -> /speckit-plan -> /speckit-tasks -> implement -> converge, lines 76-84 at the pinned SHA)"
+        ],
+        "known_issues": "Spec Kit is a workflow pattern, not a library. Cannot be installed as dependency.",
+        "relevant_behavior": "specify-cli slash-command flow: constitution once per project; specify → plan → tasks → implement → converge per feature (verbatim from README l.76 at 5e952140). Convergence compares implementation against the spec artifacts. Sub-spec pattern for large features.",
+        "repo": "github/spec-kit @ 5e952140659287106580d32f242ba71365a3862b (pinned 2026-09-18 — Spec Kit is its own toolkit, NOT BMAD)"
+      },
+      "upstream_stronger_at": [
+        "Live constitution reload on every iteration (Factory reloads but does not re-validate at every step)",
+        "Sub-spec decomposition for large milestones (Factory has no equivalent — context loss risk on long runs)",
+        "Automatic convergence task generation (Factory has convergence_gate but it's advisory, not automatic)"
+      ]
+    },
+    {
+      "decision": "KEEP roadmap_resolver (sole surviving next-work path; V1 competitors already deleted).",
+      "f4_action": "Wire factoryd.do_poll_iteration() to call roadmap_resolver.resolve() directly instead of popping campaign_state.json's queued[0] -- the V1 competitors this action originally needed to delete are gone, this step is the only remaining gap.",
+      "factory": {
+        "files": [
+          "factory_v2/roadmap_resolver.py"
+        ],
+        "files_note_2026_09_12": "Paths corrected to bare git-resolvable paths (were combined with inline line-number/description text, or named a wrong directory / nonexistent module, e.g. factory/lib/dispatcher_v3.py -> factory/bin/dispatcher_v3.py, and factory/lib/attempt_store.py + factory/lib/event_store.py [do not exist in production] -> factory/lib/supervisor_state.py [actual durable-restart state module, factory/bin/factoryd.py:_load_or_create_state()]). Original value: ['factory_v2/roadmap_resolver.py (133 LOC — CANONICAL)', 'factory/lib/backlog_refiller.py (61 LOC)', 'factory/bin/cto_planner.py (332 LOC)', 'factory/bin/campaign_state.py:next_mission() (80 LOC)']. UPDATE 2026-09-13 (FULL_CODEBASE_AUDIT_RECEIPT_CURRENT#M1): backlog_refiller.py, cto_planner.py, campaign_state.py confirmed deleted at HEAD f92ea30037a99ad0f512735e1795b376104b5c2b (git show fails); dropped from files/known_bugs, replaced with the measured current runtime_callers above.",
+        "known_bugs": [
+          "RESOLVED since this ledger's earlier snapshot: backlog_refiller.py, cto_planner.py and campaign_state.py were deleted by FACTORY_SIMPLIFY_S4 (2f5249ab) and FACTORY_SIMPLIFY_S2 (b671efe7) -- the three competing next-work paths this entry originally flagged no longer exist",
+          "factory/bin/factoryd.py's live dispatch loop (do_poll_iteration) still does not call roadmap_resolver.resolve() to choose the mission -- it pops campaign_state.json's queued[0], populated upstream by the mission compiler/CTO loop, not by the resolver itself"
+        ],
+        "loc": 200,
+        "loc_measured_cmd": "wc -l factory_v2/roadmap_resolver.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+        "runtime_callers": [
+          "factory_v2/runtime.py:739 resolve(authority, state) — le chemin canonique V2 (re-mesuré grep -n au HEAD d256977f9bb00006fb5f5271a762b1c58354cfae ; l'ancienne citation l.626 datait d'avant la fusion 4e553aab1)",
+          "factory/bin/factoryd.py:1000 next_milestone_from_resolver() appelle resolve() pour ANNONCER le prochain jalon ; la boucle de dispatch V1 (do_poll_iteration l.627) sélectionne toujours le premier queued du campaign_state (l.783) et _default_dispatch (l.591) référence ENCORE le fichier autopilot.py supprimé (l.56/606) — voir FACTORY_RUNTIME_AUTHORITY_MAP.deleted_in_f4_item_status"
+        ],
+        "state_owned": "dependency DAG resolved live from ProjectAuthority + PROJECT_STATE.json (no persisted state of its own)",
+        "tests": "no dedicated tests/test_roadmap_resolver.py file -- exercised via tests/test_factory_v2.py (test_T1_portfolio_selects_project_resolver_selects_milestone, test_T10_restart_resolves_identical_next) and runtime.py's run_until_stable test coverage"
+      },
+      "factory_stronger_at": [
+        "topological sort from YAML roadmap (unique to Factory)",
+        "depends_on chain prevents out-of-order execution",
+        "SHA-anchored to prevent roadmap drift"
+      ],
+      "subsystem": "Next-work determination",
+      "upstream": {
+        "relevant_behavior": "N/A",
+        "repo": "N/A — no upstream has an equivalent concept (Factory's roadmap-driven dependency resolution is differentiation)"
+      },
+      "upstream_stronger_at": [
+        "N/A"
+      ]
+    },
+    {
+      "decision": "KEEP V2 IndependentValidator. DELETE milestone_controller from settlement path. KEEP task_contract_validator as linter only.",
+      "f4_action": "Remove milestone_controller.evaluate() call from factoryd settlement path. Replace with IndependentValidator (V2). task_contract_validator stays as pre-dispatch linter.",
+      "factory": {
+        "files": [
+          "factory_v2/validation_contract.py",
+          "factory_v2/authority_gate.py",
+          "factory/lib/task_contract_validator.py",
+          "factory/lib/milestone_controller.py"
+        ],
+        "files_note_2026_09_12": "Paths corrected to bare git-resolvable paths (were combined with inline line-number/description text, or named a wrong directory / nonexistent module, e.g. factory/lib/dispatcher_v3.py -> factory/bin/dispatcher_v3.py, and factory/lib/attempt_store.py + factory/lib/event_store.py [do not exist in production] -> factory/lib/supervisor_state.py [actual durable-restart state module, factory/bin/factoryd.py:_load_or_create_state()]). Original value: ['factory_v2/validation_contract.py + authority_gate.py (212 LOC — CANONICAL, RAISES)', 'factory/lib/task_contract_validator.py (239 LOC — advisory)', 'factory/lib/milestone_controller.py (302 LOC — advisory, does not RAISE)'].",
+        "known_bugs": [
+          "milestone_controller.evaluate() does not RAISE — returns advisory status that factoryd can ignore"
+        ],
+        "loc": 1469,
+        "loc_measured_cmd": "wc -l factory_v2/validation_contract.py factory_v2/authority_gate.py factory/lib/task_contract_validator.py factory/lib/milestone_controller.py -> 507 + 421 + 239 + 302 (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+        "runtime_callers": [
+          "factory_v2/runtime.py uses IndependentValidator",
+          "factoryd settlement path uses milestone_controller (advisory)"
+        ],
+        "state_owned": "frozen contract hash",
+        "tests": "pas de test_validation_contract.py dédié (l'ancienne citation nommait un fichier inexistant) — couvert par tests/test_frozen_contract_is_stable.py (10) + tests/test_frozen_contract_load_integrity.py (18, 28 passed exécutés frais 2026-09-18) + tests/test_task_contract_validator.py (2)"
+      },
+      "factory_stronger_at": [
+        "Hash-anchored frozen contract (unique)",
+        "IndependentValidator with RAISES is correct"
+      ],
+      "subsystem": "Validation / settlement gate",
+      "upstream": {
+        "relevant_behavior": "Temporal: activity failure propagates as a typed exception that the workflow can catch and route. RAISES is the correct model for authoritative gates.",
+        "repo": "N/A — RAISES pattern is Factory's own invariant. Comparable to Temporal's activity failure propagation."
+      },
+      "upstream_stronger_at": [
+        "Temporal activity failure: typed exception hierarchy (Factory's gate raises generic RuntimeError)"
+      ]
+    },
+    {
+      "decision": "WIRE at F4 correct boundary (factoryd settlement path, after IndependentValidator PASS). NOT a random patch. Part of the unified settlement path.",
+      "f4_action": "In factoryd settlement callback: after IndependentValidator.validate() PASS, call runrecords.append_run(milestone_id, commit_sha, duration_s, agent_used, token_cost). No other callers. Wire exactly once.",
+      "factory": {
+        "factory_stronger_at": [
+          "Trajectoire durable par mission au format JSONL (journal vivant <run-dir>/journals/runrecords.jsonl = 55990 lignes (wc -l, 2026-09-18T11:42:32Z — journal vivant, compteur mouvant))",
+          "engine_stats() alimente le routing adaptatif mesuré (model_router) — aucune des références externes ne propose d'équivalent"
+        ],
+        "factory_stronger_at_note": "(2026-09-07 wrote 'N/A — RunRecords is not wired at all'; refuted by the live journal measurement — RunRecords IS recording, at settlement/dispatch boundaries rather than inside advance())",
+        "files": [
+          "factory_v2/runrecords.py"
+        ],
+        "files_note_2026_09_12": "Paths corrected to bare git-resolvable paths (were combined with inline line-number/description text, or named a wrong directory / nonexistent module, e.g. factory/lib/dispatcher_v3.py -> factory/bin/dispatcher_v3.py, and factory/lib/attempt_store.py + factory/lib/event_store.py [do not exist in production] -> factory/lib/supervisor_state.py [actual durable-restart state module, factory/bin/factoryd.py:_load_or_create_state()]). Original value: ['factory_v2/runrecords.py (exists, 0 calls from production code — gap)', 'factory/cto/CTO_EVENTS.jsonl (V1 event log)']. UPDATE 2026-09-13 (FULL_CODEBASE_AUDIT_RECEIPT_CURRENT#M1): factory/cto/CTO_EVENTS.jsonl no longer exists at HEAD f92ea30037a99ad0f512735e1795b376104b5c2b -- runtime state moved out of the repo by FACTORY_STATE_OUT_OF_REPO_V1 (commit 22437221); dropped from files. known_bugs re-verified: still true, runrecords.py's settlement-path import in runtime.py remains dead code (grep confirms no call site).",
+        "known_bugs": [
+          "RunRecords wiring claim corrected 2026-09-18: the 2026-09-07/09-13 'not wired at all' claim is REFUTED by measurement — settlement/dispatch paths DO write records (settlement_ledger.py:272 record_settlement, factory_v2/advance/mission_dispatch.py:1159 record_attempt via rt._record_attempt — the earlier 'review_dispatch.py' citation was FALSE, that module only READS the ledger) and the live journal counts 55990 lines (wc -l, 2026-09-18T11:42:32Z, moving counter). Residual true gap: runtime.py's own record_attempt/record_settlement/record_prediction/record_observation imports (l.94-98) have no call site INSIDE runtime.py — the advance() loop itself still does not journal directly."
+        ],
+        "loc": 416,
+        "loc_measured_cmd": "wc -l factory_v2/runrecords.py (HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, 2e re-mesure session codex-BLOCK, session 2026-09-18)",
+        "runtime_callers": "Measured 2026-09-18 (3rd pass): runtime.py imports record_attempt/record_settlement/record_prediction/record_observation/reconcile_orphan_predictions (l.94-98, no call site in that module) but calls record_reproduction_baseline (l.2699) and record_cell_transition (l.4334,4344); factory_v2/settlement_ledger.py:272 calls record_settlement; factory_v2/advance/mission_dispatch.py:1159 calls record_attempt (rt._record_attempt, guard l.1157); factory_v2/review_dispatch.py only READS the ledger (_builder_engine_from_runrecords); regression coverage tests/test_runrecords_wired.py (4 tests green). Live journal: 55990 lignes (wc -l, 2026-09-18T11:42:32Z — journal vivant, compteur mouvant ; 54926/55970 lors des sessions précédentes).",
+        "state_owned": "N/A",
+        "tests": "tests/test_runrecords_wired.py (4 tests, 4 passed exécutés frais 2026-09-18 — l'ancien 'no tests for runrecords.py' était FAUX)"
+      },
+      "factory_stronger_at": [
+        "N/A — RunRecords is not wired at all"
+      ],
+      "subsystem": "RunRecords",
+      "upstream": {
+        "relevant_behavior": "Every step result is persisted before moving to next. Partial results are recoverable via pending_sends. Complete checkpoint is the settlement record.",
+        "repo": "langchain-ai/langgraph checkpoint @ c81c13533ee48c1ae0ef2de314737ef0c455f2be (pinned 2026-09-18; concept: put() records terminal state, get_tuple() retrieves for a thread_id)"
+      },
+      "upstream_stronger_at": [
+        "LangGraph: every step result is persisted automatically",
+        "Temporal: event history IS the run record — no separate store needed"
+      ]
+    }
+  ],
+  "milestone": "FULL_CODEBASE_STATE_OF_ART_AUDIT",
+  "note": "Every decision references real Factory files and real upstream modules/classes inspected at pinned SHAs.",
+  "produced_at": "2026-09-07",
+  "revised_2026_09_12": {
+    "reason": "verify_audit_receipt.py's subsystems_covered() requires every 'files' entry to resolve via `git show HEAD:<path>` — 7/7 matrix entries failed this on 2026-09-07 because paths carried inline notes (' lines 400-520 (...)') or named files that were never real (factory/lib/attempt_store.py, factory/lib/event_store.py do not exist; verified with `git ls-files`).",
+    "verified_with": "git ls-files <path> at HEAD, one call per path listed above"
+  },
+  "schema": "factory-vs-upstream-matrix/v1",
+  "update_2026_09_18": {
+    "codex_block_fixes": [
+      "runtime_callers dispatcher: factory/bin/autopilot.py (fichier supprimé) -> factory_v2/executors.py:576",
+      "runtime.py:626 -> l.739 pour resolve(authority, state)",
+      "tests fantômes corrigés: test_dispatcher.py/test_project_authority.py/test_validation_contract.py n'existent pas — vrais fichiers et comptes mesurés (13/18/78+8/10+18+2)",
+      "'no tests for runrecords.py' -> test_runrecords_wired.py (4 tests verts)",
+      "contradiction interne factory_stronger_at vs note de correction levée",
+      "known_bugs dispatcher: plage 220-280 -> T3_REPAIR_* l.271-273"
+    ],
+    "measured_at_head": "d256977f9bb00006fb5f5271a762b1c58354cfae",
+    "reason": "Relecteur Claude BLOCK aa295959 (minor drift + stale claims): locs 2026-09-07 non re-mesurées (dispatcher 918 déclaré vs 3646 mesuré, factoryd 1039 vs 2343...), upstream commits en SHAs courtes ou 'main branch', Spec Kit sans repo réel, RunRecords déclaré non câblé (réfuté par mesure).",
+    "remeasure_cmd": "wc -l <file> par entrée + grep -n par citation (exécuté, HEAD d256977f9bb00006fb5f5271a762b1c58354cfae, session 2026-09-18 après BLOCK codex 60d76f11)",
+    "runrecords_correction": "'not wired at all' -> réfuté : journal vivant 55990 lignes (wc -l, 2026-09-18T11:42:32Z — journal vivant, compteur mouvant) ; appels réels cités (settlement_ledger.py:272, advance/mission_dispatch.py:1159, runtime.py:2699/4334/4344 — session 3 : la citation 'review_dispatch.py' était fausse, ce module lit seulement) ; tests/test_runrecords_wired.py (4 tests) couvre le wiring ; subsiste le vrai résidu : les imports record_* de runtime.py:94-98 n'ont pas d'appel dans CE module. L'ancienne entrée factory_stronger_at 'N/A — not wired at all' (qui contredisait la correction dans la même entrée) a été remplacée.",
+    "upstream_commits_now_full_shas": [
+      "04d809ceab9df28f9adaed044884180159172930 (mini-swe-agent)",
+      "5c995c365dfb1fd5bc56fda688be5d8538f9931f (SWE-ReX)",
+      "5a1703a30295291f9c944c26ec193d468e200a3b (temporalio/sdk-python)",
+      "c81c13533ee48c1ae0ef2de314737ef0c455f2be (langgraph)",
+      "5e952140659287106580d32f242ba71365a3862b (github/spec-kit)"
+    ]
+  }
+}

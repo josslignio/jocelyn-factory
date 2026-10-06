@@ -1,0 +1,15 @@
+{
+  "base_url": "http://127.0.0.1:3100",
+  "company_id": "<UUID>",
+  "project_id": "<UUID>",
+  "goal_id": "<UUID>",
+  "agents": {
+    "hermes": "<UUID>",
+    "claude": "<UUID>",
+    "codex": "<UUID>",
+    "zai": "<UUID>",
+    "reconciler": "<UUID>"
+  },
+  "chat_issue_id": "<UUID>",
+  "milestones": {}
+}

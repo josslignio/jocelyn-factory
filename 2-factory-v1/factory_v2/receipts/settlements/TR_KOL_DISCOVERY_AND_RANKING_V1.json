@@ -1,0 +1,68 @@
+{
+  "authority_hashes": {
+    "roadmap": "fbd6a8a73db76fa9bf42c224b311bcae69f487ecb074c3063d80a9cf6f879f12",
+    "spec": "a2a857563a3df635d291f09b56651153e120a2fbe2f8ed29a3fe22f5bf0319dc",
+    "strategy": "42d768f10752fd0a46501d062ac5c9955ba38eade2a15d46d87b8bd353590249"
+  },
+  "base_sha": "5c30a8e5fe2c600579de9d13e02563299aa20343",
+  "candidate_sha": "a58e110ad0daca91ca97a18154ba3dbef4a50525",
+  "contract": {
+    "frozen_at": "2026-09-09T06:35:00Z",
+    "id": "74ee52f7f07d4264547ea08a",
+    "path": "projects/twitter-radar/validation_contracts/74ee52f7f07d4264547ea08a.json",
+    "signature": "3521025819e515e0"
+  },
+  "evidence": {
+    "active_verify": [
+      {
+        "command": "Pinned dual-pin acceptance (S5): verifier@a58e110ad0da x product@d7c2cfe0a2f2 — PYTHONPATH=${FACTORY_CONTROL_REPO} python3 -m factory_v2.product_verifiers TR_KOL_DISCOVERY_AND_RANKING_V1 --project-repo . --owner-shortlist Frenchie",
+        "observed_at": "verify_settlement TRIO all PROVEN (gen9, dual pin)",
+        "output": "ACCEPTANCE_PROVEN (see FOUNDATIONAL_LONG_RUN_RECEIPT + receipts on disk)",
+        "rc": 0
+      },
+      {
+        "command": "PYTHONPATH=. python3 factory_v2/verify_long_run.py factory_v2/receipts/FOUNDATIONAL_LONG_RUN_RECEIPT.json",
+        "observed_at": "2026-09-09T18:56Z and re-run post b286be09",
+        "output": "PASS: 3 milestones, 3 incidents, 4 restarts, HUMAN_GO=0",
+        "rc": 0
+      }
+    ],
+    "full_suite": {
+      "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m pytest tests/ -q --timeout=600 (detached worktree)",
+      "counts": "1736 passed, 4 skipped, 3 subtests",
+      "duration_s": 934.96,
+      "rc": 0,
+      "receipt": "factory_v2/receipts/committed/FULL_SUITE_RECEIPT_b286be09.json",
+      "sha": "b286be09a520ab3772f83f144c47b6b4cebd7715"
+    },
+    "gate": {
+      "cost_usd": 4.08,
+      "note": "required fixes executed: settlement-ledger supersession (this entry) + narrative correction",
+      "response": ".context/glm-primary-overnight/reviews/foundational-long-run-trio-r2/6c681d6b/response.json",
+      "reviewer": "claude-sonnet-5 (effort high)",
+      "rounds": 1,
+      "verdict": "ACCEPT"
+    },
+    "historical_gate": {
+      "note": "SUPERSEDED_PRODUCT_CONTAMINATION: the prior entry's product_repo_pin 551e0b5 recorded frenchie rows collected through the lookalike resolution defect (INCIDENT NAMESAKE_RESOLUTION_DEFECT 14:41Z). The r2 artifact was regenerated from the namesake-corrected full corpus; the contaminated historical PASS is superseded and was NEVER reproduced.",
+      "prior_candidate_sha": "693d73d4303a45b40557bfadf4ffa546affb5fcd",
+      "prior_product_pin": "551e0b5ac2c7a8ba8bd0d2f427cb952225553bee"
+    },
+    "product_repo_pin": {
+      "artifact_chain": "72194b43 (trio artifacts) -> 66440719 (KOL records regen) -> d7c2cfe0 (thesis-key entries)",
+      "product_commit": "d7c2cfe0a2f2d37d3490797341460bb7104fa5a9",
+      "repo": "/Users/jocelyngrosjean/conductor/workspaces/twitter-radar/twitter-radar-foundation-v2"
+    },
+    "receipts": {
+      "attempt": "r2-20260909-74ee52f7",
+      "mission_receipt_dir": "projects/twitter-radar/evidence/receipts/TR_KOL_DISCOVERY_AND_RANKING_V1#M1"
+    }
+  },
+  "honest_residual": "Claude reviewer could not execute live probes (sandbox); Sol counter-audit with live execution is mandatory before promotion. 11 pre-binding observation records remain typed-rejected. H2/H3 provider limits remain typed-open.",
+  "milestone": "TR_KOL_DISCOVERY_AND_RANKING_V1",
+  "project": "twitter-radar",
+  "recorded_at": "2026-09-09T20:29:23Z",
+  "schema": "settlements/v1",
+  "settled_at": "2026-09-09T19:12:00Z",
+  "supersedes": "693d73d4303a45b40557bfadf4ffa546affb5fcd"
+}

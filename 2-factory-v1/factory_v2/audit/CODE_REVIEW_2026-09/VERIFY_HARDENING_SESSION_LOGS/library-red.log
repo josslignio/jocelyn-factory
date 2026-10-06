@@ -1,0 +1,76 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_______________ test_unknown_values_cannot_be_counted_as_ids[1] ________________
+
+unknown = 1
+
+    @pytest.mark.parametrize('unknown', [True, False, 1, 1.0, {}, []])
+    def test_unknown_values_cannot_be_counted_as_ids(unknown):
+>       with pytest.raises(VerificationRefused, match='identifier'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE VerificationRefused
+
+tests/test_repairs_vh_library_unknown.py:9: Failed
+____________ test_unknown_values_cannot_be_counted_as_ids[unknown5] ____________
+
+unknown = []
+
+    @pytest.mark.parametrize('unknown', [True, False, 1, 1.0, {}, []])
+    def test_unknown_values_cannot_be_counted_as_ids(unknown):
+>       with pytest.raises(VerificationRefused, match='identifier'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE VerificationRefused
+
+tests/test_repairs_vh_library_unknown.py:9: Failed
+____________ test_unknown_values_cannot_be_counted_as_ids[unknown4] ____________
+
+unknown = {}
+
+    @pytest.mark.parametrize('unknown', [True, False, 1, 1.0, {}, []])
+    def test_unknown_values_cannot_be_counted_as_ids(unknown):
+>       with pytest.raises(VerificationRefused, match='identifier'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE VerificationRefused
+
+tests/test_repairs_vh_library_unknown.py:9: Failed
+______________ test_unknown_values_cannot_be_counted_as_ids[1.0] _______________
+
+unknown = 1.0
+
+    @pytest.mark.parametrize('unknown', [True, False, 1, 1.0, {}, []])
+    def test_unknown_values_cannot_be_counted_as_ids(unknown):
+>       with pytest.raises(VerificationRefused, match='identifier'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE VerificationRefused
+
+tests/test_repairs_vh_library_unknown.py:9: Failed
+_____________ test_unknown_values_cannot_be_counted_as_ids[False] ______________
+
+unknown = False
+
+    @pytest.mark.parametrize('unknown', [True, False, 1, 1.0, {}, []])
+    def test_unknown_values_cannot_be_counted_as_ids(unknown):
+>       with pytest.raises(VerificationRefused, match='identifier'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE VerificationRefused
+
+tests/test_repairs_vh_library_unknown.py:9: Failed
+______________ test_unknown_values_cannot_be_counted_as_ids[True] ______________
+
+unknown = True
+
+    @pytest.mark.parametrize('unknown', [True, False, 1, 1.0, {}, []])
+    def test_unknown_values_cannot_be_counted_as_ids(unknown):
+>       with pytest.raises(VerificationRefused, match='identifier'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE VerificationRefused
+
+tests/test_repairs_vh_library_unknown.py:9: Failed
+=========================== short test summary info ============================
+FAILED tests/test_repairs_vh_library_unknown.py::test_unknown_values_cannot_be_counted_as_ids[1]
+FAILED tests/test_repairs_vh_library_unknown.py::test_unknown_values_cannot_be_counted_as_ids[unknown5]
+FAILED tests/test_repairs_vh_library_unknown.py::test_unknown_values_cannot_be_counted_as_ids[unknown4]
+FAILED tests/test_repairs_vh_library_unknown.py::test_unknown_values_cannot_be_counted_as_ids[1.0]
+FAILED tests/test_repairs_vh_library_unknown.py::test_unknown_values_cannot_be_counted_as_ids[False]
+FAILED tests/test_repairs_vh_library_unknown.py::test_unknown_values_cannot_be_counted_as_ids[True]
+6 failed in 0.21s

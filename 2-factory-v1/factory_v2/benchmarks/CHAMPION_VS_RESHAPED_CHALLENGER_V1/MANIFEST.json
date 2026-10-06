@@ -1,0 +1,21 @@
+{
+  "challenger_sha": "d58dcfaa81accac37ad9e92b0154b19543841d08",
+  "champion_sha": "5257c8c9689aba1e85eb7638b621458eb3a067e8",
+  "observations": {
+    "challenger_contract_refreeze.json": "9b407cc271ff8b5f7152c4c91c6dd346a23cfdfc6bab5adf899a923d68ead642",
+    "challenger_dispatch_settles.json": "472d71ab7bd0732ab7bf155b7a13a7a456ddbe32bd63629ad9b6b57e3654fc7e",
+    "challenger_kill_and_resume.json": "8ba96cf8aa66ffd31173defea7d666871ec501015a1601fa96f89030ea3bcf8c",
+    "challenger_quarantine_cycle.json": "b81fe3e37a74d6516a31a8d1c4c7017fc1b312f936a9870144fccf9151d01fd7",
+    "challenger_terminal_state_new_attempt.json": "dbd02ba608bdf779c8ce9761731276fc10bb53e0784c7c6928aa8ec4e0c4743e",
+    "challenger_unchanged_deliverable_reconfirmed.json": "aa5d906b5a5a27077916e87d37bb677f792c9823a744c7563080b530203c55b2",
+    "champion_contract_refreeze.json": "1567b39a6f508cab0b9dc5679e179d6ae169fc230b939f279a436ddc3ecd6321",
+    "champion_dispatch_settles.json": "770767a1d1f4ed8cba386c5aadba3a3c608097c44d433b92866e2c857a310705",
+    "champion_kill_and_resume.json": "85437704f141b8e04c2701250c21d59cb30ededa4e9556c17d83013069b4a818",
+    "champion_quarantine_cycle.json": "a042a962e11bce248984dd209002dbdd9f4f6c098d6e6b1d964bffd8928b1091",
+    "champion_terminal_state_new_attempt.json": "2f466332a61cdd56d71415399705fbe40235242a869fbd6ebd66d2d69f4def5e",
+    "champion_unchanged_deliverable_reconfirmed.json": "3d76543a64b166beda49e1ef60cd9087ccd108e90329e89c7be499e5e145cb18"
+  },
+  "producer_sha256": "1bc398b09c45fb2e781900d6b426238fe273ee1d0730a044782305fcaefc4f06",
+  "start_sha": "798a9fff53280a478fbf049aae0bcd2cf68e4fd0",
+  "workload_id": "CHAMPION_VS_RESHAPED_CHALLENGER_V1"
+}

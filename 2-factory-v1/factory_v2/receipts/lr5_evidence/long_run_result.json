@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "milestones_completed": [
+    "MS1",
+    "MS2",
+    "MS3"
+  ],
+  "engines_active_peak": 1,
+  "crashed": true,
+  "restarted": true,
+  "artifacts": [
+    "evidence/MS1/validator_verdict.json",
+    "evidence/MS2/validator_verdict.json",
+    "evidence/MS3/validator_verdict.json",
+    "evidence/leases/MS1_M1.json",
+    "evidence/leases/MS2_M1.json",
+    "evidence/leases/MS3_M1.json",
+    "evidence/preflight/preflight_20260909_103121.json",
+    "evidence/receipts/MS1#M1/a1.json",
+    "evidence/receipts/MS2#M1/a1.json",
+    "evidence/receipts/MS3#M1/a1.json"
+  ],
+  "fault_records": [
+    {
+      "fault_type": "SIGKILL",
+      "target": "99548",
+      "injected_at": "2026-09-09T10:31:23Z",
+      "outcome": "INJECTED",
+      "detail": "SIGKILL sent to PID 99548"
+    }
+  ],
+  "started_at": "2026-09-09T10:31:21Z",
+  "completed_at": "2026-09-09T10:31:32Z",
+  "evidence_path": "",
+  "milestones_at_crash": [
+    "MS1"
+  ],
+  "daemon_identities": [
+    {
+      "pid": 99548,
+      "birth": "Wed Sep  9 12:31:22 2026"
+    },
+    {
+      "pid": 99686,
+      "birth": "Wed Sep  9 12:31:28 2026"
+    }
+  ],
+  "routine_human_interventions": 0,
+  "human_intervention_events": [],
+  "derivation": "event-ledger HUMAN*/OWNER* events at/after run start + controlling-TTY observations on daemon identities",
+  "observed_from": {
+    "project_state": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/lr5_harness_qydjcczi/project/PROJECT_STATE.json",
+    "daemon_pids": [
+      99548,
+      99686
+    ],
+    "run_started_at": "2026-09-09T10:31:21Z"
+  }
+}

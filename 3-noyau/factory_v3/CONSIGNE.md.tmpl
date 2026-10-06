@@ -1,0 +1,32 @@
+# Jalon $jalon — produit $produit
+
+## But
+$but
+
+Référence : `$spec_ref`
+
+## Ce que tu as le droit de modifier (liste blanche, rien d'autre)
+$livrables
+
+## Tâche
+$tache
+
+## Règles (le noyau les vérifie mécaniquement ; ton texte et ton code retour ne sont pas lus)
+1. Tu travailles dans le répertoire courant, une copie jetable du dépôt. Ne fais aucun commit, aucun push, n'utilise pas git pour écrire.
+2. Les tests, la configuration de test (`tests/**`, `conftest.py`, `pytest.ini`, `pyproject.toml`, `setup.cfg`, `tox.ini`,
+   `sitecustomize.py`) et tout fichier hors de la liste blanche sont **gelés : intouchables**. Toute modification = run rejeté.
+3. Les tests du juge ne sont PAS dans ta copie : ne les cherche pas — ils seront joués après toi sur une copie restaurée.
+   L'interface attendue est décrite dans la tâche ci-dessus. Tests visibles qui doivent rester verts :
+$a_garder
+4. Pas de réseau pendant les tests. N'écris pas hors du répertoire courant (sauf $$TMPDIR).
+5. Preuves : lance UNIQUEMENT les tests nommés par la tâche ou listés ci-dessus. Ne lance JAMAIS `pytest tests/` ni une suite
+   complète, et ne construis pas de baseline `git show` : la non-régression est recalculée par le juge, pas par toi.
+6. Pièges mesurés ici : l'écriture est refusée hors des livrables de la liste blanche ; les heredocs bash sont bloqués → passe
+   le code par `python3 -c '...'` ; `rg` n'est pas installé (utilise `grep`).
+7. Fichiers et défaut déjà cités dans la tâche = point de départ : groupe tes lectures en un tour, tes éditions en un tour.
+8. N'affirme pas l'achèvement sans une sortie de test fraîche des tests nommés.
+9. Relance toi-même les tests nommés après chaque correction et corrige jusqu'à ce qu'ils passent, avant de t'arrêter.
+10. **Si le test et le but se contredisent, ou si la tâche est impossible sans toucher un fichier gelé : ne touche à rien,
+   écris `$blocked` à la racine (une ou deux phrases : quoi et pourquoi) et arrête-toi.** C'est une sortie honnête,
+   jamais un échec compté contre toi.
+11. Quand les livrables sont prêts, arrête-toi. Le juge décide.

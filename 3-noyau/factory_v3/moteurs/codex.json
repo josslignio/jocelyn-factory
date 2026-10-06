@@ -1,0 +1,50 @@
+{
+  "id": "codex",
+  "actif": false,
+  "cli": "codex",
+  "argv": [
+    "codex",
+    "exec",
+    "--json",
+    "--ephemeral",
+    "--ignore-user-config",
+    "--sandbox",
+    "danger-full-access",
+    "--skip-git-repo-check",
+    "--model",
+    "{model}",
+    "{prompt}"
+  ],
+  "defauts": {
+    "model": "gpt-6-astra"
+  },
+  "format_sortie": "codex_json",
+  "usage": {
+    "type": "turn.completed",
+    "cumul": true,
+    "champs": {
+      "input": "usage.input_tokens",
+      "cache_read": "usage.cached_input_tokens",
+      "output": "usage.output_tokens",
+      "reasoning": "usage.reasoning_output_tokens"
+    }
+  },
+  "plafonds": {
+    "mecanisme": "aucun",
+    "drapeaux": []
+  },
+  "arret": {
+    "signal_1": "SIGINT",
+    "grace_s": 10,
+    "signal_2": "SIGKILL"
+  },
+  "auth": {
+    "env": [],
+    "magasin_cli": ".codex/auth.json"
+  },
+  "env_allowlist": [],
+  "env_fixe": {
+    "CODEX_HOME": "{home}/.codex",
+    "CODEX_CA_CERTIFICATE": "/private/etc/ssl/cert.pem"
+  }
+}

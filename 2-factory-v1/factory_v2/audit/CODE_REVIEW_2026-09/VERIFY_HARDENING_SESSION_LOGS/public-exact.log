@@ -1,0 +1,76 @@
+CODE_REVIEW_REPAIRS_VERIFIED: {"ids": 37, "fixed": 36, "tests": 37}
+........................................................................ [  2%]
+........................................................................ [  4%]
+........................................................................ [  6%]
+........[factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=4 milestone=- (twitter-radar)
+F
+=================================== FAILURES ===================================
+______________ test_advance_still_runs_after_host_reload_shutdown ______________
+
+tmp_path = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5424/test_advance_still_runs_after_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1128e9010>
+
+    def test_advance_still_runs_after_host_reload_shutdown(tmp_path, monkeypatch):
+        """The victim symptom: after a RELOAD_NOW shutdown, a later in-process
+        loop must still advance a healthy project (built.txt appears)."""
+        dead = _shutdown_like_reload_now(monkeypatch)
+    
+        monkeypatch.setattr(factoryd, "_cto_startup_check", lambda *a, **kw: True)
+        monkeypatch.setitem(sys.modules, "factory_v2.continuation_controller", None)
+        monkeypatch.setenv("FACTORY_RUNRECORDS_PATH", str(tmp_path / "rr.jsonl"))
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tests"))
+        from test_portfolio_quarantine_isolation import ms, write_project  # noqa: E402
+    
+        b = write_project(tmp_path, [ms(
+            "B", command="python3 -c \"from pathlib import Path; Path('built.txt').write_text('done')\"",
+            deliverables=["built.txt"], e2e="test -f built.txt")], project="twitter-radar")
+        portfolio = tmp_path / "portfolio.json"
+        portfolio.write_text(json.dumps({"schema": "portfolio/v1",
+                                         "projects": [{"project_dir": "twitter-radar"}]}))
+        factoryd.run_daemon_loop(tmp_path / "unused.json", tmp_path / "run",
+                                 poll_interval_s=0.001, max_polls=4,
+                                 portfolio_path=str(portfolio), idle_poll_interval_s=0.001)
+>       assert (b / "built.txt").read_text() == "done"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_repairs_lot1_pool_recovery.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1027: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5424/test_advance_still_runs_after_0/twitter-radar/built.txt')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5424/test_advance_still_runs_after_0/twitter-radar/built.txt'
+
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1013: FileNotFoundError
+----------------------------- Captured stdout call -----------------------------
+[factoryd] V2_PORTFOLIO_MODE: portfolio=/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5424/test_advance_still_runs_after_0/portfolio.json — select_project() governs next work. DEFAULT_RUNTIME=V2.
+[factoryd] LOG_TARGET_DETACHED: factoryd.log no longer resolves to the inode this process writes to — readers are on a stale snapshot
+[factoryd] PARALLEL_ADVANCE_STARTED: twitter-radar slot=0 (running=1)
+[factoryd] [factoryd] HEARTBEAT pid=97833 polls=1 action=PROJECT_BUSY reason=second streak=0 next_sleep_s=1.0
+[factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=1 milestone=- (twitter-radar)
+[factoryd] PARALLEL_ADVANCE_DONE: twitter-radar action=WAITING_NETWORK
+[factoryd] PARALLEL_ADVANCE_STARTED: twitter-radar slot=0 (running=1)
+[factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=2 milestone=- (twitter-radar)
+[factoryd] PARALLEL_ADVANCE_DONE: twitter-radar action=WAITING_NETWORK
+[factoryd] PARALLEL_ADVANCE_STARTED: twitter-radar slot=0 (running=1)
+[factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=3 milestone=- (twitter-radar)
+[factoryd] PARALLEL_ADVANCE_DONE: twitter-radar action=WAITING_NETWORK
+[factoryd] PARALLEL_ADVANCE_STARTED: twitter-radar slot=0 (running=1)
+=========================== short test summary info ============================
+FAILED tests/test_repairs_lot1_pool_recovery.py::test_advance_still_runs_after_host_reload_shutdown
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 224 passed in 31.08s

@@ -1,0 +1,81 @@
+;; factory_v3/bornage.sb — profil Seatbelt unique (moteurs ET tests), INTERFACE §9, SPEC §1 fn 5.
+;; sandbox-exec -f bornage.sb -D ESPACE= -D RUN= -D TMP= -D HOME= -D NET=0|1 -D CONTROL= -D USERHOME=
+;;   [-D MAGASIN=] <argv>
+;; Chemins RÉELS (realpath : /private/tmp, jamais /tmp). Refus par défaut ; la dernière règle qui s'applique gagne.
+(version 1)
+(deny default)
+
+;; fork libre ; seul l'exec DIRECT est limité aux emplacements nommés (sans filtre : tout binaire, même illisible).
+;; Ne ferme PAS la liste des programmes : un binaire lisible copié/téléchargé dans ESPACE/TMP/HOME s'y exécute.
+(allow process-fork)
+(allow process-exec
+  (subpath "/usr/bin") (subpath "/bin") (subpath "/usr/sbin") (subpath "/sbin") (subpath "/usr/libexec")
+  (subpath "/System") (subpath "/Library/Developer/CommandLineTools") (subpath "/Library/Frameworks/Python.framework")
+  (subpath "/usr/local/lib/node_modules/opencode-ai")
+  (subpath (string-append (param "USERHOME") "/.local/share/claude/versions"))
+  (subpath (string-append (param "USERHOME") "/.codex/packages"))
+  (literal (string-append (param "USERHOME") "/bin/ffmpeg"))
+  (subpath (param "ESPACE")) (subpath (param "TMP")) (subpath (param "HOME")))
+(allow signal (target same-sandbox))
+(allow process-info* (target same-sandbox))
+(allow sysctl-read)
+(allow mach-lookup)
+(deny mach-lookup (global-name "com.apple.SecurityServer"))   ; trousseau (login.keychain)
+(allow ipc-posix-shm ipc-posix-sem)
+(allow pseudo-tty)
+(allow file-ioctl)
+
+;; lecture : métadonnées partout (résolution de chemins), contenu seulement ici
+(allow file-read-metadata)
+(allow file-read*
+  (literal "/")
+  (subpath "/usr") (subpath "/System") (subpath "/Library") (subpath "/opt/homebrew")
+  (subpath "/private/var/db") (subpath "/private/etc") (subpath "/dev") (subpath "/bin") (subpath "/sbin")
+  (subpath (param "ESPACE")) (subpath (param "TMP")) (subpath (param "HOME"))
+  (subpath (string-append (param "USERHOME") "/.local/bin"))
+  (subpath (string-append (param "USERHOME") "/.local/share/claude/versions")))
+;; A:F1/F3 : le dépôt de contrôle (noyau, juge, autres runs) n'est lu QUE pendant le jugement (NET=0) ;
+;; placé AVANT les refus ci-dessous, qui priment (dernière règle gagne)
+(if (equal? (param "NET") "0") (allow file-read* (subpath (param "CONTROL"))))
+;; catalogue des faux moteurs du banc (aucun secret) : seul morceau du contrôle lisible en phase moteur
+;; (ajout justifié : le faux moteur est un script sous CONTROL ; sans cette ligne, aucun faux moteur ne se lance)
+(allow file-read* (subpath (string-append (param "CONTROL") "/tests/v3/fakes")))
+
+;; lecture refusée (priment sur ce qui précède)
+(deny file-read*
+  (subpath (string-append (param "CONTROL") "/.context"))
+  (subpath (string-append (param "CONTROL") "/.git"))
+  (subpath (string-append (param "CONTROL") "/.factory_v3/runs"))
+  (subpath (string-append (param "USERHOME") "/.ssh"))
+  (subpath (string-append (param "USERHOME") "/.config/gh"))
+  (subpath (string-append (param "USERHOME") "/.claude"))
+  (subpath (string-append (param "USERHOME") "/.codex"))
+  (subpath (string-append (param "USERHOME") "/.local/share/opencode"))
+  (subpath (string-append (param "USERHOME") "/Library/Keychains"))
+  (subpath "/Library/Keychains"))
+;; binaire codex (exception sous ~/.codex ; auth.json : seulement via MAGASIN, en fin de profil)
+(allow file-read* (subpath (string-append (param "USERHOME") "/.codex/packages")))
+;; B5/C3 : du run courant, le bac ne lit que SA consigne et SON engine — jamais t_base*/, junit, reçus ;
+;; R2 : en phase moteur SEULEMENT (NET=1) — au jugement, l'état moteur (copie possible du jeton) reste illisible
+(if (equal? (param "NET") "1")
+    (allow file-read* (literal (string-append (param "RUN") "/CONSIGNE.md"))
+                      (subpath (string-append (param "RUN") "/engine"))))
+
+;; écriture : espace (sauf .git), RUN/engine, TMP, HOME du run
+(allow file-write*
+  (subpath (param "ESPACE")) (subpath (string-append (param "RUN") "/engine"))
+  (subpath (param "TMP")) (subpath (param "HOME"))
+  (literal "/dev/null") (literal "/dev/zero") (literal "/dev/dtracehelper") (regex #"^/dev/tty"))
+(deny file-write* (subpath (string-append (param "ESPACE") "/.git")))
+;; B2 : pendant le jugement (NET=0 = tests, cf. NET=1 = moteur), zéro écriture
+;; dans l'espace : tests, configurations, données et répertoires parents sont
+;; intouchables pendant leur propre collecte/exécution (dernière règle → gagne)
+(if (equal? (param "NET") "0")
+    (deny file-write* (subpath (param "ESPACE"))))
+
+;; réseau : ouvert pour le moteur (NET=1), coupé pour les tests (NET=0)
+(if (equal? (param "NET") "1") (allow network* system-socket))
+;; magasin CLI (Codex OAuth, jeton qui tourne au rafraîchissement) : ce SEUL fichier réel (literal, jamais le
+;; répertoire), lu et écrit en phase moteur (NET=1) seulement ; en dernier pour primer sur le refus de ~/.codex ;
+;; MAGASIN absent → aucun effet
+(if (and (equal? (param "NET") "1") (param "MAGASIN")) (allow file-read* file-write* (literal (param "MAGASIN"))))

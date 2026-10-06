@@ -1,0 +1,102 @@
+CODE_REVIEW_REPAIRS_VERIFIED: {"ids": 37, "fixed": 36, "tests": 37}
+........................................................................ [  2%]
+........................................................................ [  4%]
+...............................s........................................ [  6%]
+.................................................F
+=================================== FAILURES ===================================
+_______ test_r4_production_quarantine_self_repairs_through_real_factoryd _______
+
+    def test_r4_production_quarantine_self_repairs_through_real_factoryd():
+        """Start factoryd on a quarantined project and touch nothing afterwards.
+    
+        Metrics asserted, in order:
+          PRODUCTION_QUARANTINE_ENTERED, REPRODUCTION_BEFORE_FAIL_OBSERVED,
+          DIAGNOSE_DISPATCHED, SAFE_REPAIR_DISPATCHED, REPAIR_SHA_IS_NEW_COMMIT,
+          REGRESSIONS_PASS, INDEPENDENT_VALIDATION_PASS, QUARANTINE_CLEARED,
+          EXACT_INTERRUPTED_WORK_RESUMED, HUMAN_WRITES_AFTER_DAEMON_START=0
+        """
+        from factory_v2.safety_quarantine import is_in_quarantine
+    
+        root = Path(tempfile.mkdtemp(prefix="r4_"))
+        product = _product_repo(root)
+        pd = _quarantined_project(root, product)
+    
+        assert is_in_quarantine(pd), "PRODUCTION_QUARANTINE_ENTERED=1"
+        pre_repair_head = _git(product, "rev-parse", "HEAD")
+        manifest = product / "research" / "manifest.json"
+    
+        # Everything the test could possibly have written is frozen here.  Nothing below
+        # this line writes to the project, the product repo, or the quarantine record.
+        watched = [pd / "SAFETY_QUARANTINE.json", pd / "ROADMAP.yaml",
+                   pd / "STRATEGY.md", pd / "SPEC.md", manifest]
+        before = _snapshot(watched)
+    
+        # --foreground so the test observes the real loop, --run-dir so it never touches
+        # the live factory/run state.
+        proc = subprocess.Popen(
+            [sys.executable, str(_FACTORYD), "start", "--foreground",
+             "--v2-project-dir", str(pd), "--run-dir", str(root / "run"),
+             "--poll-interval-s", "0.2", "--idle-poll-interval-s", "1",
+             "--max-polls", "40"],
+            cwd=str(_REPO_ROOT), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        try:
+            stdout, _ = proc.communicate(timeout=300)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            stdout, _ = proc.communicate()
+            pytest.fail(f"factoryd did not finish:\n{stdout[-4000:]}")
+    
+        events = _events(pd)
+        ctx = f"\n--- factoryd ---\n{stdout[-4000:]}\n--- events ---\n{events}"
+    
+>       assert "QUARANTINE_CONTRACT_FROZEN" in events, ctx
+E       AssertionError: 
+E         --- factoryd ---
+E         tate=OFFLINE consecutive=22 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=23 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=24 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=25 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=26 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=27 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=28 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=29 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=30 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=31 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=32 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=33 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=34 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=35 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=36 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=37 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=38 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=39 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         [factoryd] V2_ADVANCE: action=WAITING_NETWORK state=OFFLINE consecutive=40 milestone=- (project)
+E         [factoryd] SAFETY_QUARANTINE_REPAIR_CYCLE: action=WAITING_NETWORK — control plane running, product dispatch blocked
+E         
+E         --- events ---
+E         []
+E       assert 'QUARANTINE_CONTRACT_FROZEN' in []
+
+tests/test_d1_final_r2_quarantine.py:187: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_d1_final_r2_quarantine.py::test_r4_production_quarantine_self_repairs_through_real_factoryd
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 264 passed, 1 skipped in 116.76s (0:01:56)

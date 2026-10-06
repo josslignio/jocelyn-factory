@@ -1,0 +1,91 @@
+{
+  "authority": "Canonical multi-project portfolio authority. LongRunSupervisor consults this before declaring ROADMAP_COMPLETE for any local project. Prevents PREMATURE_GLOBAL_IDLE_WITH_OPEN_PORTFOLIO.",
+  "current_primary_product": "twitter_radar",
+  "next_required_action": "none — all portfolio projects sealed (V1_READY)",
+  "north_star": "continuously deliver real products while improving Factory from validated work",
+  "portfolio_id": "primary",
+  "produced_at": "2026-09-07T14:38:22Z",
+  "projects": [
+    {
+      "canonical_head": "e2cc21db",
+      "description": "Factory V1 sealed 2026-09-07T12:03:58Z. All 12 CTOK capabilities E2E_PROVEN. Maintenance only — improvements triggered by observed defects from real product workloads.",
+      "mode": "MAINTENANCE_AND_MEASURED_IMPROVEMENT",
+      "priority": 2,
+      "project_id": "factory",
+      "sealed_at": "2026-09-07T12:03:58Z",
+      "state": "V1_READY"
+    },
+    {
+      "active_missions": [],
+      "candidate_chain_tip": "candidate/X110_WEEKLY_REPORT_V2 (merged 2026-09-07T14:37Z — promotes X104-X110)",
+      "canonical_head": "35d6fc1",
+      "completed_missions": [
+        "APP007_MISSION_001",
+        "APP007_MISSION_002",
+        "APP007_MISSION_003",
+        "APP007_MISSION_004",
+        "APP007_MISSION_005",
+        "APP007_MISSION_006",
+        "APP007_MISSION_007",
+        "APP007_MISSION_007B",
+        "APP007_MISSION_008",
+        "APP007_MISSION_008A",
+        "APP007_MISSION_008B",
+        "APP007_MISSION_008C",
+        "APP007_MISSION_008D",
+        "APP007_MISSION_008E",
+        "APP007_MISSION_008F",
+        "APP007_MISSION_008G",
+        "APP007_MISSION_008H",
+        "APP007_MISSION_009",
+        "APP007_MISSION_010",
+        "XR01_OPEN_SOURCE_INTAKE",
+        "XR02_SOCIAL_GRAPH_ENGINE",
+        "XR03_ABNORMAL_RETURNS",
+        "XR04_MOMENTUM_CONTROLS",
+        "XR05_OOS_VALIDATION",
+        "XR06_STATISTICAL_CONFIDENCE",
+        "X101_HISTORICAL_CORPUS_FILL",
+        "X102_M008H_FULL_CORPUS",
+        "X103_THESIS_RECONSTRUCTION",
+        "X104_REAL_SIGNAL_OUTCOME_LEDGER",
+        "X105_PERFORMANCE_V2_MFE_MAE",
+        "X106_ADVANCED_ACCOUNT_SCORING",
+        "X108_LEAD_LAG_ORIGINALITY",
+        "X109_RECURSIVE_ACCOUNT_DISCOVERY",
+        "X110_WEEKLY_REPORT_V2",
+        "X107_CONSENSUS_CLUSTERING"
+      ],
+      "current_milestone": "REAL_SIGNAL_PRODUCT_INTEGRATION",
+      "description": "APP007 Twitter/X financial-edge radar. Product E2E DELIVERED: weekly ranked leaderboard (momentum-adjusted CAR, 90d, PSR>=0.95) from real Twitter data. Stack X101-X110 merged at 35d6fc1. V1 sealed.",
+      "mode": "PRIMARY_PRODUCT_DELIVERY",
+      "next_mission_id": null,
+      "priority": 1,
+      "product_e2e_definition": "User query 'Top 10 accounts by momentum-adjusted CAR, last 90 days, PSR >= 0.95' returns ranked list updated weekly from real Twitter data.",
+      "project_id": "twitter_radar",
+      "queued_missions": [],
+      "remaining_roadmap": [
+        "X106: Advanced Account Scoring — composite score (adj_CAR + MFE/MAE + PSR)",
+        "X107: Consensus Clustering — lead/lag detection across accounts",
+        "X108: Lead/Lag + Originality Scoring",
+        "X109: Recursive Account Discovery",
+        "X110: Weekly Intelligence Report V2 — final product"
+      ],
+      "state": "V1_READY",
+      "sealed_at": "2026-09-07T14:23:52Z",
+      "milestone_delivered": {
+        "milestone": "REAL_SIGNAL_PRODUCT_INTEGRATION",
+        "completed_at": "2026-09-07T14:38:22Z",
+        "proof": "factory/campaigns/app007/evidence/X110_WEEKLY_REPORT_V2/product_e2e.json"
+      }
+    }
+  ],
+  "scheduling_policy": {
+    "after_each_twitter_radar_milestone": "settle; mark_completed; advance_to_next_x_mission; dispatch",
+    "human_selection_forbidden": true,
+    "project_selection": "PORTFOLIO_AUTHORITY_DETERMINISTIC",
+    "sequencing_note": "X-missions sequence sequentially (MAX_WORKERS=1). Each agent merges prior candidate at branch start. dependency_mission_ids in plan files left EMPTY — sequencing enforced by queue order and candidate chain merging.",
+    "when_factory_exposes_defect": "preserve_twitter_radar_position; minimal_factory_challenger; validate_promote; resume_twitter_radar"
+  },
+  "schema": "portfolio-state/v1"
+}

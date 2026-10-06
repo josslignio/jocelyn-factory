@@ -1,0 +1,634 @@
+{
+  "schema": "code-review-lot/v1",
+  "lot": "L6_bin_lib_products_1",
+  "engine": "codex",
+  "reviewed_sha": "a96d13c826a18b8c72c4d17abae6a0ee0805ddc0",
+  "files_reviewed": [
+    {
+      "path": "factory/bin/benchmark.py",
+      "lines": 349,
+      "verdict": "FINDINGS",
+      "summary": "Exécute et compare les bras Factory/solo avec reçus et télémétrie ; le lancement direct du script échoue avant argparse sans PYTHONPATH."
+    },
+    {
+      "path": "factory/bin/budget_ledger.py",
+      "lines": 311,
+      "verdict": "FINDINGS",
+      "summary": "Journalise les appels modèle, agrège les dépenses et contrôle les plafonds ; l’append par remplacement perd un enregistrement lors de deux écritures concurrentes."
+    },
+    {
+      "path": "factory/bin/check_task.py",
+      "lines": 376,
+      "verdict": "FINDINGS",
+      "summary": "Préflight identité, tâche, mission, Git, protocole et providers ; le contrôle des rubriques Markdown accepte un titre encore situé dans un bloc de code."
+    },
+    {
+      "path": "factory/bin/e1_probe.py",
+      "lines": 6,
+      "verdict": "CLEAN",
+      "summary": "Sonde minimale de self-hosting retournant E1_OK ; six lignes intégralement lues, aucune anomalie démontrée dans ce contrat constant."
+    },
+    {
+      "path": "factory/bin/factoryctl.py",
+      "lines": 201,
+      "verdict": "FINDINGS",
+      "summary": "Façade CLI des mixins et commandes mémoire/refresh ; les commandes du cœur ne contrôlent pas le paramètre state-dir absent avant de construire Path."
+    },
+    {
+      "path": "factory/bin/frozen_zone_guard.py",
+      "lines": 123,
+      "verdict": "FINDINGS",
+      "summary": "Compare RUN8 au tag gelé selon l’état de campagne ; ignore les réécritures des preuves P2_runs et lève le gel si l’état est inconnu."
+    },
+    {
+      "path": "factory/bin/i1_summary.py",
+      "lines": 331,
+      "verdict": "FINDINGS",
+      "summary": "Calcule les médianes admissibles et la dispersion selon le protocole M5 ; les mesures non finies passent la validation et sont publiées."
+    },
+    {
+      "path": "factory/bin/i2_gate_verdict.py",
+      "lines": 383,
+      "verdict": "FINDINGS",
+      "summary": "Recalcule les métriques I1/I2 et la gate d’amélioration ; la médiane des interventions manuelles masque une violation individuelle de zéro intervention."
+    },
+    {
+      "path": "factory/bin/ledger.py",
+      "lines": 181,
+      "verdict": "CLEAN",
+      "summary": "Fournit les mixins de persistance, le verrou Factory et la vérification des chaînes et preuves ; lecture complète, aucun défaut distinct retenu dans l’usage sous verrou CLI."
+    },
+    {
+      "path": "factory/bin/ledger_stats.py",
+      "lines": 141,
+      "verdict": "CLEAN",
+      "summary": "Lit le journal de budget, normalise les tokens inconnus et rend un résumé par moteur ; lecture complète, aucun défaut concret retenu dans le schéma numérique documenté."
+    },
+    {
+      "path": "factory/bin/lock_acceptance.py",
+      "lines": 146,
+      "verdict": "FINDINGS",
+      "summary": "Vérifie le contrat avant build et produit les pins du verrou ; les scripts oracle/mutations ne sont pas figés et le toolchain peut être non committé."
+    },
+    {
+      "path": "factory/bin/measurement_protocol.py",
+      "lines": 108,
+      "verdict": "CLEAN",
+      "summary": "Fige le hash du protocole M5 et vérifie son immutabilité, avec refus d’un refreeze différent ; lecture complète, aucun défaut démontré dans le flux séquentiel prévu."
+    },
+    {
+      "path": "factory/bin/memory_store.py",
+      "lines": 278,
+      "verdict": "FINDINGS",
+      "summary": "Consolide les leçons canoniques et legacy avec déduplication et rejet des lignes malformées ; deux promotions concurrentes peuvent perdre une leçon."
+    },
+    {
+      "path": "factory/bin/migrate_state_out_of_repo.py",
+      "lines": 141,
+      "verdict": "FINDINGS",
+      "summary": "Copie l’état suivi vers le run-dir puis le retire de l’index ; la seconde exécution avant commit échoue malgré le contrat idempotent."
+    },
+    {
+      "path": "factory/bin/milestone.py",
+      "lines": 534,
+      "verdict": "FINDINGS",
+      "summary": "Implémente les transitions et promotions Factory V1 ; appels refusés destructifs pour les preuves, reprise infra auto-bouclante et promotion d’une branche au-delà du SHA accepté."
+    },
+    {
+      "path": "factory/bin/mission_state.py",
+      "lines": 199,
+      "verdict": "FINDINGS",
+      "summary": "Persiste les étapes et le budget de mission pour la reprise ; une nouvelle tentative écrase la durée déjà consommée et recrédite le budget."
+    },
+    {
+      "path": "factory/bin/preflight_repo_identity.py",
+      "lines": 183,
+      "verdict": "CLEAN",
+      "summary": "Contrôle les racines Git sans replace objects contre le registre de chemins et de quarantaines ; lecture complète, le refus de ce worktree temporaire est conforme au registre actuel."
+    },
+    {
+      "path": "factory/bin/prove_red_factory.py",
+      "lines": 228,
+      "verdict": "FINDINGS",
+      "summary": "Applique des mutations ciblées et attend un échec pytest ; un test inexistant compte à tort comme une mutation tuée, sans exécution d’assertion."
+    },
+    {
+      "path": "factory/bin/receipt.py",
+      "lines": 241,
+      "verdict": "FINDINGS",
+      "summary": "Valide et exécute les reçus runtime Job Radar en worktree jetable ; le code réel du subprocess n’empêche pas l’enregistrement d’un reçu mensonger annonçant succès."
+    },
+    {
+      "path": "factory/bin/receipt_summary.py",
+      "lines": 106,
+      "verdict": "CLEAN",
+      "summary": "Rend le résumé lisible d’un reçu de dispatch, avec codes de sortie et gestion de BrokenPipe ; lecture complète, aucun défaut retenu sur le schéma de reçu attendu."
+    },
+    {
+      "path": "factory/bin/run_with_timeout.py",
+      "lines": 40,
+      "verdict": "FINDINGS",
+      "summary": "Lance une commande en groupe et applique TERM puis KILL ; la mort du leader après TERM empêche le nettoyage de descendants qui ignorent TERM."
+    },
+    {
+      "path": "factory/bin/runtime_receipt.py",
+      "lines": 100,
+      "verdict": "FINDINGS",
+      "summary": "Validateur générique de reçus, portées, nonces et écritures reviewer ; capability_id est obligatoire mais n’est pas comparé à la portée attendue."
+    },
+    {
+      "path": "factory/bin/snapshot_diff.py",
+      "lines": 188,
+      "verdict": "FINDINGS",
+      "summary": "Capture les snapshots Git, calcule les changements et committe pour les workers ; les suppressions sont incomplètement représentées et les fichiers stagés hors périmètre sont embarqués."
+    },
+    {
+      "path": "factory/bin/solo_benchmark_score.py",
+      "lines": 273,
+      "verdict": "FINDINGS",
+      "summary": "Évalue les livrables et tests des lanes XR04, puis émet le résultat ; le comptage d’un résumé pytest mixte gonfle le nombre d’échecs et le total."
+    },
+    {
+      "path": "factory/bin/tombstone.py",
+      "lines": 635,
+      "verdict": "FINDINGS",
+      "summary": "Observe les worktrees morts et maintient un journal de tombstones avec projections ; les chemins de preuves relatifs sont évalués contre le mauvais répertoire."
+    },
+    {
+      "path": "factory/bin/verdict_taxonomy.py",
+      "lines": 138,
+      "verdict": "FINDINGS",
+      "summary": "Classe les blocages et détecte les répétitions de tests en échec ; les paramètres pytest sont supprimés des node IDs et peuvent déclencher un faux conflit spec/test."
+    },
+    {
+      "path": "factory/bin/verify_campaign_freeze.py",
+      "lines": 592,
+      "verdict": "FINDINGS",
+      "summary": "Calcule la gate finale V1 depuis missions, scénarios et compteurs ; un corpus de runs absent et des roadmaps vides peuvent être traités comme des compteurs zéro mesurés."
+    },
+    {
+      "path": "factory/lib/candidate_registry.py",
+      "lines": 128,
+      "verdict": "FINDINGS",
+      "summary": "Registre de candidats protégé par flock et remplacement atomique ; la promotion QRTS accepte une preuve passed sans SHA propre."
+    },
+    {
+      "path": "factory/lib/completion_detector.py",
+      "lines": 83,
+      "verdict": "FINDINGS",
+      "summary": "Détecte reçus terminaux, PID morts et heartbeat périmé ; un reçu tronqué lève une exception qui remonte dans le polling du daemon."
+    },
+    {
+      "path": "factory/lib/context_compiler.py",
+      "lines": 396,
+      "verdict": "FINDINGS",
+      "summary": "Assemble le contexte CTO/canonique et sa version ; les fichiers canoniques manquent du compteur de version et une copie legacy peut primer sur le registre migré."
+    },
+    {
+      "path": "factory/lib/context_package.py",
+      "lines": 54,
+      "verdict": "CLEAN",
+      "summary": "Dataclass sérialisable du paquet de contexte et de son identité canonique ; lecture complète des champs et conversions, aucun défaut autonome démontré."
+    },
+    {
+      "path": "factory/lib/convergence_gate.py",
+      "lines": 401,
+      "verdict": "FINDINGS",
+      "summary": "Compare campagne, plans, preuves et architecture ; accepte une liste d’artefacts partiellement présents et déclare convergé lorsque toutes les sources manquent."
+    },
+    {
+      "path": "factory/lib/cto_kernel.py",
+      "lines": 472,
+      "verdict": "FINDINGS",
+      "summary": "Reconstruit et valide le contexte CTO puis dérive actions et identité ; les coercitions de listes font passer une DoD TBD et des champs obligatoires absents."
+    },
+    {
+      "path": "factory/lib/failure_director.py",
+      "lines": 216,
+      "verdict": "FINDINGS",
+      "summary": "Classe et mémorise les échecs avant escalade bornée ; la seule dernière ligne d’erreur peut faire déclarer équivalentes des tentatives aux échecs différents."
+    },
+    {
+      "path": "factory/lib/heartbeat.py",
+      "lines": 29,
+      "verdict": "CLEAN",
+      "summary": "Écrit et lit le heartbeat JSON via l’écriture atomique partagée, sans logique de décision ; lecture complète, aucun défaut distinct retenu par rapport aux erreurs des consommateurs."
+    },
+    {
+      "path": "factory/lib/long_run_supervisor.py",
+      "lines": 381,
+      "verdict": "FINDINGS",
+      "summary": "Évalue les gates V1 et remet du travail en file au niveau projet/portfolio ; un PASS ancien peut masquer la dernière régression non verte."
+    },
+    {
+      "path": "factory/lib/milestone_controller.py",
+      "lines": 302,
+      "verdict": "FINDINGS",
+      "summary": "Combine tests, intégration, E2E et artefacts en verdict de livraison ; un fichier E2E ancien n’est pas lié au SHA du candidat courant."
+    },
+    {
+      "path": "factory/lib/progress_watchdog.py",
+      "lines": 187,
+      "verdict": "FINDINGS",
+      "summary": "Agrège heartbeat, fichiers, commits et événements pour diagnostiquer le stall ; un timestamp sans fuseau provoque une exception et désactive ce diagnostic pour le worker."
+    }
+  ],
+  "findings": [
+    {
+      "id": "L6_bin_lib_products_1-001",
+      "file": "factory/bin/benchmark.py",
+      "line": 37,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "from factory_v2._io import _now",
+      "why": "Le point d’entrée documenté ne démarre pas lorsque PYTHONPATH n’inclut pas déjà la racine du dépôt : l’import factory_v2 précède les sys.path.insert censés le rendre disponible. Même --help échoue ; les modes run et compare sont inaccessibles dans cet environnement normal de script.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nenv = dict(os.environ); env.pop('PYTHONPATH', None)\np = subprocess.run([sys.executable, '-B', 'factory/bin/benchmark.py', '--help'], env=env, capture_output=True, text=True)\nassert p.returncode == 1 and \"No module named 'factory_v2'\" in p.stderr\nprint(\"rc=1 ModuleNotFoundError: No module named 'factory_v2'\")\n\nPY\nRésultat : TEST benchmark_import: rc=0\nrc=1 ModuleNotFoundError: No module named 'factory_v2'",
+      "recommendation": "Placer l’initialisation du chemin avant tout import du paquet local, ou supprimer cet import inutilisé ; tester le script depuis un processus sans PYTHONPATH.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-002",
+      "file": "factory/bin/budget_ledger.py",
+      "line": 104,
+      "severity": "HIGH",
+      "category": "RACE",
+      "evidence": "existing = path.read_bytes() if path.exists() else b\"\"",
+      "why": "Deux enregistrements qui lisent la même version du JSONL remplacent ensuite chacun le fichier entier : un des deux appels réussis disparaît. Le compteur sous-estime alors les tokens/coûts utilisés. La barrière du test impose seulement cet entrelacement à os.replace ; elle ne change ni les données ni l’algorithme.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport budget_ledger as b\nfrom threading import Barrier\nfrom concurrent.futures import ThreadPoolExecutor\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td)/'ledger.jsonl'; p.write_text('')\n    barrier=Barrier(2); replace=os.replace\n    def interleave(src,dst):\n        barrier.wait(timeout=5); return replace(src,dst)\n    with patch.object(b.os, 'replace', side_effect=interleave), ThreadPoolExecutor(2) as pool:\n        list(pool.map(lambda n:b._atomic_append(p, {'mission_id':'M', 'tokens_in':n}), [11,22]))\n    assert len(p.read_text().splitlines())==1\n    print('2 successful appends; persisted_records=1')\n\nPY\nRésultat : TEST budget_lost_append: rc=0\n2 successful appends; persisted_records=1",
+      "recommendation": "Verrouiller toute la transaction lecture-ajout-remplacement, ou utiliser un journal append protégé. Ajouter un test concurrent qui exige les deux lignes et la somme des budgets.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-003",
+      "file": "factory/bin/check_task.py",
+      "line": 130,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if _FENCE_RE.match(line):\n            in_fence = not in_fence\n            continue",
+      "why": "Le parseur inverse in_fence pour n’importe quelle séquence de trois accents graves ou tildes, sans mémoriser le délimiteur ni sa longueur. Trois accents graves dans un bloc ouvert avec quatre ferment donc fictivement le bloc : une rubrique Objective qui n’est que du code cité satisfait le préflight.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport check_task as c\ncontent = '````markdown\\n```\\n## Objective\\nThis heading remains inside the four-backtick fence.\\n````\\n'\nassert c._find_outcome_heading(content)=='Objective'\nprint('fenced-only Objective accepted')\n\nPY\nRésultat : TEST check_task_fence: rc=0\nfenced-only Objective accepted",
+      "recommendation": "Mémoriser le caractère et la longueur de l’ouverture ; ne fermer que sur un délimiteur compatible au moins aussi long. Couvrir les blocs imbriqués cités et les délimiteurs mixtes.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-004",
+      "file": "factory/bin/factoryctl.py",
+      "line": 169,
+      "severity": "LOW",
+      "category": "ERROR_HANDLING",
+      "evidence": "f=Factory(pathlib.Path(a.repo),pathlib.Path(a.state_dir))",
+      "why": "--state-dir est optionnel pour argparse, mais les commandes du cœur convertissent immédiatement None en Path. L’appel status --repo . provoque un traceback TypeError au lieu d’une erreur d’usage indiquant le paramètre manquant. Le test n’a créé aucun état.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\np=subprocess.run([sys.executable,'-B','factory/bin/factoryctl.py','status','--repo','.'],capture_output=True,text=True)\nassert p.returncode==1 and 'NoneType' in p.stderr\nprint('status --repo . without --state-dir: rc=1 TypeError NoneType')\n\nPY\nRésultat : TEST factoryctl_state: rc=0\nstatus --repo . without --state-dir: rc=1 TypeError NoneType",
+      "recommendation": "Exiger explicitement --state-dir pour les commandes qui construisent Factory, comme cela est déjà fait pour --repo ; conserver les commandes mémoire/weekly-refresh autonomes.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-005",
+      "file": "factory/bin/frozen_zone_guard.py",
+      "line": 89,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "rewrites = [f for f in committed if \"/evidence/P2_runs/\" not in f]",
+      "why": "L’exception destinée aux nouveaux résultats append-only exclut tous les chemins sous evidence/P2_runs, sans distinguer ajout, modification et suppression. Une preuve existante peut être modifiée puis commitée et le garde annonce FROZEN_ZONE_INTACT pendant RUNNING. La reproduction utilise un vrai dépôt temporaire et réécrit FAIL en PASS après le tag.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport frozen_zone_guard as f\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td); repo(p)\n    write(p/'campaigns/RUN8/evidence/P2_runs/run/result.json', {'verdict':'FAIL'})\n    state=p/'factory/campaigns/CAMPAIGN_STATE'; state.parent.mkdir(parents=True); state.write_text('RUNNING')\n    git(p,'add','.'); git(p,'commit','-qm','baseline'); git(p,'tag',f.BASELINE_TAG)\n    write(p/'campaigns/RUN8/evidence/P2_runs/run/result.json', {'verdict':'PASS'})\n    git(p,'add','.'); git(p,'commit','-qm','rewrite existing evidence')\n    with patch.object(f,'REPO',p): result=f.check()\n    assert result['ok']\n    print('existing FAIL receipt overwritten by PASS; guard='+result['verdict'])\n\nPY\nRésultat : TEST frozen_rewrite: rc=0\nexisting FAIL receipt overwritten by PASS; guard=FROZEN_ZONE_INTACT",
+      "recommendation": "Lire les statuts git du diff au baseline et n’autoriser que les créations sous ce préfixe ; refuser modifications, suppressions et renommages des preuves déjà présentes.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-006",
+      "file": "factory/bin/frozen_zone_guard.py",
+      "line": 65,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "if factory_state not in FACTORY_ACTIVE_STATES:\n        return {\"ok\": True, \"rc\": RC_OK, \"verdict\": \"FROZEN_ZONE_INTACT\",",
+      "why": "Un CAMPAIGN_STATE absent ou illisible produit UNKNOWN ; comme UNKNOWN n’appartient pas à FACTORY_ACTIVE_STATES, le garde lève le gel et renvoie succès sans même vérifier le baseline. L’absence d’autorité est ainsi assimilée à une autorisation d’écriture.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport frozen_zone_guard as f\nwith tempfile.TemporaryDirectory() as td:\n    with patch.object(f,'REPO',Path(td)): result=f.check()\n    assert result['ok']\n    print('missing campaign state and baseline; guard='+result['verdict'])\n\nPY\nRésultat : TEST frozen_unknown: rc=0\nmissing campaign state and baseline; guard=FROZEN_ZONE_INTACT",
+      "recommendation": "Limiter la levée du gel aux états inactifs explicitement autorisés et refuser les états absents, inconnus ou illisibles.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-007",
+      "file": "factory/bin/i1_summary.py",
+      "line": 125,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "elif not isinstance(run[metric], (int, float)) or isinstance(run[metric], bool):\n        reasons.append(f\"METRIC_VALUE_NOT_NUMERIC ({run[metric]!r})\")",
+      "why": "judge_run accepte NaN et les infinis comme nombres. Trois durées NaN deviennent une médiane PUBLISHED à NaN, avec exceeded=False puisque la comparaison NaN > seuil est fausse. Le résumé peut donc publier une mesure non définie et du JSON non standard.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport i1_summary as s, math\nruns=[dict(time_to_pass_seconds=float('nan'),repairs_count=0,manual_continue_count=0,escaped_defects_count=0,oracle_result='6/6 PASS',sha_accepted=True,candidate_sha='a'*40) for _ in range(3)]\nr=s.summarize(runs,0.15);m=r['metrics']['time_to_pass_seconds']\nassert m['publication']=='PUBLISHED' and math.isnan(m['median']) and not m['exceeded']\nprint('3 NaN durations; publication=PUBLISHED; median=NaN; exceeded=False')\n\nPY\nRésultat : TEST i1_nonfinite: rc=0\n3 NaN durations; publication=PUBLISHED; median=NaN; exceeded=False",
+      "recommendation": "Exiger math.isfinite sur les mesures numériques et des valeurs non négatives pour les compteurs/durées avant agrégation ; rejeter les valeurs non finies avec une raison d’inadmissibilité.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-008",
+      "file": "factory/bin/i2_gate_verdict.py",
+      "line": 171,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "\"met\": i2_manual[\"published\"] and manual_continue_median == thresholds[\"manual_continue\"],",
+      "why": "La définition gelée de manual_continue_count exige zéro pour chaque run, mais la gate compare seulement la médiane I2 à zéro. Un jeu I2 [0,0,1] obtient ici overall_gate=PASS avec toutes les autres conditions satisfaites. Une intervention réelle disparaît donc de la condition d’autonomie.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport i2_gate_verdict as g\nthresholds={'dispersion_max_pct':15,'product_oracles_pass':'6/6','manual_continue':0,'escaped_defects_in_i2':0,'learned_defect_absent_from_all_i2_runs':True,'improvement':'15%','no_critical_metric_degraded_more_than_pct':5}\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td)\n    for phase, seconds in [('i1',100),('i2',80)]:\n        for i in range(3):\n            run=p/phase/f'run-{i}'\n            write(run/'result.json',dict(time_to_pass_seconds=seconds,repairs_count=0,manual_continue_count=int(phase=='i2' and i==2),escaped_defects_count=0,oracle_result='6/6 PASS',sha_accepted=True,qa_accepted=True,candidate_sha='a'*40))\n            events=[dict(stage='prepared',ts='2026-01-01T00:00:00Z'),dict(stage='tests_pass',ts='2026-01-01T00:01:'+('40' if phase=='i1' else '20')+'Z')]\n            ep=run/'state/events.jsonl';ep.parent.mkdir();ep.write_text(''.join(json.dumps(e)+'\\n' for e in events))\n    result=g.evaluate(p/'i1',p/'i2',{},{},thresholds)\n    assert result['overall_gate']=='PASS'\n    print('I2 manual_continue_count=[0,0,1]; manual gate=True; overall_gate=PASS')\n\nPY\nRésultat : TEST i2_manual: rc=0\nI2 manual_continue_count=[0,0,1]; manual gate=True; overall_gate=PASS",
+      "recommendation": "Vérifier l’existence et la valeur zéro du compteur sur chaque run concerné par le protocole, dans les deux phases ; garder la médiane comme statistique descriptive, sans en faire la preuve de zéro intervention.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-009",
+      "file": "factory/bin/lock_acceptance.py",
+      "line": 98,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "cp = subprocess.run(oracle_command, cwd=spec_dir, capture_output=True, text=True)",
+      "why": "Le verrou promet de figer les scripts oracle/mutations et tous les fichiers committés, mais check ne conserve que le code de sortie de l’oracle et les booléens de mutation. Les scripts peuvent changer après le verrou sans changer evidence ; un toolchain-lock.json non suivi est également accepté. Le test modifie réellement les scripts d’un dépôt temporaire et obtient les mêmes preuves.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport lock_acceptance as l\nimport yaml\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td); repo(p); sd=p/'specs/M';sd.mkdir(parents=True)\n    for name in ['spec.md','plan.md','tasks.md']: (sd/name).write_text('valid requirement '*20)\n    (sd/'oracle.py').write_text('raise SystemExit(1)')\n    (sd/'mutation.py').write_text('raise SystemExit(1)')\n    (sd/'acceptance.yaml').write_text(yaml.safe_dump(dict(network_policy={'mode':'offline'}, oracle_command=[sys.executable,'oracle.py'],negative_mutations=[{'id':'negative','test_command':[sys.executable,'mutation.py']}])))\n    git(p,'add','.');git(p,'commit','-qm','contract')\n    (p/'toolchain-lock.json').write_text('{}')\n    ok,problems,e1=l.check(p,'M'); assert ok,problems\n    (sd/'oracle.py').write_text('# changed after lock\\nraise SystemExit(1)')\n    (sd/'mutation.py').write_text('# changed after lock\\nraise SystemExit(1)')\n    ok,problems,e2=l.check(p,'M'); assert ok and e1==e2,problems\n    print('untracked toolchain and dirty oracle/mutation accepted; lock evidence unchanged=True')\n\nPY\nRésultat : TEST lock_unpinned: rc=0\nuntracked toolchain and dirty oracle/mutation accepted; lock evidence unchanged=True",
+      "recommendation": "Déclarer et vérifier la liste des fichiers oracle/mutations/toolchain à HEAD, hacher chaque fichier dans le verrou, puis faire vérifier ces pins par les consommateurs ; ne pas tenter de déduire arbitrairement tous les fichiers d’une commande libre.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-010",
+      "file": "factory/bin/memory_store.py",
+      "line": 190,
+      "severity": "MEDIUM",
+      "category": "RACE",
+      "evidence": "previous = target.read_text(encoding=\"utf-8\") if target.is_file() else \"\"",
+      "why": "append_lesson lit puis réécrit l’intégralité du fichier sans verrou ; les commandes promote-lesson sont explicitement hors du verrou Factory. Deux promotions distinctes peuvent réussir et perdre une leçon. La reproduction synchronise les remplacements de deux threads après leurs lectures : base + A + B n’en laisse que deux.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport memory_store as m\nfrom threading import Barrier\nfrom concurrent.futures import ThreadPoolExecutor\nwith tempfile.TemporaryDirectory() as td:\n    root=Path(td);m.append_lesson(root, {'id':'base'})\n    barrier=Barrier(2);replace=os.replace\n    def interleave(src,dst):\n        barrier.wait(timeout=5);return replace(src,dst)\n    with patch.object(m.os,'replace',side_effect=interleave), ThreadPoolExecutor(2) as pool:\n        list(pool.map(lambda lid:m.append_lesson(root,{'id':lid}),['A','B']))\n    records,_,_=m.load_lessons(root);assert len(records)==2\n    print('base + 2 successful appends; persisted_lessons=2 (expected 3)')\n\nPY\nRésultat : TEST memory_lost_append: rc=0\nbase + 2 successful appends; persisted_lessons=2 (expected 3)",
+      "recommendation": "Prendre un verrou commun couvrant la recherche des doublons, la lecture et le remplacement ; vérifier qu’une promotion concurrente conserve toutes les leçons et ne duplique pas les ids.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-011",
+      "file": "factory/bin/migrate_state_out_of_repo.py",
+      "line": 114,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "subprocess.run([\"git\", \"-C\", str(repo), \"rm\", \"--cached\", \"-q\", \"--\", *to_untrack],\n                        check=True)",
+      "why": "La migration annoncée idempotente énumère les fichiers depuis HEAD, puis exécute git rm --cached. Après une première exécution sans commit, les fichiers restent dans HEAD mais sont déjà absents de l’index : la deuxième exécution échoue rc=128 au lieu de reprendre proprement. C’est précisément la fenêtre d’une reprise après migration partielle.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport migrate_state_out_of_repo as m\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td)/'repo';repo(p);write(p/'factory/run/x.json',{'value':1})\n    git(p,'add','.');git(p,'commit','-qm','state');dst=Path(td)/'out'\n    m.migrate(p,dst)\n    try: m.migrate(p,dst)\n    except subprocess.CalledProcessError as e:\n        print('second migration before commit: CalledProcessError rc='+str(e.returncode))\n    else: raise AssertionError('expected second git rm to fail')\n\nPY\nRésultat : TEST migration_retry: rc=0\nsecond migration before commit: CalledProcessError rc=128",
+      "recommendation": "Filtrer les suppressions selon l’index courant, ou utiliser --ignore-unmatch tout en contrôlant les erreurs réelles ; tester deux exécutions consécutives avant et après commit.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-012",
+      "file": "factory/bin/mission_state.py",
+      "line": 189,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "rec.duration_s = round(time.monotonic() - t0, 2)",
+      "why": "Relancer un StepRecord failed remplace duration_s par la durée de la dernière tentative. budget_remaining_s somme ensuite uniquement cette valeur : après 80 s consommées sur 100 puis une tentative de 5 s, le budget remonte de 20 à 95 s au lieu de tomber à 15. Un retry efface donc le coût temporel passé.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nfrom mission_state import MissionState,StepRecord\nimport mission_state as m\ns=MissionState('M','TASK',100,['build'],steps=[StepRecord('build',status='failed',duration_s=80)])\nbefore=s.budget_remaining_s()\nwith patch.object(m.time,'monotonic',side_effect=[100,105]):\n    with s.step('build'): pass\nassert before==20 and s.budget_remaining_s()==95\nprint('remaining before retry=20; after 5s retry=95 (expected 15)')\n\nPY\nRésultat : TEST mission_budget: rc=0\nremaining before retry=20; after 5s retry=95 (expected 15)",
+      "recommendation": "Conserver les tentatives séparément ou accumuler leurs durées ; distinguer la durée de la tentative courante du total durable, y compris après reprise d’un état running.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-013",
+      "file": "factory/bin/milestone.py",
+      "line": 204,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "dst=self.art(mid,src.name);dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(src.read_bytes())",
+      "why": "record copie l’artefact dans evidence avant de vérifier la transition et les pins. Un second appel invalide avec le même basename écrase donc la preuve déjà acceptée, puis lève invalid plan transition. La chaîne d’événements conserve l’ancien hash et verify_evidence lève désormais TAMPERED_EVIDENCE : un appel refusé a corrompu un état auparavant valide.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nfrom factoryctl import Factory\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);f=Factory(p,p/'state');f.state.mkdir();f.state_commit=lambda *a:None\n    src=p/'incoming/result.json';write(src,{'verdict':'PLAN_ACCEPT','spec_sha256':'s','plan_sha256':'p'})\n    f.roadmap.write_text(json.dumps({'id':'M','status':'spec_ready','spec_sha256':'s','plan_sha256':'p'})+'\\n')\n    f.record('M','plan',str(src));f.verify_evidence()\n    write(src,{'verdict':'PLAN_ACCEPT','spec_sha256':'bad','plan_sha256':'p'})\n    try:f.record('M','plan',str(src))\n    except RuntimeError as e:print('record rejected: '+str(e))\n    else:raise AssertionError('expected rejection')\n    try:f.verify_evidence()\n    except RuntimeError as e:\n        assert 'TAMPERED_EVIDENCE' in str(e);print('previously valid evidence now TAMPERED_EVIDENCE')\n    else:raise AssertionError('expected evidence corruption')\n\nPY\nRésultat : TEST milestone_evidence: rc=0\nrecord rejected: invalid plan transition\npreviously valid evidence now TAMPERED_EVIDENCE",
+      "recommendation": "Effectuer toutes les validations avant toute écriture et publier une preuve immutable par tentative/hash ; atomiser la mise à jour avec la transition acceptée. Tester qu’un appel refusé laisse preuves et ledger inchangés.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-014",
+      "file": "factory/bin/milestone.py",
+      "line": 315,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "resume_stage=r.get(\"status\",\"pending\")",
+      "why": "Une deuxième infra_failure pendant waiting_infra remplace resume_stage par waiting_infra, au lieu de garder le stade productif initial. recover(force=True) restaure ensuite waiting_infra et efface retry_after ; les appels suivants peuvent répéter cette pseudo-reprise sans retourner à built. La reproduction utilise deux attempt_id distincts, donc la déduplication ne s’applique pas.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nfrom factoryctl import Factory\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);f=Factory(p,p/'state');f.state.mkdir();f.state_commit=lambda *a:None\n    f.roadmap.write_text(json.dumps({'id':'M','status':'built'})+'\\n')\n    f.infra_failure('M','first',attempt_id='1');f.infra_failure('M','second',attempt_id='2');f.recover(force=True)\n    row=f.get('M');assert row['status']==row['resume_stage']=='waiting_infra'\n    print('after 2 infra errors + recover: status=waiting_infra; resume_stage=waiting_infra; retry_after=None')\n\nPY\nRésultat : TEST milestone_resume: rc=0\n1\nafter 2 infra errors + recover: status=waiting_infra; resume_stage=waiting_infra; retry_after=None",
+      "recommendation": "Quand le statut courant est waiting_infra, conserver et valider le resume_stage d’origine ; refuser les cibles de reprise non productives. Couvrir plusieurs pannes avant récupération.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-015",
+      "file": "factory/bin/milestone.py",
+      "line": 347,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "cp=run([\"git\",\"merge\",\"--no-ff\",r[\"branch\"],\"-m\",f\"merge {mid} exact-SHA accepted\"],cwd=self.repo,check=False)",
+      "why": "promote vérifie l’accord des SHAs enregistrés avec candidate_sha, mais fusionne ensuite le nom mutable r['branch']. Si la branche reçoit un nouveau commit après acceptation, ce commit non revu est fusionné et le jalon passe done. La preuve crée une branche d’intégration temporaire et un descendant unreviewed après le candidat accepté.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nfrom factoryctl import Factory\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);r=p/'repo';repo(r);git(r,'branch','integration');git(r,'switch','-q','-c','candidate')\n    (r/'accepted').write_text('reviewed');git(r,'add','.');git(r,'commit','-qm','accepted');accepted=git(r,'rev-parse','HEAD')\n    (r/'unreviewed').write_text('not reviewed');git(r,'add','.');git(r,'commit','-qm','unreviewed')\n    git(r,'switch','-q','integration')\n    f=Factory(r,p/'state');f.state.mkdir();f.state_commit=lambda *a:None\n    f.roadmap.write_text(json.dumps(dict(id='M',status='retro_done',candidate_sha=accepted,builder_runtime_sha=accepted,z_runtime_sha=accepted,acceptance_lock_sha256='locked',branch='candidate',worktree=str(p/'nonexistent')))+'\\n')\n    f.promote('M',target='integration')\n    assert (r/'unreviewed').exists() and f.get('M')['status']=='done'\n    print('promotion done; unreviewed descendant merged=True')\n\nPY\nRésultat : TEST milestone_promote: rc=0\nd90e301b243df94a07830c70c18ce44a80e141ce\npromotion done; unreviewed descendant merged=True",
+      "recommendation": "Fusionner le SHA accepté immutable et vérifier la relation exacte entre ce SHA, la branche candidate et les preuves ; bloquer ou requalifier tout descendant ajouté après review.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-016",
+      "file": "factory/bin/prove_red_factory.py",
+      "line": 198,
+      "severity": "HIGH",
+      "category": "TEST_GAP",
+      "evidence": "killed = cp.returncode != 0",
+      "why": "Tout code pytest non nul compte comme mutation KILLED. Un test inexistant retourne le code d’usage 4, sans exécuter d’assertion, et run_proof le classe pourtant KILLED. Une suite cassée, un problème de collecte ou une dépendance manquante peuvent ainsi produire de fausses preuves de détection.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport prove_red_factory as p\nwith tempfile.TemporaryDirectory() as td:\n    root=Path(td);b=root/'factory/bin';b.mkdir(parents=True);(b/'fixture.py').write_text('x=1\\n')\n    with patch.object(p,'REPO',root),patch.object(p,'BIN',b):\n        result=p.run_proof('TEST','missing test','fixture.py','x=1','x=2','tests/missing.py::test_absent')\n    assert result['status']=='KILLED' and result['returncode']==4\n    print('nonexistent test: pytest rc=4; mutation status=KILLED')\n\nPY\nRésultat : TEST mutation_false_kill: rc=0\nnonexistent test: pytest rc=4; mutation status=KILLED",
+      "recommendation": "Exiger un baseline vert, un test effectivement collecté/exécuté et un échec d’assertion attribuable à la mutation ; refuser les codes d’usage, interruption et collecte. Exécuter les mutations dans une copie isolée.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-017",
+      "file": "factory/bin/receipt.py",
+      "line": 198,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "oracle_returncode=proc.returncode",
+      "why": "verify_runtime lit le returncode réel du subprocess mais ne le confronte jamais au reçu. Un oracle qui écrit exit_code=0 puis termine rc=7 enregistre z_runtime_sha et un événement runtime_verified_z. Le test fait tourner un vrai oracle dans un worktree jetable ; seul le commit de l’état d’audit est neutralisé.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nfrom factoryctl import Factory\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);r=p/'repo';repo(r)\n    script=r/'scripts/verify_live_product_dod.py';script.parent.mkdir()\n    script.write_text(\"import json,sys,pathlib,hashlib,subprocess\\np=pathlib.Path(sys.argv[2]);p.parent.mkdir(parents=True,exist_ok=True)\\np.write_text(json.dumps({'oracle_sha256':hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),'candidate_sha':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'exit_code':0}))\\nraise SystemExit(7)\\n\")\n    git(r,'add','.');git(r,'commit','-qm','oracle');sha=git(r,'rev-parse','HEAD')\n    f=Factory(r,p/'state');f.state.mkdir();f.state_commit=lambda *a:None;f.roadmap.write_text(json.dumps({'id':'M','candidate_sha':sha})+'\\n')\n    f.verify_runtime('M','z',sha)\n    assert f.get('M')['z_runtime_sha']==sha\n    print('oracle process rc=7; receipt claimed rc=0; z_runtime_sha persisted=True')\n\nPY\nRésultat : TEST receipt_exit: rc=0\n{\n  \"oracle_sha256\": \"450908767b62a7c8627840e30337d6a1c4660480f5e166c0e3ec8a43225a822b\",\n  \"candidate_sha\": \"f590ca10694060f9caa7fb35c8d100e69cc40306\",\n  \"exit_code\": 0,\n  \"mission_id\": \"M\"\n}\noracle process rc=7; receipt claimed rc=0; z_runtime_sha persisted=True",
+      "recommendation": "Vérifier le code réel et sa cohérence avec le reçu avant toute persistance ; appeler la validation de schéma et des pins sur le résultat réellement exécuté. Enregistrer une erreur typée en cas de désaccord.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-018",
+      "file": "factory/bin/run_with_timeout.py",
+      "line": 30,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "proc.wait(timeout=a.grace)\n            except subprocess.TimeoutExpired:\n                os.killpg(proc.pid, signal.SIGKILL)\n                proc.wait()",
+      "why": "Après SIGTERM envoyé au groupe, le wrapper attend seulement le processus leader. Si celui-ci meurt mais qu’un descendant ignore SIGTERM, wait termine et SIGKILL n’est jamais envoyé : le wrapper sort 124 en laissant un processus consommateur actif. La reproduction nettoie explicitement son descendant après l’avoir constaté vivant.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport signal,time\nwith tempfile.TemporaryDirectory() as td:\n    root=Path(td);pidfile=root/'pid';ready=root/'ready'\n    child=\"import signal,time,pathlib,os;signal.signal(signal.SIGTERM,signal.SIG_IGN);pathlib.Path(\"+repr(str(pidfile))+\").write_text(str(os.getpid()));time.sleep(30)\"\n    parent=\"import subprocess,sys,time,pathlib;subprocess.Popen([sys.executable,'-c',\"+repr(child)+\"]);time.sleep(30)\"\n    p=subprocess.run([sys.executable,'-B','factory/bin/run_with_timeout.py','--timeout','1','--grace','0.1','--',sys.executable,'-c',parent],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=5)\n    pid=int(pidfile.read_text())\n    try:\n        os.kill(pid,0)\n        assert p.returncode==124\n        print('wrapper rc=124; SIGTERM-ignoring grandchild still alive=True')\n    finally:\n        try:os.kill(pid,signal.SIGKILL)\n        except ProcessLookupError:pass\n\nPY\nRésultat : TEST timeout_orphan: rc=0\nwrapper rc=124; SIGTERM-ignoring grandchild still alive=True",
+      "recommendation": "Après le délai de grâce, terminer le groupe restant même si le leader a déjà fini, avec gestion ESRCH et nettoyage sur interruption du wrapper ; tester un enfant qui ignore TERM.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-019",
+      "file": "factory/bin/runtime_receipt.py",
+      "line": 79,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "for key in (\"campaign_id\", \"project_id\", \"mission_id\", \"attempt_id\", \"candidate_sha\",\n                \"oracle_sha256\", \"acceptance_lock_sha256\", \"network_policy_sha256\",\n                \"toolchain_lock_sha256\"):",
+      "why": "capability_id est obligatoire dans le reçu mais absent de la liste des champs comparés à expected. Fournir expected.capability_id=EXPECTED n’empêche pas l’acceptation d’un reçu OTHER de la même mission : validate retourne []. Cela permet une réutilisation entre capacités là où un appelant croit avoir fixé cette portée.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport runtime_receipt as r\nwith tempfile.TemporaryDirectory() as td:\n    events=Path(td)/'events';events.write_text(json.dumps({'event_hash':'event'})+'\\n')\n    receipt={k:'value' for k in r.REQUIRED_FIELDS}\n    receipt.update(schema=r.SCHEMA,capability_id='OTHER',exit_code=0,sentinels_valid=True,role='reviewer',factory_event_hash='event')\n    problems=r.validate(receipt,expected={'capability_id':'EXPECTED'},consumed_nonces=set(),events_jsonl=events)\n    assert problems==[]\n    print('expected capability=EXPECTED; receipt capability=OTHER; problems=[]')\n\nPY\nRésultat : TEST runtime_scope: rc=0\nexpected capability=EXPECTED; receipt capability=OTHER; problems=[]",
+      "recommendation": "Comparer capability_id et tous les champs de portée contractuels fournis dans expected ; tester une matrice croisée projet/mission/capacité/tentative et exiger des types stricts pour les champs de validation.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-020",
+      "file": "factory/bin/snapshot_diff.py",
+      "line": 93,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "return self.added | self.modified | self.untracked_new",
+      "why": "Le contrat all_changed exclut deleted ; de plus snapshot conserve le hash de l’index quand un fichier suivi est supprimé sans staging, ce qui rend cette suppression invisible. Le dispatcher actuel utilise git add -A pour les changements non committés, ce qui atténue ce cas ; son fallback de détection d’un commit déjà créé utilise encore all_changed et peut ignorer un commit composé uniquement de suppressions.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport snapshot_diff as s\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);repo(p);before=s.snapshot(p);(p/'seed').unlink();after=s.snapshot(p);d=s.diff(before,after)\n    assert not d.has_changes\n    print('unstaged tracked deletion: has_changes=False')\n    git(p,'add','-u');d=s.diff(before,s.snapshot(p));assert d.deleted=={'seed'} and not d.all_changed\n    print('staged deletion: deleted={seed}; all_changed=set()')\n\nPY\nRésultat : TEST snapshot_deleted: rc=0\nunstaged tracked deletion: has_changes=False\nstaged deletion: deleted={seed}; all_changed=set()",
+      "recommendation": "Inclure deleted dans all_changed et représenter explicitement les suppressions du working tree ; couvrir suppressions non stagées, stagées et déjà committées dans le chemin de capture.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-021",
+      "file": "factory/bin/snapshot_diff.py",
+      "line": 178,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "[\"git\", \"commit\", \"-m\", message],",
+      "why": "factory_commit reçoit un ensemble changed_files mais git commit sans pathspec embarque l’intégralité de l’index. Un fichier déjà stagé par une autre opération est donc intégré au candidat sans appartenir à l’ensemble annoncé. Les worktrees isolés réduisent l’exposition, mais l’API ne respecte pas son périmètre.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport snapshot_diff as s\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);repo(p);(p/'other').write_text('unrelated');git(p,'add','other');(p/'chosen').write_text('mission')\n    s.factory_commit(p,{'chosen'},'M','build')\n    names=git(p,'show','--format=','--name-only','HEAD').splitlines()\n    assert set(names)=={'chosen','other'}\n    print('requested files={chosen}; committed files={chosen,other}')\n\nPY\nRésultat : TEST snapshot_staged: rc=0\nrequested files={chosen}; committed files={chosen,other}",
+      "recommendation": "Refuser un index contenant des chemins hors de changed_files ou créer le commit dans un index privé ; conserver les changements stagés étrangers au lieu de les embarquer silencieusement.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-022",
+      "file": "factory/bin/solo_benchmark_score.py",
+      "line": 81,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if \" failed\" in line:\n            for tok in line.split():\n                if tok.isdigit():\n                    failed = int(tok)",
+      "why": "Le parseur affecte chaque entier d’une ligne de résumé au compteur failed, y compris le nombre placé avant passed. Le résumé pytest standard '1 failed, 9 passed' est donc compté comme 9 échecs et 9 succès, total 18 au lieu de 10. Les scores publiés deviennent faux même si le verdict utilise correctement le returncode.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport solo_benchmark_score as s\nwith patch.object(s,'_run',return_value=(1,'1 failed, 9 passed in 0.01s','')):\n    ok,passed,failed,_=s._check_tests(Path('.'))\nassert (passed,failed)==(9,9)\nprint('pytest: 1 failed, 9 passed; parsed failed=9, passed=9, total=18')\n\nPY\nRésultat : TEST solo_count: rc=0\npytest: 1 failed, 9 passed; parsed failed=9, passed=9, total=18",
+      "recommendation": "Extraire les nombres associés explicitement aux mots passed/failed/error/skipped ou consommer un rapport structuré ; tester un résumé contenant plusieurs catégories.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-023",
+      "file": "factory/bin/tombstone.py",
+      "line": 272,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "resolvable = [e for e in recorded if pathlib.Path(e).exists()]",
+      "why": "last_known_proof résout les références evidence relatives depuis le cwd, alors que LedgerMixin.event les stocke relativement à state. Une preuve présente dans state/artifact.json est donc comptée introuvable dès que le cwd diffère de state, ce qui fausse le diagnostic et le rapport de conservation des preuves.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport tombstone as t\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);(p/'artifact.json').write_text('{}');(p/'events.jsonl').write_text(json.dumps({'milestone':'M','evidence':'artifact.json'})+'\\n')\n    result=t.last_known_proof(p,'M',{})\n    assert result['evidence_paths_resolvable']==0\n    print('existing state/artifact.json recorded relatively; evidence_paths_resolvable=0')\n\nPY\nRésultat : TEST tombstone_relative: rc=0\nexisting state/artifact.json recorded relatively; evidence_paths_resolvable=0",
+      "recommendation": "Résoudre les chemins relatifs contre state_dir, comme LedgerMixin.verify_evidence, tout en gardant la compatibilité des chemins absolus.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-024",
+      "file": "factory/bin/verdict_taxonomy.py",
+      "line": 76,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "m = re.match(r'FAILED\\s+([\\w/.:_-]+)', line.strip())",
+      "why": "La regex coupe les node IDs pytest avant les paramètres entre crochets. Deux échecs sur test_add[positive] puis test_add[negative] sont vus comme le même ensemble et detect_spec_test_conflict retourne True. dispatcher_v3 utilise directement ce résultat pour interrompre la réparation avant T3 et demander une réécriture de contrat : une réparation ayant changé le cas défaillant est donc classée à tort sans effet.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport verdict_taxonomy as v\none='FAILED tests/test_calc.py::test_add[positive] - AssertionError'\ntwo='FAILED tests/test_calc.py::test_add[negative] - AssertionError'\nassert v.detect_spec_test_conflict(one,two)\nprint('different parameter cases positive/negative; SPEC_TEST_CONFLICT=True')\n\nPY\nRésultat : TEST taxonomy_collision: rc=0\ndifferent parameter cases positive/negative; SPEC_TEST_CONFLICT=True",
+      "recommendation": "Conserver l’identifiant pytest complet, paramètres inclus, et distinguer échec persistant de contradiction prouvée entre spec et oracle ; tester deux paramètres différents du même test.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-025",
+      "file": "factory/bin/verify_campaign_freeze.py",
+      "line": 414,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if m5_runs_dir is not None:\n        counters[\"MANUAL_CONTINUE\"] = manual_continue_total(m5_runs_dir)",
+      "why": "Une racine M5 inexistante se réduit à MANUAL_CONTINUE=0 ; une liste roadmap_paths vide donne aussi zéro violation. evaluate considère ces compteurs comme mesurés et peut rendre campaign=PASS / freeze=ALLOWED avec des missions/faults déclarées PASS mais sans aucun run ni roadmap à vérifier. La reproduction montre ce verdict complet.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport verify_campaign_freeze as v\nimport yaml\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);(p/'missions.jsonl').write_text(''.join(json.dumps({'id':m,'status':'done','gate_result':'PASS'})+'\\n' for m in v.MISSION_IDS))\n    f=p/'fault.yaml';f.write_text(yaml.safe_dump({'expected_fault_ids':['F011','F023'],'scenarios':[{'id':x,'status':'PASS'} for x in ['F011','F023']],'invalid_promotions_this_session':0}))\n    result=v.evaluate(p,f,m0_status='PASS',m5_runs_dir=p/'missing',roadmap_paths=[],env={})\n    assert result['factory_v1_freeze']=='ALLOWED'\n    print('missing M5 runs; empty roadmaps; campaign=PASS; factory_v1_freeze=ALLOWED')\n\nPY\nRésultat : TEST freeze_empty_evidence: rc=0\nmissing M5 runs; empty roadmaps; campaign=PASS; factory_v1_freeze=ALLOWED",
+      "recommendation": "Exiger une couverture non vide et attendue des runs/roadmaps avant de publier zéro ; distinguer explicitement absence de données et zéro violation, puis bloquer le gel en cas de données manquantes.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-026",
+      "file": "factory/lib/candidate_registry.py",
+      "line": 121,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if getattr(evidence, \"sha\", sha) != sha:",
+      "why": "La vérification de SHA utilise le SHA demandé comme valeur par défaut de getattr. Un objet evidence avec passed=True mais sans attribut sha suffit donc à promouvoir n’importe quel QRTS, en contradiction avec l’invariant 'passing evidence for THIS sha'. Le verrou disque protège la course mais pas cette absence de liaison.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nfrom candidate_registry import CandidateRegistry\nwith tempfile.TemporaryDirectory() as td:\n    r=CandidateRegistry(Path(td)/'registry.json');r.promote_qrts('f'*40,SimpleNamespace(passed=True))\n    assert r.load()['qrts']=='f'*8\n    print('evidence passed=True with no SHA; QRTS promoted=ffffffff')\n\nPY\nRésultat : TEST candidate_unbound: rc=0\nevidence passed=True with no SHA; QRTS promoted=ffffffff",
+      "recommendation": "Exiger un SHA de preuve présent, valide et exactement égal au SHA cible avant la mutation ; refuser les preuves structurellement incomplètes.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-027",
+      "file": "factory/lib/completion_detector.py",
+      "line": 26,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "receipt = json.loads(receipt_path.read_text(encoding=\"utf-8\"))",
+      "why": "Un reçu tronqué lève JSONDecodeError au lieu d’un résultat contrôlé. factoryd.do_poll_iteration appelle cette fonction dans sa boucle des workers sans try local : un seul reçu écrit partiellement ou corrompu interrompt le polling des autres missions. La preuve isole l’exception sur un fichier contenant seulement '{'.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport completion_detector as c\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);(p/'receipt_M.json').write_text('{')\n    try:c.check_mission_completion('M',p)\n    except json.JSONDecodeError:print('truncated receipt raises JSONDecodeError (poll caller has no guard)')\n    else:raise AssertionError('expected crash')\n\nPY\nRésultat : TEST completion_corrupt: rc=0\ntruncated receipt raises JSONDecodeError (poll caller has no guard)",
+      "recommendation": "Lire et valider le reçu avec gestion des erreurs JSON/I/O, distinguer écriture transitoire et corruption durable, journaliser puis continuer à inspecter les autres workers ; imposer une publication atomique côté producteur.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-028",
+      "file": "factory/lib/context_compiler.py",
+      "line": 204,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "self.cto_dir / \"CTO_STRATEGY.md\",",
+      "why": "En mode project_dir, le contenu et l’identité d’autorité proviennent de STRATEGY.md/SPEC.md/ROADMAP.yaml du projet, mais _source_files hache encore CTO_STRATEGY.md et omet les trois fichiers canoniques. Une modification de SPEC change context_sha256 tout en conservant context_version=1. La version ne prouve donc pas la fraîcheur qu’annonce son contrat ; le hash du paquet atténue le risque pour les consommateurs qui le vérifient.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport context_compiler as c\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);project=p/'project';project.mkdir();(project/'STRATEGY.md').write_text('### 1. Rule');(project/'SPEC.md').write_text('first');(project/'ROADMAP.yaml').write_text('steps: []')\n    with patch.object(c,'_VERSION_CACHE_BASE',p/'cache'),patch.dict(os.environ,{'FACTORY_CANDIDATE_REGISTRY_PATH':str(p/'registry.json')}):\n        compiler=c.ContextCompiler(p,project);a=compiler.compile('M');(project/'SPEC.md').write_text('changed');b=compiler.compile('M')\n    assert a.context_version==b.context_version and a.context_sha256!=b.context_sha256\n    print('canonical SPEC changed; package SHA changed=True; context_version remains '+str(a.context_version))\n\nPY\nRésultat : TEST context_version: rc=0\ncanonical SPEC changed; package SHA changed=True; context_version remains 1",
+      "recommendation": "Inclure les sources canoniques et les dépendances réellement compilées dans le calcul de version, et indexer le cache aussi par projet ; vérifier version et identité sur deux projets distincts.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-029",
+      "file": "factory/lib/context_compiler.py",
+      "line": 192,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if legacy.exists():\n            return legacy\n        run_dir = (os.environ.get(\"FACTORY_RUN_DIR\", \"\").strip()",
+      "why": "Sans FACTORY_CANDIDATE_REGISTRY_PATH explicite, une ancienne copie in-repo gagne même lorsque FACTORY_RUN_DIR contient un registre plus récent. migrate_state_out_of_repo conserve justement la copie de travail source : la migration seule peut donc laisser ContextCompiler lire indéfiniment l’ancien QRTS/candidats.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport context_compiler as c\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);write(p/c.CANDIDATE_REGISTRY_REL,{'qrts':'stale'})\n    run=p/'run';new=run/'projects/factory-control/evidence/factory-v1/candidate_registry.json';write(new,{'qrts':'fresh'})\n    env=dict(os.environ);env.pop('FACTORY_CANDIDATE_REGISTRY_PATH',None);env['FACTORY_RUN_DIR']=str(run)\n    with patch.dict(os.environ,env,clear=True):result=c.ContextCompiler(p)._candidate_registry()\n    assert result['qrts']=='stale'\n    print('new run-dir registry=fresh; surviving migrated source=stale; compiler reads stale')\n\nPY\nRésultat : TEST context_registry: rc=0\nnew run-dir registry=fresh; surviving migrated source=stale; compiler reads stale",
+      "recommendation": "Donner priorité au run-dir configuré et à une source canonique explicite ; réserver la lecture legacy à un mode de compatibilité choisi ou à l’absence réelle de la destination, en signalant cette provenance.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-030",
+      "file": "factory/lib/convergence_gate.py",
+      "line": 185,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if resolved.exists():\n                found = True\n                break\n        if found:",
+      "why": "_check_artifact_missing s’arrête dès qu’un seul required_artifact existe. Avec present.json et missing.json requis, analyze retourne gaps=[] et is_converged=True. Le commentaire de module promet pourtant de contrôler chaque artefact obligatoire.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nfrom convergence_gate import ConvergenceGate\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);cs=p/'campaign/state.json';write(cs,{'completed':['M']})\n    write(p/'campaign/plans/m_plan.json',{'required_artifacts':['present.json','missing.json']})\n    write(p/'campaign/evidence/M/present.json',{})\n    result=ConvergenceGate(p/'factory/cto',cs).analyze('M')\n    assert result.is_converged and result.gaps==[]\n    print('one of two required artifacts missing; gaps=[]; is_converged=True')\n\nPY\nRésultat : TEST convergence_any: rc=0\none of two required artifacts missing; gaps=[]; is_converged=True",
+      "recommendation": "Évaluer tous les artefacts et produire les gaps correspondant à chacun des manquants ; tester une liste partiellement présente, pas seulement le cas où tout manque.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L6_bin_lib_products_1-031",
+      "file": "factory/lib/convergence_gate.py",
+      "line": 108,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "is_converged = not any(g.severity in (\"P0\", \"P1\") for g in gaps)",
+      "why": "Chaque source manquante ou illisible devient une liste de gaps vide ; is_converged est ensuite déduit de cette absence. Quand tous les fichiers d’autorité, de campagne et de plan sont absents, la gate annonce True. Ce résultat contredit la promesse de ne jamais produire un faux CONVERGED sur des sources illisibles.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nfrom convergence_gate import ConvergenceGate\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);result=ConvergenceGate(p/'factory/cto',p/'missing/state.json').analyze('M')\n    assert result.is_converged\n    print('all authority, plan and state files absent; is_converged=True')\n\nPY\nRésultat : TEST convergence_absent: rc=0\nall authority, plan and state files absent; is_converged=True",
+      "recommendation": "Suivre explicitement l’état des sources et produire un gap bloquant ou un résultat INDETERMINATE lorsque la couverture nécessaire manque ; ne pas confondre absence de constat et preuve de convergence.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-032",
+      "file": "factory/lib/cto_kernel.py",
+      "line": 266,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "milestone_definition_of_done=list(_get(\"milestone_definition_of_done\", []) or []),",
+      "why": "load convertit sans validation les champs de liste avec list(value or []). Une DoD textuelle 'TBD' devient ['T','B','D'], puis validate la juge non vide ; les listes obligatoires absentes deviennent également des listes vides valides. Le contrôle annoncé fail-closed accepte ainsi un contexte dont la DoD n’a jamais été définie.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport cto_kernel as c\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);data={k:'valid' for k in c.REQUIRED_SCALAR_FIELDS};data['milestone_definition_of_done']='TBD';write(p/'CTO_STATE.json',data)\n    kernel=c.CTOKernel(p);state=kernel.load();kernel.validate(state)\n    assert state.milestone_definition_of_done==['T','B','D']\n    print(\"DoD='TBD', required lists absent; validate passes; DoD=['T','B','D']\")\n\nPY\nRésultat : TEST cto_invalid_dod: rc=0\nDoD='TBD', required lists absent; validate passes; DoD=['T','B','D']",
+      "recommendation": "Valider les types, la présence et les sentinelles dans les données brutes avant coercition ; exiger une liste d’items DoD non vides et non placeholders.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-033",
+      "file": "factory/lib/failure_director.py",
+      "line": 126,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "essence = line\n    if not essence:\n        essence = normalize_error_text(error_output or \"\")",
+      "why": "La signature ne garde que la dernière ligne portant un marqueur d’erreur. Deux tentatives dont les tests défaillants diffèrent mais finissent sur la même exception secondaire ont donc la même signature et get_next_strategy lève EquivalentRetryDetected. Ce faux équivalent peut interrompre une réparation qui a pourtant changé les échecs.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport failure_director as f\none='FAILED tests/test_a.py::test_a - AssertionError: a\\nException: database unavailable'\ntwo='FAILED tests/test_b.py::test_b - AssertionError: b\\nException: database unavailable'\nassert f.compute_failure_signature(one)==f.compute_failure_signature(two)\nwith tempfile.TemporaryDirectory() as td:\n    director=f.FailureDirector(Path(td)/'log');director.record_failure(f.FailureRecord('M',1,f.TEST_FAILURE,f.compute_failure_signature(one),'INITIAL'))\n    try:director.get_next_strategy('M',2,f.TEST_FAILURE,f.compute_failure_signature(two))\n    except f.EquivalentRetryDetected:print('different failed tests + common last exception; EquivalentRetryDetected')\n    else:raise AssertionError('expected false equivalence')\n\nPY\nRésultat : TEST failure_signature: rc=0\ndifferent failed tests + common last exception; EquivalentRetryDetected",
+      "recommendation": "Construire une signature structurée de l’ensemble des échecs pertinents, en conservant les node IDs et types de causes après normalisation ; tester un échec corrigé et un nouveau cas avec une erreur finale commune.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-034",
+      "file": "factory/lib/long_run_supervisor.py",
+      "line": 83,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if isinstance(failed, int) and failed == 0:\n                return True",
+      "why": "_check_regression_clean parcourt les événements du plus récent au plus ancien mais continue après un événement de régression non vert. Un ancien FULL_REGRESSION_PASS suffit donc à masquer un nouveau REGRESSION_IMPROVED_929_931 portant failed=2. La gate reste verte et compute_next_required_actions n’en déduit pas de nouvelle qualification.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport long_run_supervisor as l\nrows=[{'event':'FULL_REGRESSION_PASS','failed':0},{'event':'REGRESSION_IMPROVED_929_931','failed':2}]\nassert l._check_regression_clean(rows)\nprint('older clean run + latest regression failed=2; full_regression_clean=True')\n\nPY\nRésultat : TEST longrun_stale_pass: rc=0\nolder clean run + latest regression failed=2; full_regression_clean=True",
+      "recommendation": "Décider sur la dernière qualification pertinente et liée au SHA courant ; un nouvel échec doit invalider le PASS antérieur plutôt que permettre de le retrouver plus loin dans l’historique.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-035",
+      "file": "factory/lib/milestone_controller.py",
+      "line": 282,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if isinstance(proof.get(\"pass\"), bool):\n            return proof[\"pass\"]\n        return str(proof.get(\"verdict\", \"\")).upper() == \"PASS\"",
+      "why": "Le fichier product_e2e.json est accepté selon son booléen pass sans liaison au candidate_sha du reçu courant. Une preuve PASS sur 'old' reste suffisante quand le reçu vise 'new' : evaluate rend COMPLETE. Une reprise dans le même répertoire de preuves peut donc réutiliser un E2E qui ne couvre pas le code livré.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nfrom milestone_controller import MilestoneController\nwith tempfile.TemporaryDirectory() as td:\n    p=Path(td);write(p/'cto/CTO_STATE.json',{'milestone_definition_of_done':{'M':{'required_artifacts':[]}}})\n    write(p/'evidence/M/product_e2e.json',{'pass':True,'candidate_sha':'old'})\n    result=MilestoneController(p/'cto',p/'evidence').evaluate('M',{'verdict':'ACCEPTED','candidate_sha':'new'})\n    assert result.verdict=='COMPLETE'\n    print('current candidate=new; product_e2e proof candidate=old; verdict=COMPLETE')\n\nPY\nRésultat : TEST milestone_stale_e2e: rc=0\ncurrent candidate=new; product_e2e proof candidate=old; verdict=COMPLETE",
+      "recommendation": "Exiger la correspondance exacte mission/tentative/candidate_sha et la provenance du résultat E2E avant COMPLETE ; couvrir la réutilisation d’un répertoire contenant un reçu ancien.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L6_bin_lib_products_1-036",
+      "file": "factory/lib/progress_watchdog.py",
+      "line": 42,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "return dt.datetime.fromisoformat(ts.replace(\"Z\", \"+00:00\"))",
+      "why": "Le fallback fromisoformat accepte un timestamp ISO sans fuseau et renvoie un datetime naïf. snapshot le compare ensuite au now UTC aware et lève TypeError. factoryd transforme l’exception en WATCHDOG_WARN puis passe au worker suivant : un worker portant ce timestamp échappe au diagnostic de stall à chaque cycle.\n\nPreuve exécutée sur la baseline, sans correction du dépôt (mission de revue uniquement). Depuis la racine du checkout, commande reproductible :\npython3 -B - <<'PY'\nimport sys, os, json, tempfile, subprocess\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom types import SimpleNamespace\nsys.path[:0] = [str(Path.cwd()), str(Path.cwd()/\"factory/bin\"), str(Path.cwd()/\"factory/lib\")]\ndef write(p, value):\n    p.parent.mkdir(parents=True, exist_ok=True)\n    p.write_text(json.dumps(value))\ndef git(root, *args):\n    return subprocess.check_output([\"git\", \"-C\", str(root), *args], text=True, stderr=subprocess.STDOUT).strip()\ndef repo(root):\n    root.mkdir(parents=True, exist_ok=True)\n    git(root, \"init\", \"-q\", \"-b\", \"main\")\n    git(root, \"config\", \"user.email\", \"audit@example.invalid\")\n    git(root, \"config\", \"user.name\", \"Audit fixture\")\n    git(root, \"config\", \"core.hooksPath\", \"/dev/null\")\n    (root/\"seed\").write_text(\"seed\")\n    git(root, \"add\", \".\")\n    git(root, \"commit\", \"-qm\", \"seed\")\n\nimport progress_watchdog as p\nimport datetime as dt\nwith tempfile.TemporaryDirectory() as td:\n    root=Path(td)\n    try:p.ProgressWatchdog(root,root).snapshot({'mission_id':'M','started_at':'2026-01-01T00:00:00'},now=dt.datetime(2026,1,2,tzinfo=dt.timezone.utc))\n    except TypeError:print('offset-free ISO started_at: TypeError comparing naive and aware datetimes')\n    else:raise AssertionError('expected TypeError')\n\nPY\nRésultat : TEST watchdog_naive: rc=0\noffset-free ISO started_at: TypeError comparing naive and aware datetimes",
+      "recommendation": "Normaliser les timestamps sans offset selon une politique explicite (UTC ou rejet contrôlé) et éviter toute comparaison naïf/aware ; tester heartbeat, événements et started_at sans fuseau.",
+      "fix_effort": "S"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "glm",
+  "cli": "opencode",
+  "argv": [
+    "opencode",
+    "run",
+    "--print-logs",
+    "--log-level",
+    "INFO",
+    "--pure",
+    "--format",
+    "json",
+    "--model",
+    "{model}",
+    "{prompt}"
+  ],
+  "defauts": {
+    "model": "zai-coding-plan/glm-5.3",
+    "max_turns": 80
+  },
+  "format_sortie": "opencode_json",
+  "usage": {
+    "type": "step_finish",
+    "cumul": true,
+    "champs": {
+      "input": "part.tokens.input",
+      "output": "part.tokens.output",
+      "reasoning": "part.tokens.reasoning",
+      "cache_read": "part.tokens.cache.read",
+      "cache_write": "part.tokens.cache.write",
+      "cost_usd": "part.cost"
+    }
+  },
+  "plafonds": {
+    "mecanisme": "natif",
+    "drapeaux": [
+      "agent.build.steps={max_turns} (OPENCODE_CONFIG_CONTENT)"
+    ]
+  },
+  "arret": {
+    "signal_1": "SIGINT",
+    "grace_s": 10,
+    "signal_2": "SIGKILL"
+  },
+  "auth": {
+    "env": [
+      "ZAI_API_KEY"
+    ]
+  },
+  "env_allowlist": [
+    "ZAI_API_KEY"
+  ],
+  "env_fixe": {
+    "OPENCODE_CONFIG_CONTENT": "{\"$schema\":\"https://opencode.ai/config.json\",\"autoupdate\":false,\"share\":\"disabled\",\"provider\":{\"zai-coding-plan\":{\"options\":{\"apiKey\":\"{env:ZAI_API_KEY}\"},\"models\":{\"glm-5.3\":{\"name\":\"GLM-5.3\"}}}},\"agent\":{\"build\":{\"steps\":{max_turns}}}}",
+    "OPENCODE_PERMISSION": "{\"*\":\"deny\",\"read\":\"allow\",\"edit\":\"allow\",\"bash\":\"allow\",\"glob\":\"allow\",\"grep\":\"allow\",\"list\":\"allow\",\"webfetch\":\"deny\",\"external_directory\":\"deny\"}",
+    "OPENCODE_DISABLE_AUTOUPDATE": "1",
+    "OPENCODE_DISABLE_MODELS_FETCH": "1"
+  }
+}

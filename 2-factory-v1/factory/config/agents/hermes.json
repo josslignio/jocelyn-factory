@@ -1,0 +1,28 @@
+{
+  "name": "Hermes Chief of Staff",
+  "role": "pm",
+  "title": "Chief of Staff & Factory Memory",
+  "adapterType": "hermes_local",
+  "budgetMonthlyCents": 0,
+  "adapterConfig": {
+    "provider": "openai-codex",
+    "timeoutSec": 300,
+    "graceSec": 20,
+    "persistSession": true,
+    "maxIterations": 20,
+    "enabledToolsets": [
+      "terminal",
+      "file",
+      "web"
+    ]
+  },
+  "runtimeConfig": {
+    "heartbeat": {
+      "enabled": true,
+      "intervalSec": 600,
+      "wakeOnAssignment": true,
+      "wakeOnOnDemand": true,
+      "wakeOnAutomation": true
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "campaign": "PARTIAL_FAIL",
+  "factory_v1_freeze": "INTERDIT",
+  "fault_injection": {
+    "executed_fault_ids": [
+      "F001",
+      "F002",
+      "F003",
+      "F004",
+      "F005",
+      "F006",
+      "F007",
+      "F008",
+      "F009",
+      "F010",
+      "F011",
+      "F012",
+      "F013",
+      "F014",
+      "F015",
+      "F016",
+      "F017",
+      "F018",
+      "F019",
+      "F020",
+      "F021",
+      "F022",
+      "F023"
+    ],
+    "expected_fault_ids": [
+      "F001",
+      "F002",
+      "F003",
+      "F004",
+      "F005",
+      "F006",
+      "F007",
+      "F008",
+      "F009",
+      "F010",
+      "F011",
+      "F012",
+      "F013",
+      "F014",
+      "F015",
+      "F016",
+      "F017",
+      "F018",
+      "F019",
+      "F020",
+      "F021",
+      "F022",
+      "F023"
+    ],
+    "fault_ids_match": true,
+    "invalid_promotions_this_session": 0,
+    "invalid_promotions_zero": true,
+    "passed_fault_ids": [
+      "F001",
+      "F002",
+      "F003",
+      "F004",
+      "F005",
+      "F006",
+      "F007",
+      "F008",
+      "F009",
+      "F010",
+      "F011",
+      "F012",
+      "F013",
+      "F014",
+      "F015",
+      "F016",
+      "F017",
+      "F018",
+      "F019",
+      "F020",
+      "F021",
+      "F022",
+      "F023"
+    ]
+  },
+  "mission_verdicts": {
+    "M0": "PASS",
+    "M1": "PASS",
+    "M3": "PASS",
+    "M4a": "PASS",
+    "M4b": "PASS",
+    "M4c": "PASS",
+    "M4d": "PASS",
+    "M5": "FAIL"
+  },
+  "order19_counter_detail": {
+    "invalid_review_accepted": {
+      "count": 0,
+      "rows_checked": 5,
+      "violations": []
+    },
+    "paid_api_usage": {
+      "env_vars_present": []
+    },
+    "sha_divergence_accepted": {
+      "count": 0,
+      "rows_checked": 12,
+      "violations": []
+    }
+  },
+  "order19_counters": {
+    "BRAIN_SWITCH_AT_SAFE_CHECKPOINT": "PASS",
+    "CRASH_RESUME": "PASS",
+    "INVALID_REVIEW_ACCEPTED": 0,
+    "MANUAL_CONTINUE": 0,
+    "PAID_API_USAGE": 0,
+    "SHA_DIVERGENCE_ACCEPTED": 0
+  },
+  "reasons": [
+    "M5=FAIL"
+  ],
+  "untracked_order19_counters": []
+}

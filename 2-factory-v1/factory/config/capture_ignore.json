@@ -1,0 +1,27 @@
+{
+  "_comment": "LOT C34 — factory-owned bookkeeping paths. These are rewritten automatically by the factory's own control plane (post-commit hook, daemon, ledger) on every commit/mission cycle, never by a worker. They are excluded from candidate capture (dispatcher_v3._capture_worker_changes), excluded from the post-capture cleanliness gate (dispatcher_v3._post_capture_gate), and can never be declared as a milestone deliverable (typed refusal instead). Schema: `paths` is a list of entries matched against a repo-relative, forward-slash path. An entry ending in '/' matches that directory and everything under it. An entry containing '*' is matched with fnmatch (shell-style glob, '*' matches any characters including '/'). Any other entry is matched exactly. 20/09 18:50 Bangkok: + factory_v2/receipts/ (weekly_observations, recovery_allocations… written by the test suite itself inside the worktree), evidence/ (engine registry / attempt ledger of the worktree) and the transaction lock — three accepted candidates were refused CANDIDATE_CAPTURE_INCOMPLETE on receipts the tests had just written. 21/09 (FACTORY_TOKEN_TRUTH_V1): + projects/*/evidence/streams/ — raw engine streams teed by the dispatcher/review path per attempt (already under projects/*/evidence/, listed explicitly). 22/09 (FACTORY_DEAD_WEIGHT_PURGE_V1): + factory_v2/receipts/verified_fixes/ (magasin du superviseur), factory_v2/receipts/audit_cells/ (bacs à sable de la boucle d'audit), factory_v2/receipts/settlements/.ledger.lock, routing_stats/ (routing_aggregator, dérivé de runrecords.jsonl) — retirés du suivi git, comptabilité runtime.",
+  "paths": [
+    "factory/projects/factory-control/evidence/",
+    "factory/run/",
+    "factory/cto/CTO_EVENTS.jsonl",
+    "factory/cto/canonical/AUTHORITY_AUDIT_RECEIPT.json",
+    "factory_v2/receipts/runrecords.jsonl",
+    "factory_v2/receipts/collection_sessions.jsonl",
+    "factory_v2/receipts/settlements/LEDGER_INDEX.json",
+    "projects/*/PROJECT_STATE.json",
+    "projects/*/evidence/",
+    "projects/*/evidence/streams/",
+    "evidence/engine_registry.jsonl",
+    "evidence/attempt_accounts.jsonl",
+    "evidence/",
+    ".project_transaction.lock",
+    "projects/*/.project_transaction.lock",
+    "factory_v2/receipts/weekly_observations/*.json",
+    "factory_v2/receipts/recovery_allocations/",
+    "factory_v2/receipts/validation_jobs/",
+    "factory_v2/receipts/verified_fixes/",
+    "factory_v2/receipts/audit_cells/",
+    "factory_v2/receipts/settlements/.ledger.lock",
+    "routing_stats/"
+  ]
+}

@@ -1,0 +1,274 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.FF                                    [100%]
+=================================== FAILURES ===================================
+_______________ test_l5_2_022_no_injected_outcome_is_not_a_pass ________________
+tests/test_repairs_vh_judges.py:87: in test_l5_2_022_no_injected_outcome_is_not_a_pass
+    assert statuses.get("fault_records_persisted") == "FAIL", res.checks
+E   AssertionError: [VerificationCheck(check='milestone_count', status='PASS', detail='reported=1 >= required=1'), VerificationCheck(check...t files: ['a.json']"), VerificationCheck(check='fault_records_persisted', status='PASS', detail='0/1 faults injected')]
+E   assert 'PASS' == 'FAIL'
+E     
+E     - FAIL
+E     + PASS
+_________________ test_l5_2_024_printed_human_go_is_recounted __________________
+tests/test_repairs_vh_judges.py:160: in test_l5_2_024_printed_human_go_is_recounted
+    assert "HUMAN_GO=1" in r.stdout, (
+E   AssertionError: the qualification message must print the RECOUNTED human-gate count, not an unverified HUMAN_GO=0: 'PASS: 2 refreshes, all distinct report_shas, HUMAN_GO=0\n'
+E   assert 'HUMAN_GO=1' in 'PASS: 2 refreshes, all distinct report_shas, HUMAN_GO=0\n'
+E    +  where 'PASS: 2 refreshes, all distinct report_shas, HUMAN_GO=0\n' = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178..._human_go0/cycle2.jsonl'], returncode=0, stdout='PASS: 2 refreshes, all distinct report_shas, HUMAN_GO=0\n', stderr='').stdout
+______________ test_l5_2_027_restarts_recomputed_without_home_log ______________
+tests/test_repairs_vh_judges.py:256: in test_l5_2_027_restarts_recomputed_without_home_log
+    out = vfh.check_metrics_dashboard(Path(tmp_path))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+factory_v2/verify_factory_hygiene.py:381: in check_metrics_dashboard
+    raise Unmet(f"METRICS_MISMATCH: settlements/parked/loops/restarts recomputed={settlements}/{parked}/{loops}/{restarts}")
+E   factory_v2.verify_factory_hygiene.Unmet: METRICS_MISMATCH: settlements/parked/loops/restarts recomputed=0/0/0/0
+___________ test_l5_2_020_negative_settlements_and_null_level_a_fail ___________
+tests/test_repairs_vh_judges.py:55: in test_l5_2_020_negative_settlements_and_null_level_a_fail
+    assert r.returncode != 0, (
+E   AssertionError: arbitrary schema + null level_a entries + settlements_covered=-1 must FAIL, got rc=0 with stdout='OK: 2 Level-A checks, 1 auto-triggered Level-B events\nOK: -1 settlements covered, human_triggered_audits=0\n'
+E   assert 0 != 0
+E    +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178... 2 Level-A checks, 1 auto-triggered Level-B events\nOK: -1 settlements covered, human_triggered_audits=0\n', stderr='').returncode
+__________ test_l5_2_026_stage_mentioned_only_in_comment_is_not_wired __________
+tests/test_repairs_vh_judges.py:200: in test_l5_2_026_stage_mentioned_only_in_comment_is_not_wired
+    with pytest.raises(Exception, match="STAGES_NOT_WIRED"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE Exception
+________________ test_l5_2_023_twenty_copies_of_one_handle_fail ________________
+tests/test_repairs_vh_judges.py:124: in test_l5_2_023_twenty_copies_of_one_handle_fail
+    assert r.returncode != 0, (
+E   AssertionError: 20 copies of the SAME handle must not satisfy ≥20 distinct accounts (rc=0, stdout='CYCLE2_MANIFEST PASS: 20 accounts with ≥30 calls, corpus_sha=aaaaaaaaaaaa\n')
+E   assert 0 != 0
+E    +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178....json'], returncode=0, stdout='CYCLE2_MANIFEST PASS: 20 accounts with ≥30 calls, corpus_sha=aaaaaaaaaaaa\n', stderr='').returncode
+__________________ test_l4_010_tool_output_is_never_a_verdict __________________
+tests/test_repairs_vh_review.py:21: in test_l4_010_tool_output_is_never_a_verdict
+    assert _extract_verdict(codex_tool_only) == "ERROR", (
+E   AssertionError: Codex transcript with only a command_execution displaying ACCEPT must not become an ACCEPT verdict
+E   assert 'ACCEPT' == 'ERROR'
+E     
+E     - ERROR
+E     + ACCEPT
+_______________ test_l5_1_031_gate_under_if_false_does_not_count _______________
+tests/test_repairs_vh_gates.py:51: in test_l5_1_031_gate_under_if_false_does_not_count
+    assert ok is False, (
+E   AssertionError: a gate under `if False:` is never executed and must not count (all 1 spending path(s) gated: dispatch()@4)
+E   assert True is False
+____________ test_l5_1_002_ungated_ctx_runner_in_stage_module_fails ____________
+tests/test_repairs_vh_gates.py:36: in test_l5_1_002_ungated_ctx_runner_in_stage_module_fails
+    assert ok is False, (
+E   AssertionError: ungated ctx.runner.execute in a stage module must fail the wiring gate (all 1 spending path(s) gated: recovery()@3)
+E   assert True is False
+_____________ test_l5_1_001_imports_only_without_calls_fails_gate ______________
+tests/test_repairs_vh_gates.py:22: in test_l5_1_001_imports_only_without_calls_fails_gate
+    assert ok is False, (
+E   AssertionError: imports without a single call must not satisfy the A1/A6 gate (A1/A6: all three capabilities present in the production dispatch path apply=['mark_result_applied'], execute=['run_audit_cell'], trigger=['persist_audit_cell_request'])
+E   assert True is False
+____________ test_l5_2_010_rc1_wrapper_printing_passed_is_not_pass _____________
+tests/test_repairs_vh_runners.py:97: in test_l5_2_010_rc1_wrapper_printing_passed_is_not_pass
+    job = _job_state(cwd)
+          ^^^^^^^^^^^^^^^
+tests/test_repairs_vh_runners.py:88: in _job_state
+    return json.loads(p.read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1027: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1013: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/private/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/pytest-of-jocelyngrosjean/pytest-5359/test_l5_2_010_rc1_wrapper_prin0/w/factory_v2/receipts/validation_jobs/k1.json'
+____________ test_l5_2_004_freshness_probe_requires_observed_change ____________
+tests/test_repairs_vh_runners.py:51: in test_l5_2_004_freshness_probe_requires_observed_change
+    assert out.get("passed") is False, (
+E   AssertionError: a stale cached loader survived the freshness probe: {'passed': True, 'auth1_hashes': {'project': 'p', 'strategy_sha': '21933aa92f2e8815f8b1a47e81b1243112e2c0f25b6cceaf7936e977a7713d28', 'spec_sha': '1b355baa30768cee67e2f1f9ff2d45584cb42f9413881d9104579d26cff1d2e8', 'roadmap_sha': '3d4a124b77dd78dc8c6a5fabf3dc1fe9c66f7e18d8720e10fe367500416a967f'}, 'auth2_hashes': {'project': 'p', 'strategy_sha': '21933aa92f2e8815f8b1a47e81b1243112e2c0f25b6cceaf7936e977a7713d28', 'spec_sha': '1b355baa30768cee67e2f1f9ff2d45584cb42f9413881d9104579d26cff1d2e8', 'roadmap_sha': '3d4a124b77dd78dc8c6a5fabf3dc1fe9c66f7e18d8720e10fe367500416a967f'}, 'note': 'load_authority() is stateless — same disk content = identical hashes'}
+E   assert True is False
+E    +  where True = <built-in method get of dict object at 0x106a84840>('passed')
+E    +    where <built-in method get of dict object at 0x106a84840> = {'passed': True, 'auth1_hashes': {'project': 'p', 'strategy_sha': '21933aa92f2e8815f8b1a47e81b1243112e2c0f25b6cceaf793...1fe9c66f7e18d8720e10fe367500416a967f'}, 'note': 'load_authority() is stateless — same disk content = identical hashes'}.get
+_____________ test_l5_2_018_collect_only_after_every_pytest_token ______________
+tests/test_repairs_vh_runners.py:130: in test_l5_2_018_collect_only_after_every_pytest_token
+    assert n_collect == 2, out
+E   AssertionError: python3 -m pytest --collect-only -q tests/a.py -q && python3 -m pytest tests/b.py -q
+E   assert 1 == 2
+_____ test_l3_007_ineffective_repair_escalates_t3_instead_of_spec_conflict _____
+tests/test_repairs_vh_dispatcher.py:98: in test_l3_007_ineffective_repair_escalates_t3_instead_of_spec_conflict
+    assert rec["verdict"] != "SPEC_TEST_CONFLICT", (
+E   AssertionError: ineffective repair mislabelled SPEC_TEST_CONFLICT (steps=['build_glm', 'factory_capture', 'candidate_capture_gate', 'test_1', 'repair_glm', 'factory_capture', 'candidate_capture_gate', 'test_2'])
+E   assert 'SPEC_TEST_CONFLICT' != 'SPEC_TEST_CONFLICT'
+----------------------------- Captured stdout call -----------------------------
+M-L3-007: SPEC_TEST_CONFLICT — test_1 et test_2 échouent sur les mêmes tests — conflit spec/contrat, pas une erreur d'implémentation; réécriture du contrat requise
+reçu → /var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/l3-007-s_ghahz6/evidence/receipt.json
+____________ test_l5_3_002_long_run_milestones_must_be_in_timeline _____________
+tests/test_repairs_vh_longrun.py:189: in test_l5_3_002_long_run_milestones_must_be_in_timeline
+    assert r.returncode != 0, (
+E   AssertionError: long-run milestone M9 absent from the kill/restart timeline passed §D (rc=0, out='LONG_RUN_READY_VERIFIER: ALL CHECKS PASS\n{"integration_sha": "37ceb78106ec624d2ac0c8957975114bd1c6f3d1"}\n')
+E   assert 0 != 0
+E    +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '-m', 'factory_v2.verify_long...ONG_RUN_READY_VERIFIER: ALL CHECKS PASS\n{"integration_sha": "37ceb78106ec624d2ac0c8957975114bd1c6f3d1"}\n', stderr='').returncode
+__________ test_l5_3_005_parse_long_run_requires_distinct_milestones ___________
+tests/test_repairs_vh_longrun.py:91: in test_l5_3_005_parse_long_run_requires_distinct_milestones
+    with pytest.raises(ValueError, match="(?i)distinct"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+__________ test_l5_3_011_contradictory_validated_records_are_refused ___________
+tests/test_repairs_vh_longrun.py:334: in test_l5_3_011_contradictory_validated_records_are_refused
+    assert r.returncode != 0, (
+E   AssertionError: validated=True with REJECTED/exit_code=1 must not count as validated (rc=0, out="PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']\n")
+E   assert 0 != 0
+E    +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178...-min-runs', '3'], returncode=0, stdout="PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']\n", stderr='').returncode
+____________ test_l5_3_001_same_milestone_three_times_is_not_three _____________
+tests/test_repairs_vh_longrun.py:75: in test_l5_3_001_same_milestone_three_times_is_not_three
+    assert "DISTINCT" in (r.stderr + r.stdout).upper(), (
+E   AssertionError: M1 x3 must be rejected as non-distinct milestones, got: "FAIL: settlement verifier unavailable: No module named 'factory_v2'\n"
+E   assert 'DISTINCT' in "FAIL: SETTLEMENT VERIFIER UNAVAILABLE: NO MODULE NAMED 'FACTORY_V2'\n"
+E    +  where "FAIL: SETTLEMENT VERIFIER UNAVAILABLE: NO MODULE NAMED 'FACTORY_V2'\n" = <built-in method upper of str object at 0x106c0f1a0>()
+E    +    where <built-in method upper of str object at 0x106c0f1a0> = ("FAIL: settlement verifier unavailable: No module named 'factory_v2'\n" + '').upper
+E    +      where "FAIL: settlement verifier unavailable: No module named 'factory_v2'\n" = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178...ECEIPT.json'], returncode=1, stdout='', stderr="FAIL: settlement verifier unavailable: No module named 'factory_v2'\n").stderr
+E    +      and   '' = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178...ECEIPT.json'], returncode=1, stdout='', stderr="FAIL: settlement verifier unavailable: No module named 'factory_v2'\n").stdout
+_____________ test_l5_3_006_application_commit_at_base_is_refused ______________
+tests/test_repairs_vh_longrun.py:244: in test_l5_3_006_application_commit_at_base_is_refused
+    assert rc != 0, (
+E   AssertionError: attributing the deletion to base_sha (where the file still exists) passed — only reachability from integration_sha was checked
+E   assert 0 != 0
+----------------------------- Captured stdout call -----------------------------
+CONVERGENCE_RESHAPE_VERIFIER: PASS — 1 decisions verified, LOC 2->0, 12 tests passed
+___________ test_l5_3_010_min_runs_applies_without_require_validated ___________
+tests/test_repairs_vh_longrun.py:311: in test_l5_3_010_min_runs_applies_without_require_validated
+    assert r.returncode != 0, (
+E   AssertionError: --min-runs 100 with a single record must FAIL without --require-validated (rc=0, out="PASS: 1 records, 1 validated, engines=['glm']\n")
+E   assert 0 != 0
+E    +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/private/tmp/vh-original-178..._applies0/rr', '--min-runs', '100'], returncode=0, stdout="PASS: 1 records, 1 validated, engines=['glm']\n", stderr='').returncode
+____________________ test_l5_3_003_zero_digests_are_refused ____________________
+tests/test_repairs_vh_longrun.py:173: in test_l5_3_003_zero_digests_are_refused
+    assert r.returncode != 0, (
+E   AssertionError: all-zero pinned digests must be refused (rc=0, out='LONG_RUN_READY_VERIFIER: ALL CHECKS PASS\n{"integration_sha": "0278603ae4718d70efc29919e35f836b54ff5a0b"}\n')
+E   assert 0 != 0
+E    +  where 0 = CompletedProcess(args=['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '-m', 'factory_v2.verify_long...ONG_RUN_READY_VERIFIER: ALL CHECKS PASS\n{"integration_sha": "0278603ae4718d70efc29919e35f836b54ff5a0b"}\n', stderr='').returncode
+__________ test_l5_3_008_notinledger_entry_cannot_authorize_new_file ___________
+tests/test_repairs_vh_longrun.py:279: in test_l5_3_008_notinledger_entry_cannot_authorize_new_file
+    assert rc != 0, (
+E   AssertionError: an applied entry NOT in the frozen ledger authorized surprise.py as a declared new file
+E   assert 0 != 0
+----------------------------- Captured stdout call -----------------------------
+CONVERGENCE_RESHAPE_VERIFIER: PASS — 1 decisions verified, LOC 2->1, 12 tests passed
+__________ test_l5_3_007_neutral_preamble_cannot_mask_final_failures ___________
+tests/test_repairs_vh_longrun.py:261: in test_l5_3_007_neutral_preamble_cannot_mask_final_failures
+    assert rc != 0, (
+E   AssertionError: a '0 failed, 0 errors' preamble masked the final '1 failed, 1 error' summary — re.search only read the first occurrence
+E   assert 0 != 0
+----------------------------- Captured stdout call -----------------------------
+CONVERGENCE_RESHAPE_VERIFIER: PASS — 1 decisions verified, LOC 2->0, 12 tests passed
+________________ test_l6_2_025_exporter_producing_no_page_fails ________________
+tests/test_repairs_vh_products.py:215: in test_l6_2_025_exporter_producing_no_page_fails
+    with pytest.raises(Unmet):
+         ^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE Unmet
+______________ test_l6_2_026_single_old_quote_is_not_2y_coverage _______________
+tests/test_repairs_vh_products.py:271: in test_l6_2_026_single_old_quote_is_not_2y_coverage
+    with pytest.raises(Unmet):
+         ^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE Unmet
+___________ test_l6_2_018_current_other_milestone_never_auto_starts ____________
+tests/test_repairs_vh_products.py:74: in test_l6_2_018_current_other_milestone_never_auto_starts
+    assert result is None, (
+E   AssertionError: long_run_ready=True with current_milestone=OTHER (target neither current nor next-open) launched the long run: TwitterRadarLongRunResult(status='FAIL', phase8_sha='', milestones_completed=[], engines_active_peak=0, crashed=False, restarted=False, artifacts=[], fault_records=[], started_at='2026-09-20T10:05:34Z', completed_at='2026-09-20T10:05:34Z', evidence_path='')
+E   assert TwitterRadarLongRunResult(status='FAIL', phase8_sha='', milestones_completed=[], engines_active_peak=0, crashed=False,...tifacts=[], fault_records=[], started_at='2026-09-20T10:05:34Z', completed_at='2026-09-20T10:05:34Z', evidence_path='') is None
+_____________ test_l6_2_028_lifecycle_flip_in_artifact_is_refused ______________
+tests/test_repairs_vh_products.py:331: in test_l6_2_028_lifecycle_flip_in_artifact_is_refused
+    assert res.code != 0, (
+E   AssertionError: flipping every lifecycle MONITORED→REJECTED in the artifact passed the judge: <products.twitter_radar.product_verifiers.VerifierResult object at 0x106a4a7b0>
+E   assert 0 != 0
+E    +  where 0 = <products.twitter_radar.product_verifiers.VerifierResult object at 0x106a4a7b0>.code
+_____________________ test_l6_2_019_status_fail_is_refused _____________________
+tests/test_repairs_vh_products.py:101: in test_l6_2_019_status_fail_is_refused
+    with pytest.raises(TwitterRadarLongRunFailed):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE TwitterRadarLongRunFailed
+__________ test_l6_2_029_duplicated_episodes_in_artifact_are_refused ___________
+tests/test_repairs_vh_products.py:391: in test_l6_2_029_duplicated_episodes_in_artifact_are_refused
+    assert res.code != 0, (
+E   AssertionError: duplicating every episode in the artifact list passed: <products.twitter_radar.product_verifiers.VerifierResult object at 0x1068eb410>
+E   assert 0 != 0
+E    +  where 0 = <products.twitter_radar.product_verifiers.VerifierResult object at 0x1068eb410>.code
+____________ test_l6_2_024_global_words_without_per_item_pairs_fail ____________
+tests/test_repairs_vh_products.py:150: in test_l6_2_024_global_words_without_per_item_pairs_fail
+    with pytest.raises(Unmet):
+         ^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE Unmet
+__________________ test_l6_1_016_usage_error_rc_is_not_a_kill __________________
+tests/test_repairs_vh_bin.py:57: in test_l6_1_016_usage_error_rc_is_not_a_kill
+    assert r["status"] == "SURVIVED", (
+E   AssertionError: a pytest usage error (rc=4, no assertion ran) counted as KILLED — only a real assertion failure may kill
+E   assert 'KILLED' == 'SURVIVED'
+E     
+E     - SURVIVED
+E     + KILLED
+_____________ test_l6_1_019_capability_id_mismatch_is_cross_scope ______________
+tests/test_repairs_vh_bin.py:178: in test_l6_1_019_capability_id_mismatch_is_cross_scope
+    assert any("capability_id" in p and "REJECT_CROSS_SCOPE" in p
+E   AssertionError: []
+E   assert False
+E    +  where False = any(<generator object test_l6_1_019_capability_id_mismatch_is_cross_scope.<locals>.<genexpr> at 0x10688f780>)
+________ test_l6_1_017_receipt_exit_code_confronted_to_real_process_rc _________
+tests/test_repairs_vh_bin.py:135: in test_l6_1_017_receipt_exit_code_confronted_to_real_process_rc
+    raise AssertionError(
+E   AssertionError: an oracle writing exit_code=0 then exiting rc=7 was recorded as verified (z_runtime_sha/runtime_verified event)
+----------------------------- Captured stdout call -----------------------------
+{
+  "schema": "job-radar-runtime-receipt/v1",
+  "candidate_sha": "6e597304a3416c2bfa751557af7fd3716814cbae",
+  "exit_code": 0,
+  "oracle_sha256": "d42749920893c1469aaf6bac25ac6faffafd6fce1e6fedaf207ebe94536a766c",
+  "mission_id": "M1"
+}
+__________ test_l6_1_034_old_pass_cannot_mask_newer_dirty_regression ___________
+tests/test_repairs_vh_bin.py:201: in test_l6_1_034_old_pass_cannot_mask_newer_dirty_regression
+    assert m._check_regression_clean(events) is False, (
+E   AssertionError: an OLD FULL_REGRESSION_PASS masked a NEWER non-clean regression event
+E   assert True is False
+E    +  where True = <function _check_regression_clean at 0x106ed4cc0>([{'event': 'FULL_REGRESSION_PASS', 'failed': 0}, {'event': 'REGRESSION_IMPROVED_929_931', 'failed': 2}])
+E    +    where <function _check_regression_clean at 0x106ed4cc0> = <module 'lrs_vh' from '/private/tmp/vh-original-178ba6e1f/factory/lib/long_run_supervisor.py'>._check_regression_clean
+______ test_l5_1_010_digest_covers_effective_verifiers_not_only_the_shim _______
+tests/test_repairs_vh_truth.py:63: in test_l5_1_010_digest_covers_effective_verifiers_not_only_the_shim
+    assert d1 != d2, (
+E   AssertionError: two commits whose EFFECTIVE verifiers differ must not share the same validator digest (shim unchanged) — got 8b89978eabf693f3ff1a0b1c49ed8a4b1ab7e6aed68f77c83e77e52a12ca1a58 == 8b89978eabf693f3ff1a0b1c49ed8a4b1ab7e6aed68f77c83e77e52a12ca1a58
+E   assert '8b89978eabf693f3ff1a0b1c49ed8a4b1ab7e6aed68f77c83e77e52a12ca1a58' != '8b89978eabf693f3ff1a0b1c49ed8a4b1ab7e6aed68f77c83e77e52a12ca1a58'
+_______________ test_l5_1_023_pinned_sha_must_match_actual_head ________________
+tests/test_repairs_vh_truth.py:108: in test_l5_1_023_pinned_sha_must_match_actual_head
+    with pytest.raises(Unproven) as ei:
+         ^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE Unproven
+=========================== short test summary info ============================
+FAILED tests/test_repairs_vh_judges.py::test_l5_2_022_no_injected_outcome_is_not_a_pass
+FAILED tests/test_repairs_vh_judges.py::test_l5_2_024_printed_human_go_is_recounted
+FAILED tests/test_repairs_vh_judges.py::test_l5_2_027_restarts_recomputed_without_home_log
+FAILED tests/test_repairs_vh_judges.py::test_l5_2_020_negative_settlements_and_null_level_a_fail
+FAILED tests/test_repairs_vh_judges.py::test_l5_2_026_stage_mentioned_only_in_comment_is_not_wired
+FAILED tests/test_repairs_vh_judges.py::test_l5_2_023_twenty_copies_of_one_handle_fail
+FAILED tests/test_repairs_vh_review.py::test_l4_010_tool_output_is_never_a_verdict
+FAILED tests/test_repairs_vh_gates.py::test_l5_1_031_gate_under_if_false_does_not_count
+FAILED tests/test_repairs_vh_gates.py::test_l5_1_002_ungated_ctx_runner_in_stage_module_fails
+FAILED tests/test_repairs_vh_gates.py::test_l5_1_001_imports_only_without_calls_fails_gate
+FAILED tests/test_repairs_vh_runners.py::test_l5_2_010_rc1_wrapper_printing_passed_is_not_pass
+FAILED tests/test_repairs_vh_runners.py::test_l5_2_004_freshness_probe_requires_observed_change
+FAILED tests/test_repairs_vh_runners.py::test_l5_2_018_collect_only_after_every_pytest_token
+FAILED tests/test_repairs_vh_dispatcher.py::test_l3_007_ineffective_repair_escalates_t3_instead_of_spec_conflict
+FAILED tests/test_repairs_vh_longrun.py::test_l5_3_002_long_run_milestones_must_be_in_timeline
+FAILED tests/test_repairs_vh_longrun.py::test_l5_3_005_parse_long_run_requires_distinct_milestones
+FAILED tests/test_repairs_vh_longrun.py::test_l5_3_011_contradictory_validated_records_are_refused
+FAILED tests/test_repairs_vh_longrun.py::test_l5_3_001_same_milestone_three_times_is_not_three
+FAILED tests/test_repairs_vh_longrun.py::test_l5_3_006_application_commit_at_base_is_refused
+FAILED tests/test_repairs_vh_longrun.py::test_l5_3_010_min_runs_applies_without_require_validated
+FAILED tests/test_repairs_vh_longrun.py::test_l5_3_003_zero_digests_are_refused
+FAILED tests/test_repairs_vh_longrun.py::test_l5_3_008_notinledger_entry_cannot_authorize_new_file
+FAILED tests/test_repairs_vh_longrun.py::test_l5_3_007_neutral_preamble_cannot_mask_final_failures
+FAILED tests/test_repairs_vh_products.py::test_l6_2_025_exporter_producing_no_page_fails
+FAILED tests/test_repairs_vh_products.py::test_l6_2_026_single_old_quote_is_not_2y_coverage
+FAILED tests/test_repairs_vh_products.py::test_l6_2_018_current_other_milestone_never_auto_starts
+FAILED tests/test_repairs_vh_products.py::test_l6_2_028_lifecycle_flip_in_artifact_is_refused
+FAILED tests/test_repairs_vh_products.py::test_l6_2_019_status_fail_is_refused
+FAILED tests/test_repairs_vh_products.py::test_l6_2_029_duplicated_episodes_in_artifact_are_refused
+FAILED tests/test_repairs_vh_products.py::test_l6_2_024_global_words_without_per_item_pairs_fail
+FAILED tests/test_repairs_vh_bin.py::test_l6_1_016_usage_error_rc_is_not_a_kill
+FAILED tests/test_repairs_vh_bin.py::test_l6_1_019_capability_id_mismatch_is_cross_scope
+FAILED tests/test_repairs_vh_bin.py::test_l6_1_017_receipt_exit_code_confronted_to_real_process_rc
+FAILED tests/test_repairs_vh_bin.py::test_l6_1_034_old_pass_cannot_mask_newer_dirty_regression
+FAILED tests/test_repairs_vh_truth.py::test_l5_1_010_digest_covers_effective_verifiers_not_only_the_shim
+FAILED tests/test_repairs_vh_truth.py::test_l5_1_023_pinned_sha_must_match_actual_head
+36 failed, 1 passed in 9.83s

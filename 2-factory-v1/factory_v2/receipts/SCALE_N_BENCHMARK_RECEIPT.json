@@ -1,0 +1,174 @@
+{
+  "schema": "scale-n-benchmark-receipt/v1",
+  "milestone": "SCALE_N",
+  "produced_at": "2026-09-20T06:35:00Z",
+  "producer": {
+    "script": "factory_v2/run_scale_n_benchmark.py",
+    "commands": [
+      "python3 factory_v2/run_scale_n_benchmark.py --out factory_v2/benchmarks/SCALE_N_V1 --repeats 3 --mission-sleep 6 --d019",
+      "python3 factory_v2/run_scale_n_benchmark.py --out factory_v2/benchmarks/SCALE_N_V1_extra4w --only-arm 4 --repeats 5 --mission-sleep 6"
+    ],
+    "driver": "REAL factoryd.run_daemon_loop (portfolio supervisor mode, in-process, main thread; completion watcher stops it via its own _shutdown_requested flag)",
+    "scope_honesty": "missions are local_command executors with real sleeps and real subprocesses: every scaled cost is real scheduling machinery (project locks, worker leases, heartbeats, attempt ledgers, settlement, run windows). NO AI quality is measured and none is claimed.",
+    "stop_rule_exercised": "stop-at-first-isolation-failure was armed on every run; it never fired (no isolation failure occurred); repo_untouched=true on both invocations"
+  },
+  "environment": {
+    "repo_head_at_run": "da3b2498 (checkpoint stage EVIDENCE_RUN; producer factory_v2/run_scale_n_benchmark.py identical to its introduction commit 3f9e21c81; raw outputs untracked at run time, committed after)",
+    "platform": "darwin",
+    "python": "3.12",
+    "poll_interval_s": 0.05,
+    "backoff_ceiling_s": 1.0
+  },
+  "workload": {
+    "id": "SCALE_N_W1",
+    "structure": "portfolio {p1, p2, p3, p4} = 4 INDEPENDENT 2-mission chains (the SCALE_2_W1 workload has only 2 chains and could never distinguish N=4 from N=2); p1: P1_BUILD (6s, writes knowledge/lesson.json) then P1_RESEARCH (6s, reads a STATIC pre-planted input); p2..p4: Pi_BUILD (6s) then Pi_REUSE (6s, bounded read-only wait for p(i-1)'s lesson.json, embeds its sha256 — cross-product knowledge reuse, zero authority sharing); dependency graph ACYCLIC so the 1-worker arm cannot deadlock",
+    "missions": 8,
+    "chains": 4,
+    "mission_sleep_s": 6.0,
+    "identical_across_arms": "command bytes are relative paths; trees regenerated fresh per run; arms differ ONLY by FACTORY_MAX_WORKERS",
+    "comparability_with_SCALE_2_W1": "same per-mission cost (this workload 1w median 51.076s / 8 missions = 6.385 s/mission vs SCALE_2_W1 25.475 / 4 = 6.369 s/mission), so per-worker efficiency is comparable across receipts",
+    "d019_drill": "SCALE_2_D019 drill re-used unchanged (factory_v2/run_scale_benchmark.build_d019_workload) and executed at N=4 workers"
+  },
+  "scale_2_baseline": {
+    "receipt_file": "factory_v2/receipts/SCALE_2_BENCHMARK_RECEIPT.json",
+    "gate_entry_rule": "brief: 'gated on a real SCALE_2 measurement: scale_2_baseline.throughput must be a finite measured number, not an assertion' — satisfied by citing the canonical receipt's MEASURED numbers below",
+    "throughput": 0.27035,
+    "throughput_arm": "median_throughput arm_2w (missions/s), measured 2026-09-20, pooled canonical sample",
+    "median_throughput_1w": 0.15702,
+    "median_throughput_2w": 0.27035,
+    "reliability_pooled_2w": "10/11 runs all-counters-clean (single F1 re-dispatch defect run; defect_mechanism and defect_detail in the canonical receipt)",
+    "decision": "NO_SCALE (throughput_improved true, reliability_non_regressed false, isolation_perfect_2w true; FACTORY_MAX_WORKERS stayed 1; followup named: close the engine-exited->settlement-written liveness gap, then re-benchmark)"
+  },
+  "measurements": {
+    "arm_1w": {
+      "runs": 3,
+      "walls_s": [51.076, 51.101, 51.056],
+      "median_wall_s": 51.076,
+      "throughputs_missions_per_s": [0.15663, 0.15655, 0.15669],
+      "median_throughput": 0.15663,
+      "run_window_ids": ["f52d04fdfb1248778a885964c1aa1194", "2171c0052fda472ea4add09415d1955f", "d538f20e7b014bcaa599e2da956c3bef"],
+      "engine_overlaps_total": 0,
+      "evidence": ["factory_v2/benchmarks/SCALE_N_V1/run_0_1w.json", "factory_v2/benchmarks/SCALE_N_V1/run_1_1w.json", "factory_v2/benchmarks/SCALE_N_V1/run_2_1w.json"]
+    },
+    "arm_2w": {
+      "runs": 3,
+      "walls_s": [34.448, 30.366, 28.156],
+      "median_wall_s": 30.366,
+      "throughputs_missions_per_s": [0.23223, 0.26345, 0.28413],
+      "median_throughput": 0.26345,
+      "run_window_ids": ["1bb72bdebe824a6d8c3a762cc1d36315", "01c90cbdd8464355bd1d90e0a740e326", "af0783a8fc3949dfb174b057554bcd36"],
+      "engine_overlaps_total": 16,
+      "reliability_clean_runs": 2,
+      "defect_runs": 1,
+      "evidence": ["factory_v2/benchmarks/SCALE_N_V1/run_0_2w.json", "factory_v2/benchmarks/SCALE_N_V1/run_1_2w.json", "factory_v2/benchmarks/SCALE_N_V1/run_2_2w.json"]
+    },
+    "arm_4w_main": {
+      "runs": 3,
+      "walls_s": [17.612, 17.714, 16.959],
+      "median_wall_s": 17.612,
+      "throughputs_missions_per_s": [0.45424, 0.45161, 0.47172],
+      "median_throughput": 0.45424,
+      "run_window_ids": ["2ef32675d7c143b883394d0751297cb1", "5e6f3852aac345488c5ad48b052fe9cd", "cbe5c02aa3d640d79889e9919d44d839"],
+      "engine_overlaps_total": 50,
+      "evidence": ["factory_v2/benchmarks/SCALE_N_V1/run_0_4w.json", "factory_v2/benchmarks/SCALE_N_V1/run_1_4w.json", "factory_v2/benchmarks/SCALE_N_V1/run_2_4w.json"]
+    },
+    "arm_4w_extra": {
+      "runs": 5,
+      "walls_s": [16.567, 17.128, 16.821, 16.755, 18.311],
+      "throughputs_missions_per_s": [0.48289, 0.46707, 0.47559, 0.47747, 0.4369],
+      "run_window_ids": ["5ddd388a9c0f4ac9adbdd382162460c2", "0f9105e259ac414cad10de3fd983da46", "1172ab7952d64dea942aac2cf2fb8008", "c61ce697b0e7471f89a6cac86edeb856", "cec5e173cbe2481aaafb705c30c0ad24"],
+      "engine_overlaps_total": 84,
+      "evidence": ["factory_v2/benchmarks/SCALE_N_V1_extra4w/run_0_4w.json", "factory_v2/benchmarks/SCALE_N_V1_extra4w/run_1_4w.json", "factory_v2/benchmarks/SCALE_N_V1_extra4w/run_2_4w.json", "factory_v2/benchmarks/SCALE_N_V1_extra4w/run_3_4w.json", "factory_v2/benchmarks/SCALE_N_V1_extra4w/run_4_4w.json"]
+    },
+    "arm_4w_pooled": {
+      "runs": 8,
+      "median_wall_s": 17.0435,
+      "median_throughput": 0.469395,
+      "engine_overlaps_total": 134,
+      "reliability_clean_runs": 8,
+      "derivation": "statistics.median over the 8 raw run files of both 4w directories (walls sorted: [16.567, 16.755, 16.821, 16.959, 17.128, 17.612, 17.714, 18.311] -> (16.959+17.128)/2; throughputs sorted: [0.4369, 0.45161, 0.45424, 0.46707, 0.47172, 0.47559, 0.47747, 0.48289] -> (0.46707+0.47172)/2)"
+    },
+    "same_workload": true,
+    "scaling": {
+      "speedup_4w_over_1w_pooled": 2.997,
+      "efficiency_per_worker": 0.749,
+      "throughput_ratio_4w_over_1w": 2.997,
+      "throughput_ratio_4w_over_2w": 1.782,
+      "throughput_ratio_2w_over_1w": 1.682,
+      "main_sample_only_speedup": 2.9,
+      "main_sample_only_efficiency": 0.725,
+      "linear": false,
+      "linear_threshold": "pre-declared in the producer: linear iff speedup >= 0.80 * N = 3.2 at N=4; measured 2.997 (pooled) — sub-linear, justified below",
+      "sub_linear_scale_justification": "Measured mechanisms, not excuses: (1) CHAIN-BOUND TAIL — with 4 chains x 2 sequential missions the ideal wall is 2 missions = 12s; the measured 4w median 17.044s carries ~5s of irreducible per-chain scheduling overhead (dispatch + settlement + product_e2e per milestone) that parallelism cannot remove, while the 1w arm pays it 8 times (51.076s); (2) DAEMON POLL SERIALIZATION — the supervisor loop harvests and dispatches advances sequentially every 50ms, so engine starts and settlements queue behind each other (17 engine-overlap pairs per 4w run vs 50 total shows real but partial overlap: engines overlap only after their dispatch serialized); (3) SETTLEMENT SERIALIZATION — PROJECT_STATE writes and attempt-ledger fsyncs serialize per project; (4) the same mechanisms already measured at SCALE_2 (per-worker efficiency 0.861 at 2w on a 2-chain workload) persist at 4 chains (0.749): efficiency DROPS as N rises because the serialized overhead is a growing fraction of the shorter walls. Linear scaling (>= 3.2x) was NOT measured and is NOT claimed."
+    }
+  },
+  "reliability": {
+    "decision_rule_predeclared": "receipt-level rule (mirrors SCALE_2's conjunction): SCALE_N only if throughput improved AND reliability non-regressed vs the SCALE_2 baseline state AND isolation perfect at N; the producer's arm-level rule (committed BEFORE any 6s evidence ran, factory_v2/run_scale_n_benchmark.py 3f9e21c81) additionally required reliability at Nw no worse than at the same-session 2w arm",
+    "pooled_sample": {
+      "arm_1w_runs": 3,
+      "arm_1w_all_counters_clean": 3,
+      "arm_2w_runs": 3,
+      "arm_2w_all_counters_clean": 2,
+      "arm_2w_defect_runs": 1,
+      "defect_file": "factory_v2/benchmarks/SCALE_N_V1/run_0_2w.json",
+      "defect_run_window_id": "1bb72bdebe824a6d8c3a762cc1d36315",
+      "arm_4w_runs": 8,
+      "arm_4w_all_counters_clean": 8
+    },
+    "defect_detail": "run_0 (2 workers): P4_REUSE launched TWICE (launches_per_mission P4_REUSE=2), 17x p4:STALE_GENERATION_WRITE_BLOCKED cycles, final mission state PASS with lease_generation=2 (P4_BUILD stayed 1), wall 34.448s (+17.7% vs the clean-2w median 29.261s of runs 1-2), still settled 8/8. Fencing held (no double settlement, no concurrent same-mission engines — same_mission_concurrent_overlaps empty).",
+    "defect_mechanism": "the SAME unfixed SCALE_2 defect F1: in the window between the engine process EXITING and its settlement being written, the worker heartbeat is gone, so a sibling advance on the same project legitimately sees 'no live worker + not settled' and re-dispatches the mission (new lease generation); the first advance's settlement is then refused as stale generation until the second attempt settles. Impossible at MAX_WORKERS=1 (no sibling dispatcher exists).",
+    "regression_verdict": "REGRESSION_NOT_EXCLUDED: reliability non-regression vs SCALE_2 is UNMET. The pooled 4w sample is 8/8 clean, but (a) the known-unfixed F1 defect fired AGAIN in THIS session at the 2-worker arm (defect_detail above — it is live at multi-worker scheduling on this workload), and (b) a clean sample of 8 cannot affirm non-regression against a probabilistic defect: Clopper-Pearson 95% lower bound for 8/8 is 0.631, below the canonical 2w clean rate 10/11 = 0.909, and P(8/8 clean | true rate = canonical 1/11) = (10/11)^8 = 0.467 — an unremarkable outcome under the defect hypothesis. Recommending N workers while the same benchmark session catches the unfixed race at 2 workers would over-claim; the honest verdict is NO_SCALE until F1 is fixed and re-benchmarked (exactly the followup SCALE_2 already named).",
+    "producer_arm_rule_output": "SCALE_N_RECOMMENDED (main sample: throughput strictly increasing 0.15663 < 0.26345 < 0.45424, isolation 3/3 perfect at 4w, 4w clean 3/3 >= 2w clean 2/3, real parallelism 50 overlaps) — recorded here for transparency: the producer's pre-declared arm rule passed on its own sample, and the receipt-level decision STILL returns NO_SCALE because the arm rule does not weigh the live F1 defect against the SCALE_2 baseline (clause 'aucune regression vs SCALE_2'), which the receipt-level rule above does. The gate (verify_scale_n_benchmark.py) recomputes the arm rule from its own fresh observation and refuses only an unsupported SCALE_N_RECOMMENDED; this receipt's conservative NO_SCALE can never be refused by it."
+  },
+  "context_isolation": {
+    "verdict": "PERFECT_ON_ALL_MEASURED_RUNS",
+    "runs_checked": 15,
+    "all_passing": 15,
+    "runs_breakdown": "3x 1w + 3x 2w + 8x 4w arm runs + 1x D019 drill run — every run passes all checks",
+    "checks_per_run": [
+      "every deliverable byte-exact vs the deterministic expected content (the retried P4_REUSE in the defect run rewrote identical bytes)",
+      "STRATEGY.md/SPEC.md/ROADMAP.yaml byte-identical before/after in every project",
+      "zero cross-tree writes (a rel path owned by the local project is local authorship; foreign deliverable paths and foreign .bench markers never appear in another project's tree — 0 violations across all runs)",
+      "attempt ledger: 100% parseable JSONL, unique attempt_keys, no torn lines under concurrent appends",
+      "all mission records coexist in PROJECT_STATE after concurrent advances (no clobbering)",
+      "ledger rows and run windows carry max_workers matching the arm, run windows closed"
+    ],
+    "evidence": "isolation block of every factory_v2/benchmarks/SCALE_N_V1*/run_*.json and d019_drill.json"
+  },
+  "d019_elastic_fanout_and_knowledge_reuse": {
+    "verdict": "DEMONSTRATED_AT_4W",
+    "drill_file": "factory_v2/benchmarks/SCALE_N_V1/d019_drill.json",
+    "fan_out_event": "PARALLEL_MILESTONE_SELECTED emitted at N=4 (intra-product elastic fan-out on the real daemon path)",
+    "real_overlap": "G1_BUILD and G2_RESEARCH engine windows overlap in time (g1_g2_overlap=true)",
+    "cross_product_knowledge_reuse": "G2_RESEARCH read older_product/knowledge/lesson.md READ-ONLY and its report embeds the exact sha256 of that file (knowledge_sha_match=true)",
+    "no_authority_sharing": "older_product tree byte-identical before/after the drill (older_product_tree_unchanged=true)"
+  },
+  "decision": {
+    "verdict": "NO_SCALE",
+    "max_workers_after_this_mission": 1,
+    "rule": "scale only if throughput improved AND reliability non-regressed vs the SCALE_2 baseline AND isolation perfect at N workers",
+    "throughput_improved": true,
+    "reliability_non_regressed": false,
+    "isolation_perfect_nw": true,
+    "n_workers_tested": 4,
+    "consequence": "FACTORY_MAX_WORKERS stays 1 (no default flip, no operational change). The measured 4-worker throughput (+199.7% pooled, efficiency 0.749/worker, sub-linear with documented mechanisms) and perfect isolation at N=4 are real, but the conjunction fails on reliability-vs-SCALE_2: the unfixed re-dispatch defect F1 fired again this session at 2 workers and cannot be excluded at 4 by a clean 8-run sample.",
+    "followup_named": "unchanged from SCALE_2: close the engine-exited->settlement-written liveness gap for sibling advances (settlement-intent marker consulted by the in-flight guard), then re-run this exact N benchmark (both producers are committed and hermetic for that purpose)"
+  },
+  "unmet_and_notes": [
+    "Acceptance clause 'aucune regression vs SCALE_2' is UNMET with evidence and reasoning in reliability.regression_verdict — left unmet rather than asserted, per the mission stop conditions.",
+    "Acceptance clauses MET with measured evidence: 'N > 2 workers testes avec workload reel' (4 workers, 8 arm runs + drill on the real daemon), 'throughput scale lineairement ou justification documentee' (sub-linear measured + sub_linear_scale_justification with measured mechanisms), 'isolation contextuelle parfaite a N workers' (8/8 4w runs, 15/15 all runs), 'D019 fan-out elastique et reutilisation de connaissance inter-produits sans partage d'autorite' (DEMONSTRATED_AT_4W).",
+    "The workload width differs from SCALE_2_W1 by necessity (4 chains instead of 2 — a 2-chain workload cannot distinguish 4 workers from 2); per-mission cost is matched (6.385 vs 6.369 s/mission at 1w) so per-worker efficiency is comparable; absolute throughputs are NOT compared across workloads and no such comparison is claimed.",
+    "The gate factory_v2/verify_scale_n_benchmark.py was the fail-closed exit-2 stub until this mission; it now re-runs the committed producer and recomputes the arm rule from raw per-run files (SCALE_2 precedent ef89a19aa, coherence DEFERRED entry removed per precedent a1823326f). Its fresh 2-repeat observation is a NEW sample each run: it can only refuse an unsupported SCALE_N_RECOMMENDED claim; this receipt's NO_SCALE is conservative and always acceptable.",
+    "worker_slot is persisted on every attempt (ledger rows carry worker_slot and max_workers per arm) but the daemon still does not stamp DISTINCT slots per parallel advance (pre-existing SCALE_2 note, unchanged here); slot-separation was not used as isolation evidence — the isolation verdict rests on the six measured checks listed above."
+  ],
+  "qualification": {
+    "milestone_test_cmd": "python3 -m pytest tests/ -q -k scale",
+    "milestone_test_cmd_fresh_result": "17 passed, 3230 deselected in 13.13s, rc=0 (fresh at 313ac7d7; selection: test_model_router.py::TestCliArgs::test_writer_max_turns_scales_with_budget + the 16 tests of tests/test_scale_n_benchmark.py)",
+    "gate_fresh_result": "rc=0 — 'SCALE_N: ACCEPTED — fresh observation NO_SCALE 1w=0.1552/s 2w=0.2845/s 4w=0.4229/s isolation_N=True reliability_N=False linear(fresh)=False' (product_e2e exact du jalon, exécuté frais 2026-09-20, ré-exécution complète du producteur 2 repeats x 3 bras). NOTE DÉCISIVE: l'observation fraîche du gate elle-même mesure reliability_N=False — le defect F1 a frappé un run 4w de l'échantillon FRAIS : preuve indépendante supplémentaire que le défaut est vivant à 4 workers, qui conforte le NO_SCALE ci-dessus.",
+    "gate_fresh_result_final_bytes": "rc=0 — 'SCALE_N: ACCEPTED — fresh observation SCALE_N_RECOMMENDED 1w=0.1551/s 2w=0.2584/s 4w=0.4523/s isolation_N=True reliability_N=True linear(fresh)=False' (seconde exécution fraîche complète, sur les octets FINAUX du reçu après amendement de qualification). Ce second échantillon frais fut PROPRE à 4w et la règle fraîche a calculé SCALE_N_RECOMMENDED — le gate accepte néanmoins le NO_SCALE conservateur de ce reçu (direction non-sûre seule refusée). Les deux exécutions fraîches successives illustrent exactement le point du regression_verdict : le defect est probabiliste (échantillon frais 1 : attrapé à 4w ; échantillon frais 2 : manqué), donc aucun échantillon fini propre ne peut affirmer la non-régression.",
+    "coherence_fresh_result": "32 passed in 6.78s, rc=0 (tests/test_cto_coherence_2026_09_11.py frais à 313ac7d7 ; la paramétrisation DEFERRED SCALE_N y est retirée selon le précédent a1823326f)",
+    "producer_flag_matrix_fresh": "--workers 3 exercé en frais (bras 1w/2w/3w, 6/6 settled par bras, isolation+reliability vraies, overlaps 0/2/4) ; --workers 2 refusé par argparse (rc≠0, testé) ; --repeats 1, --mission-sleep 0.2/0.3, --only-arm 4, --d019 tous exercés en frais (runs cités ci-dessus)",
+    "safe_suite": "python3 -m pytest tests -q -p no:cacheprovider -x --ignore=tests/test_stabilization_proof.py --ignore=tests/test_external_supervisor_production_path.py --ignore=tests/test_lr4_interprocess.py --ignore=tests/test_p0_supervision_repairs.py --ignore=tests/test_sol_ladder_fairness.py --ignore=tests/test_telemetry_integration.py --ignore=tests/test_tr_weekly_refresh_verifier.py",
+    "safe_suite_fresh_result": "3100 passed, 4 skipped, 3 deselected, 4 subtests passed in 1262.40s. Les 3 désélections sont des échecs PRÉ-EXISTANTS reproduits sur la baseline INTACTE d4348d6a6 dans des worktrees détachés (exécutions fraîches citées) : test_factoryctl_tombstone_wiring.py::ZoneGeleeIntacte::test_la_zone_gelee_est_intacte et test_factoryctl_memory_wiring.py::DonneesReellesIntactes::test_la_zone_gelee_est_intacte (tous deux = frozen_zone_guard STOP sur campaigns/RUN8/.../champion.py, fichier supprimé par la décision D2 fusionnée 062f2ba80 antérieure à ce mission), et test_base_ready_aggregator.py::test_authored_aggregate_cannot_influence_grading (déjà documenté pré-existant par le reçu SCALE_2 à la baseline 7a9e2731f). Aucun test existant modifié ni sacrifié par cette mission."
+  }
+}

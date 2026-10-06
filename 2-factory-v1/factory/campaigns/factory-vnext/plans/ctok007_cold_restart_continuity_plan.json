@@ -1,0 +1,29 @@
+{
+  "missions": [
+    {
+      "id": "CTOK007_COLD_RESTART_CONTINUITY",
+      "repo": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2",
+      "task_file": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/factory/campaigns/app007/tasks/CTOK007_cold_restart_continuity.md",
+      "test_cmd": "python3 -m pytest tests/test_restart_continuity.py -v --tb=short",
+      "budget_s": 3600,
+      "spec_level": "A",
+      "component": "conductor_cold_restart",
+      "dependency_mission_ids": [
+        "CTOK001_CANONICAL_CTO_STATE",
+        "CTOK002_CONTEXT_COMPILER_V2",
+        "CTOK002B_DISPATCHER_HARD_GATE",
+        "CTOK002B_P2_PRE_SPAWN_AUTHORITY_BARRIER",
+        "CTOK003_Q_RESEARCH_REUSE_GATE_QUALIFIED",
+        "CTOK006_PERSISTENT_FAILURE_DIRECTOR",
+        "CTOK004_MILESTONE_PRODUCT_E2E",
+        "CTOK005_SPEC_CODE_CONVERGENCE",
+        "CTOK006B_TASK_CONTRACT_VALIDATOR",
+        "CTOK006C_REQUIRED_STATE_RESOLVER"
+      ],
+      "required_capability_state": "E2E_PROVEN",
+      "base_sha": "71a6c7bc",
+      "base_branch": "factory/e1-probe",
+      "label": "CTOK007 \u2014 Cold Restart: kill runtime, reconstruct from durable state, resume correct work"
+    }
+  ]
+}

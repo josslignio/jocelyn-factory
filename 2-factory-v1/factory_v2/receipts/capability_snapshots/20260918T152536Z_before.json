@@ -1,0 +1,33 @@
+{
+  "actor_capabilities": {
+    "claude": [
+      "A",
+      "B",
+      "S"
+    ],
+    "codex": [
+      "A",
+      "B"
+    ],
+    "glm": [
+      "B"
+    ],
+    "local": [
+      "A",
+      "B",
+      "S"
+    ]
+  },
+  "network_policy": {
+    "convention": "FACTORY_NO_REAL_ENGINE",
+    "outbound_network_calls_allowed": false,
+    "real_ai_engine_invocation_allowed": false
+  },
+  "owner_policy_ids": [
+    "owner-routing/claude-builder-glm-reviewer-2026-09-11",
+    "owner-routing/glm-all-roles-2026-09-12",
+    "owner-routing/glm-builder-claude-reviewer-2026-09-11"
+  ],
+  "taken_at": "2026-09-18T15:25:36Z",
+  "validator_source_sha256": "966fa5f9d99742916f87e41e2d7836fa570a83f87b1ad3b0c44cae7e3089dbad"
+}

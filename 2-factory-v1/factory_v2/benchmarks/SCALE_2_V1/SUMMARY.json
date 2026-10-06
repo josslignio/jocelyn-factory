@@ -1,0 +1,83 @@
+{
+  "arm_1w": {
+    "engine_overlaps_total": 0,
+    "isolation_all_runs": [
+      true,
+      true,
+      true
+    ],
+    "median_throughput": 0.15702,
+    "median_wall_s": 25.475,
+    "reliability_all_runs": [
+      true,
+      true,
+      true
+    ],
+    "throughputs": [
+      0.15484,
+      0.15706,
+      0.15702
+    ],
+    "walls_s": [
+      25.833,
+      25.467,
+      25.475
+    ]
+  },
+  "arm_2w": {
+    "engine_overlaps_total": 9,
+    "isolation_all_runs": [
+      true,
+      true,
+      true
+    ],
+    "median_throughput": 0.27035,
+    "median_wall_s": 14.796,
+    "reliability_all_runs": [
+      true,
+      true,
+      true
+    ],
+    "throughputs": [
+      0.27972,
+      0.2666,
+      0.27035
+    ],
+    "walls_s": [
+      14.3,
+      15.004,
+      14.796
+    ]
+  },
+  "backoff_ceiling_s": 1.0,
+  "d019": {
+    "fan_out_event": true,
+    "g1_g2_overlap": true,
+    "knowledge_sha_match": true,
+    "older_product_tree_unchanged": true,
+    "reused_from": "../older_product/knowledge/lesson.md"
+  },
+  "measured": {
+    "isolation_perfect_2w": true,
+    "real_parallelism_2w": true,
+    "reliability_non_regressed": true,
+    "speedup_median_wall": 1.722,
+    "throughput_improved": true
+  },
+  "mission_sleep_s": 6.0,
+  "poll_interval_s": 0.05,
+  "repeats": 3,
+  "repo_check_note": "recomputed after the run with 'git status --porcelain -uall', excluding the benchmark's own output dirs and the committed producer file; the in-run self-check collapsed untracked dirs (porcelain without -uall) and self-flagged its own output dir - producer fixed since",
+  "repo_clean_after": [
+    "M evidence/engine_registry.jsonl"
+  ],
+  "repo_clean_before": [
+    "M evidence/engine_registry.jsonl"
+  ],
+  "repo_untouched": true,
+  "same_workload": true,
+  "schema": "scale2-benchmark-summary/v1",
+  "verdict": "SCALE_RECOMMENDED",
+  "verdict_rule": "SCALE_RECOMMENDED iff median_throughput(2w) > median_throughput(1w) AND all reliability 2w AND all isolation 2w AND arm2 shows >=1 real engine overlap",
+  "workload_id": "SCALE_2_W1"
+}

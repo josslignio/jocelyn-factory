@@ -1,0 +1,561 @@
+{
+  "schema": "code-review-lot/v1",
+  "lot": "L3_dispatcher_router",
+  "engine": "codex",
+  "reviewed_sha": "ed8cbfc37b8e1a7af973a5375a3d852e32f896c0",
+  "files_reviewed": [
+    {
+      "path": "factory/bin/dispatcher_v3.py",
+      "lines": 3646,
+      "verdict": "FINDINGS",
+      "summary": "Orchestre worktrees, fusion et escalade des étapes modèle/test. Lecture intégrale : sept défauts reproduits touchent fusion, reçus, nettoyage, JSON, budget et qualification des échecs."
+    },
+    {
+      "path": "factory/bin/factoryd.py",
+      "lines": 2363,
+      "verdict": "FINDINGS",
+      "summary": "Supervise les projets V2, les slots, les rechargements et le nettoyage des processus ; conserve une boucle V1. Lecture intégrale : six défauts reproduits de concurrence, observation et gestion des processus."
+    },
+    {
+      "path": "factory/bin/factoryd_watch.py",
+      "lines": 82,
+      "verdict": "FINDINGS",
+      "summary": "Affiche périodiquement la campagne et le superviseur. Lecture intégrale : l’affichage hérité sous-estime l’activité du runtime V2."
+    },
+    {
+      "path": "factory/bin/model_router.py",
+      "lines": 1888,
+      "verdict": "FINDINGS",
+      "summary": "Choisit moteurs/modèles et construit les argv, restrictions et garde-fous de quota. Lecture intégrale : cinq défauts reproduits sur fallback, quota et identité du modèle."
+    },
+    {
+      "path": "factory/bin/owner_routing_policy.py",
+      "lines": 421,
+      "verdict": "FINDINGS",
+      "summary": "Définit les fenêtres de politique propriétaire et leurs substitutions de moteurs. Lecture intégrale : le statut exposé ne suit pas la phase effectivement appliquée."
+    },
+    {
+      "path": "factory/bin/supervised_factoryd_worker.py",
+      "lines": 97,
+      "verdict": "CLEAN",
+      "summary": "Encapsule factoryd avec heartbeat et surveillance d’un worker supervisé. Lecture intégrale des 97 lignes : aucun défaut démontrable retenu dans ce périmètre ; CLEAN ne vaut pas preuve générale d’absence de bug."
+    }
+  ],
+  "findings": [
+    {
+      "id": "L3-001",
+      "file": "factory/bin/dispatcher_v3.py",
+      "line": 577,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "            ours = [f for f in conf if f.startswith(_book)]\n            theirs = [f for f in conf if f in _mission_files]      # the candidate's own checkpoints\n            if ours:\n                _run([\"git\", \"checkout\", \"--ours\", \"--\", *ours], cwd=repo_root, timeout=30)",
+      "why": "La liste de chemins de comptabilité inclut tout projects/ (ligne 556). Un conflit de contenu dans ce préfixe est automatiquement résolu avec --ours et déclaré fusionné. La reproduction Git réelle perd VALUE=2 du candidat dans projects/widget/main.py et conserve VALUE=1 de la branche courante, tout en retournant True. Les changements fonctionnels et les documents contractuels rangés sous projects/ peuvent donc disparaître d’une fusion acceptée.",
+      "recommendation": "Limiter la résolution automatique aux fichiers d’état explicitement identifiés, refuser les conflits de code ou de contrat et vérifier le contenu effectivement fusionné avant de déclarer la promotion réussie.",
+      "fix_effort": "M",
+      "locations": [
+        {
+          "file": "factory/bin/dispatcher_v3.py",
+          "line": 541,
+          "function": "_merge_candidate"
+        }
+      ],
+      "proof_case": "merge_discards_project_source",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . merge_discards_project_source\nTEST merge_discards_project_source : rc=0\nreal Git conflict projects/widget/main.py: merge True, candidate VALUE=2 discarded in favor of live VALUE=1\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-002",
+      "file": "factory/bin/dispatcher_v3.py",
+      "line": 952,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "                    rec[\"verdict\"] = \"BLOCKED\"\n                    rec[\"verdict_reason\"] = (\n                        \"MERGE_FAILED: candidate passed tests but merge into main failed. \"\n                        \"Golden branch is unchanged. Manual merge required.\"",
+      "why": "Après un reçu ACCEPTED/promotable=True et un échec de fusion, seule la copie retournée devient BLOCKED. Le reçu déjà écrit reste ACCEPTED et même la copie conserve promotable=True. La reproduction exerce _run_in_worktree avec résultat de fusion simulé False : un consommateur du fichier voit un succès que l’appelant ne voit plus.",
+      "recommendation": "Mettre promotable à False et réécrire atomiquement le reçu de blocage avant le retour ; tester ensemble le résultat retourné et celui relu sur disque.",
+      "fix_effort": "S",
+      "locations": [
+        {
+          "file": "factory/bin/dispatcher_v3.py",
+          "line": 759,
+          "function": "_run_in_worktree"
+        }
+      ],
+      "proof_case": "merge_failure_receipt_stays_accepted",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . merge_failure_receipt_stays_accepted\nTEST merge_failure_receipt_stays_accepted : rc=0\nmerge=False -> returned BLOCKED/promotable=True; disk receipt remains ACCEPTED/promotable=True\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-003",
+      "file": "factory/bin/dispatcher_v3.py",
+      "line": 481,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "                os.killpg(os.getpgid(proc.pid), signal.SIGKILL)\n            except (ProcessLookupError, PermissionError):\n                pass",
+      "why": "communicate() a déjà attendu et récolté le parent avant getpgid(proc.pid). Si le parent est sorti, getpgid échoue et le nettoyage ignore ProcessLookupError. Un vrai parent Python qui lance un enfant avec ses sorties redirigées puis sort retourne rc=0 ; l’enfant reste vivant après _run. Le nettoyage annoncé du groupe ne fonctionne donc pas sur ce chemin normal.",
+      "recommendation": "Conserver l’identité du groupe créé au lancement et l’utiliser pour le nettoyage après communicate, sans rechercher le groupe via un PID déjà récolté ; couvrir parent terminé et descendants survivants.",
+      "fix_effort": "M",
+      "locations": [
+        {
+          "file": "factory/bin/dispatcher_v3.py",
+          "line": 440,
+          "function": "_run"
+        }
+      ],
+      "proof_case": "process_group_leaks_after_parent_exit",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . process_group_leaks_after_parent_exit\nTEST process_group_leaks_after_parent_exit : rc=0\nreal parent rc=0; descendant with redirected pipes still alive after _run returns\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-004",
+      "file": "factory/bin/dispatcher_v3.py",
+      "line": 491,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "            return -1, \"\", \"TIMEOUT\"",
+      "why": "Le chemin TimeoutExpired remplace toutes les sorties par stdout vide et stderr TIMEOUT. Le sous-processus de reproduction imprime et flush des diagnostics sur les deux flux avant de dépasser le délai ; aucune de ces données n’est rendue à l’appelant. Cela supprime les indices nécessaires au diagnostic et à la reprise des étapes longues.",
+      "recommendation": "Après l’arrêt du groupe, drainer les flux et conserver les sorties capturées dans le résultat, en ajoutant un indicateur distinct de timeout.",
+      "fix_effort": "S",
+      "locations": [
+        {
+          "file": "factory/bin/dispatcher_v3.py",
+          "line": 440,
+          "function": "_run"
+        }
+      ],
+      "proof_case": "timeout_discards_output",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . timeout_discards_output\nTEST timeout_discards_output : rc=0\nsubprocess emits stdout+stderr before timeout; _run returns empty stdout and TIMEOUT, both diagnostics lost\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-005",
+      "file": "factory/bin/dispatcher_v3.py",
+      "line": 1616,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "        if ch == \"{\":\n            depth += 1\n        elif ch == \"}\":\n            depth -= 1",
+      "why": "Le repli d’extraction JSON compte les accolades à l’intérieur des chaînes. Le même objet JSON valide contenant root_cause=\"unexpected } delimiter\" est accepté seul et rejeté quand une phrase le précède. Une réponse de diagnostic avec ce contenu devient ainsi inexploitable alors que l’objet est valide.",
+      "recommendation": "Utiliser JSONDecoder.raw_decode à partir des positions candidates ou un parseur qui respecte chaînes et échappements ; tester accolades et guillemets échappés dans les valeurs.",
+      "fix_effort": "S",
+      "locations": [
+        {
+          "file": "factory/bin/dispatcher_v3.py",
+          "line": 1588,
+          "function": "_extract_json_object"
+        }
+      ],
+      "proof_case": "json_brace_in_string",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . json_brace_in_string\nTEST json_brace_in_string : rc=0\nvalid JSON with } in string parses alone, but with prose prefix returns None\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-006",
+      "file": "factory/bin/dispatcher_v3.py",
+      "line": 3086,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "                cmd = _mr.cli_args(choice, repo, prompt, budget_s=_remaining(), resume_session=resume_sid)\n                t0 = time.monotonic()\n                rc, out, err = _run_engine(cmd, choice, \"build_glm\")",
+      "why": "La reprise après error_max_turns lance un deuxième moteur avant tout nouvel arbitrage du budget et l’enregistrement ultérieur ne compte que le dernier lancement. Avec max_model_calls=1, la reproduction exécute deux moteurs simulés, observe deux engine_executions dont --resume, mais seulement un model_call dans le ledger. La borne des appels réellement lancés peut donc être dépassée.",
+      "recommendation": "Vérifier et réserver le budget avant chaque lancement physique, y compris reprises et retries ; enregistrer séparément leurs coûts et durées, puis agréger au niveau de l’étape.",
+      "fix_effort": "M",
+      "locations": [
+        {
+          "file": "factory/bin/dispatcher_v3.py",
+          "line": 2420,
+          "function": "dispatch_v3"
+        }
+      ],
+      "proof_case": "resumed_build_bypasses_budget",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . resumed_build_bypasses_budget\nTEST resumed_build_bypasses_budget : rc=0\nmax_model_calls=1; 2 T0 model stubs execute including --resume; engine_executions=2 but ledger model_calls=1\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-007",
+      "file": "factory/bin/dispatcher_v3.py",
+      "line": 3322,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "    if detect_spec_test_conflict(test_out_1, test_out_2):\n        return _receipt(mission_id, started_at, base_sha, candidate_sha, stages,\n                        SPEC_TEST_CONFLICT,\n                        \"test_1 et test_2 échouent sur les mêmes tests — conflit spec/contrat, pas une erreur d'implémentation; réécriture du contrat requise\",",
+      "why": "Deux échecs sur les mêmes tests suffisent à conclure à un conflit spec/contrat et à sauter T3. La reproduction utilise un vrai test pytest inchangé : l’implémentation fournit 1 au lieu de 2 ; une réparation simulée inefficace répète l’échec et obtient SPEC_TEST_CONFLICT. Changer seulement l’implémentation en 2 rend ce même test vert. La répétition ne prouve donc pas que le contrat est en cause.",
+      "recommendation": "Qualifier ce cas de réparation inefficace ou de stagnation et appliquer l’escalade bornée prévue ; exiger une contradiction démontrée avec la spécification avant de demander une réécriture du contrat.",
+      "fix_effort": "M",
+      "locations": [
+        {
+          "file": "factory/bin/dispatcher_v3.py",
+          "line": 2420,
+          "function": "dispatch_v3"
+        }
+      ],
+      "proof_case": "repeated_bug_mislabeled_contract_conflict",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . repeated_bug_mislabeled_contract_conflict\nTEST repeated_bug_mislabeled_contract_conflict : rc=0\nsame real pytest failure after ineffective repair -> SPEC_TEST_CONFLICT, T3 skipped; changing implementation 1->2 makes unchanged test pass\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-008",
+      "file": "factory/bin/factoryd.py",
+      "line": 1373,
+      "severity": "HIGH",
+      "category": "RACE",
+      "evidence": "    _ADVANCE_RESULTS[str(project_dir)] = (result.detail or \"\", list(result.touched_files or []))",
+      "why": "Les futures ont des clés par slot mais le détail et les fichiers touchés sont stockés uniquement par projet. Deux avances du même projet terminées avant la récolte écrasent le même enregistrement. La reproduction fait précéder PROJECT_BUSY par MILESTONE_SETTLED : la récolte de la première perd factoryd.py et reçoit le détail de la seconde, puis la seconde n’a plus de détail. Les preuves et la détection de code à recharger sont désassociées de l’action.",
+      "recommendation": "Renvoyer le CycleResult complet dans chaque Future et récolter cet objet, ou associer les métadonnées à un identifiant unique de soumission ; tester deux slots du même projet achevés avant harvest.",
+      "fix_effort": "M",
+      "locations": [
+        {
+          "file": "factory/bin/factoryd.py",
+          "line": 1336,
+          "function": "_advance_v2"
+        }
+      ],
+      "proof_case": "parallel_results_collide",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . parallel_results_collide\nTEST parallel_results_collide : rc=0\ntwo completions before harvest -> settlement gets busy detail and loses touched factoryd.py; second result empty\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-009",
+      "file": "factory/bin/factoryd.py",
+      "line": 1264,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "        return int(v2_status_summary(Path(project_dir)).get(\"in_flight\", 0))\n    except Exception:\n        return 1                                  # unknown = not safe to restart",
+      "why": "v2_status_summary représente un état illisible par observed=False et in_flight=0 sans lever d’exception. Les deux compteurs de drainage (_project_in_flight et _reload_in_flight) prennent ce zéro pour une absence de travail. La reproduction sur PROJECT_STATE.json corrompu rend 0 dans les deux cas : la branche de prudence except ne protège pas ce cas et un rechargement peut être autorisé alors que l’activité est inconnue.",
+      "recommendation": "Refuser le redémarrage lorsque observed n’est pas True et centraliser ce calcul prudent pour les deux chemins de drainage ; distinguer zéro vérifié et observation indisponible.",
+      "fix_effort": "S",
+      "locations": [
+        {
+          "file": "factory/bin/factoryd.py",
+          "line": 1262,
+          "function": "_project_in_flight"
+        }
+      ],
+      "proof_case": "reload_unknown_state_is_idle",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . reload_unknown_state_is_idle\nTEST reload_unknown_state_is_idle : rc=0\nunreadable PROJECT_STATE: observed=False but both reload in-flight checks return 0 (restart allowed)\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-010",
+      "file": "factory/bin/factoryd.py",
+      "line": 1057,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "        except (OSError, json.JSONDecodeError):\n            continue",
+      "why": "Le contrat de _live_engine_lease_ids promet None si l’appartenance ne peut pas être établie, mais les erreurs de lecture d’état sont sautées et la fonction retourne un ensemble vide. Dans la reproduction, état et lease illisibles donnent set() : le sélecteur réel du registre classe orphelin un moteur de quinze minutes à launcher mort ; le même appel avec None le préserve jusqu’au plafond d’âge. Une absence de preuve devient une preuve d’absence de propriétaire.",
+      "recommendation": "Propager un état inconnu lorsque la lecture d’un projet ou de ses leases échoue, ou garder une incertitude par projet ; ne jamais supprimer pour absence d’appartenance lorsque cette appartenance n’a pas pu être lue.",
+      "fix_effort": "M",
+      "locations": [
+        {
+          "file": "factory/bin/factoryd.py",
+          "line": 1040,
+          "function": "_live_engine_lease_ids"
+        }
+      ],
+      "proof_case": "orphan_membership_read_error",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . orphan_membership_read_error\nTEST orphan_membership_read_error : rc=0\nunreadable state+lease -> empty set -> 15-minute engine selected as orphan; UNKNOWN would preserve it (no signal)\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-011",
+      "file": "factory/bin/factoryd.py",
+      "line": 1167,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "        if age > ORPHAN_ENGINE_MAX_AGE_S:\n            try:\n                os.killpg(os.getpgid(int(pid)), _sig.SIGKILL)",
+      "why": "Après la sélection prudente du registre, le second balayage ps tue tout moteur PPID=1 dépassant trois heures, sans exclure les moteurs protégés par une lease vivante. La reproduction fait protéger un moteur de quatre heures par le vrai sélecteur de registre, puis observe une demande SIGKILL par le balayage secondaire. Les signaux sont simulés : aucun moteur réel n’est arrêté.",
+      "recommendation": "Exclure du balayage hérité les identités connues du registre, préserver les leases actives/adoptées et vérifier l’identité de naissance avant tout signal ; partager une seule décision d’éligibilité entre les deux sources.",
+      "fix_effort": "M",
+      "locations": [
+        {
+          "file": "factory/bin/factoryd.py",
+          "line": 1109,
+          "function": "_sweep_orphan_engines"
+        }
+      ],
+      "proof_case": "secondary_sweep_ignores_live_lease",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . secondary_sweep_ignores_live_lease\nTEST secondary_sweep_ignores_live_lease : rc=0\nregistry reports no orphan; legacy ps scan still requests SIGKILL of 4-hour engine (signals mocked)\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-012",
+      "file": "factory/bin/factoryd.py",
+      "line": 2182,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "    os.kill(pid, signal.SIGTERM)",
+      "why": "cmd_stop fait confiance au PID numérique du pidfile ; son contrôle de vivacité ne démontre pas qu’il s’agit toujours du daemon. Un fichier périmé après réutilisation du PID peut donc provoquer SIGTERM sur un autre processus et le traitement de ses descendants. La reproduction place le PID du processus de test dans le fichier et capture exactement cette demande de signal sans l’envoyer.",
+      "recommendation": "Persister une identité de processus incluant sa naissance et vérifier cette identité avant stop/status/restart et avant les signaux de rattrapage ; considérer une identité différente comme un pidfile périmé.",
+      "fix_effort": "M",
+      "locations": [
+        {
+          "file": "factory/bin/factoryd.py",
+          "line": 2165,
+          "function": "cmd_stop"
+        }
+      ],
+      "proof_case": "stale_pid_targets_unrelated_process",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . stale_pid_targets_unrelated_process\nTEST stale_pid_targets_unrelated_process : rc=0\nPID file names unrelated live review process -> cmd_stop requests SIGTERM without daemon identity/birth check (mocked signal)\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-013",
+      "file": "factory/bin/factoryd.py",
+      "line": 743,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "            still_active = [w for w in still_active if w[\"mission_id\"] != mid]\n            _log(f\"STALL_RECOVERED: {mid} requeued for retry\")",
+      "why": "Dans la boucle V1 conservée do_poll_iteration, state.active_workers reçoit still_active avant la récupération de stall ; celle-ci réaffecte ensuite seulement la variable locale. Le worker tué reste donc dans state.active_workers. La reproduction avec capacité 1 remet M en file mais conserve son ancien worker et n’effectue aucun dispatch de remplacement dans le même poll. Ce constat porte sur le chemin V1 conservé, pas sur la boucle V2 par défaut.",
+      "recommendation": "Retirer ce chemin s’il n’est plus supporté ; sinon synchroniser state.active_workers après la récupération et ne réattribuer le slot qu’après confirmation de l’arrêt, avec test de stall à capacité 1.",
+      "fix_effort": "S",
+      "locations": [
+        {
+          "file": "factory/bin/factoryd.py",
+          "line": 627,
+          "function": "do_poll_iteration"
+        }
+      ],
+      "proof_case": "stall_retains_active_worker",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . stall_retains_active_worker\nTEST stall_retains_active_worker : rc=0\nlegacy stall requeues M but retains killed worker in active_workers; capacity=1 prevents retry in same poll\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-014",
+      "file": "factory/bin/factoryd_watch.py",
+      "line": 56,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "                      f\"WORKERS={len(state.active_workers)}/1\")",
+      "why": "Le watcher lit uniquement les workers de l’ancien SupervisorState et affiche un dénominateur fixé à 1. Le runtime V2 n’alimente pas cette liste. Sur un état V2 avec une mission vivante, le résumé V2 de référence voit in_flight=1 alors que format_status affiche WORKERS=0/1 et seulement la campagne héritée : cet outil ne reflète pas l’activité effective du daemon par défaut.",
+      "recommendation": "Construire l’affichage depuis le même résumé V2 et la même capacité effective que cmd_status, en conservant un mode V1 explicitement identifié si nécessaire.",
+      "fix_effort": "S",
+      "locations": [
+        {
+          "file": "factory/bin/factoryd_watch.py",
+          "line": 34,
+          "function": "format_status"
+        }
+      ],
+      "proof_case": "watcher_ignores_v2",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . watcher_ignores_v2\nTEST watcher_ignores_v2 : rc=0\nV2 status sees 1 live mission; watcher reports WORKERS=0/1 and legacy campaign only\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-015",
+      "file": "factory/bin/model_router.py",
+      "line": 1856,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "    if \"--model\" in argv:\n        i = argv.index(\"--model\")\n        if i + 1 < len(argv):\n            return argv[i + 1]",
+      "why": "model_from_argv ne reconnaît que --model alors que les constructeurs Codex émettent -m. La reproduction construit réellement l’argv de revue restreinte avec -m gpt-6-astra puis obtient une chaîne vide. Le champ model dérivé de cet utilitaire, notamment dans engine_executions du dispatcher, perd donc l’identité effectivement demandée à Codex.",
+      "recommendation": "Reconnaître -m et --model dans les options du client, sans interpréter le texte du prompt comme des options ; vérifier les argv réels de chaque moteur.",
+      "fix_effort": "S",
+      "locations": [
+        {
+          "file": "factory/bin/model_router.py",
+          "line": 1854,
+          "function": "model_from_argv"
+        }
+      ],
+      "proof_case": "codex_model_identity",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . codex_model_identity\nTEST codex_model_identity : rc=0\nrestricted argv: -m gpt-6-astra; model_from_argv returns empty string\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-016",
+      "file": "factory/bin/model_router.py",
+      "line": 387,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "            if row.get(\"provider\") == provider and now - float(row.get(\"ts\", 0)) < 86400:\n                recent += 1",
+      "why": "Le compteur de rationnement filtre seulement provider et ts, sans tenir compte du kind. Le canari d’échec de lecture des quotas, écrit dans le même journal sans lancer de moteur, est compté comme lancement. Avec cap=1 et un seul canari de routage, la reproduction refuse le premier véritable lancement pour \"1 launches\" : des observations consomment à tort la capacité d’exécution.",
+      "recommendation": "Compter uniquement les événements de lancement concernés par le rationnement, en excluant explicitement les canaris de routage ; garder la compatibilité avec les véritables lancements historiques et tester un journal mixte.",
+      "fix_effort": "S",
+      "locations": [
+        {
+          "file": "factory/bin/model_router.py",
+          "line": 371,
+          "function": "_quota_unknown_ration"
+        }
+      ],
+      "proof_case": "quota_canary_counts_as_launch",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . quota_canary_counts_as_launch\nTEST quota_canary_counts_as_launch : rc=0\none routing canary, zero launches -> first launch refused: QUOTA_UNKNOWN_CAP (1 launches, cap 1)\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-017",
+      "file": "factory/bin/model_router.py",
+      "line": 395,
+      "severity": "HIGH",
+      "category": "RACE",
+      "evidence": "    if recent >= cap:\n        return False, (f\"QUOTA_UNKNOWN_CAP: {provider} — {recent} launches in 24 h with no \"\n                       f\"observed quota window (cap {cap}, {QUOTA_UNKNOWN_CAP_ENV}); refresh the \"\n                       f\"quota snapshot or raise the cap explicitly\")",
+      "why": "La lecture du journal, le contrôle du cap et l’ajout de la réservation ne sont pas atomiques. Deux appels synchronisés juste après leur lecture du même journal vide avec cap=1 sont tous deux autorisés et produisent deux lignes. Dans un dispatcher concurrent, le quota de secours peut donc être dépassé même si chaque appel applique individuellement le test recent >= cap.",
+      "recommendation": "Protéger par un verrou interprocessus toute la transaction lecture-compte-réservation, ou utiliser un stockage transactionnel ; tester plusieurs processus qui réservent simultanément la dernière place.",
+      "fix_effort": "M",
+      "locations": [
+        {
+          "file": "factory/bin/model_router.py",
+          "line": 371,
+          "function": "_quota_unknown_ration"
+        }
+      ],
+      "proof_case": "quota_check_append_race",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . quota_check_append_race\nTEST quota_check_append_race : rc=0\ncap=1; two reads synchronized before append -> 2 allowed launches and 2 journal rows\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-018",
+      "file": "factory/bin/model_router.py",
+      "line": 616,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "        if _alt in (\"glm\", \"claude\") and tk == TaskKind.REVIEW:\n            # 2026-09-18: Claude too — its REVIEW launch is the verified\n            # restricted read-only argv (_restricted_claude_argv), never the\n            # supervisor writer (review_dispatch refused it otherwise).",
+      "why": "Le fallback lié aux exclusions ne préserve le mode restreint Claude/GLM que pour REVIEW. Une tâche A diagnose, initialement en lecture seule, routée avec Codex exclu obtient Claude read_only=False et un argv contenant --dangerously-skip-permissions. La reproduction construit cet argv sans l’exécuter : le changement de moteur transforme indûment un diagnostic en session capable d’écrire.",
+      "recommendation": "Conserver le rôle et le caractère read_only de la tâche à travers les fallbacks, notamment DIAGNOSE et REPLAN, et utiliser les constructeurs restreints vérifiés de chaque moteur compatible.",
+      "fix_effort": "S",
+      "locations": [
+        {
+          "file": "factory/bin/model_router.py",
+          "line": 574,
+          "function": "_finalize_choice"
+        }
+      ],
+      "proof_case": "diagnose_exclusion_becomes_writer",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . diagnose_exclusion_becomes_writer\nTEST diagnose_exclusion_becomes_writer : rc=0\nA diagnose excluding codex -> Claude read_only=False; unrestricted writer argv constructed (not executed)\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-019",
+      "file": "factory/bin/model_router.py",
+      "line": 604,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "    for _alt in (\"claude\", \"glm\", \"codex\", \"local\"):\n        if _alt in excluded_engines or _alt == choice.engine:\n            continue\n        if not engine_capable(_alt, sl, tk):",
+      "why": "La liste de fallback inclut local pour une tâche de revue nécessitant un moteur. Quand glm, claude et codex sont exclus, route retourne une EngineChoice local, puis cli_args lève ValueError(\"unknown canonical engine\"). Le routage annonce ainsi un choix réussi qui ne peut pas être lancé au lieu de signaler que les relecteurs sont épuisés.",
+      "recommendation": "Limiter les alternatives aux moteurs lançables pour ce type de tâche et lever l’erreur métier d’épuisement ou d’indépendance prévue lorsque la liste est vide ; réserver local aux opérations qui ont un exécuteur local réel.",
+      "fix_effort": "S",
+      "locations": [
+        {
+          "file": "factory/bin/model_router.py",
+          "line": 574,
+          "function": "_finalize_choice"
+        }
+      ],
+      "proof_case": "reviewer_falls_back_to_unlaunchable_local",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . reviewer_falls_back_to_unlaunchable_local\nTEST reviewer_falls_back_to_unlaunchable_local : rc=0\nthree model engines excluded -> local writer returned; cli_args raises unknown canonical engine\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    },
+    {
+      "id": "L3-020",
+      "file": "factory/bin/owner_routing_policy.py",
+      "line": 216,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "        \"active\": in_scope and not expired,\n        \"expires_at\": EXPIRES_AT.isoformat(),\n        \"evaluated_at\": instant.isoformat(),",
+      "why": "status calcule active et effective_engines à partir d’une ancienne fenêtre expirée, alors que override_for applique les phases ultérieures. À la date fixe du 19 septembre 2026, status(\"factory\") indique active=False et builder=\"seed policy\", tandis que override_for(\"factory\", \"A\", \"build\") applique réellement GLM en phase 5. L’observabilité du routage contredit donc la décision utilisée.",
+      "recommendation": "Dériver le statut de la même sélection de phase que override_for, en exposant la fenêtre et les moteurs actifs ; tester avant, pendant et après chaque fenêtre de politique.",
+      "fix_effort": "S",
+      "locations": [
+        {
+          "file": "factory/bin/owner_routing_policy.py",
+          "line": 197,
+          "function": "status"
+        }
+      ],
+      "proof_case": "owner_status",
+      "detail": "Sur le SHA original ed8cbfc37b8e1a7af973a5375a3d852e32f896c0, reproduction isolée : python3 /tmp/L3_review_probes.py . owner_status\nTEST owner_status : rc=0\nstatus active=False, builder=seed policy; effective override applies=True, builder=glm (phase 5)\nSource du scénario embarquée dans reproduction_suite.source. rc=0 confirme le défaut existant ; aucun correctif n’est appliqué ni revendiqué."
+    }
+  ],
+  "review_method": {
+    "coverage": "Six fichiers lus intégralement en tranches numérotées contiguës, 8497 lignes ; sources identiques au SHA reviewed_sha.",
+    "scope": "Revue de qualité logicielle uniquement, aucun changement du code, des contrats ou de l’état. Seul ce JSON constitue le livrable committé.",
+    "proof_limits": "Les 20 scénarios reproduisent des comportements du code existant. Les appels modèle, réseau et signaux vers des moteurs sont simulés ; les conflits Git, enfants de processus et tests pytest signalés comme réels sont isolés en répertoires temporaires. Aucun résultat de production ni correction après revue n’est revendiqué."
+  },
+  "reproduction_suite": {
+    "language": "python3",
+    "dependencies": "Python standard library, pytest et dépendances déjà présentes pour importer le dépôt.",
+    "extract_command": "python3 -c 'import json,pathlib; d=json.loads(pathlib.Path(\"factory_v2/audit/CODE_REVIEW_2026-09/L3_dispatcher_router.json\").read_text()); pathlib.Path(\"/tmp/L3_review_probes.py\").write_text(d[\"reproduction_suite\"][\"source\"])' ",
+    "run_command": "PYTHONDONTWRITEBYTECODE=1 python3 /tmp/L3_review_probes.py .",
+    "source_sha256": "4cbf9ec9d51e59ea502c66320da1a0b2cf6ec33fc5dbb0bde7fa3e1674f52442",
+    "source": "\"\"\"Run: python3 probes.py REPO [CASE]. rc=0 confirms defective behavior.\nReal Git and child processes use TemporaryDirectory; no model is invoked.\nExternal dependencies are stubbed explicitly. Each case completes synchronously.\n\"\"\"\nimport contextlib, datetime as dt, io, json, os, signal, subprocess, sys, tempfile, time\nfrom pathlib import Path\nfrom types import SimpleNamespace as NS\nfrom unittest.mock import patch\nREPO=Path(sys.argv[1]).resolve(); sys.dont_write_bytecode=True\nsys.path[:0]=[str(REPO),str(REPO/'factory/bin'),str(REPO/'factory/lib')]\nos.environ['FACTORY_NO_REAL_ENGINE']='1'\nCASES={}\ndef case(fn): CASES[fn.__name__]=fn; return fn\ndef git(p,*args):\n r=subprocess.run(['git',*args],cwd=p,text=True,capture_output=True)\n assert r.returncode==0,(args,r.stderr)\n return r.stdout.strip()\ndef repository(p):\n p.mkdir(); git(p,'init','-q'); git(p,'config','user.name','Review fixture'); git(p,'config','user.email','fixture@example.invalid'); git(p,'config','core.hooksPath','/dev/null')\n (p/'.gitignore').write_text('__pycache__/\\n.pytest_cache/\\n'); (p/'README.md').write_text('fixture\\n')\n git(p,'add','.'); git(p,'commit','-qm','baseline'); return p\n@case\ndef owner_status(p):\n now=dt.datetime.fromisoformat('2026-09-19T00:00:00+00:00'); s=owner.status('factory',now); o=owner.override_for('factory','A','build',now)\n assert not s['active'] and s['effective_engines']['builder']=='seed policy' and o.applies and o.engine=='glm'\n return 'status active=False, builder=seed policy; effective override applies=True, builder=glm (phase 5)'\n@case\ndef codex_model_identity(p):\n c=mr.EngineChoice('codex',mr.CODEX_MODEL_STRONG,'codex','reviewer','A','review','fixture',True)\n with patch.dict(mr._codex_probe_cache,{'report':''},clear=True): a=mr.cli_args(c,p,'review')\n try:\n  assert a[a.index('-m')+1]==mr.CODEX_MODEL_STRONG and mr.model_from_argv(a)==''\n finally: Path(a[a.index('-o')+1]).unlink()\n return 'restricted argv: -m gpt-6-astra; model_from_argv returns empty string'\n@case\ndef quota_canary_counts_as_launch(p):\n j=p/'quota.jsonl'; j.write_text('')\n with patch.object(mr,'_quota_unknown_journal',return_value=j),patch.dict(os.environ,{'FACTORY_QUOTA_UNKNOWN_CAP':'1'}):\n  assert mr._quota_routing_lookup_guard('glm',RuntimeError('lookup'))==(True,'')\n  rows=[json.loads(s) for s in j.read_text().splitlines()]; assert len(rows)==1 and rows[0]['kind'].startswith(mr.ROUTING_LOOKUP_CANARY_KIND)\n  ok,why=mr._quota_unknown_ration(p,'glm'); assert not ok and '1 launches' in why\n return 'one routing canary, zero launches -> first launch refused: QUOTA_UNKNOWN_CAP (1 launches, cap 1)'\n@case\ndef quota_check_append_race(p):\n import concurrent.futures,threading\n j=p/'quota.jsonl'; j.write_text(''); b=threading.Barrier(2); original=Path.read_text\n def read(path,*a,**kw):\n  value=original(path,*a,**kw)\n  if path==j: b.wait(timeout=5)\n  return value\n with patch.object(mr,'_quota_unknown_journal',return_value=j),patch.dict(os.environ,{'FACTORY_QUOTA_UNKNOWN_CAP':'1'}),patch.object(Path,'read_text',read):\n  with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:\n   a=pool.submit(mr._quota_unknown_ration,p,'glm'); z=pool.submit(mr._quota_unknown_ration,p,'glm'); results=[a.result(timeout=10),z.result(timeout=10)]\n assert all(r[0] for r in results) and len(j.read_text().splitlines())==2\n return 'cap=1; two reads synchronized before append -> 2 allowed launches and 2 journal rows'\n@case\ndef diagnose_exclusion_becomes_writer(p):\n with patch.dict(mr._codex_probe_cache,{'report':''},clear=True),patch.object(mr,'_quota_engine_allowance',return_value=(True,'')):\n  c=mr.route('A','diagnose',exclude_engines=['codex']); a=mr.cli_args(c,p,'diagnose')\n assert c.engine=='claude' and not c.read_only and '--dangerously-skip-permissions' in a\n return 'A diagnose excluding codex -> Claude read_only=False; unrestricted writer argv constructed (not executed)'\n@case\ndef reviewer_falls_back_to_unlaunchable_local(p):\n c=mr.route('B','review',exclude_engines=['glm','claude','codex']); assert c.engine=='local' and not c.read_only\n try: mr.cli_args(c,p,'review')\n except ValueError as e: assert 'unknown canonical engine' in str(e)\n else: raise AssertionError('unexpected launch')\n return 'three model engines excluded -> local writer returned; cli_args raises unknown canonical engine'\n@case\ndef parallel_results_collide(p):\n from concurrent.futures import Future\n from factory_v2 import runtime,resilience\n results=[NS(action='MILESTONE_SETTLED',milestone='A',detail='first',touched_files=['factory/bin/factoryd.py']),NS(action='PROJECT_BUSY',milestone='B',detail='second',touched_files=[])]\n with patch.dict(fd._ADVANCE_RESULTS,{},clear=True),patch.dict(fd._ADVANCE_FUTURES,{},clear=True),patch.object(fd,'_PARALLEL_HARVEST',[]),patch.object(runtime,'advance',side_effect=results),patch.object(resilience,'network_available',return_value=True),patch.object(fd,'_classify_progress',return_value=[]):\n  for i in range(2):\n   action=fd._advance_v2(p,lambda *a:None); f=Future(); f.set_result(action); fd._ADVANCE_FUTURES[f'{p}#{i}']=f\n  fd._harvest_parallel(lambda *a:None); rows=fd._PARALLEL_HARVEST\n  assert rows[0][1:]==('MILESTONE_SETTLED','second',[]) and rows[1][1:]==('PROJECT_BUSY','',[])\n return 'two completions before harvest -> settlement gets busy detail and loses touched factoryd.py; second result empty'\n@case\ndef reload_unknown_state_is_idle(p):\n (p/'PROJECT_STATE.json').write_text('{broken'); assert fd.v2_status_summary(p)['observed'] is False and fd._project_in_flight(p)==0\n with patch.object(fd,'_RELOAD_DRAINING',False),patch.dict(fd._ADVANCE_FUTURES,{},clear=True): assert fd._reload_in_flight(p,'BLOCKED')==0\n return 'unreadable PROJECT_STATE: observed=False but both reload in-flight checks return 0 (restart allowed)'\n@case\ndef orphan_membership_read_error(p):\n from factory_v2 import engine_registry as er\n (p/'PROJECT_STATE.json').write_text('{broken'); leases=p/'evidence/leases'; leases.mkdir(parents=True); (leases/'live.json').write_text('{torn')\n live=fd._live_engine_lease_ids([p]); assert live==set(); now=time.time()\n rec={'pid':123456,'birth_time':now-900,'lease_id':'live','mission_id':'M','launcher_pid':0}\n with patch.object(er,'read_registry',return_value=[rec]),patch.object(er,'_pid_alive',return_value=True),patch.object(er,'_proc_birth_time',return_value=now-900):\n  assert er.orphans_from_registry(p,live_leases=live,max_age_s=10800)==[rec]\n  assert er.orphans_from_registry(p,live_leases=None,max_age_s=10800)==[]\n return 'unreadable state+lease -> empty set -> 15-minute engine selected as orphan; UNKNOWN would preserve it (no signal)'\n@case\ndef secondary_sweep_ignores_live_lease(p):\n from factory_v2 import engine_registry as er\n signals=[]; birth=time.time()-14400; rec={'pid':123456,'birth_time':birth,'lease_id':'live','mission_id':'M'}\n with patch.object(er,'read_registry',return_value=[rec]),patch.object(er,'_pid_alive',return_value=True),patch.object(er,'_proc_birth_time',return_value=birth),patch.object(fd,'_live_engine_lease_ids',return_value={'live'}),patch.object(fd,'_engine_registry_files',return_value=[p/'evidence/engine_registry.jsonl']),patch.object(fd.subprocess,'run',return_value=NS(stdout='123456 1 04:00:00 codex exec --json\\n')),patch.object(fd.os,'getpgid',return_value=123456),patch.object(fd.os,'killpg',side_effect=lambda *a:signals.append(a)):\n  killed=fd._sweep_orphan_engines(lambda *a:None,[p])\n assert killed==1 and signals==[(123456,signal.SIGKILL)]\n return 'registry reports no orphan; legacy ps scan still requests SIGKILL of 4-hour engine (signals mocked)'\n@case\ndef watcher_ignores_v2(p):\n run=p/'run'; run.mkdir(); project=p/'project'; project.mkdir(); (project/'PROJECT_STATE.json').write_text(json.dumps({'missions':{'M':{'state':'RUNNING'}}}))\n cs=p/'campaign.json'; cs.write_text(json.dumps({'state':'RUNNING','active':[]})); s=fd.sstate.SupervisorState(123,fd.sstate.utc_now(),fd.sstate.utc_now()); fd.sstate.save_state(run/'supervisor_state.json',s)\n from factory_v2 import mission_evidence\n with patch.object(fd,'running_pid',return_value=123),patch.object(mission_evidence,'is_worker_alive',return_value=True): summary=fd.v2_status_summary(project); status=watch.format_status(run,cs)\n assert summary['in_flight']==1 and 'WORKERS=0/1' in status and 'V2_' not in status\n return 'V2 status sees 1 live mission; watcher reports WORKERS=0/1 and legacy campaign only'\n@case\ndef stale_pid_targets_unrelated_process(p):\n (p/'factoryd.pid').write_text(str(os.getpid())); signals=[]\n with patch.object(fd,'_descendants_of',return_value=[]),patch.object(fd.os,'kill',side_effect=lambda *a:signals.append(a)),patch.object(fd,'_reap_pids',return_value=[]): fd.cmd_stop(NS(run_dir=str(p),stop_timeout_s=0))\n assert (os.getpid(),signal.SIGTERM) in signals\n return 'PID file names unrelated live review process -> cmd_stop requests SIGTERM without daemon identity/birth check (mocked signal)'\n@case\ndef stall_retains_active_worker(p):\n cs=p/'campaign.json'; cs.write_text(json.dumps({'state':'RUNNING','active':['M'],'queued':[]})); w={'mission_id':'M','pid':123456,'evidence_dir':str(p/'evidence')}; s=fd.sstate.SupervisorState(1,fd.sstate.utc_now(),fd.sstate.utc_now(),active_workers=[w]); launched=[]\n with patch.object(fd.cdet,'check_mission_completion',return_value=NS(done=False)),patch.object(fd.cdet,'is_worker_stalled',return_value=False),patch.object(fd.pwatch.ProgressWatchdog,'is_stalled',return_value=True),patch.object(fd.os,'kill',return_value=None):\n  fd.do_poll_iteration(cs,s,p,dispatch=lambda *a:launched.append(a),cto_events_path=p/'events.jsonl',failure_log_path=p/'failure.jsonl',chain_state_path=p/'chain.json',portfolio_path=False)\n assert json.loads(cs.read_text())['queued']==['M'] and s.active_workers==[w] and not launched\n return 'legacy stall requeues M but retains killed worker in active_workers; capacity=1 prevents retry in same poll'\n@case\ndef merge_discards_project_source(p):\n repo=repository(p/'repo'); src=repo/'projects/widget/main.py'; src.parent.mkdir(parents=True); src.write_text('VALUE=0\\n'); git(repo,'add','.'); git(repo,'commit','-qm','base source'); base=git(repo,'rev-parse','HEAD')\n git(repo,'checkout','-qb','candidate'); src.write_text('VALUE=2\\n'); git(repo,'commit','-qam','candidate fix'); git(repo,'checkout','-qb','live',base); src.write_text('VALUE=1\\n'); git(repo,'commit','-qam','live conflicting edit')\n assert dv._merge_candidate(repo,'candidate','M') is True and src.read_text()=='VALUE=1\\n' and git(repo,'show','candidate:projects/widget/main.py')=='VALUE=2'\n return 'real Git conflict projects/widget/main.py: merge True, candidate VALUE=2 discarded in favor of live VALUE=1'\n@case\ndef merge_failure_receipt_stays_accepted(p):\n repo=repository(p/'repo'); wt=repository(p/'wt'); base=git(repo,'rev-parse','HEAD'); info=NS(path=wt,branch='candidate/M',base_commit=base)\n manager=NS(recover_worktree=lambda mid:None,create_worktree=lambda mid:info,remove_worktree=lambda *a,**k:None); out=p/'receipt.json'\n def dispatch(*a,**kw):\n  r={'verdict':'ACCEPTED','promotable':True,'candidate_sha':'a'*40}; out.write_text(json.dumps(r)); return r\n with patch.object(dv,'WorktreeManager',return_value=manager),patch.object(dv,'_prepare_context_package',return_value=(None,None)),patch.object(dv,'prune_stale_worktrees',return_value=[]),patch.object(dv,'dispatch_v3',side_effect=dispatch),patch.object(dv,'_is_factory_repo',return_value=True),patch.object(dv,'_merge_candidate',return_value=False),patch.object(dv,'_run',return_value=(0,'','')):\n  r=dv._run_in_worktree('M',repo,'task','true',600,out)\n assert r['verdict']=='BLOCKED' and r['promotable'] is True and json.loads(out.read_text())['verdict']=='ACCEPTED'\n return 'merge=False -> returned BLOCKED/promotable=True; disk receipt remains ACCEPTED/promotable=True'\n@case\ndef process_group_leaks_after_parent_exit(p):\n child=None; pidfile=p/'child.pid'\n try:\n  code=\"import subprocess,sys,pathlib; p=subprocess.Popen([sys.executable,'-c','import time; time.sleep(20)'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL); pathlib.Path(sys.argv[1]).write_text(str(p.pid))\"\n  rc,out,err=dv._run([sys.executable,'-c',code,str(pidfile)],p,5); child=int(pidfile.read_text()); os.kill(child,0); assert rc==0\n  return 'real parent rc=0; descendant with redirected pipes still alive after _run returns'\n finally:\n  if child:\n   try: os.killpg(os.getpgid(child),signal.SIGKILL)\n   except ProcessLookupError: pass\n@case\ndef timeout_discards_output(p):\n code=\"import sys,time; print('DIAGNOSTIC_BEFORE_TIMEOUT',flush=True); print('ERROR_BEFORE_TIMEOUT',file=sys.stderr,flush=True); time.sleep(10)\"\n assert dv._run([sys.executable,'-c',code],p,0.3)==(-1,'','TIMEOUT')\n return 'subprocess emits stdout+stderr before timeout; _run returns empty stdout and TIMEOUT, both diagnostics lost'\n@case\ndef json_brace_in_string(p):\n obj={'root_cause':'unexpected } delimiter','proposed_fix':'escape delimiter'}; text=json.dumps(obj)\n assert dv._extract_json_object(text)==obj and dv._extract_json_object('Diagnosis: '+text) is None\n return 'valid JSON with } in string parses alone, but with prose prefix returns None'\ndef dispatch_fixture(p,outputs,*,tests=None,ledger=None):\n repo=repository(p/'repo'); evidence=p/'evidence'; evidence.mkdir(); seen=[]; real_run=dv._run\n choice=mr.EngineChoice('claude',mr.CLAUDE_MODEL,'claude','builder','A','build','fixture',False,'high')\n def run(cmd,cwd,timeout):\n  if cmd[0]=='claude':\n   seen.append(cmd); (repo/'REPORT.json').write_text(json.dumps({'outcome':'IMPLEMENTED'})); return outputs[len(seen)-1]\n  if cmd[0]=='bash' and tests is not None: return tests()\n  return real_run(cmd,cwd,timeout)\n with patch.object(dv,'_run',side_effect=run),patch.object(dv,'route_for_dispatch',return_value=choice),patch.object(dv,'_resilience',None),patch.object(dv,'_builder_declared_done',return_value=False),patch.object(dv,'_refresh_cli_quota_snapshot',return_value=None):\n  result=dv.dispatch_v3(repo,'fixture','M','true',600,evidence/'receipt.json',ledger=ledger)\n return result,seen,repo\ndef event(subtype,**kw): return json.dumps({'type':'result','subtype':subtype,'session_id':'fixture-session','usage':{'input_tokens':10,'output_tokens':5},**kw})\n@case\ndef resumed_build_bypasses_budget(p):\n ledger=dv.BudgetLedger(p/'budget.jsonl',max_model_calls=1)\n r,seen,repo=dispatch_fixture(p,[(1,event('error_max_turns'),''),(0,event('success',result='done'),'')],ledger=ledger)\n assert len(seen)==2 and '--resume' in seen[1] and len(r['engine_executions'])==2 and ledger.status('M').model_calls==1\n return 'max_model_calls=1; 2 T0 model stubs execute including --resume; engine_executions=2 but ledger model_calls=1'\n@case\ndef repeated_bug_mislabeled_contract_conflict(p):\n count=0\n implementation=p/'value.txt'; implementation.write_text('1')\n oracle=p/'test_value.py'\n oracle.write_text(\"from pathlib import Path\\ndef test_value():\\n    assert int(Path(__file__).with_name('value.txt').read_text()) == 2\\n\")\n def test():\n  nonlocal count\n  count+=1\n  z=subprocess.run([sys.executable,'-m','pytest','-q','-p','no:cacheprovider',str(oracle)],capture_output=True,text=True,cwd=p)\n  return z.returncode,z.stdout,z.stderr\n r,seen,repo=dispatch_fixture(p,[(0,event('success',result='built'),''),(0,event('success',result='ineffective repair'),'')],tests=test)\n assert r['verdict']=='SPEC_TEST_CONFLICT' and count==2 and len(seen)==2\n implementation.write_text('2')\n assert test()[0]==0\n return 'same real pytest failure after ineffective repair -> SPEC_TEST_CONFLICT, T3 skipped; changing implementation 1->2 makes unchanged test pass'\nif __name__=='__main__':\n with tempfile.TemporaryDirectory(prefix='m3-probes-') as td:\n  root=Path(td); os.environ['FACTORY_RUN_DIR']=str(root/'run'); os.environ['FACTORY_QUOTA_SNAPSHOT_ROOT']=str(root/'quota')\n  import owner_routing_policy as owner,model_router as mr,factoryd as fd,factoryd_watch as watch,dispatcher_v3 as dv\n  selected=[sys.argv[2]] if len(sys.argv)>2 else list(CASES); failed=False\n  for name in selected:\n   p=root/name; p.mkdir(); capture=io.StringIO()\n   try:\n    with contextlib.redirect_stdout(capture): output=CASES[name](p)\n    print(json.dumps({'case':name,'rc':0,'output':output},ensure_ascii=False))\n   except Exception as exc:\n    import traceback\n    failed=True; print(json.dumps({'case':name,'rc':1,'error':repr(exc),'traceback':traceback.format_exc(),'captured':capture.getvalue()},ensure_ascii=False))\n  raise SystemExit(int(failed))\n",
+    "results": [
+      {
+        "case": "owner_status",
+        "rc": 0,
+        "output": "status active=False, builder=seed policy; effective override applies=True, builder=glm (phase 5)"
+      },
+      {
+        "case": "codex_model_identity",
+        "rc": 0,
+        "output": "restricted argv: -m gpt-6-astra; model_from_argv returns empty string"
+      },
+      {
+        "case": "quota_canary_counts_as_launch",
+        "rc": 0,
+        "output": "one routing canary, zero launches -> first launch refused: QUOTA_UNKNOWN_CAP (1 launches, cap 1)"
+      },
+      {
+        "case": "quota_check_append_race",
+        "rc": 0,
+        "output": "cap=1; two reads synchronized before append -> 2 allowed launches and 2 journal rows"
+      },
+      {
+        "case": "diagnose_exclusion_becomes_writer",
+        "rc": 0,
+        "output": "A diagnose excluding codex -> Claude read_only=False; unrestricted writer argv constructed (not executed)"
+      },
+      {
+        "case": "reviewer_falls_back_to_unlaunchable_local",
+        "rc": 0,
+        "output": "three model engines excluded -> local writer returned; cli_args raises unknown canonical engine"
+      },
+      {
+        "case": "parallel_results_collide",
+        "rc": 0,
+        "output": "two completions before harvest -> settlement gets busy detail and loses touched factoryd.py; second result empty"
+      },
+      {
+        "case": "reload_unknown_state_is_idle",
+        "rc": 0,
+        "output": "unreadable PROJECT_STATE: observed=False but both reload in-flight checks return 0 (restart allowed)"
+      },
+      {
+        "case": "orphan_membership_read_error",
+        "rc": 0,
+        "output": "unreadable state+lease -> empty set -> 15-minute engine selected as orphan; UNKNOWN would preserve it (no signal)"
+      },
+      {
+        "case": "secondary_sweep_ignores_live_lease",
+        "rc": 0,
+        "output": "registry reports no orphan; legacy ps scan still requests SIGKILL of 4-hour engine (signals mocked)"
+      },
+      {
+        "case": "watcher_ignores_v2",
+        "rc": 0,
+        "output": "V2 status sees 1 live mission; watcher reports WORKERS=0/1 and legacy campaign only"
+      },
+      {
+        "case": "stale_pid_targets_unrelated_process",
+        "rc": 0,
+        "output": "PID file names unrelated live review process -> cmd_stop requests SIGTERM without daemon identity/birth check (mocked signal)"
+      },
+      {
+        "case": "stall_retains_active_worker",
+        "rc": 0,
+        "output": "legacy stall requeues M but retains killed worker in active_workers; capacity=1 prevents retry in same poll"
+      },
+      {
+        "case": "merge_discards_project_source",
+        "rc": 0,
+        "output": "real Git conflict projects/widget/main.py: merge True, candidate VALUE=2 discarded in favor of live VALUE=1"
+      },
+      {
+        "case": "merge_failure_receipt_stays_accepted",
+        "rc": 0,
+        "output": "merge=False -> returned BLOCKED/promotable=True; disk receipt remains ACCEPTED/promotable=True"
+      },
+      {
+        "case": "process_group_leaks_after_parent_exit",
+        "rc": 0,
+        "output": "real parent rc=0; descendant with redirected pipes still alive after _run returns"
+      },
+      {
+        "case": "timeout_discards_output",
+        "rc": 0,
+        "output": "subprocess emits stdout+stderr before timeout; _run returns empty stdout and TIMEOUT, both diagnostics lost"
+      },
+      {
+        "case": "json_brace_in_string",
+        "rc": 0,
+        "output": "valid JSON with } in string parses alone, but with prose prefix returns None"
+      },
+      {
+        "case": "resumed_build_bypasses_budget",
+        "rc": 0,
+        "output": "max_model_calls=1; 2 T0 model stubs execute including --resume; engine_executions=2 but ledger model_calls=1"
+      },
+      {
+        "case": "repeated_bug_mislabeled_contract_conflict",
+        "rc": 0,
+        "output": "same real pytest failure after ineffective repair -> SPEC_TEST_CONFLICT, T3 skipped; changing implementation 1->2 makes unchanged test pass"
+      }
+    ]
+  }
+}

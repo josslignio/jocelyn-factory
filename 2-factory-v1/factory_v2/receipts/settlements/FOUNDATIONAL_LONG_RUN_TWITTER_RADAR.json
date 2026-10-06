@@ -1,0 +1,56 @@
+{
+  "authority_hashes": {
+    "roadmap": "fbd6a8a73db76fa9bf42c224b311bcae69f487ecb074c3063d80a9cf6f879f12",
+    "spec": "a2a857563a3df635d291f09b56651153e120a2fbe2f8ed29a3fe22f5bf0319dc",
+    "strategy": "42d768f10752fd0a46501d062ac5c9955ba38eade2a15d46d87b8bd353590249"
+  },
+  "base_sha": "a58e110ad0daca91ca97a18154ba3dbef4a50525",
+  "candidate_sha": "2e3fbdcd54aee70c72749274b488e7c5bfdfb2f4",
+  "contract": {
+    "frozen_at": "2026-09-08T00:00:00Z",
+    "id": "roadmap-acceptance",
+    "path": "projects/factory/ROADMAP.yaml#FOUNDATIONAL_LONG_RUN_TWITTER_RADAR",
+    "signature": "roadmap-v3"
+  },
+  "evidence": {
+    "active_verify": [
+      {
+        "command": "PYTHONPATH=. python3 factory_v2/verify_long_run.py factory_v2/receipts/FOUNDATIONAL_LONG_RUN_RECEIPT.json",
+        "observed_at": "2026-09-09T20:49:50Z (controller + Claude hand-trace + Sol LIVE execution)",
+        "output": "PASS: 3 milestones, 3 incidents, 4 restarts, HUMAN_GO=0",
+        "rc": 0
+      },
+      {
+        "command": "PYTHONPATH=. python3 -c verify_settlement(projects/twitter-radar, TR_x) x3",
+        "observed_at": "2026-09-09T20:49:50Z (controller + Sol LIVE on exact clones)",
+        "output": "TR_DATA/TR_KOL/TR_CALL all PROVEN (dual pin ctrl a58e110a x prod d7c2cfe0)",
+        "rc": 0
+      }
+    ],
+    "full_suite": {
+      "command": "framework python3 -m pytest tests/ -q --timeout=600 (detached worktree)",
+      "counts": "1736 passed, 4 skipped, 3 subtests",
+      "duration_s": 934.96,
+      "rc": 0,
+      "receipt": "factory_v2/receipts/committed/FULL_SUITE_RECEIPT_b286be09.json",
+      "sha": "b286be09a520ab3772f83f144c47b6b4cebd7715"
+    },
+    "gate": {
+      "note": "Claude ACCEPT@6c681d6b (fixes F1/F2 landed; F3=live Sol execution satisfied); Sol ACCEPT with counter-probes",
+      "response": ".context/external-watchdog/sol-reviews/1788985888-2e3fbdcd54ae/response.json",
+      "reviewer": "claude-sonnet-5 then codex gpt-5.6-sol",
+      "rounds": 1,
+      "verdict": "ACCEPT"
+    },
+    "product_repo_pin": {
+      "product_commit": "d7c2cfe0a2f2d37d3490797341460bb7104fa5a9",
+      "repo": "/Users/jocelyngrosjean/conductor/workspaces/twitter-radar/twitter-radar-foundation-v2"
+    }
+  },
+  "honest_residual": "weekly-report acceptance evidenced by X110 lineage + H5 owner QA artifacts (TR_WEEKLY_DEEP_REFRESH is a later milestone); engine diversity evidenced by mission receipts (glm) + Claude gates + Sol audits; 11 pre-binding observations typed-rejected; H2/H3 provider limits typed-open; watchdog typed a premature REVIEWER_NO_VERDICT during Sol's quiet window (incident recorded, verdict valid).",
+  "milestone": "FOUNDATIONAL_LONG_RUN_TWITTER_RADAR",
+  "project": "factory",
+  "recorded_at": "2026-09-09T20:49:50Z",
+  "schema": "settlements/v1",
+  "settled_at": "2026-09-09T20:49:50Z"
+}

@@ -1,0 +1,80 @@
+{
+  "control_sha": "865de5703a2450b38bc4f166cbcfe835439c6c9a",
+  "control_sha_rebind_2026_09_19": "REBOUND 2026-09-19 (codex BLOCK 2f0e5bf3 repair, session 5): control_sha moved 57cd98e0->865de5703a2450b38bc4f166cbcfe835439c6c9a because intervening milestones (SAFE_SELF_IMPROVEMENT, FACTORY_CODE_REVIEW_SWEEP, FACTORY_DEEP_RESEARCH) committed real code after 2f0e5bf3 (git diff --name-only 2f0e5bf3..HEAD: factoryd.py, runtime.py, mission_dispatch.py, settlement.py, launch_gate.py, owner_routing_policy.py, tests/). Re-verified at the new binding: LOC re-measured fresh (wc -l; drift found and updated: runtime.py 4468->4475, factoryd.py 2343->2363; all other entries exact), line citations re-resolved (factoryd _reconcile_stale_active l.200, _load_or_create_state l.884 still exact), mechanical judge python3 factory_v2/verify_audit_repair.py . -> AUDIT_REPAIR_VERIFIED rc=0.",
+  "entries": [
+    {
+      "adaptation_allowed": true,
+      "commit": "04d809ceab9df28f9adaed044884180159172930",
+      "commit_source": "api.github.com git/ref/heads/main (session 2026-09-18) ; extrait au SHA dans FACTORY_F3_EXTERNAL_RESEARCH_RECEIPT.json ; licence vérifiée raw.githubusercontent.com/<repo>/<sha>/LICENSE.md (session 3)",
+      "copy_allowed": true,
+      "decision": "ADAPT — adopt DefaultAgent message-loop pattern and AgentConfig (Pydantic) shape. Rewrite in Factory context, do not copy verbatim. No legal obligation for adaptation.",
+      "f4_action": "Refactor dispatcher_v3 agent loop to match DefaultAgent's 160-LOC structure. Reference upstream pattern, do NOT copy file.",
+      "license": "MIT (mini-swe-agent/LICENSE.md au SHA 04d809ce — confirmé par fetch session 3 : 'Copyright (c) 2025 Kilian A. Lieret and Carlos E. Jimenez' ; l'ancienne mention 'LICENSE … Copyright 2024 SWE-agent contributors' citait un chemin et une ligne de copyright inexacts)",
+      "notice_required": "Include MIT copyright notice in NOTICE file if code is copied verbatim",
+      "repo": "https://github.com/SWE-agent/mini-swe-agent",
+      "upstream": "mini-swe-agent"
+    },
+    {
+      "adaptation_allowed": true,
+      "commit": "5c995c365dfb1fd5bc56fda688be5d8538f9931f",
+      "commit_source": "api.github.com git/ref/heads/main (session 2026-09-18) ; extrait au SHA dans FACTORY_F3_EXTERNAL_RESEARCH_RECEIPT.json ; licence vérifiée raw.githubusercontent.com/<repo>/<sha>/LICENSE.txt (session 3)",
+      "copy_allowed": true,
+      "decision": "ADAPT — adopt BashAction/BashObservation typed Pydantic model shape. Rewrite as Factory types (factory/types/execution_action.py). Do NOT copy verbatim.",
+      "f4_action": "Create factory/types/execution_action.py with BashAction/BashObservation analogues. Remove untyped subprocess calls from dispatcher_v3.",
+      "license": "MIT (SWE-ReX/LICENSE.txt au SHA 5c995c36 — confirmé par fetch session 3 : 'Copyright (c) 2024 Kilian Lieret, Carlos E. Jimenez' ; l'ancienne mention 'LICENSE … Copyright 2024 SWE-agent contributors' citait un chemin et une ligne de copyright inexacts)",
+      "notice_required": "Include MIT copyright notice in NOTICE file if code is copied verbatim",
+      "repo": "https://github.com/SWE-agent/SWE-ReX",
+      "upstream": "SWE-ReX"
+    },
+    {
+      "adaptation_allowed": true,
+      "commit": "fdf7e80ad6c8f6dbdd9b779d5d6923c74d8b583e",
+      "commit_source": "api.github.com git/ref/heads/main (session 2026-09-18) ; extrait au SHA dans FACTORY_F3_EXTERNAL_RESEARCH_RECEIPT.json",
+      "copy_allowed": true,
+      "decision": "REFERENCE ONLY — framework is too large for Factory's single-machine use. Do not copy or wrap any MAF code in F4. A2A protocol interesting for future multi-agent interop but not needed now.",
+      "f4_action": "No code changes. Conceptual reference only for multi-agent handoff patterns.",
+      "license": "MIT (microsoft/agent-framework/LICENSE — confirmed: Copyright Microsoft Corporation)",
+      "notice_required": "Include MIT copyright notice if copying",
+      "repo": "https://github.com/microsoft/agent-framework",
+      "upstream": "Microsoft Agent Framework"
+    },
+    {
+      "adaptation_allowed": true,
+      "commit": "5a1703a30295291f9c944c26ec193d468e200a3b",
+      "commit_source": "api.github.com git/ref/heads/main (session 2026-09-18) ; extrait au SHA dans FACTORY_F3_EXTERNAL_RESEARCH_RECEIPT.json",
+      "copy_allowed": true,
+      "decision": "ADAPT SEMANTICS — do not install temporalio as a dependency. Adapt RetryPolicy declarative dataclass shape and heartbeat-on-long-operation pattern into Factory's retry_policy.py. The semantics are MIT-licensed and can be re-expressed.",
+      "f4_action": "Create factory/lib/retry_policy.py with RetryPolicy dataclass (initial_interval_s, backoff_coefficient, max_attempts, non_retryable_types). Remove hardcoded T0/T2/T3 retry constants from dispatcher_v3.",
+      "license": "MIT (temporalio/sdk-python/LICENSE)",
+      "notice_required": "Include copyright if verbatim copy",
+      "repo": "https://github.com/temporalio/sdk-python",
+      "upstream": "Temporal Python SDK"
+    },
+    {
+      "adaptation_allowed": true,
+      "commit": "c81c13533ee48c1ae0ef2de314737ef0c455f2be",
+      "commit_source": "api.github.com git/ref/heads/main (session 2026-09-18) ; extrait au SHA dans FACTORY_F3_EXTERNAL_RESEARCH_RECEIPT.json",
+      "copy_allowed": true,
+      "decision": "ADAPT SEMANTICS — do not install langgraph as a dependency. Adapt pending_writes checkpoint concept into Factory's AttemptStore. The key insight: store intermediate task outputs keyed by (thread_id, checkpoint_id) so partial missions can be recovered.",
+      "f4_action": "Enhance factory_v2/runrecords.py (wired in F4 at correct boundary) to support partial recovery records.",
+      "license": "MIT (langchain-ai/langgraph/LICENSE)",
+      "notice_required": "Include copyright if verbatim copy",
+      "repo": "https://github.com/langchain-ai/langgraph",
+      "upstream": "LangGraph checkpoint interface"
+    }
+  ],
+  "factory_license": "Proprietary / private repo — no outbound license obligations",
+  "milestone": "FULL_CODEBASE_STATE_OF_ART_AUDIT",
+  "policy": "Copy only MIT/Apache-2.0 code. Wrap BSD-2/BSD-3 (keep attribution). Reject GPL. For any copy: record source, copyright notice, and include in NOTICE file.",
+  "produced_at": "2026-09-07",
+  "prohibited": [],
+  "required_notice_file": "NOTICE (create in repo root if any code is copied verbatim — currently none)",
+  "schema": "license-compatibility-ledger/v1",
+  "update_2026_09_18": {
+    "measured_at_head": "d256977f9bb00006fb5f5271a762b1c58354cfae",
+    "reason": "Placeholders 'via WebFetch' remplacés par des SHA 40 hex réels (relecteur Claude BLOCK aa295959 : « (fetched via WebFetch) ne sont pas des commit SHA ») ; SHAs courtes étendues ; artefact rebindé au HEAD courant.",
+    "reverified_second_pass": "Re-vérification fraîche (session codex-BLOCK 60d76f11) : les 5 commit_sha re-résolus par fetch raw.githubusercontent.com au SHA (5/5 OK, extraits du receipt de recherche retrouvés verbatim).",
+    "reverified_third_pass": "Session 3 (BLOCK codex a4f12607) : fetch frais des fichiers de licence au SHA pinné — 5/5 MIT confirmés. DÉFAUTS CORRIGÉS : mini-swe-agent et SWE-ReX n'ont PAS de fichier 'LICENSE' au chemin cité (404) — les vrais chemins au SHA sont LICENSE.md (copyright '(c) 2025 Kilian A. Lieret and Carlos E. Jimenez') et LICENSE.txt (copyright '(c) 2024 Kilian Lieret, Carlos E. Jimenez') ; l'ancienne ligne 'Copyright 2024 SWE-agent contributors' était une confirmation inexacte sur les deux. agent-framework/temporalio/langgraph : LICENSE MIT à la racine, conformes."
+  },
+  "verdict": "ALL UPSTREAMS MIT. Adaptation is unrestricted. No GPL contamination risk. No copy needed — patterns are adapted, not copied. No NOTICE file required at this time."
+}

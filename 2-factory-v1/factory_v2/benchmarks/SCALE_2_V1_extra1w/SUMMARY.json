@@ -1,0 +1,72 @@
+{
+  "arm_1w": {
+    "engine_overlaps_total": 0,
+    "isolation_all_runs": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "median_throughput": 0.15775,
+    "median_wall_s": 25.357,
+    "reliability_all_runs": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "throughputs": [
+      0.15576,
+      0.15812,
+      0.15738,
+      0.15733,
+      0.15934,
+      0.1592,
+      0.15904,
+      0.15656
+    ],
+    "walls_s": [
+      25.68,
+      25.297,
+      25.417,
+      25.424,
+      25.104,
+      25.126,
+      25.151,
+      25.549
+    ]
+  },
+  "arm_2w": {
+    "engine_overlaps_total": 0,
+    "isolation_all_runs": [],
+    "median_throughput": null,
+    "median_wall_s": null,
+    "reliability_all_runs": [],
+    "throughputs": [],
+    "walls_s": []
+  },
+  "backoff_ceiling_s": 1.0,
+  "mission_sleep_s": 6.0,
+  "poll_interval_s": 0.05,
+  "repeats": 8,
+  "repo_check_note": "recomputed after the run with 'git status --porcelain -uall', excluding the benchmark's own output dirs and the committed producer file; the in-run self-check collapsed untracked dirs (porcelain without -uall) and self-flagged its own output dir - producer fixed since",
+  "repo_clean_after": [
+    "M evidence/engine_registry.jsonl"
+  ],
+  "repo_clean_before": [
+    "M evidence/engine_registry.jsonl"
+  ],
+  "repo_untouched": true,
+  "same_workload": true,
+  "schema": "scale2-benchmark-summary/v1",
+  "verdict_rule": "SCALE_RECOMMENDED iff median_throughput(2w) > median_throughput(1w) AND all reliability 2w AND all isolation 2w AND arm2 shows >=1 real engine overlap",
+  "workload_id": "SCALE_2_W1"
+}

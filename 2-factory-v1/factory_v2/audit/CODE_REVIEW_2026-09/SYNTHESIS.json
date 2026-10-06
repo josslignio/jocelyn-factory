@@ -1,0 +1,697 @@
+{
+ "schema": "code-review-synthesis/v1",
+ "reviewed_sha": "e8cb2facd153c8550aa44ca1dcbc1e392ebb153f",
+ "generated_by": "FACTORY_CODE_REVIEW_SWEEP_V1#M10",
+ "totals": {
+  "lots": 9,
+  "files_reviewed": 223,
+  "lines_reviewed": 70892,
+  "files_with_findings": 138,
+  "findings": 222,
+  "by_severity": {
+   "CRITICAL": 0,
+   "HIGH": 103,
+   "MEDIUM": 112,
+   "LOW": 7
+  },
+  "by_category": {
+   "BUG": 158,
+   "DEAD_CODE": 0,
+   "DUPLICATE": 0,
+   "RACE": 17,
+   "ERROR_HANDLING": 36,
+   "PERF": 3,
+   "SECURITY": 0,
+   "COMPLEXITY": 0,
+   "TEST_GAP": 5,
+   "DOC_DRIFT": 3
+  },
+  "by_fix_effort": {
+   "S": 131,
+   "M": 91,
+   "L": 0
+  },
+  "by_lot": {
+   "L1_advance": {
+    "files": 10,
+    "findings": 17,
+    "files_with_findings": 7,
+    "lines": 3594
+   },
+   "L2_runtime_core": {
+    "files": 11,
+    "findings": 19,
+    "files_with_findings": 11,
+    "lines": 12937
+   },
+   "L3_dispatcher_router": {
+    "files": 6,
+    "findings": 20,
+    "files_with_findings": 5,
+    "lines": 8497
+   },
+   "L4_resilience_review": {
+    "files": 20,
+    "findings": 22,
+    "files_with_findings": 15,
+    "lines": 7758
+   },
+   "L5_factory_v2_rest_1": {
+    "files": 45,
+    "findings": 31,
+    "files_with_findings": 20,
+    "lines": 9099
+   },
+   "L5_factory_v2_rest_2": {
+    "files": 54,
+    "findings": 29,
+    "files_with_findings": 23,
+    "lines": 9357
+   },
+   "L5_factory_v2_rest_3": {
+    "files": 15,
+    "findings": 18,
+    "files_with_findings": 8,
+    "lines": 2106
+   },
+   "L6_bin_lib_products_1": {
+    "files": 38,
+    "findings": 36,
+    "files_with_findings": 30,
+    "lines": 9181
+   },
+   "L6_bin_lib_products_2": {
+    "files": 24,
+    "findings": 30,
+    "files_with_findings": 19,
+    "lines": 8363
+   }
+  },
+  "items": 13
+ },
+ "top": [
+  {
+   "rank": 1,
+   "theme": 1,
+   "title": "Juges et gates fail-open : la preuve est acceptée sans être vérifiée",
+   "metric": "42 constats (25 HIGH, 16 MEDIUM, 1 LOW) sur 31 fichiers",
+   "finding_ids": [
+    "L3-007",
+    "L4_resilience_review-010",
+    "L5_factory_v2_rest_1-001",
+    "L5_factory_v2_rest_1-002",
+    "L5_factory_v2_rest_1-010",
+    "L5_factory_v2_rest_1-023",
+    "L5_factory_v2_rest_1-031",
+    "L5_factory_v2_rest_2-004",
+    "L5_factory_v2_rest_2-006",
+    "L5_factory_v2_rest_2-010",
+    "L5_factory_v2_rest_2-018",
+    "L5_factory_v2_rest_2-020",
+    "L5_factory_v2_rest_2-022",
+    "L5_factory_v2_rest_2-023",
+    "L5_factory_v2_rest_2-024",
+    "L5_factory_v2_rest_2-026",
+    "L5_factory_v2_rest_2-027",
+    "L5_factory_v2_rest_3-001",
+    "L5_factory_v2_rest_3-002",
+    "L5_factory_v2_rest_3-003",
+    "L5_factory_v2_rest_3-005",
+    "L5_factory_v2_rest_3-006",
+    "L5_factory_v2_rest_3-007",
+    "L5_factory_v2_rest_3-008",
+    "L5_factory_v2_rest_3-010",
+    "L5_factory_v2_rest_3-011",
+    "L6_bin_lib_products_1-008",
+    "L6_bin_lib_products_1-016",
+    "L6_bin_lib_products_1-017",
+    "L6_bin_lib_products_1-019",
+    "L6_bin_lib_products_1-026",
+    "L6_bin_lib_products_1-030",
+    "L6_bin_lib_products_1-034",
+    "L6_bin_lib_products_1-035",
+    "L6_bin_lib_products_2-018",
+    "L6_bin_lib_products_2-019",
+    "L6_bin_lib_products_2-023",
+    "L6_bin_lib_products_2-024",
+    "L6_bin_lib_products_2-025",
+    "L6_bin_lib_products_2-026",
+    "L6_bin_lib_products_2-028",
+    "L6_bin_lib_products_2-029"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 25,
+    "MEDIUM": 16,
+    "LOW": 1
+   },
+   "categories": {
+    "BUG": 37,
+    "TEST_GAP": 5
+   },
+   "milestone_proposal": {
+    "id": "VERIFY-HARDENING",
+    "goal": "Chaque juge/gate vérifie réellement ce qu'il certifie : unicité des identités, code de sortie réel, empreintes des octets, couverture observée — jamais une longueur de liste, une présence ou un booléen auto-déclaré.",
+    "deliverables": [
+     "Inventaire des juges/gates avec la preuve exacte qu'ils contrôlent vs contrôlent pas (matrice)",
+     "Bibliothèque commune de vérification : ids distincts, rc confronté au reçu, hash des octets, refus sur donnée absente/inconnue",
+     "Régressions adversariales par juge : doublons, rc≠0 caché, préambule neutre puis échec final, booléens contradictoires",
+     "Interdire tout succès par défaut : absence de donnée = FAIL explicite"
+    ],
+    "judge": "python3 factory_v2/verify_code_review_sweep.py --synthesis --project-repo . plus la suite de régressions adversariales des juges, toute rouge sur un cas déclaratif = juge non conforme"
+   }
+  },
+  {
+   "rank": 2,
+   "theme": 2,
+   "title": "Une observation impossible est convertie en verdict favorable (fail-open généralisé)",
+   "metric": "22 constats (16 HIGH, 6 MEDIUM, 0 LOW) sur 19 fichiers",
+   "finding_ids": [
+    "L1_advance-001",
+    "L2_runtime_core-002",
+    "L2_runtime_core-012",
+    "L2_runtime_core-014",
+    "L3-009",
+    "L3-010",
+    "L5_factory_v2_rest_1-011",
+    "L5_factory_v2_rest_1-013",
+    "L5_factory_v2_rest_1-016",
+    "L5_factory_v2_rest_1-019",
+    "L5_factory_v2_rest_1-020",
+    "L5_factory_v2_rest_1-021",
+    "L5_factory_v2_rest_1-022",
+    "L5_factory_v2_rest_2-005",
+    "L5_factory_v2_rest_2-017",
+    "L5_factory_v2_rest_3-009",
+    "L5_factory_v2_rest_3-012",
+    "L5_factory_v2_rest_3-014",
+    "L6_bin_lib_products_1-006",
+    "L6_bin_lib_products_1-025",
+    "L6_bin_lib_products_1-027",
+    "L6_bin_lib_products_1-031"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 16,
+    "MEDIUM": 6,
+    "LOW": 0
+   },
+   "categories": {
+    "BUG": 8,
+    "ERROR_HANDLING": 14
+   },
+   "milestone_proposal": {
+    "id": "FAIL-CLOSED-OBSERVATION",
+    "goal": "Une observation indisponible (fichier illisible, commande en erreur, registre corrompu, exception de sonde) ne produit jamais un verdict favorable : état INCONNU typé et bloquant.",
+    "deliverables": [
+     "Grep systématique des except/None→succès dans les lecteurs d'état, preflights et juges",
+     "Trinité VIVANT/MORT/INCONNU appliquée aux contrôles de vie, leases, journaux et quarantaines",
+     "Corruption de marqueur durable (GLOBAL_QUARANTINE, ledger) = état persistant bloquant, pas absent",
+     "Tests d'injection d'erreur par lecteur : indisponibilité => refus, jamais PASS/zéro"
+    ],
+    "judge": "suite d'injection d'erreurs sur chaque lecteur : tout lecteur qui transforme une exception en PASS/zéro/vide échoue"
+   }
+  },
+  {
+   "rank": 3,
+   "theme": 3,
+   "title": "Preuves et autorités détachées du SHA/HEAD qu'elles certifient",
+   "metric": "28 constats (17 HIGH, 11 MEDIUM, 0 LOW) sur 23 fichiers",
+   "finding_ids": [
+    "L2_runtime_core-001",
+    "L2_runtime_core-003",
+    "L2_runtime_core-006",
+    "L2_runtime_core-007",
+    "L2_runtime_core-013",
+    "L2_runtime_core-015",
+    "L2_runtime_core-017",
+    "L3-001",
+    "L3-002",
+    "L4_resilience_review-002",
+    "L4_resilience_review-008",
+    "L5_factory_v2_rest_1-006",
+    "L5_factory_v2_rest_1-008",
+    "L5_factory_v2_rest_1-015",
+    "L5_factory_v2_rest_2-011",
+    "L5_factory_v2_rest_2-014",
+    "L5_factory_v2_rest_2-015",
+    "L6_bin_lib_products_1-005",
+    "L6_bin_lib_products_1-009",
+    "L6_bin_lib_products_1-013",
+    "L6_bin_lib_products_1-015",
+    "L6_bin_lib_products_1-020",
+    "L6_bin_lib_products_1-021",
+    "L6_bin_lib_products_2-001",
+    "L6_bin_lib_products_2-007",
+    "L6_bin_lib_products_2-020",
+    "L6_bin_lib_products_2-021",
+    "L6_bin_lib_products_2-030"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 17,
+    "MEDIUM": 11,
+    "LOW": 0
+   },
+   "categories": {
+    "BUG": 22,
+    "ERROR_HANDLING": 4,
+    "RACE": 2
+   },
+   "milestone_proposal": {
+    "id": "PIN-PROOF-TO-SHA",
+    "goal": "Toute preuve (reçu, settlement, promotion, revue) est liée aux octets exacts du commit qu'elle certifie : checkout/HEAD vérifiés avant et après, hash des blobs, jamais la référence mutable ou l'index.",
+    "deliverables": [
+     "Audit des sites produisant/consommant un reçu : SHA observé vs SHA copié, blob HEAD vs working tree",
+     "Fusion/promotion sur SHA immutable, jamais une branche mobile ; refus d'index contenant des chemins étrangers",
+     "Résolution atomique des conflits limitée aux fichiers d'état identifiés ; contenu fusionné re-vérifié",
+     "Hash déterministe des sources effectives (shims déléguants inclus) pour les digests de validation"
+    ],
+    "judge": "tests de mutation : commit après acceptation, index pollué, fichier local modifié, blob HEAD différent — chacun doit faire échouer la gate/le reçu concerné"
+   }
+  },
+  {
+   "rank": 4,
+   "theme": 4,
+   "title": "Orchestrateur advance : états bloqués sans issue et invariants de settlement non tenus",
+   "metric": "18 constats (15 HIGH, 2 MEDIUM, 1 LOW) sur 10 fichiers",
+   "finding_ids": [
+    "L1_advance-002",
+    "L1_advance-003",
+    "L1_advance-004",
+    "L1_advance-005",
+    "L1_advance-008",
+    "L1_advance-009",
+    "L1_advance-010",
+    "L1_advance-011",
+    "L1_advance-012",
+    "L1_advance-013",
+    "L1_advance-014",
+    "L1_advance-015",
+    "L1_advance-016",
+    "L2_runtime_core-008",
+    "L2_runtime_core-018",
+    "L2_runtime_core-019",
+    "L5_factory_v2_rest_2-013",
+    "L6_bin_lib_products_1-014"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 15,
+    "MEDIUM": 2,
+    "LOW": 1
+   },
+   "categories": {
+    "BUG": 17,
+    "RACE": 1
+   },
+   "milestone_proposal": {
+    "id": "UNBLOCK-SETTLEMENT",
+    "goal": "Aucun état bloqué n'est terminal sans issue : holds, parcages, quarantaines et recoveries se réévaluent quand leur cause externe disparaît, et la sélection respecte les invariants (retired, disjonction de livrables, seuils gelés).",
+    "deliverables": [
+     "Cartographie des états bloquants (gate_hold, EXTERNAL_BLOCK, parked, head-of-line recovery) avec condition de sortie",
+     "Invalidation des holds sur changement de cause (quarantaine disparue, autorité mise à jour)",
+     "Prédicat d'éligibilité partagé par toutes les voies de sélection (retired, livrables occupés)",
+     "Seuils gelés jamais abaissés au runtime ; invalidations persistées avant toute sortie anticipée"
+    ],
+    "judge": "tests de cycle complet : blocage puis disparition de la cause => le travail reprend ; deux jalons gelés identiques ne passent jamais sous le seuil du contrat"
+   }
+  },
+  {
+   "rank": 5,
+   "theme": 5,
+   "title": "Race conditions : read-modify-write et fichiers temporaires partagés sans verrou",
+   "metric": "13 constats (7 HIGH, 6 MEDIUM, 0 LOW) sur 13 fichiers",
+   "finding_ids": [
+    "L3-008",
+    "L3-017",
+    "L4_resilience_review-004",
+    "L4_resilience_review-009",
+    "L5_factory_v2_rest_1-003",
+    "L5_factory_v2_rest_1-005",
+    "L5_factory_v2_rest_2-008",
+    "L5_factory_v2_rest_2-009",
+    "L5_factory_v2_rest_2-016",
+    "L6_bin_lib_products_1-002",
+    "L6_bin_lib_products_1-010",
+    "L6_bin_lib_products_2-006",
+    "L6_bin_lib_products_2-022"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 7,
+    "MEDIUM": 6,
+    "LOW": 0
+   },
+   "categories": {
+    "RACE": 13
+   },
+   "milestone_proposal": {
+    "id": "ATOMIC-STATE-IO",
+    "goal": "Toute écriture d'état concurrente est atomique : fichier temporaire unique + os.replace, verrou interprocessus sur les transactions read-modify-write et hash-chains.",
+    "deliverables": [
+     "Helper unique d'écriture atomique (temp unique par écriture) adopté par _io, supervisor_state, mission_evidence, budget_ledger, memory_store, verified_fix, weekly_observation",
+     "Verrous interprocessus sur : journal de rationnement, hash-chain self_modification, index de reçus, index d'observations",
+     "Audit des caches SHA-lus-avant-usage (autorité) : une seule lecture snapshot par décision",
+     "Tests concurrentiels réels (2 writers) exigeant les deux écritures visibles"
+    ],
+    "judge": "suite de concurrence : N writers sur chaque état partagé, zéro perte et zéro FileNotFoundError tolérés"
+   }
+  },
+  {
+   "rank": 6,
+   "theme": 6,
+   "title": "Comptabilité budget/quota du modèle faussée",
+   "metric": "12 constats (7 HIGH, 5 MEDIUM, 0 LOW) sur 9 fichiers",
+   "finding_ids": [
+    "L1_advance-006",
+    "L1_advance-007",
+    "L2_runtime_core-004",
+    "L2_runtime_core-009",
+    "L2_runtime_core-010",
+    "L2_runtime_core-011",
+    "L3-006",
+    "L3-016",
+    "L4_resilience_review-006",
+    "L4_resilience_review-007",
+    "L5_factory_v2_rest_1-026",
+    "L6_bin_lib_products_1-012"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 7,
+    "MEDIUM": 5,
+    "LOW": 0
+   },
+   "categories": {
+    "BUG": 11,
+    "ERROR_HANDLING": 1
+   },
+   "milestone_proposal": {
+    "id": "BUDGET-TRUTH",
+    "goal": "La comptabilité modèle reflète exactement les lancements physiques : un lancement = un débit, les reprises et canaris sont comptés séparément, les timestamps invalides ne font pas disparaître une dépense.",
+    "deliverables": [
+     "Plafonds calculés par fenêtre (provider x scope) et non par dernier signal ; fusion conservant l'origine et l'âge",
+     "Réservation vérifiée avant CHAQUE lancement physique, y compris reprises/retries du dispatcher",
+     "Agrégats token avec complétude propagée (PARTIAL_FLOOR/UNKNOWN) ; NaN/infinis rejetés",
+     "Repli du plafond sur tentatives dédupliquées par attempt_key, pas sur des lignes brutes"
+    ],
+    "judge": "tests de budget : 2 moteurs pour cap=1 impossible ; fenêtre hebdo saturée bloque malgré mesure 5h ; NaN rejeté ; dépense à timestamp invalide toujours comptée"
+   }
+  },
+  {
+   "rank": 7,
+   "theme": 7,
+   "title": "Processus, groupes et signaux mal maîtrisés",
+   "metric": "12 constats (9 HIGH, 3 MEDIUM, 0 LOW) sur 9 fichiers",
+   "finding_ids": [
+    "L2_runtime_core-005",
+    "L3-003",
+    "L3-004",
+    "L3-011",
+    "L3-012",
+    "L4_resilience_review-001",
+    "L5_factory_v2_rest_1-012",
+    "L5_factory_v2_rest_1-018",
+    "L5_factory_v2_rest_2-002",
+    "L5_factory_v2_rest_2-003",
+    "L5_factory_v2_rest_2-012",
+    "L6_bin_lib_products_1-018"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 9,
+    "MEDIUM": 3,
+    "LOW": 0
+   },
+   "categories": {
+    "BUG": 7,
+    "ERROR_HANDLING": 5
+   },
+   "milestone_proposal": {
+    "id": "PROCESS-LIFECYCLE",
+    "goal": "Le runtime possède la discipline processus : identité PID+naissance vérifiée avant tout signal, groupe entier terminé (TERM puis KILL) y compris après mort du leader, flux drainés ou redirigés, aucun kill hors périmètre.",
+    "deliverables": [
+     "Helper de supervision de groupe (start/kill/reap avec ESRCH) partagé par dispatcher, factoryd, wrappers et harness",
+     "Identité de naissance persistée pour pidfile/leases/single_flight, vérifiée avant signal et adoption",
+     "Drain des PIPE ou redirection vers logs bornés pour daemon et collecte",
+     "Refus de cibler un PID dont l'appartenance au groupe/au projet n'est pas prouvée"
+    ],
+    "judge": "tests réels : enfant qui ignore SIGTERM tué par le wrapper ; pid réutilisé refusé ; daemon bavard de 2 Mo ne bloque jamais ; faux worker tué sans toucher les moteurs protégés"
+   }
+  },
+  {
+   "rank": 8,
+   "theme": 8,
+   "title": "Télémétrie : compteurs, bornes et agrégats non fiables",
+   "metric": "10 constats (0 HIGH, 10 MEDIUM, 0 LOW) sur 6 fichiers",
+   "finding_ids": [
+    "L4_resilience_review-011",
+    "L4_resilience_review-012",
+    "L4_resilience_review-013",
+    "L4_resilience_review-014",
+    "L4_resilience_review-015",
+    "L4_resilience_review-016",
+    "L4_resilience_review-017",
+    "L4_resilience_review-018",
+    "L4_resilience_review-019",
+    "L4_resilience_review-022"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 0,
+    "MEDIUM": 10,
+    "LOW": 0
+   },
+   "categories": {
+    "BUG": 8,
+    "ERROR_HANDLING": 1,
+    "PERF": 1
+   },
+   "milestone_proposal": {
+    "id": "TELEMETRY-TRUTH",
+    "goal": "Les agrégats télémétrie sont bornés et honnêtes : champs absents = inconnus, raffinement sans perte, deltas pour compteurs cumulatifs, fenêtre de capture respectée, prompts masqués.",
+    "deliverables": [
+     "Règle de fusion par champ (présence+qualité) dans ledger/aggregate ; UNKNOWN jamais sommé",
+     "Comptage des événements écartés au plafond + caveat PARTIAL_FLOOR ; chunk tronqué avant conservation",
+     "Identité composée projet/jalon dans les dénominateurs ; deltas par lancement pour les cumulatifs",
+     "Décision terminale sur rc/ended_at indépendamment de wall_time ; argv systématiquement passé par redact_argv"
+    ],
+    "judge": "tests : UNKNOWN+nombre ne lève plus ; 2 execves = 2 lancements ; chunk > max_bytes borné ; ligne de journal déchirée réparée sans perte suivante ; prompt jamais en clair"
+   }
+  },
+  {
+   "rank": 9,
+   "theme": 9,
+   "title": "Leases workers : fencing, adoption et identité insuffisants",
+   "metric": "6 constats (2 HIGH, 4 MEDIUM, 0 LOW) sur 3 fichiers",
+   "finding_ids": [
+    "L1_advance-017",
+    "L5_factory_v2_rest_1-028",
+    "L5_factory_v2_rest_3-015",
+    "L5_factory_v2_rest_3-016",
+    "L5_factory_v2_rest_3-017",
+    "L5_factory_v2_rest_3-018"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 2,
+    "MEDIUM": 4,
+    "LOW": 0
+   },
+   "categories": {
+    "BUG": 4,
+    "ERROR_HANDLING": 1,
+    "RACE": 1
+   },
+   "milestone_proposal": {
+    "id": "LEASE-FENCING",
+    "goal": "Leases et renouvellements possessionnés : renew/tick exigent génération + fencing token du propriétaire, adoption seulement sur identité prouvée, noms de fichiers injectifs.",
+    "deliverables": [
+     "Passer génération+token dans renew/tick_heartbeat et comparer sous verrou avant écriture",
+     "Refuser l'adoption si l'identité attendue existe mais l'observée est absente",
+     "Nommage injectif (hash suffix) des fichiers de lease avec migration sans collision",
+     "tick refusé pour une lease expirée sans état EXPIRED explicite"
+    ],
+    "judge": "tests : ancien worker G1 ne prolonge pas G2 ; birth illisible => pas d'adoption ; A#M1 et A_M1 distincts ; heartbeat s'arrête après expiration"
+   }
+  },
+  {
+   "rank": 10,
+   "theme": 10,
+   "title": "Parsers et comparaisons dupliqués et fragiles",
+   "metric": "29 constats (2 HIGH, 26 MEDIUM, 1 LOW) sur 26 fichiers",
+   "finding_ids": [
+    "L2_runtime_core-016",
+    "L3-005",
+    "L3-015",
+    "L3-018",
+    "L3-019",
+    "L4_resilience_review-005",
+    "L5_factory_v2_rest_1-004",
+    "L5_factory_v2_rest_1-017",
+    "L5_factory_v2_rest_1-025",
+    "L5_factory_v2_rest_2-001",
+    "L5_factory_v2_rest_2-007",
+    "L5_factory_v2_rest_2-019",
+    "L5_factory_v2_rest_2-021",
+    "L5_factory_v2_rest_2-025",
+    "L5_factory_v2_rest_3-004",
+    "L5_factory_v2_rest_3-013",
+    "L6_bin_lib_products_1-003",
+    "L6_bin_lib_products_1-007",
+    "L6_bin_lib_products_1-022",
+    "L6_bin_lib_products_1-024",
+    "L6_bin_lib_products_1-032",
+    "L6_bin_lib_products_1-033",
+    "L6_bin_lib_products_2-002",
+    "L6_bin_lib_products_2-003",
+    "L6_bin_lib_products_2-004",
+    "L6_bin_lib_products_2-005",
+    "L6_bin_lib_products_2-011",
+    "L6_bin_lib_products_2-013",
+    "L6_bin_lib_products_2-016"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 2,
+    "MEDIUM": 26,
+    "LOW": 1
+   },
+   "categories": {
+    "BUG": 22,
+    "ERROR_HANDLING": 7
+   },
+   "milestone_proposal": {
+    "id": "SHARED-PARSERS",
+    "goal": "Un seul parser par concept, robuste : fences markdown mémorisant délimiteur, JSON strict sans NaN/Infinity, résumés pytest complets, node IDs avec paramètres, imports par AST.",
+    "deliverables": [
+     "Bibliothèque commune : parse_markdown_fences, parse_json_strict, parse_pytest_summary, parse_timestamps_utc — utilisée par check_task, task_contract_validator, verifiers, benchmarks, harness",
+     "Supprimer les variantes privées dupliquées après bascule",
+     "AST pour les imports Python multilignes dans les juges de simplification",
+     "Les juges parsent le JSON, jamais la ligne brute par regex"
+    ],
+    "judge": "tests croisés sur corpus adversarial (fences imbriquées, NaN, résumés multi-catégories, ids paramétrés, imports multilignes) exécutés contre la bibliothèque partagée seule"
+   }
+  },
+  {
+   "rank": 11,
+   "theme": 11,
+   "title": "Timestamps naïfs et tris lexicographiques d'instants",
+   "metric": "5 constats (0 HIGH, 5 MEDIUM, 0 LOW) sur 5 fichiers",
+   "finding_ids": [
+    "L5_factory_v2_rest_1-027",
+    "L6_bin_lib_products_1-036",
+    "L6_bin_lib_products_2-010",
+    "L6_bin_lib_products_2-014",
+    "L6_bin_lib_products_2-015"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 0,
+    "MEDIUM": 5,
+    "LOW": 0
+   },
+   "categories": {
+    "BUG": 3,
+    "ERROR_HANDLING": 2
+   },
+   "milestone_proposal": {
+    "id": "TIME-NORMALIZATION",
+    "goal": "Tous les instants sont des datetime UTC aware avant comparaison ou tri ; les timestamps sans fuseau sont normalisés ou rejetés selon une politique unique.",
+    "deliverables": [
+     "Helper unique parse_utc_instant (rejet contrôlé du naïf, fallback documenté) adopté par tr_call, tr_radar_harness, tr_refresh_harness, progress_watchdog, launch_gate",
+     "Aucun tri/comparaison de chaînes ISO entre offsets différents",
+     "Politique écrite pour les dates illisibles (type distinct de l'absence)",
+     "Tests avec corpus mixte +02:00/Z et timestamps sans fuseau"
+    ],
+    "judge": "tests : corpus mixte d'offsets trié par instant réel ; timestamp naïf rejeté avec erreur typée ; aucune comparaison naive/aware possible (grep)"
+   }
+  },
+  {
+   "rank": 12,
+   "theme": 12,
+   "title": "Chemins V1 morts, double représentation des événements, doc périmée",
+   "metric": "20 constats (1 HIGH, 15 MEDIUM, 4 LOW) sur 18 fichiers",
+   "finding_ids": [
+    "L3-013",
+    "L3-014",
+    "L3-020",
+    "L4_resilience_review-003",
+    "L4_resilience_review-020",
+    "L4_resilience_review-021",
+    "L5_factory_v2_rest_1-007",
+    "L5_factory_v2_rest_1-009",
+    "L5_factory_v2_rest_1-014",
+    "L5_factory_v2_rest_1-024",
+    "L5_factory_v2_rest_1-029",
+    "L5_factory_v2_rest_1-030",
+    "L5_factory_v2_rest_2-028",
+    "L5_factory_v2_rest_2-029",
+    "L6_bin_lib_products_1-001",
+    "L6_bin_lib_products_1-004",
+    "L6_bin_lib_products_1-011",
+    "L6_bin_lib_products_1-023",
+    "L6_bin_lib_products_1-028",
+    "L6_bin_lib_products_1-029"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 1,
+    "MEDIUM": 15,
+    "LOW": 4
+   },
+   "categories": {
+    "BUG": 15,
+    "DOC_DRIFT": 3,
+    "ERROR_HANDLING": 1,
+    "PERF": 1
+   },
+   "milestone_proposal": {
+    "id": "RETIRE-V1-DRIFT",
+    "goal": "Le dépôt n'a qu'une représentation vivante par concept : les chemins V1 morts sont retirés, le journal d'événements est la source unique, les docs/inventaires reflètent les sites réels.",
+    "deliverables": [
+     "Retrait (ou isolation explicite) de do_poll_iteration V1 et de l'affichage SupervisorState du watcher",
+     "Unification journal/queue : iter_events partout (dashboard, owner_console) avec dédup migration/déactivation",
+     "Enregistrement ou suppression du check worktree-autopurge ; inventaire télémétrie contrôlé par test",
+     "Priorité au run-dir pour le registre de candidats ; chemins relatifs résolus contre state_dir"
+    ],
+    "judge": "grep des symboles V1 restants = zéro hit vivant ; >200 événements/24h visibles partout ; tout check documenté joignable par son CLI (rc!=2)"
+   }
+  },
+  {
+   "rank": 13,
+   "theme": 13,
+   "title": "twitter_radar : robustesse runtime du produit",
+   "metric": "5 constats (2 HIGH, 3 MEDIUM, 0 LOW) sur 5 fichiers",
+   "finding_ids": [
+    "L6_bin_lib_products_2-008",
+    "L6_bin_lib_products_2-009",
+    "L6_bin_lib_products_2-012",
+    "L6_bin_lib_products_2-017",
+    "L6_bin_lib_products_2-027"
+   ],
+   "severity_breakdown": {
+    "CRITICAL": 0,
+    "HIGH": 2,
+    "MEDIUM": 3,
+    "LOW": 0
+   },
+   "categories": {
+    "BUG": 4,
+    "PERF": 1
+   },
+   "milestone_proposal": {
+    "id": "TR-RUNTIME",
+    "goal": "Le produit twitter_radar survit à ses entrées réelles : secteurs, handles, timestamps, HTML et corpus hétérogènes normalisés ; pas de mutation destructive du checkout utilisateur.",
+    "deliverables": [
+     "Fix KeyError sectoriel (peers = tickers) et normalisation casefold des handles",
+     "Tri/comparaison d'instants normalisés (cf. TIME-NORMALIZATION) ; coverage lit created_at/timestamp/date",
+     "Exercices dans un worktree dédié, jamais git reset --hard sur le checkout de l'opérateur",
+     "Lecture corpus unique et groupée par compte (fin du O(lectures x comptes))"
+    ],
+    "judge": "suite produit : ledger complet multi-secteurs, corpus mixte offsets/casse, run sans mutation du checkout utilisateur — tout rc=0 sans exception"
+   }
+  }
+ ]
+}

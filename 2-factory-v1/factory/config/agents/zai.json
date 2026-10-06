@@ -1,0 +1,24 @@
+{
+  "name": "Z QA Counter-Audit",
+  "role": "qa",
+  "title": "Independent QA / GLM Coding Plan",
+  "adapterType": "opencode_local",
+  "budgetMonthlyCents": 0,
+  "adapterConfig": {
+    "provider": "zai-coding-plan",
+    "model": "<DETECT_WITH_opencode_models>",
+    "timeoutSec": 1200,
+    "graceSec": 30,
+    "agent": "factory-qa",
+    "persistSession": false
+  },
+  "runtimeConfig": {
+    "heartbeat": {
+      "enabled": false,
+      "intervalSec": 0,
+      "wakeOnAssignment": true,
+      "wakeOnOnDemand": true,
+      "wakeOnAutomation": true
+    }
+  }
+}

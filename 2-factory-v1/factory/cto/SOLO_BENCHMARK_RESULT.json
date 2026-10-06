@@ -1,0 +1,70 @@
+{
+  "schema": "solo-benchmark/v1",
+  "benchmark_task": "XR04_MOMENTUM_CONTROLS",
+  "benchmark_base_sha": "42e41f294246610ca34ed00ee45401a2d72d17b3",
+  "lanes": {
+    "A": {
+      "label": "Claude solo (no factory scaffolding)",
+      "available": true,
+      "skip_reason": "",
+      "scores": {
+        "lane": "A",
+        "available": true,
+        "skip_reason": "",
+        "delivery": true,
+        "tests_pass": true,
+        "test_count": 1,
+        "test_pass_count": 1,
+        "reuse_xr03": true,
+        "architecture_match": true,
+        "price_redownload": true,
+        "factory_evidence": false,
+        "human_interventions": 0,
+        "wall_time_s": 0.0,
+        "notes": []
+      }
+    },
+    "B": {
+      "label": "GLM solo",
+      "available": false,
+      "skip_reason": "CREDENTIALS_UNAVAILABLE \u2014 GLM API not present in runtime",
+      "decision_class": "IRREVERSIBLE_EXTERNAL"
+    },
+    "C": {
+      "label": "Codex solo",
+      "available": false,
+      "skip_reason": "CREDENTIALS_UNAVAILABLE \u2014 OpenAI Codex not present in runtime",
+      "decision_class": "IRREVERSIBLE_EXTERNAL"
+    },
+    "D": {
+      "label": "Conductor+Factory",
+      "available": true,
+      "skip_reason": "",
+      "scores": {
+        "lane": "D",
+        "available": true,
+        "skip_reason": "",
+        "delivery": true,
+        "tests_pass": true,
+        "test_count": 12,
+        "test_pass_count": 12,
+        "reuse_xr03": true,
+        "architecture_match": true,
+        "price_redownload": false,
+        "factory_evidence": true,
+        "human_interventions": 0,
+        "wall_time_s": 2.1,
+        "notes": []
+      }
+    }
+  },
+  "verdict": {
+    "lane_a_pass": true,
+    "lane_d_pass": true,
+    "factory_advantage_points": 2,
+    "lanes_b_c": "CREDENTIALS_UNAVAILABLE",
+    "lanes_b_c_class": "IRREVERSIBLE_EXTERNAL",
+    "benchmark_complete": true
+  },
+  "elapsed_s": 3.8
+}

@@ -1,0 +1,166 @@
+{
+  "schema": "cto-state/v2+v3",
+  "epoch": "2026-09-06-v2",
+  "produced_at": "2026-09-07T14:43:57Z",
+  "authority": "This file is the ground truth for the autonomous CTO system. The conversation is NEVER the authority.",
+  "_v3_note": "CTOK-007: flat fields below are additive — read by factory/lib/cto_kernel.py (CTOKernel.load()/validate()) for cold-restart continuity. The nested v2 blocks further down (north_stars/factory/twitter/...) are unchanged and still authoritative for milestone_controller.py, convergence_gate.py and required_state_resolver.py.",
+  "project_id": "FACTORY_V1",
+  "north_star": "Autonomously execute, verify, recover and improve multi-mission software campaigns for days without human babysitting. (factory/cto/canonical/FACTORY_MASTER_SPEC.md)",
+  "product_goal": "Autonomous scalable software-building system with evidence-backed delivery and recovery — the Factory builds, verifies, recovers, scales and improves itself without babysitting; APP007 (Twitter/X financial-edge radar) is the flagship product the Factory is autonomously delivering end-to-end as proof.",
+  "why": "So a single operator (Jocelyn) can disappear for 72+ hours and return to find missions progressed, failures detected and repaired without human input, cross-review performed, roadmap updated based on outcomes, and CTO_STATUS_LATEST.md current — with HUMAN_GO_COUNT=0 for the entire run.",
+  "spec_version": "v1",
+  "architecture_version": "v1",
+  "roadmap_version": "v1",
+  "current_milestone": "CTOK007_COLD_RESTART_CONTINUITY",
+  "milestone_goal": "Factory V1 SEALED 2026-09-07 (CTOK001-CTOK009 complete). Runtime core sealed; twitter_radar product E2E delivered. Cycle complete — next milestone defined by next owner orders. See AUTHORITY_MAP.md + GAP_REGISTRY.json.",
+  "milestone_definition_of_done": [
+    "all 13 cold-restart questions answerable from durable state alone (CTOContext fields all non-empty)",
+    "factoryd startup check (_cto_startup_check) PASS after a real kill -9 + restart",
+    "CTO_STARTUP_CHECK_PASS event present in CTO_EVENTS.jsonl"
+  ],
+  "completed_milestones": [
+    "CTOK001_CANONICAL_CTO_STATE",
+    "CTOK002_CONTEXT_COMPILER_V2",
+    "CTOK002B_DISPATCHER_HARD_GATE",
+    "CTOK002B_P2_PRE_SPAWN_AUTHORITY_BARRIER",
+    "CTOK003_Q_RESEARCH_REUSE_GATE_QUALIFIED",
+    "CTOK004_MILESTONE_PRODUCT_E2E",
+    "CTOK005_SPEC_CODE_CONVERGENCE",
+    "CTOK006_PERSISTENT_FAILURE_DIRECTOR",
+    "CTOK006B_TASK_CONTRACT_VALIDATOR",
+    "CTOK006C_REQUIRED_STATE_RESOLVER",
+    "CTOK007_COLD_RESTART_CONTINUITY",
+    "CTOK008_LONG_RUN_SUPERVISOR",
+    "CTOK009_PORTFOLIO_SUPERVISOR"
+  ],
+  "active_missions": [],
+  "blocked": [],
+  "next_milestones": [
+    "FACTORY_V2_RESHAPE_BENCHMARK_PROMOTION",
+    "RUN_RECORDS",
+    "ADAPTIVE_MODEL_ROUTING",
+    "CHALLENGER_AUTOMATION",
+    "MAX_WORKERS_2"
+  ],
+  "last_verified_product_sha": "f9b40b2",
+  "last_verified_factory_sha": "d6398b21",
+  "next_required_action": "Complete CTOK007 (cold restart continuity: factoryd startup check + 13-question test pack), then run FULL REGRESSION, TRUE PRODUCT E2E, SOLO BENCHMARK, and V1 SEAL.",
+  "north_stars": {
+    "factory": "Autonomous scalable software-building system with evidence-backed delivery and recovery. Build, verify, recover, scale and improve itself without babysitting.",
+    "twitter": "Identify financial X accounts and independent clusters whose calls exhibit genuine historical edge above market, sector, momentum and randomness. Detect new signals before consensus is evident."
+  },
+  "factory": {
+    "phase": "CONTROL_PLANE_BOOTSTRAP",
+    "qualified_head": "d6398b21",
+    "product_head": "88bc7c8",
+    "factory_suite": "706 passed / 3 skipped / 2 failed (pre-existing frozen zone)",
+    "active": [
+      "CTO002_EVENT_DRIVEN_LOOP"
+    ],
+    "ready": [
+      "CTO003_AUTO_REPORTER",
+      "CTO004_CONTEXT_INJECTION",
+      "CTO005_CROSS_MODEL_REVIEW"
+    ],
+    "blocked": [],
+    "known_defects": [
+      "factory_capture FAILED for spec_level=A (Claude commits directly before capture runs) — FIX: F005",
+      "active=[] + queued=non-empty → system was asking human to continue — CONTROL_PLANE_DEFECT — FIX: CTO002",
+      "test_full_corpus_extractor.py: 29 pre-existing failures block X-track auto-verdict — FIX: dedicated repair mission",
+      "F001 E2E chain unproven: factoryd exists but TEST_AUTONOMOUS_CHAIN_001 not yet written"
+    ],
+    "next_milestone": "CTO_AUTONOMOUS_CHAIN: queue not empty + no worker → auto-launch without human input"
+  },
+  "twitter": {
+    "phase": "INTELLIGENCE_LAYER_BOOTSTRAP",
+    "canonical_head": "88bc7c8",
+    "canonical_data_root": "~/.local/share/twitter-radar-canonical/",
+    "active": [],
+    "ready": [
+      "XR02_SOCIAL_GRAPH",
+      "XR03_ABNORMAL_RETURNS",
+      "X101_HISTORICAL_CORPUS_FILL",
+      "X102_M008H_FULL_CORPUS",
+      "X103_THESIS_RECONSTRUCTION"
+    ],
+    "completed": [
+      "XR01_OPEN_SOURCE_INTAKE"
+    ],
+    "xr01_verdict": "ACCEPTED — NetworkX/purgedcv/oos-lab ADOPTED, eventstudy BLOCKED_GPL (requires human ADR), purgedcv version hallucination corrected (0.1.6 not >=0.4)",
+    "blocked": [
+      "APP007_MISSION_008 (WAITING_HUMAN_VALIDATION)"
+    ],
+    "known_defects": [
+      "test_full_corpus_extractor.py: 29 pre-existing failures (16 at M008H baseline, 13 added by conftest regression now reverted)",
+      "R5 ledger not yet wired to M008H semantic signals — real entry/exit/P&L absent",
+      "Thesis reconstruction absent — each tweet treated independently",
+      "Social graph absent — 6433 accounts treated as independent signals",
+      "Edge not yet statistically validated (XR03-XR06 required)"
+    ],
+    "next_milestone": "XR01 ACCEPTED → unlock XR02-XR06 research layer"
+  },
+  "qualified_components": {
+    "factory.supervisor": "factory/bin/factoryd.py — ACCEPTED F001 — 27 tests",
+    "factory.dispatcher": "factory/bin/dispatcher_v3.py — QUALIFIED",
+    "factory.model_router": "factory/lib/model_router.py — QUALIFIED",
+    "factory.stop_gate": "factory/hooks/stop_gate.py — QUALIFIED (PLAN.md+REPORT.json added to safe prefixes)",
+    "factory.rolling_backlog": "factory/lib/rolling_backlog.py — ACCEPTED FD5",
+    "factory.verdict_taxonomy": "factory/lib/verdict_taxonomy.py — ACCEPTED FD3",
+    "factory.snapshot_diff": "factory/lib/snapshot_diff.py — ACCEPTED FD1",
+    "twitter.position_event": "scripts/t2_rule_classifier.py — ACCEPTED M008H — is_call() invariant (path corrected by CTO000 audit)",
+    "twitter.corpus": "data/corpus/ — ACCEPTED M008A — 10802 posts CKCapitalxx+PhotonBull+RJCcapital",
+    "twitter.canonical_universe": "recovery/CANONICAL_ACCOUNT_UNIVERSE.csv — ACCEPTED X000C — 6433 accounts"
+  },
+  "model_assignment": {
+    "claude": "CTO / Principal Architect — architecture, roadmap, integration review, complex debug, contract writing",
+    "glm": "Primary Builder — bounded implementation, tests, data pipelines, refactors, CLI/scripts",
+    "codex": "Adversarial Reviewer — code correctness, API hallucination detection, edge cases, statistical formula review (PENDING INTEGRATION)",
+    "z_code": "Challenger Engineer — alternative architecture, code archaeology, legacy comparison (PENDING INTEGRATION)"
+  },
+  "human_gates": [
+    {
+      "id": "M008_VALIDATION",
+      "description": "Human verdict on HUMAN_REVIEW_PACKAGE_V7 — 477 calls quality audit",
+      "status": "WAITING_HUMAN",
+      "blocks": [
+        "X103_THESIS_RECONSTRUCTION production use of M008H classifier"
+      ]
+    },
+    {
+      "id": "XR01_EVENTSTUDY_GPL",
+      "description": "eventstudy is GPL-3.0 (not MIT). Decision: REJECT_CORE_DEPENDENCY_GPL — conservative policy, no human input needed.",
+      "status": "RESOLVED_BY_POLICY",
+      "resolution": "DO NOT vendor, DO NOT copy, DO NOT add as core dependency. Implement CAR internally using statsmodels/scipy/numpy (all permissive). eventstudy kept as documentation reference only.",
+      "adr": "ADR007",
+      "blocks": []
+    }
+  ],
+  "strategic_risks": [
+    {
+      "id": "R001",
+      "description": "Parallel workers on same repo before worktrees (F006) cause git conflicts",
+      "mitigation": "Only one writer per repo until F006 ACCEPTED",
+      "severity": "HIGH"
+    },
+    {
+      "id": "R002",
+      "description": "GLM may hallucinate statistical APIs (PSR/DSR formula, purgedcv interface)",
+      "mitigation": "Codex adversarial review mandatory for XR03-XR06 implementations",
+      "severity": "HIGH"
+    },
+    {
+      "id": "R003",
+      "description": "Edge validation (XR03-XR06) may show most accounts have no real edge — product pivot required",
+      "mitigation": "Accept evidence regardless of result — filter to top accounts with confirmed edge",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "R004",
+      "description": "CTO loop not yet event-driven — human still needed between cycles",
+      "mitigation": "CTO002 priority — deploy after CTO001",
+      "severity": "HIGH"
+    }
+  ],
+  "last_cto_review": "2026-09-06T05:00:00Z",
+  "last_progress": "XR01 ACCEPTED — NetworkX/purgedcv/oos-lab ADOPTED — eventstudy BLOCKED_GPL — CTO002 launched on factory-foundation-v2"
+}

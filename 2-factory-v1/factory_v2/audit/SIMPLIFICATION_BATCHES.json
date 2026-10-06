@@ -1,0 +1,64 @@
+{
+  "schema": "simplification-batches/v1",
+  "frozen_at": "2026-09-13T00:55:00Z",
+  "frozen_at_control_sha": "5257c8c9689aba1e85eb7638b621458eb3a067e8",
+  "loc_scope": [
+    "factory/",
+    "factory_v2/"
+  ],
+  "loc_measure": "git ls-files 'factory/*.py' 'factory_v2/*.py' | xargs wc -l (tests/ hors perimetre)",
+  "baseline_loc": 66833,
+  "source": ".context/factory-tightening-audit-2026-09-12/SIMPLIFICATION_INVENTORY.json (Codex S1, corrige par l'operateur: ledger.py, mission_state.py, backlog_refiller.py ont des importeurs vivants)",
+  "source_absence_note_2026_09_18_s3": "SIMPLIFICATION_INVENTORY.json est ABSENT du dépôt et n'a jamais été commité (git log --all --diff-filter=A → vide, session 3). baseline_loc 66833 est une mesure CONGELÉE as-of 5257c8c9 (2026-09-13, SHA résolu) ; re-exécution de loc_measure au HEAD de la session 3 : 68198 lignes (git ls-files 'factory/*.py' 'factory_v2/*.py' | xargs wc -l).",
+  "batches": {
+    "S2": {
+      "title": "Chemin V1: modules de campagne/backlog/planificateur/oracle DoD V1 sans appelant de production",
+      "paths": [
+        "factory/bin/autopilot.py",
+        "factory/bin/campaign_run.py",
+        "factory/bin/campaign_state.py",
+        "factory/bin/cto_planner.py",
+        "factory/bin/rolling_backlog.py",
+        "factory/bin/auto_lessons.py",
+        "factory/bin/dashboard.py",
+        "factory/bin/mission_obs.py",
+        "factory/bin/verify_factory_dod.py"
+      ],
+      "expected_loc_removed": 2590,
+      "keep": [
+        "factory/bin/ledger.py (launch_gate, product_verifiers, factoryctl)",
+        "factory/bin/mission_state.py (dispatcher_v3)"
+      ],
+      "notes": "factory/cto/cto_reporter.py ne mentionne autopilot que dans une docstring. 31 fichiers de tests referencent ces modules: chaque test supprime doit etre un test DU module supprime, un test qui utilisait le module comme fixture doit etre reecrit sans lui, jamais supprime en bloc. Seuls les tests listes dans tests_removable peuvent disparaitre (TEST_DELETED_OUTSIDE_LIST sinon). verify_factory_dod.py (oracle V1, charge campaign_state par spec_from_file_location) ajoute le 13/09 apres detection par le scan dynamique ; FACTORY_LAW.md l.23/25 (doctrine V1) et factory/bootstrap/ (V1) le citent comme texte : hors scan, a nettoyer par l'operateur.",
+      "tests_removable": [
+        "tests/test_autopilot.py",
+        "tests/test_campaign_run.py",
+        "tests/test_campaign_state.py",
+        "tests/test_campaign_state_cli.py",
+        "tests/test_cto_planner.py",
+        "tests/test_rolling_backlog.py",
+        "tests/test_factory_auto_lessons.py",
+        "tests/test_dashboard.py",
+        "tests/test_mission_obs.py",
+        "tests/test_tb1_campaign_run_dispatcher.py",
+        "tests/test_verify_campaign_freeze.py",
+        "tests/test_verify_factory_dod.py"
+      ],
+      "forbidden_tokens": []
+    },
+    "S4": {
+      "title": "Branche --legacy-v1 de factoryd + backlog_refiller",
+      "paths": [
+        "factory/lib/backlog_refiller.py"
+      ],
+      "expected_loc_removed": 61,
+      "depends_on": "S2",
+      "notes": "factory/bin/factoryd.py et factoryd_watch.py importent backlog_refiller au niveau module: retirer l'import, le flag --legacy-v1 et la branche V1 (grep 'legacy' factoryd.py), sans toucher au chemin V2.",
+      "tests_removable": [],
+      "forbidden_tokens": [
+        "--legacy-v1",
+        "backlog_refiller"
+      ]
+    }
+  }
+}

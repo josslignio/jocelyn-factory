@@ -1,0 +1,48 @@
+# Factory V1 mission DAG (order §0/§19). M0 (bootstrap) is NOT a mission here — it is a
+# separate, external precondition proven by factory/bootstrap/verify_bootstrap_dod.py before
+# `campaign-run --from M1` may run at all (order §4.4). core: true means order rule 23 applies
+# (its failure blocks dependents); core: false means order rule 22 applies (independent failure
+# never blocks other missions).
+schema: factory-campaign-dag/v1
+campaign_id: factory-v1
+missions:
+  - id: M1
+    title: CSV Statistics CLI
+    project: csv-statistics
+    deps: []
+    core: true
+  - id: M2
+    title: Job Radar recovery (M2.1-M2.8)
+    project: job-radar
+    deps: [M1]
+    core: true
+  - id: M3
+    title: Fault injection (F001-F023)
+    project: factory-control
+    deps: [M2]
+    core: true
+  - id: M4a
+    title: Equipment Maintenance Tracker
+    project: equipment-tracker
+    deps: [M3]
+    core: false
+  - id: M4b
+    title: Notes API
+    project: notes-api
+    deps: [M3]
+    core: false
+  - id: M4c
+    title: Reminder Scheduler
+    project: reminder-scheduler
+    deps: [M3]
+    core: false
+  - id: M4d
+    title: ICS Parser
+    project: ics-parser
+    deps: [M3]
+    core: false
+  - id: M5
+    title: Proof of improvement (I1/I2)
+    project: factory-control
+    deps: [M4a, M4b, M4c, M4d]
+    core: true

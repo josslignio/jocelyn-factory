@@ -1,0 +1,56 @@
+/* Référence UX/UI propriétaire = plateforme Job Radar « UI V2 par JOÃO.AI » (bleu nuit), servie le 14/09/2026. Reprendre ces tokens tels quels. */
+
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(160deg,#0b0e1a,#12172e 55%,#1a1440);min-height:100vh;color:#e8eaf0;font:13.5px -apple-system,"Helvetica Neue",sans-serif;padding-bottom:60px}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.3;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22/><feColorMatrix values=%220 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0%22/></filter><rect width=%22120%22 height=%22120%22 filter=%22url(%23n)%22/></svg>')}
+  .top{display:flex;align-items:center;gap:14px;padding:16px 26px;border-bottom:1px solid rgba(255,255,255,.07);position:relative;z-index:2}
+  .brand{font-weight:800;font-size:19px;letter-spacing:.5px}
+  .brand b{color:#6ea8ff}.brand span{color:#8b93a8;font-weight:600;font-size:12px;margin-left:8px}
+  .spacer{flex:1}
+  .refresh{font-size:12px;color:#8b93a8}
+  .btn{background:linear-gradient(120deg,#6ea8ff,#c96eff);color:#fff;font-weight:800;font-size:12.5px;border-radius:10px;padding:8px 16px;border:none;cursor:pointer}
+  .stats{display:flex;gap:14px;padding:18px 26px;position:relative;z-index:2;flex-wrap:wrap}
+  .stat{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 18px;min-width:150px}
+  .stat .n{font-size:24px;font-weight:800}
+  .stat .l{font-size:11px;color:#8b93a8;margin-top:2px}
+  .stat.good .n{color:#3ddc85}.stat.warn .n{color:#ffb454}.stat.info .n{color:#6ea8ff}
+  .pipe{display:flex;gap:8px;padding:0 26px 14px;position:relative;z-index:2;font-size:11.5px;color:#8b93a8;align-items:center;flex-wrap:wrap}
+  .stage{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:5px 13px}
+  .stage b{color:#e8eaf0}
+  .arrow{opacity:.4}
+  .wrap{display:flex;gap:18px;padding:4px 26px;position:relative;z-index:2;align-items:flex-start}
+  .list{flex:1;display:flex;flex-direction:column;gap:12px;min-width:0}
+  .secttl{font-size:11px;font-weight:800;letter-spacing:1px;color:#8b93a8;margin:6px 0 2px}
+  .card{background:rgba(13,15,26,.72);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:16px 18px;display:flex;gap:16px;transition:.15s;backdrop-filter:blur(8px)}
+  .card:hover{border-color:rgba(110,168,255,.45);transform:translateY(-1px)}
+  .score{flex:none;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;position:relative}
+  .score i{position:absolute;inset:4px;background:#12162a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal}
+  .body{flex:1;min-width:0}
+  .jtitle{font-size:15px;font-weight:800;margin-bottom:1px}
+  .jco{font-size:12.5px;color:#8b93a8;margin-bottom:8px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+  .chip{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:12px;border:1px solid}
+  .c-geo{color:#3ddc85;border-color:rgba(61,220,133,.4);background:rgba(61,220,133,.07)}
+  .c-fresh{color:#6ea8ff;border-color:rgba(110,168,255,.4);background:rgba(110,168,255,.07)}
+  .c-src{color:#c9a7ff;border-color:rgba(201,167,255,.4);background:rgba(201,167,255,.07)}
+  .c-fam{color:#ffb454;border-color:rgba(255,180,84,.4);background:rgba(255,180,84,.07)}
+  .c-warn{color:#ff8a8a;border-color:rgba(255,138,138,.45);background:rgba(255,138,138,.08)}
+  .why{font-size:12px;color:#b9c2d4;line-height:1.5;margin-bottom:10px}
+  .why b{color:#e8eaf0}
+  .acts{display:flex;gap:8px;align-items:center}
+  .a1{background:linear-gradient(120deg,#6ea8ff,#c96eff);color:#fff;font-weight:800;font-size:11.5px;border-radius:9px;padding:6px 13px;border:none;cursor:pointer}
+  .a2{background:none;border:1px solid rgba(255,255,255,.16);color:#cfd6e4;font-size:11.5px;border-radius:9px;padding:6px 12px;text-decoration:none;display:inline-block}
+  .a3{background:none;border:none;color:#8b93a8;font-size:11.5px;cursor:pointer}
+  .mr{border-left:3px solid #ffb454}
+  .panel{width:340px;flex:none;background:rgba(13,15,26,.75);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:18px;backdrop-filter:blur(8px);position:sticky;top:14px}
+  .panel h3{margin:0 0 3px;font-size:15px}
+  .panel .co{color:#8b93a8;font-size:12px;margin-bottom:12px}
+  .kv{display:flex;justify-content:space-between;font-size:12px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .kv span:first-child{color:#8b93a8}
+  .ok{color:#3ddc85}.warn2{color:#ffb454}
+  .panel .sub{font-size:11px;font-weight:800;letter-spacing:.8px;color:#8b93a8;margin:14px 0 6px}
+  .match{font-size:12px;line-height:1.6}
+  .match li{margin-bottom:3px}
+  .pkg{margin-top:14px;background:rgba(61,220,133,.07);border:1px solid rgba(61,220,133,.3);border-radius:12px;padding:11px 13px;font-size:12px}
+  .pkg b{color:#3ddc85}
+  .note{padding:16px 26px;color:#8b93a8;font-size:12px;position:relative;z-index:2;line-height:1.6;max-width:900px}

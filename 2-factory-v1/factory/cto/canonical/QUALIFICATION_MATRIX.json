@@ -1,0 +1,118 @@
+{
+  "schema": "qualification-matrix/v1",
+  "produced_at": "2026-09-07T15:36:02Z",
+  "authority": "Contrat produit canonique 2026-09-07 §XXVIII — FACTORY_AUTONOMOUS_CTO_READY exigé",
+  "rule": "TRUE uniquement si TOUT passe; aucun statut ne se déclare depuis un jalon local",
+  "matrix": {
+    "CANONICAL_STRATEGY_UNIQUE": {
+      "state": "PASS",
+      "evidence": "projects/{factory,twitter-radar}/STRATEGY.md — audit C10 10/10"
+    },
+    "CANONICAL_SPEC_UNIQUE": {
+      "state": "PASS",
+      "evidence": "projects/*/SPEC.md; legacy gelés (C9); APP007_PRODUCT_SPEC_V2 SUPERSEDED (C7)"
+    },
+    "CANONICAL_ROADMAP_UNIQUE": {
+      "state": "PASS",
+      "evidence": "projects/*/ROADMAP.yaml milestone-centrique; ancien CANONICAL_ROADMAP gelé"
+    },
+    "CANONICAL_CONTEXT_CONFLICTS": {
+      "state": "0",
+      "evidence": "authority_audit 10/10 PASS"
+    },
+    "GLOBAL_CONTEXT_CONTINUITY": {
+      "state": "PASS",
+      "evidence": "REAL_CONTINUITY_RECEIPT: 2 processus froids, 17 réponses identiques, projet réel radar"
+    },
+    "USER_REEXPLANATION_REQUIRED": {
+      "state": "0",
+      "evidence": "réponses dérivées de l'état durable seul"
+    },
+    "ROADMAP_DRIVEN_CONTINUATION": {
+      "state": "PASS",
+      "evidence": "T1-T4/T12 + E2E: next-work dérivé du ROADMAP.yaml uniquement"
+    },
+    "PREMATURE_IDLE_WITH_OPEN_ROADMAP": {
+      "state": "0",
+      "evidence": "T12; resolver matérialise le travail"
+    },
+    "PREMATURE_GLOBAL_IDLE_WITH_OPEN_PORTFOLIO": {
+      "state": "0",
+      "evidence": "select_project V2 + champion corrigé (settle-sync)"
+    },
+    "UNBOUNDED_EQUIVALENT_RETRY": {
+      "state": "PARTIAL",
+      "evidence": "champion FailureDirector fingerprints; V2 escalation strategy = à câbler (roadmap factory)"
+    },
+    "FAILURE_REPLAN": {
+      "state": "PENDING",
+      "evidence": "échec mission→replan milestone: non prouvé en run réel long (PHASE 10)"
+    },
+    "RESEARCH_REUSE_ENFORCED": {
+      "state": "PARTIAL",
+      "evidence": "gate existe (champion); pas encore bloquant sur tout build majeur"
+    },
+    "MULTI_AI_ORCHESTRATION": {
+      "state": "PARTIAL",
+      "evidence": "3 IA routées (champion dispatcher); V2 executor adapters prêts, routing adaptatif non"
+    },
+    "INDEPENDENT_VALIDATION": {
+      "state": "PASS",
+      "evidence": "V2 IndependentValidator black box; T6/T7/T15/T16"
+    },
+    "CONVERGENCE_AUTHORITATIVE": {
+      "state": "PASS_challenger",
+      "evidence": "gate BLOQUANT V2 (MILESTONE_GATE_BLOCKED); champion reste advisory (freeze)"
+    },
+    "PRODUCT_E2E_DELIVERY": {
+      "state": "PASS",
+      "evidence": "radar X110 livré: 35d6fc1, product_e2e.json PROVEN, requête live"
+    },
+    "FALSE_SATISFIED": {
+      "state": "0_challenger",
+      "evidence": "T6/T7/T16; placeholders éliminés des roadmaps réels"
+    },
+    "CRASH_RESTART_RECOVERY": {
+      "state": "PASS",
+      "evidence": "E2E multi-processus (restart froid entre milestones) + REAL_CONTINUITY"
+    },
+    "RUN_RECORDS": {
+      "state": "FAIL",
+      "evidence": "non implémentés — roadmap factory: RUN_RECORDS"
+    },
+    "RUN_LEARNING": {
+      "state": "FAIL",
+      "evidence": "dépend de RUN_RECORDS"
+    },
+    "ADAPTIVE_ROUTING": {
+      "state": "FAIL",
+      "evidence": "routing statique — roadmap factory"
+    },
+    "SAFE_SELF_IMPROVEMENT": {
+      "state": "PARTIAL",
+      "evidence": "champion/challenger discipline prouvée (V2 isolé, champion frozen); benchmark/promotion automatisés non"
+    },
+    "LONG_HORIZON_AUTONOMY": {
+      "state": "PENDING",
+      "evidence": "run long multi-milestones réel avec failures injectées — PHASE 10"
+    },
+    "ROUTINE_HUMAN_INTERVENTIONS": {
+      "state": "NON_ZERO_TODAY",
+      "evidence": "observé ce cycle (interventions pour debloquer); cible 0 après promotion V2"
+    }
+  },
+  "conclusion": "FACTORY_AUTONOMOUS_CTO_READY = FALSE — fondations canoniques/autorité/continuité PASS; learning/routing/self-improvement/long-run restent à prouver (roadmap projects/factory/ROADMAP.yaml).",
+  "phases": {
+    "PHASE_1_canonical_brain": "DONE (trio par projet, audit 10/10, gel legacy C9)",
+    "PHASE_2_real_continuity": "DONE (REAL_CONTINUITY_RECEIPT PASS)",
+    "PHASE_3_multi_AI_counter_audit": "PENDING_OWNER (briefs: Claude=architecture, Codex=correctness, Z Code=wiring, GLM=simplification)",
+    "PHASE_4_deep_external_research": "PARTIAL (conclusions 2026-09-07 enregistrées; recompare par sous-système faible à faire)",
+    "PHASE_5_factory_v2_reshape": "DONE (T1-T16 + E2E + receipts)",
+    "PHASE_6_hard_testing": "MOSTLY DONE (régression 970/0, fault/stale/context T5-T9, restart E2E; mutation contexte à compléter en benchmark)",
+    "PHASE_7_run_learning": "PENDING",
+    "PHASE_8_adaptive_routing": "PENDING",
+    "PHASE_9_safe_self_improvement": "PENDING (benchmark champion vs challenger)",
+    "PHASE_10_long_run_2": "PENDING",
+    "PHASE_11_scale": "PENDING"
+  }
+}

@@ -1,0 +1,191 @@
+[
+  {
+    "id": "L2_runtime_core-016",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L2_runtime_core_016_malformed_later_executor_is_typed_compile_error",
+    "note": "mission_compiler: _auto_steps keeps only dict executors; a malformed later step reaches the typed MissionCompileError instead of AttributeError."
+  },
+  {
+    "id": "L3-005",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L3_005_json_object_with_brace_inside_string_after_prose",
+    "note": "engine_output.extract_json_object (called by dispatcher_v3) delegates to factory_v2.shared_parsers.extract_json_object: JSONDecoder.raw_decode from each '{' candidate, strings/escapes respected."
+  },
+  {
+    "id": "L3-015",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L3_015_model_from_argv_recognises_codex_short_option",
+    "note": "model_router.model_from_argv delegates to shared_parsers.model_from_argv: -m, --model, --model=X; only whole argv tokens, the prompt is never parsed."
+  },
+  {
+    "id": "L3-019",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L3_019_review_with_all_model_engines_excluded_raises_not_local",
+    "note": "_finalize_choice alternatives limited to launchable engines (claude, glm, codex); with all excluded it raises ReviewerEqualsBuilder instead of returning an unlaunchable local choice."
+  },
+  {
+    "id": "L4_resilience_review-005",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L4_resilience_review_005_non_object_receipt_is_typed_error",
+    "note": "load_mission_receipt returns None for valid-JSON non-objects ([] / null / scalar); load_verified_mission_receipt raises its typed ReceiptVerificationError."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-017",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L5_factory_v2_rest_1_017_diff_numbers_flags_non_finite",
+    "note": "_diff_numbers reports a discrepancy when published or recomputed is not a finite number (shared_parsers.is_finite_number)."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-025",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L5_factory_v2_rest_1_025_long_fingerprints_with_common_prefix_stay_distinct",
+    "note": "record carries failure_fingerprint_sha256 (full fingerprint); _supersede_legacy_duplicates compares the digest, legacy records only when their stored fingerprint was never truncated."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-001",
+    "status": "WONTFIX",
+    "commit": "",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_retired_modules_absent_at_head_no_live_reference",
+    "note": "factory_v2/routing_evidence_backfill.py was retired at HEAD by 4b8058d0c (FACTORY_DEDUP_SHARED_CONCEPTS_V1, module without a live caller); the defective code no longer exists. The test proves the file is absent, untracked and unreferenced."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-019",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L5_factory_v2_rest_2_019_calibration_ignores_untyped_outcomes",
+    "note": "_calibration counts only pairs whose predicted and observed outcomes are typed non-empty strings; absent/unknown outcomes are skipped, never folded into False == False."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-021",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L5_factory_v2_rest_2_021_authority_map_checked_as_json",
+    "note": "verify_audit_repair parses FACTORY_RUNTIME_AUTHORITY_MAP.json and checks the status/state of the entry naming backlog_refiller (exact 'ACTIVE'), independent of formatting."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-025",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L5_factory_v2_rest_2_025_synthesis_rejects_non_finite_metrics",
+    "note": "_check_synthesis requires finite baseline/target (shared_parsers.is_finite_number); _load refuses NaN/Infinity JSON constants (json_loads_finite)."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-004",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L5_factory_v2_rest_3_004_null_birth_yields_typed_finding",
+    "note": "daemon_identities validated by type (dict entries, int pids, non-empty str births); birth=null / non-dict identity yields the typed RESTART_IDENTITY_NOT_DISTINCT finding, no TypeError."
+  },
+  {
+    "id": "L5_factory_v2_rest_3-013",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L5_factory_v2_rest_3_013_multiline_parenthesised_import_is_a_reference",
+    "note": "_references adds _ast_import_references: tracked HEAD .py blobs with a parenthesised import are parsed with ast (absolute and relative ImportFrom / Import resolved against the deleted module)."
+  },
+  {
+    "id": "L6_bin_lib_products_1-003",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L6_bin_lib_products_1_003_four_backtick_fence_not_closed_by_three",
+    "note": "check_task._find_outcome_heading walks shared_parsers.iter_outside_fences: CommonMark fences (same character, closer at least as long)."
+  },
+  {
+    "id": "L6_bin_lib_products_1-007",
+    "status": "WONTFIX",
+    "commit": "",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_retired_modules_absent_at_head_no_live_reference",
+    "note": "factory/bin/i1_summary.py was retired at HEAD by 4b8058d0c (FACTORY_DEDUP_SHARED_CONCEPTS_V1, module without a live caller); the defective judge_run no longer exists. The test proves the file is absent, untracked and unreferenced."
+  },
+  {
+    "id": "L6_bin_lib_products_1-022",
+    "status": "WONTFIX",
+    "commit": "",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_retired_modules_absent_at_head_no_live_reference",
+    "note": "factory/bin/solo_benchmark_score.py was retired at HEAD by 4b8058d0c (FACTORY_DEDUP_SHARED_CONCEPTS_V1, module without a live caller); the defective summary parser no longer exists. The test proves the file is absent, untracked and unreferenced. shared_parsers.pytest_summary_counts is the one word-bound parser for any future consumer."
+  },
+  {
+    "id": "L6_bin_lib_products_1-024",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L6_bin_lib_products_1_024_parametrised_node_ids_are_distinct",
+    "note": "verdict_taxonomy.extract_failed_tests delegates to shared_parsers.pytest_failed_node_ids: full node id with [parameters]; detect_spec_test_conflict no longer collides test_add[positive]/test_add[negative]."
+  },
+  {
+    "id": "L6_bin_lib_products_1-032",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L6_bin_lib_products_1_032_string_dod_and_missing_lists_are_incomplete",
+    "note": "CTOKernel.load takes a list field only when the raw JSON value is a list (no list('TBD')); validate requires every DoD item to be a non-placeholder string."
+  },
+  {
+    "id": "L6_bin_lib_products_1-033",
+    "status": "WONTFIX",
+    "commit": "",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_retired_modules_absent_at_head_no_live_reference",
+    "note": "factory/lib/failure_director.py was retired at HEAD by 4b8058d0c (FACTORY_DEDUP_SHARED_CONCEPTS_V1, module without a live caller); compute_failure_signature no longer exists. The test proves the file is absent, untracked and unreferenced."
+  },
+  {
+    "id": "L6_bin_lib_products_2-004",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L6_bin_lib_products_2_004_task_sections_inside_four_backtick_fence_rejected",
+    "note": "task_contract_validator.validate_task_file walks shared_parsers.iter_outside_fences (same CommonMark fence tracking as check_task)."
+  },
+  {
+    "id": "L6_bin_lib_products_2-005",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L6_bin_lib_products_2_005_empty_containers_are_not_plan_values",
+    "note": "_check_plan_dict requires non-empty strings for id/repo/task_file/spec_level (spec_level in S/A/B); test_cmd is a non-empty string or a non-empty list of non-empty strings."
+  },
+  {
+    "id": "L6_bin_lib_products_2-011",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L6_bin_lib_products_2_011_graph_membership_is_case_insensitive",
+    "note": "tr_kol.build_graph resolves targets through a casefold index of corpus handles (canonical spelling = corpus dir); discovery from qualified KOLs uses the same casefold membership."
+  },
+  {
+    "id": "L6_bin_lib_products_2-013",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L6_bin_lib_products_2_013_discovered_outside_membership_uses_handles",
+    "note": "tr_kol_records builds the casefolded set of discovered_outside[].handle and tests membership on it instead of `str in list[dict]`."
+  },
+  {
+    "id": "L6_bin_lib_products_2-016",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L6_bin_lib_products_2_016_nested_same_name_tag_does_not_close_row",
+    "note": "tr_web_harness.parse_dom keeps a real element stack; row/episode/field contexts close only when their own element (by depth) closes; unclosed <p>/<li>, void tags and stray end tags handled."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-027",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L5_factory_v2_rest_1_027_drift_measured_from_episode_start",
+    "note": "_authority_drift_exceptions measures the grace period from the first AUTHORITY_DRIFT_BLOCKED of the unresolved episode (any other event for the milestone resets it), not from the latest repeated poll."
+  },
+  {
+    "id": "L6_bin_lib_products_2-014",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L6_bin_lib_products_2_014_corpus_timestamp_is_latest_instant_not_string",
+    "note": "corpus_facts selects the newest post as an instant (shared_parsers.instant_sort_key / instant_before, UTC-normalised) and keeps its original text."
+  },
+  {
+    "id": "L6_bin_lib_products_2-015",
+    "status": "FIXED",
+    "commit": "c30fcca8207ec4b7f7401def7b937a853738b804",
+    "test": "tests/test_code_review_repairs_lot2b.py::test_L6_bin_lib_products_2_015_ground_truth_orders_posts_by_instant",
+    "note": "tr_radar_harness.load_corpus sorts by (instant_sort_key(ts), id); closure comparison and watermark windows compare instants, not ISO strings."
+  }
+]

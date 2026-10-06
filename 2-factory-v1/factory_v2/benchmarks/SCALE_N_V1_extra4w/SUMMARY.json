@@ -1,0 +1,95 @@
+{
+  "arms": {
+    "4w": {
+      "engine_overlaps_total": 84,
+      "evidence": [
+        "run_0_4w.json",
+        "run_1_4w.json",
+        "run_2_4w.json",
+        "run_3_4w.json",
+        "run_4_4w.json"
+      ],
+      "isolation_all_runs": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "median_throughput": 0.47559,
+      "median_wall_s": 16.821,
+      "reliability_all_runs": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "reliability_clean_runs": 5,
+      "run_window_ids": [
+        "5ddd388a9c0f4ac9adbdd382162460c2",
+        "0f9105e259ac414cad10de3fd983da46",
+        "1172ab7952d64dea942aac2cf2fb8008",
+        "c61ce697b0e7471f89a6cac86edeb856",
+        "cec5e173cbe2481aaafb705c30c0ad24"
+      ],
+      "runs": 5,
+      "throughputs_missions_per_s": [
+        0.48289,
+        0.46707,
+        0.47559,
+        0.47747,
+        0.4369
+      ],
+      "walls_s": [
+        16.567,
+        17.128,
+        16.821,
+        16.755,
+        18.311
+      ]
+    }
+  },
+  "backoff_ceiling_s": 1.0,
+  "chains": 4,
+  "linear_efficiency_threshold": 0.8,
+  "mission_sleep_s": 6.0,
+  "n": 4,
+  "poll_interval_s": 0.05,
+  "repeats": 5,
+  "repo_clean_after": [
+    "M .factory_worktree_meta.json",
+    " M evidence/engine_registry.jsonl",
+    "?? factory_v2/benchmarks/SCALE_N_V1/SUMMARY.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/d019_drill.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_0_1w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_0_2w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_0_4w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_1_1w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_1_2w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_1_4w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_2_1w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_2_2w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_2_4w.json"
+  ],
+  "repo_clean_before": [
+    "M .factory_worktree_meta.json",
+    " M evidence/engine_registry.jsonl",
+    "?? factory_v2/benchmarks/SCALE_N_V1/SUMMARY.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/d019_drill.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_0_1w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_0_2w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_0_4w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_1_1w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_1_2w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_1_4w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_2_1w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_2_2w.json",
+    "?? factory_v2/benchmarks/SCALE_N_V1/run_2_4w.json"
+  ],
+  "repo_untouched": true,
+  "same_workload": true,
+  "schema": "scale-n-benchmark-summary/v1",
+  "verdict_rule": "SCALE_N_RECOMMENDED iff median throughput strictly increases 1w < 2w < Nw AND every isolation check passes on every Nw run AND reliability counters at Nw are no worse than at 2w on this same workload AND the Nw arm shows >= 1 real engine overlap; anything else is NO_SCALE (an honest measured outcome)",
+  "workload_id": "SCALE_N_W1"
+}

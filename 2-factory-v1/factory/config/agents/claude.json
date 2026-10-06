@@ -1,0 +1,31 @@
+{
+  "name": "Claude Builder",
+  "role": "engineer",
+  "title": "Sole Writer",
+  "adapterType": "claude_local",
+  "budgetMonthlyCents": 0,
+  "adapterConfig": {
+    "timeoutSec": 2700,
+    "graceSec": 30,
+    "maxTurns": 60,
+    "permissionMode": "acceptEdits",
+    "allowedTools": [
+      "Read",
+      "Edit",
+      "Write",
+      "Bash",
+      "Glob",
+      "Grep"
+    ],
+    "persistSession": false
+  },
+  "runtimeConfig": {
+    "heartbeat": {
+      "enabled": false,
+      "intervalSec": 0,
+      "wakeOnAssignment": true,
+      "wakeOnOnDemand": true,
+      "wakeOnAutomation": true
+    }
+  }
+}

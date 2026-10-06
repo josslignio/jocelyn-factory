@@ -1,0 +1,82 @@
+/* Source 2 du mix (deck Quant Pilot) : kicker, un message par écran, tuiles chiffres, liserés, pilules, badges VÉRIFIÉ — à transposer sur la base sombre Job Radar. */
+
+@page{size:1280px 720px;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"SF Pro Display",-apple-system,"Helvetica Neue",Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased;background:#E9EDF2;color:#0E1116}
+.slide{width:1280px;height:720px;background:#fff;margin:24px auto;position:relative;padding:44px 56px 60px;overflow:hidden;page-break-after:always;box-shadow:0 4px 24px rgba(15,20,30,.13)}
+.kicker{font-size:14px;font-weight:800;letter-spacing:2.4px;text-transform:uppercase;color:#0B5FFF;margin-bottom:8px}
+h1{font-size:44px;font-weight:800;letter-spacing:-.8px;line-height:1.06}
+.head{margin-bottom:16px}
+.foot{position:absolute;left:56px;right:56px;bottom:16px;display:flex;justify-content:space-between;font-size:12.5px;color:#98A1AC;border-top:1px solid #E8ECF1;padding-top:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.card{background:#FBFCFE;border:1px solid #E4E8EE;border-radius:14px;padding:16px 18px}
+.card h3{font-size:14px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:9px}
+.card p,.card li{font-size:19px;line-height:1.38}
+.card ul{list-style:none}
+.card li{padding:3px 0 3px 24px;position:relative}
+.card li::before{content:"";position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:#0B5FFF}
+.green h3{color:#00A86B}.green li::before{background:#00A86B}
+.red h3{color:#C2410C}.red li::before{background:#C2410C}
+.num{counter-reset:n}
+.num li{counter-increment:n;padding-left:34px;line-height:1.32}
+.num li::before{content:counter(n);background:#fff;border:2.5px solid #C2410C;color:#C2410C;font-weight:800;font-size:13px;width:24px;height:24px;border-radius:50%;top:8px;display:flex;align-items:center;justify-content:center}
+.stat{border-radius:16px;color:#fff;padding:14px 18px}
+.stat.b{background:linear-gradient(160deg,#0B5FFF,#0949C4)}
+.stat.g{background:linear-gradient(160deg,#00A86B,#037A4E)}
+.stat.k{background:#0E1116}
+.stat.o{background:linear-gradient(160deg,#EA580C,#B45309)}
+.stat .n{font-size:52px;font-weight:850;letter-spacing:-1.5px;line-height:1}
+.stat .l{font-size:16px;opacity:.92;margin-top:7px;line-height:1.35}
+.quote{border-left:6px solid #00C48C;background:#F0FAF5;border-radius:0 14px 14px 0;padding:14px 20px;font-size:22px;font-weight:650;line-height:1.35}
+.banner{background:#0E1116;color:#fff;border-radius:12px;padding:12px 20px;font-size:20px;font-weight:700;line-height:1.3}
+.banner em{color:#fff;font-style:normal;font-weight:800}
+.banner.g{background:linear-gradient(135deg,#00A86B,#037A4E)}
+table{border-collapse:collapse;width:100%}
+th{background:#0B5FFF;color:#fff;text-align:left;font-size:16px;padding:7px 11px;font-weight:700}
+td{font-size:18px;line-height:1.33;padding:9px 11px;border-bottom:1px solid #E8ECF1;vertical-align:top}
+tr:nth-child(even) td{background:#F7F9FC}
+.flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.step{background:#0E1116;color:#fff;border-radius:9px;padding:10px 14px;font-size:17px;font-weight:700}
+.step.b{background:#0B5FFF}
+.step.g{background:#00A86B}
+.arr{color:#98A1AC;font-size:19px;font-weight:800}
+.pill{font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;border-radius:999px}
+.pill.b{background:#E8F0FF;color:#073B9E}
+.pill.g{background:#E6F7F0;color:#046C46}
+.pill.o{background:#FFF1E6;color:#B45309}
+.pill.k{background:#0E1116;color:#fff}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#F0F4FF;border:2px solid #C9D8FF;color:#073B9E;border-radius:999px;padding:7px 14px;font-size:16px;font-weight:700;margin:0 7px 7px 0}
+.chip b{color:#00A86B}
+.chip.k{background:#0E1116;color:#fff;border-color:#0E1116}
+.small{font-size:14px;color:#5B6470;line-height:1.4}
+.hero{font-size:96px;font-weight:850;letter-spacing:-3px;line-height:.92}
+.ladder{display:flex;gap:10px;align-items:stretch}
+.rung{flex:1;border-radius:12px;padding:14px 12px;text-align:center;display:flex;flex-direction:column;gap:5px}
+.rung .rt{font-size:15px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}
+.rung .rd{font-size:14px;line-height:1.35;opacity:.88}
+.rung .rp{font-size:12px;font-weight:700;opacity:.8}
+.tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.6px;border-radius:4px;padding:2px 6px}
+.tV{background:#e3efe3;color:#006300}.tCR{background:#eef;color:#073B9E}.tA{background:#f6ecdd;color:#8a5a00}
+.mono{font-variant-numeric:tabular-nums}
+.msg-row{display:flex;gap:14px;flex:1}
+.msg{flex:1;border-left:5px solid #EA580C;border-radius:0 12px 12px 0;background:#FFF8F5;padding:14px 16px}
+.msg .ml{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#EA580C;margin-bottom:5px}
+.msg b{font-size:18px;line-height:1.35;display:block;margin-bottom:5px}
+.msg p{font-size:15px;color:#5B6470;line-height:1.38}
+.tl{display:flex;gap:10px;flex:1}
+.ph{flex:1;background:#FBFCFE;border:1px solid #E4E8EE;border-radius:12px;padding:14px}
+.ph .pt{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#0B5FFF;margin-bottom:4px}
+.ph h3{font-size:17px;font-weight:800;margin-bottom:5px}
+.ph p{font-size:14px;color:#5B6470;line-height:1.4}
+.checks{display:flex;gap:9px;margin-top:10px}
+.ck{flex:1;border-left:4px solid #0B5FFF;border-radius:0 8px 8px 0;background:#F0F4FF;padding:8px 11px;font-size:14px;color:#073B9E;font-weight:600}
+.ck b{font-size:15px;display:block;font-weight:800}
+#s3 th{font-size:11px!important;padding:5px 8px!important}
+#s3 td{font-size:11px!important;padding:5px 8px!important;line-height:1.25!important}
+#appb .ct td{font-size:12px!important;padding:4px 8px!important;line-height:1.25!important}
+#appb .st th{font-size:12px!important;padding:4px 6px!important}
+#appb .st td{font-size:12px!important;padding:3px 6px!important;line-height:1.25!important}
+#comps th{font-size:14px;padding:5px 8px}
+#comps td{font-size:15px;line-height:1.22;padding:5px 8px}
+@media print{body{background:#fff}.slide{margin:0;box-shadow:none}}

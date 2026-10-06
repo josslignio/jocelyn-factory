@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "factory-bootstrap-receipt/v1",
+  "title": "M0_SELF_HOST_PASS.json",
+  "description": "Written EXCLUSIVELY by factory/bootstrap/verify_bootstrap_dod.py (P0.1: the candidate's own verify_factory_dod.py cannot be authority over its own self-host proof). bootstrap_gate.py and every M0 candidate process have zero write access to this schema's target path.",
+  "type": "object",
+  "required": [
+    "schema", "candidate_sha", "bootstrap_lock_sha256", "verifier_sha256",
+    "checks", "all_pass", "verified_at", "verifier"
+  ],
+  "properties": {
+    "schema": {"const": "factory-bootstrap-receipt/v1"},
+    "candidate_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "bootstrap_lock_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 of BOOTSTRAP_LOCK.json itself at verification time, so a later change to the lock invalidates old receipts."},
+    "verifier_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 of verify_bootstrap_dod.py at run time — must match BOOTSTRAP_LOCK.json's own entry."},
+    "checks": {
+      "type": "object",
+      "properties": {
+        "bootstrap_lock_valid": {"type": "boolean"},
+        "candidate_checkout_sha_matches": {"type": "boolean"},
+        "candidate_workspace_clean_before": {"type": "boolean"},
+        "candidate_workspace_unchanged_after": {"type": "boolean"},
+        "candidate_test_suite_sentinels_present": {"type": "boolean"},
+        "candidate_test_suite_exit_zero": {"type": "boolean"},
+        "candidate_factory_dod_tested_as_component": {"type": "boolean"},
+        "no_double_writer_detected": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
+    "all_pass": {"type": "boolean"},
+    "verified_at": {"type": "string", "format": "date-time"},
+    "verifier": {"const": "verify_bootstrap_dod.py"},
+    "notes": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

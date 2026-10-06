@@ -1,0 +1,13 @@
+{
+  "control_sha": "08e1268a2a680a3472e99f16d91179d574452d85",
+  "generated_at": "2026-09-18T18:09:27Z",
+  "generated_by": "factory_v2.audit_observation_producer.build_observation (imported, milestone=FULL_CODEBASE_AUDIT_REVIEWED, FULL_CODEBASE_AUDIT_REVIEWED#M1 repair session 5 (codex BLOCK 2f0e5bf3 2026-09-18T12:12:54Z))",
+  "milestone": "FULL_CODEBASE_AUDIT_REVIEWED",
+  "note": "Regenerated after the FIFTH audit-repair pass (codex BLOCK 2f0e5bf3 2026-09-18T12:12:54Z: 'la justification WorktreeManager et la description du contexte V2 contredisent le code' — transcript evidence/reviews/FULL_CODEBASE_AUDIT_REVIEWED/codex_20260918T121254Z.log). Both points closed with executed evidence: (1) LEDGER WorktreeManager 'Flock + atomic meta write' REFUTED — worktree_manager.py:183 writes meta by plain write_text(), no fcntl import, no tmp+os.replace (grep re-executed: single match l.183); justification rewritten to describe the real code (non-atomic unlocked write, _read_meta :185-192 returns None on torn file, recovery re-derives from git worktree list) + justification_fix_note_2026_09_19. (2) 'Workers receive V1 context' (receipt l.49 + LangGraph/SpecKit/OpenHands entries + FULL_FACTORY_CODEBASE_AUDIT.md:121 + VS_UPSTREAM_MATRIX f4_action/known_bugs + DEAD_DUPLICATE SS-001) rewritten to past tense with status FIXED-since-F4 (c489224e2): context_compiler.py:135-168 project_dir fail-closed V2 path (STRATEGY :146-155, SPEC :158-168, CTO_STRATEGY.md fallback :156 ONLY when project_dir=None), dispatcher_v3.py:1096 passes project_dir, executors.py:691 passes --project-dir — grep/sed re-executed this session. Additionally: control_sha re-bound 57cd98e0->865de5703 on all 8 required artifacts because real code was committed after 2f0e5bf3 by intervening milestones (factoryd.py, runtime.py, mission_dispatch.py, settlement.py, launch_gate.py); LOC re-measured fresh at re-bind (runtime.py 4468->4475, factoryd.py 2343->2363, matrix 2805->2825, all other entries byte-exact), factoryd line citations re-resolved (l.200/l.884 exact), verify_audit_repair.py -> AUDIT_REPAIR_VERIFIED rc=0 after every commit. unmet clauses at generation are reviewer-only (reviewers_min_3_distinct_accept) — the 3-reviewer re-read happens AFTER this repair, read-only.",
+  "observation_hash": "96e668f0f161606cee9c0bc91c092e5c0a4f67be446996f2550ec689cdfc90e4",
+  "schema": "audit-receipt/v1",
+  "status_at_generation": "PARTIAL",
+  "unmet_clauses_at_generation": [
+    "reviewers_min_3_distinct_accept"
+  ]
+}

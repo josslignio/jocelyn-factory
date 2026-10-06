@@ -1,0 +1,20 @@
+{
+  "files": {
+    "factory/bootstrap/bootstrap_factory_v1.sh": "fc2509314d4dc4c467c6e556a39b820831e58e511b3f8738c3a0a31961ba3dc4",
+    "factory/bootstrap/bootstrap_gate.py": "f1e0b3eecee047e0e8a265f6922967c20035e6b6ae44e8ecb43f0e89d9f586f0",
+    "factory/bootstrap/bootstrap_receipt.schema.json": "8ce9103d2301e3f5cf6c94f387b326c6fe2023eed4dff26579749b0311213d68",
+    "factory/bootstrap/fixtures/bad_candidate/tests/test_x.py": "7786bca7bdf46037c611abfab46dd5e915bbc6a9fa50653b9ebe872ee881f967",
+    "factory/bootstrap/fixtures/good_candidate/tests/test_verify_factory_dod.py": "cd4603663c30de342200b967f926e0716be0f0858901b98f6526179ab3ef1048",
+    "factory/bootstrap/fixtures/good_candidate/tests/test_x.py": "deb22a8dcf2d38aed20a69016b83c4596f06b390b59eb3b0b99e0d66ba737376",
+    "factory/bootstrap/tests/test_bootstrap_dod.py": "162e27c7aa4c84d3a3055fb148b889a2b47b3bc585fc4ee59ab666740ae9b6b3",
+    "factory/bootstrap/verify_bootstrap_dod.py": "94ef9431383ee0ffc84843098c5c7d40711e03faac514e3109e8dd227901516d",
+    "factory/bootstrap/verify_lock_only.py": "416304e36f31d3cc4cbdb67c3f247e59d043fcf5dea5f54c7067aa0884add62b",
+    "toolchain-lock.json": "5e1c05e13d989cb5f06ceab4e6f6e27ac9471b20f00e75ff3ffa5037f97fb221"
+  },
+  "generated": "2026-07-26",
+  "schema": "factory-bootstrap-lock/v1",
+  "self_host_commands_expected": [
+    "python3 -m pytest tests/ -q",
+    "python3 -m pytest tests/test_verify_factory_dod.py -q"
+  ]
+}

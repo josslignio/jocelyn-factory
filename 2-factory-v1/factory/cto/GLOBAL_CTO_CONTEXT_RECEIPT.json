@@ -1,0 +1,72 @@
+{
+  "schema": "global-cto-context-receipt/v1",
+  "generated_at": "2026-09-07",
+  "canonical_factory_sha": "e2cc21db",
+  "canonical_twitter_radar_sha": "703b623",
+
+  "factory": {
+    "1_why_factory_exists": "Solo agents (Claude, GLM, Codex) perform well on 6-minute tasks. On multi-day, multi-milestone projects with failures, restarts, and model switches they lose context, repeat failed strategies, hallucinate completion, and drift from spec. Factory provides persistent CTO-level state, anti-loop enforcement, validated candidate lifecycle, and autonomous continuation that survives any process death.",
+
+    "2_what_is_conductor": "The persistent CTO brain. Implemented as factoryd.py + ctok_kernel.py + CTO_STATE files. Never exits between missions. Holds canonical project state (roadmap, candidates, failures, strategy). Makes roadmap and promotion decisions from durable evidence, not conversational memory.",
+
+    "3_what_is_factory": "The execution layer. factoryd polls campaign state every 30s. dispatcher_v3 routes missions to engines (Claude/GLM/Codex), creates worktrees, spawns autopilot.py agents, collects evidence, settles candidates into CandidateRegistry. Factory is stateless between polls; all truth lives in files.",
+
+    "4_roadmap_authority": "CTOKernel (ctok_kernel.py). Reads and validates factory/cto/CTO_STATE.json, CTOK_CHAIN_STATE.json, CTO_EVENTS.jsonl on every daemon start. Fail-closed: 12 required fields; raises CTOContextIncomplete if any is empty or UNKNOWN. Roadmap changes require updating CTO_STATE and emitting to CTO_EVENTS.jsonl.",
+
+    "5_candidate_promotion_authority": "CandidateRegistry (candidate_registry.py). Mutations under fcntl.LOCK_EX + atomic tmp-replace. promote_qrts() requires QualificationResult.passed=True AND evidence.sha==sha. CAS promotion requires: CTOK accepted + full regression + stop_gate + AUTONOMOUS_CHAIN + human CTO attest. Git tag -f is FORBIDDEN; new immutable tags only.",
+
+    "6_context_persisted": "Via durable files only. Chat history is NOT authoritative. CTO_STATE.json (scalars), CTO_EVENTS.jsonl (immutable audit log), CTOK_CHAIN_STATE.json (capability chain), APP007_CAMPAIGN_STATE.json (campaign lifecycle), candidate_registry.json (SHAs), failure_director.jsonl (failure patterns). On any restart, factoryd reads these files and reconstructs full context. ContextCompiler builds agent context from files, not agent memory.",
+
+    "7_loop_prevention": "FailureDirector: 5-step bounded ladder (TARGETED_REPAIR → INDEPENDENT_DIAGNOSIS → ARCHITECTURAL_RETHINK → REPLAN_MILESTONE → BLOCKED). Equivalent retry detection: SHA256 of normalized error text — if same signature recurs, UNBOUNDED_EQUIVALENT_RETRY raised. ResearchReuseGate: blocks dispatch if no REUSE/ADAPT/WRAP/BUILD decision for major capabilities. LongRunSupervisor: prevents premature idle. ProgressWatchdog: kills stalled workers and requeues.",
+
+    "8_crash_recovery": "factoryd watchdog checks heartbeat mtime, artifact mtime, CTO_EVENTS for mission, git commits to evidence dir. STALLED → SIGTERM worker → remove from active_workers → requeue mission at front. On restart: factoryd reads supervisor_state.json (PIDs), campaign state (active/queued), reconciles. In-flight missions: their evidence dir shows last write; if within stall threshold, they're resurrected; if stale, requeued.",
+
+    "9_research_reuse_gate": "research_reuse_gate.py. Before dispatch: check if capability is MAJOR (by token heuristics: subsystem, scheduler, persistence, pipeline, engine, orchestration, ...). If major and no CTO_RESEARCH_REGISTRY.json decision → raise MissingReuseDecision. Decision types: REUSE (use as-is), ADAPT (minimal change), WRAP (thin interface), BUILD (new, justified), REJECT (existing sufficient). Gate is in dispatcher_v3._prepare_context_package() — no worktree created until gate clears.",
+
+    "10_failure_director": "failure_director.py. Called from factoryd._handle_mission_failure() for VIOLATED verdicts. Reads failure_director.jsonl (per-mission history). Step ladder: TARGETED_REPAIR (first failure) → INDEPENDENT_DIAGNOSIS (second) → ARCHITECTURAL_RETHINK (third) → REPLAN_MILESTONE (fourth) → BLOCKED (fifth, genuinely irreducible). Equivalent retry detection: SHA256(normalize(error_text)) — same hash on prior attempt → EquivalentRetryDetected raised immediately, skips ladder to BLOCKED.",
+
+    "11_milestone_controller": "milestone_controller.py. Evaluates: unit_tests_pass, integration_pass, product_e2e_pass (requires explicit receipt field OR product_e2e.json proof file — absent evidence → False), spec_criteria_met, required_artifacts. Verdicts: COMPLETE / IMPLEMENTED_NOT_DELIVERED / INCOMPLETE. Currently ADVISORY (emits MILESTONE_NOT_COMPLETE event, does not block settlement). POST-V1: make it blocking.",
+
+    "12_convergence_gate": "convergence_gate.py. 7 checks: (P0) TASK_COMPLETE_WITHOUT_EVIDENCE, REQUIREMENT_NOT_IMPLEMENTED, CAPABILITY_NOT_ON_RUNTIME_PATH; (P1) ARTIFACT_MISSING; (P2) SPEC_DRIFT, CODE_NOT_IN_ARCHITECTURE, OBSOLETE_TASK_OPEN. is_converged = no P0/P1 gaps. NOT called from factoryd — called from CTO-level tooling. POST-V1: wire into factoryd poll.",
+
+    "13_agent_routing": "model_router.py. Static routing table: spec_level B → GLM (zai-coding-plan/glm-5.2) first; stall>=2 → Claude escalation; spec_level A/S → Claude. Currently: GLM CREDENTIALS_UNAVAILABLE in runtime → all dispatches go to Claude. Future: adaptive routing from P(success | engine, task_type) using validated RunRecords.",
+
+    "14_current_factory_milestone": "LONG_HORIZON_AUTONOMY_PROOF — V1 sealed, dual-lane execution underway. Lane T: Twitter Radar product delivery (X104 next). Lane F: monitoring for measured weaknesses.",
+
+    "15_next_factory_improvement": "RunRecord infrastructure — after each validated run, emit: task_type, engine, strategy, result, wall_time, quota, retries, regressions, reuse_decision. This is the data foundation for adaptive routing. No improvement built without measured weakness justifying it.",
+
+    "16_final_v1_vnext_target": "V1 = FACTORY_CONDUCTOR_V1_READY (SEALED 2026-09-07). VNext: project chaining (Factory delivers multiple independent projects), adaptive routing from RunRecords, champion/challenger self-improvement loop, multi-worker scaling (MAX_WORKERS 1→2→N)."
+  },
+
+  "twitter_radar": {
+    "17_what_is_the_product": "A trading intelligence tool that identifies which Twitter/X financial accounts have statistically validated, momentum-adjusted edge in predicting market moves. Weekly report: top accounts by PSR (Probabilistic Sharpe Ratio), CAR, and consensus ranking.",
+
+    "18_who_is_it_for": "Active retail and semi-professional traders who follow financial influencers on Twitter/X and need a systematic way to distinguish real edge from narrative and momentum riding.",
+
+    "19_data_currently_exists": "5 original accounts (raw JSONL at repo root: bryzonx, ckcapitalxx, frenchie, rjccapital, photonbull). 13 accounts in expanded corpus (X101). 566 M008H call events with CARs computed (XR03). Momentum-adjusted results for 503 events (XR04). Price cache 2024-01-02 to 2026-09-04. Social graph: 1,502 nodes, 1,851 edges.",
+
+    "20_what_is_implemented": "T1→T4 pipeline (tweet ingestion, call extraction, attribution, outcome enrichment). Social graph engine (XR02). Abnormal returns engine (XR03). Momentum control engine (XR04). OOS validation engine (XR05). Statistical confidence engine (XR06, PSR/DSR/PBO). Thesis reconstruction state machine (X103). All research modules are proven but not yet wired into live product pipeline.",
+
+    "21_current_milestone": "Research phase complete. Transitioning to product integration (X104).",
+
+    "22_exact_gap": "The statistical layer (XR03-XR06) proves real signal exists. Gap: it reads static CSV, not live data. X104 wires momentum-adjusted CARs into the per-account performance ledger (replacing raw direction accuracy with real financial outcome).",
+
+    "23_what_comes_next": "X104: Real signal outcome ledger → X105: P&L + MFE/MAE → X106: Advanced account scoring → X107: Consensus clustering → X108: Lead/lag scoring → X109: Account discovery expansion → X110: Weekly Intelligence Report V2.",
+
+    "24_final_product_e2e": "User query: 'Top 10 accounts by momentum-adjusted CAR, last 90 days, with PSR ≥ 0.95.' Answer updates automatically each week from real Twitter data. Includes lead-lag ranking (who called it first) and OOS-validated performance.",
+
+    "25_what_makes_it_valuable": "Most social analytics tools measure followers, engagement, sentiment. Twitter Radar measures actual market outcomes after removing momentum and sector bias. An account that correctly called $TSLA in a momentum-driven week gets less credit than one that called a contrarian-momentum stock. PSR adjusts for strategy-switching and data-mining bias. This is the difference between a backtest that confirms existing narrative and a genuine edge discovery tool."
+  },
+
+  "global": {
+    "26_how_they_evolve_simultaneously": "Two lanes: Lane T (Twitter Radar product delivery, DEFAULT_PRIORITY) and Lane F (Factory improvement, only when blocking Twitter Radar or hard invariant violated). factoryd runs one campaign at a time; campaign phase transitions handle the switch. CROSS_PROJECT_CONTEXT_LEAK=0 enforced by separate campaign state files and scoped context compilation.",
+
+    "27_if_factory_blocks_twitter_radar": "Factory improvement gets absolute priority until the block is resolved. The block must be explicitly logged in CTO_EVENTS.jsonl as FACTORY_BLOCKING_PRODUCT. LongRunSupervisor classifies it as POLICY_CONTROLLED or AUTONOMOUS and attempts auto-resolution before escalating.",
+
+    "28_when_twitter_radar_exposes_factory_weakness": "Log the observation in CTO_EVENTS.jsonl as OBSERVED_WEAKNESS with evidence. After Twitter Radar milestone completes, evaluate whether the weakness justifies a Factory challenger. ResearchReuseGate applies: must prove the improvement brings measurable benefit (reliability, recovery, latency, quota, routing quality) before building.",
+
+    "29_factory_improvement_validation": "Champion/challenger model (POST-V1): Factory N (champion) vs N+1 (challenger), same benchmark task, objective comparison. Promotion only if N+1 wins on measured dimensions. Validated through RunRecords from real project work — not synthetic benchmarks.",
+
+    "30_resume_twitter_radar_after_factory_work": "Campaign state (APP007_CAMPAIGN_STATE.json) persists current milestone, last accepted candidate SHA, queued/active missions. CTOKernel reconstructs full context from files. ContextCompiler loads Twitter Radar-scoped context (not Factory context). Lane T resumes from exact last position — CONTEXT_LOSS=0."
+  }
+}

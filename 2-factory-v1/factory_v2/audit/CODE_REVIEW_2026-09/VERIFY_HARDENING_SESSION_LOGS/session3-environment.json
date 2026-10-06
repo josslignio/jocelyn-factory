@@ -1,0 +1,6 @@
+{
+  "ps": "rc=0",
+  "localhost_bind": "ok",
+  "dns": "160.79.104.10",
+  "previously_failing_files_rerun": "85 passed in 50.13s (test_tr_web_product_verifier, test_tr_product_ready_verifier, test_hot_reload::settlement_touched_files, test_collection_observation_validation, test_sol_r2_tr_call_closure_and_observation_forge, test_engine_registry, test_p1_closure_counterproofs, test_factory_v2::P0D, test_fault_f017_port_occupe, test_portfolio_quarantine_isolation)"
+}

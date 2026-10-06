@@ -1,0 +1,13 @@
+{
+  "engine_exercised": "NOT_EXERCISED",
+  "launches_lost": 0,
+  "notes": "A quarantined; B independent done=True; C held=True",
+  "probe_id": "quarantine_cycle",
+  "restart_recovered": false,
+  "settled": true,
+  "side": "champion",
+  "side_sha": "5257c8c9689aba1e85eb7638b621458eb3a067e8",
+  "start_sha": "2805d31254d4fbc3cc29f3e423861b79c48da09e",
+  "wall_s": 5.739,
+  "workload_id": "SAFE_SELF_IMPROVEMENT_M1"
+}

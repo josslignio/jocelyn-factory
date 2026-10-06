@@ -1,0 +1,43 @@
+{
+  "pass": true,
+  "verdict": "PASS",
+  "proven_at": "2026-09-07T14:38:00Z",
+  "milestone": "REAL_SIGNAL_PRODUCT_INTEGRATION",
+  "product_e2e_definition": "User query 'Top 10 accounts by momentum-adjusted CAR, last 90 days, PSR >= 0.95' returns a ranked list updated weekly from real Twitter data.",
+  "query": "WeeklyReport.answer_query(n=10, min_psr=0.95)",
+  "command": "python3 research/x110_weekly_report.py",
+  "repo": "/Users/jocelyngrosjean/conductor/workspaces/twitter-radar/twitter-radar-foundation-v2",
+  "canonical_head_after_merge": "35d6fc1",
+  "merge": "candidate/X110_WEEKLY_REPORT_V2 -> app007/t3-attribution-outcomes (fast-forward, promotes X104-X110 stack)",
+  "period": {
+    "start": "2026-06-09",
+    "end": "2026-09-07"
+  },
+  "generated_at": "2026-09-07T14:37:15.830930+00:00",
+  "e2e_answer": [
+    {
+      "rank": 1,
+      "handle": "frenchie",
+      "tier": "ELITE",
+      "mean_adj_car_long": 0.054483561498846304,
+      "psr": 0.998957,
+      "mean_risk_ratio": 3.25229,
+      "role": "LATE_FOLLOWER"
+    },
+    {
+      "rank": 2,
+      "handle": "ckcapitalxx",
+      "tier": "ELITE",
+      "mean_adj_car_long": -0.04369347984260415,
+      "psr": 0.997749,
+      "mean_risk_ratio": 3.319824,
+      "role": "EARLY_FOLLOWER"
+    }
+  ],
+  "evidence": {
+    "artifact": "research/X110_WEEKLY_REPORT.json (e2e_answer embedded)",
+    "tests": "python3 -m pytest tests/test_weekly_report_v2.py -> 21 passed",
+    "run_output": "X110 weekly report 2026-09-07: 2 leaderboard / 3 clusters / 1 originators / 10 candidates"
+  },
+  "note": "Live run post-merge by conductor session; results identical to receipt-embedded e2e_answer (35d6fc1)."
+}

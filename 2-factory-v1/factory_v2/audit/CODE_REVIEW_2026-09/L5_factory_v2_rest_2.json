@@ -1,0 +1,653 @@
+{
+  "schema": "code-review-lot/v1",
+  "lot": "L5_factory_v2_rest_2",
+  "engine": "codex",
+  "reviewed_sha": "56b2c63c5de0228750c8e878ad2041cef395160b",
+  "files_reviewed": [
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen10-r1-20260909T213515Z/sandbox/ctrl/factory_v2/cell_reviewer.py",
+      "lines": 100,
+      "verdict": "CLEAN",
+      "summary": "Copie archivée du reviewer gen10 : contrôle intégrité du package, rôle, HEAD exact et hashes des entrées. Lue intégralement ; aucun défaut retenu dans son périmètre de fixture."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen10-r1-20260909T213515Z/sandbox/product/widget.py",
+      "lines": 2,
+      "verdict": "CLEAN",
+      "summary": "Fixture produit gen10 : build renvoie la constante attendue par l’exercice. Deux lignes lues ; aucun défaut relevé pour ce rôle volontairement minimal."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen11-r3-20260909T221455Z/sandbox/ctrl-fault-crash/factory_v2/cell_challenger.py",
+      "lines": 89,
+      "verdict": "CLEAN",
+      "summary": "Copie du challenger utilisée par le scénario reviewer-crash gen11 : vérifie package et preuves. Lecture intégrale ; le crash appartient au reviewer compagnon, aucun défaut retenu ici."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen11-r3-20260909T221455Z/sandbox/ctrl-fault-crash/factory_v2/cell_reviewer.py",
+      "lines": 5,
+      "verdict": "CLEAN",
+      "summary": "Fixture d’injection gen11 : écrit le diagnostic puis termine immédiatement avec code 9. Lecture intégrale ; arrêt brutal intentionnel pour éprouver le contrôleur."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen11-r3-20260909T221455Z/sandbox/ctrl-fault-quarantine/factory_v2/cell_challenger.py",
+      "lines": 89,
+      "verdict": "CLEAN",
+      "summary": "Copie du challenger du scénario quarantine gen11 : recompute les hashes et retourne les écarts bloquants. Lecture intégrale ; aucun défaut établi dans cette fixture."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen11-r3-20260909T221455Z/sandbox/ctrl-fault-quarantine/factory_v2/cell_reviewer.py",
+      "lines": 12,
+      "verdict": "CLEAN",
+      "summary": "Reviewer de faute gen11 : produit volontairement un verdict QUARANTINE lié au package. Les douze lignes sont cohérentes avec cet exercice, pas un défaut de production."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen11-r3-20260909T221455Z/sandbox/ctrl-fault-slow/factory_v2/cell_challenger.py",
+      "lines": 7,
+      "verdict": "CLEAN",
+      "summary": "Challenger lent de faute gen11 : dort deux secondes pour dépasser l’enveloppe de 0,2 seconde. Lecture intégrale ; dépassement explicitement intentionnel."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen11-r3-20260909T221455Z/sandbox/ctrl-fault-slow/factory_v2/cell_reviewer.py",
+      "lines": 100,
+      "verdict": "CLEAN",
+      "summary": "Reviewer témoin du scénario slow gen11 : vérifie HEAD et intégrité des preuves. Lecture intégrale ; aucun défaut retenu dans son usage archivé."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen11-r3-20260909T221455Z/sandbox/ctrl/factory_v2/cell_challenger.py",
+      "lines": 89,
+      "verdict": "CLEAN",
+      "summary": "Challenger témoin gen11 : contrôle l’intégrité du package et des fichiers d’entrée sans modifier le produit. Lecture intégrale ; aucun défaut démontré retenu."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen11-r3-20260909T221455Z/sandbox/ctrl/factory_v2/cell_reviewer.py",
+      "lines": 100,
+      "verdict": "CLEAN",
+      "summary": "Reviewer témoin gen11 : refuse le mauvais SHA et transforme les dérives d’entrées en REJECT. Lecture intégrale ; aucun défaut retenu pour cette fixture."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen11-r3-20260909T221455Z/sandbox/product/widget.py",
+      "lines": 2,
+      "verdict": "CLEAN",
+      "summary": "Fixture produit gen11 : build retourne w, artefact minimal de l’exercice. Deux lignes lues en entier ; comportement intentionnel."
+    },
+    {
+      "path": "factory_v2/repair_epoch.py",
+      "lines": 221,
+      "verdict": "CLEAN",
+      "summary": "Gère identité, adoption, projection et archivage des épisodes de réparation. Lecture intégrale et consultation du caller de réouverture ; aucun défaut démontré retenu."
+    },
+    {
+      "path": "factory_v2/roadmap_resolver.py",
+      "lines": 200,
+      "verdict": "CLEAN",
+      "summary": "Résout l’ordre des jalons, dépendances, retraits et DoD obligatoire/optionnelle depuis l’autorité. Lecture intégrale ; aucun défaut démontré retenu."
+    },
+    {
+      "path": "factory_v2/routing_evidence.py",
+      "lines": 108,
+      "verdict": "CLEAN",
+      "summary": "Agrège le ledger plié pour le routage, exclut les refus et compte les échecs sémantiques observés. Lecture intégrale ; logique examinée, aucun défaut comportemental retenu."
+    },
+    {
+      "path": "factory_v2/routing_evidence_backfill.py",
+      "lines": 73,
+      "verdict": "FINDINGS",
+      "summary": "Produit des annotations de routage historiques. Défaut reproduit : mauvais niveau depuis la roadmap actuelle et écrasement d’un task_kind déjà observé."
+    },
+    {
+      "path": "factory_v2/routing_receipt.py",
+      "lines": 93,
+      "verdict": "CLEAN",
+      "summary": "Construit le reçu adaptatif en fusionnant les preuves par projet et en consultant le routeur. Lecture intégrale ; sorties et création du parent examinées, aucun défaut retenu."
+    },
+    {
+      "path": "factory_v2/run_controlled_long_run.py",
+      "lines": 383,
+      "verdict": "FINDINGS",
+      "summary": "Pilote le daemon, observe les jalons et injecte un crash. Deux défauts reproduits : blocage sur PIPE non drainés et descendants survivant au nettoyage."
+    },
+    {
+      "path": "factory_v2/run_f5_benchmark.py",
+      "lines": 260,
+      "verdict": "FINDINGS",
+      "summary": "Benchmark F5 de contexte et reprise par sondes. La sonde de fraîcheur accepte un loader figé malgré une modification du fichier ; couverture de régression insuffisante."
+    },
+    {
+      "path": "factory_v2/run_lr5_preflight.py",
+      "lines": 421,
+      "verdict": "FINDINGS",
+      "summary": "Harnais LR5 avec fixtures, CAS, branche préservée et reçus. Les erreurs de sources d’observation humaine deviennent à tort un compte nul confirmé."
+    },
+    {
+      "path": "factory_v2/run_matched_benchmark.py",
+      "lines": 258,
+      "verdict": "FINDINGS",
+      "summary": "Exécute des sondes appariées sur deux worktrees, agrège et publie décision/pointeur. Le texte explicatif du REJECT peut affirmer l’inverse des métriques ; défaut reproduit."
+    },
+    {
+      "path": "factory_v2/run_matched_benchmark_3arm.py",
+      "lines": 799,
+      "verdict": "FINDINGS",
+      "summary": "Benchmark hermétique à trois bras avec crash/reprise, coût simulé et reconstruction. verify_only accepte un jeu dont les contrôles d’appariement sont faux."
+    },
+    {
+      "path": "factory_v2/run_tr_collection.py",
+      "lines": 11,
+      "verdict": "CLEAN",
+      "summary": "Shim de compatibilité vers products.twitter_radar.run_tr_collection : alias du module et délégation CLI. Lecture intégrale ; aucun défaut retenu."
+    },
+    {
+      "path": "factory_v2/run_windows.py",
+      "lines": 57,
+      "verdict": "CLEAN",
+      "summary": "Journalise ouvertures et fermetures de fenêtres daemon, avec fsync et identité UUID. Lecture intégrale ; aucun défaut démontré retenu."
+    },
+    {
+      "path": "factory_v2/runrecords.py",
+      "lines": 416,
+      "verdict": "FINDINGS",
+      "summary": "Persiste tentatives, settlements et paires prediction/observation puis calcule les statistiques. Réconciliation de worker vivant et panne sur fin JSONL tronquée reproduites."
+    },
+    {
+      "path": "factory_v2/runrecords_wire_harness.py",
+      "lines": 117,
+      "verdict": "CLEAN",
+      "summary": "Harnais de reprise RunRecords par enfant tué puis processus froid, avec lecteur JSONL tolérant. Lecture intégrale ; aucun défaut démontré retenu dans ce pilote de fixture."
+    },
+    {
+      "path": "factory_v2/self_modification_ledger.py",
+      "lines": 106,
+      "verdict": "FINDINGS",
+      "summary": "Registre chaîné par hash des modifications validées. Entrelacement reproduit : deux append réussis produisent une chaîne brisée faute de verrou sur le précédent hash."
+    },
+    {
+      "path": "factory_v2/settle_fullsuite.py",
+      "lines": 95,
+      "verdict": "FINDINGS",
+      "summary": "Règle le job full-suite et produit son reçu à partir du log. Le statut PASS est inféré du texte et peut contredire le vrai code de sortie du processus."
+    },
+    {
+      "path": "factory_v2/settlement_ledger.py",
+      "lines": 356,
+      "verdict": "FINDINGS",
+      "summary": "Registre partagé des settlements, index, replay idempotent et rollback vérifié. Collision reproduite entre deux projets portant le même identifiant de jalon."
+    },
+    {
+      "path": "factory_v2/settlement_truth.py",
+      "lines": 442,
+      "verdict": "CLEAN",
+      "summary": "Vérifie la vérité des settlements par contrats, reçus, double pin et acceptance ; expose les blockers. Lecture intégrale ; aucun défaut démontré retenu."
+    },
+    {
+      "path": "factory_v2/single_flight.py",
+      "lines": 367,
+      "verdict": "FINDINGS",
+      "summary": "Arbitre les validations single-flight, générations, classes terminales et reprise. La réconciliation ignore une naissance de processus incompatible que acquire sait détecter."
+    },
+    {
+      "path": "factory_v2/stop_gate_policy.py",
+      "lines": 246,
+      "verdict": "FINDINGS",
+      "summary": "Classe les contextes de sortie et consulte état, PID et handoff. Sortie autorisée à tort avec roadmap inachevée sans current_milestone ; reproduit dans l’API et son hook de production."
+    },
+    {
+      "path": "factory_v2/tr_call.py",
+      "lines": 8,
+      "verdict": "CLEAN",
+      "summary": "Shim de module tr_call : exporte la même implémentation products.twitter_radar sans dupliquer le modèle métier. Lecture intégrale ; aucun défaut retenu."
+    },
+    {
+      "path": "factory_v2/tr_kol.py",
+      "lines": 8,
+      "verdict": "CLEAN",
+      "summary": "Shim de module tr_kol : redirige les imports vers le package produit. Lecture intégrale ; aucune logique active supplémentaire ni défaut retenu."
+    },
+    {
+      "path": "factory_v2/tr_kol_records.py",
+      "lines": 7,
+      "verdict": "CLEAN",
+      "summary": "Shim restauré tr_kol_records : alias vers le producteur canonique et délégation de main. Lecture intégrale ; aucun défaut retenu."
+    },
+    {
+      "path": "factory_v2/tr_presentation_verifiers.py",
+      "lines": 11,
+      "verdict": "CLEAN",
+      "summary": "Shim CLI des vérificateurs de présentation Twitter Radar : délègue imports et main. Lecture intégrale ; aucun défaut retenu."
+    },
+    {
+      "path": "factory_v2/tr_product_ready_observer.py",
+      "lines": 11,
+      "verdict": "CLEAN",
+      "summary": "Shim CLI de l’observateur de readiness produit : délègue au package Twitter Radar. Lecture intégrale ; aucun défaut retenu."
+    },
+    {
+      "path": "factory_v2/tr_radar_harness.py",
+      "lines": 8,
+      "verdict": "CLEAN",
+      "summary": "Shim tr_radar_harness : conserve le chemin d’import historique vers l’implémentation produit. Lecture intégrale ; aucun défaut retenu."
+    },
+    {
+      "path": "factory_v2/tr_ready_harness.py",
+      "lines": 8,
+      "verdict": "CLEAN",
+      "summary": "Shim tr_ready_harness : alias du module de qualification produit sans logique copiée. Lecture intégrale ; aucun défaut retenu."
+    },
+    {
+      "path": "factory_v2/tr_refresh_harness.py",
+      "lines": 8,
+      "verdict": "CLEAN",
+      "summary": "Shim tr_refresh_harness : redirection d’import vers le harnais produit de refresh. Lecture intégrale ; aucun défaut retenu."
+    },
+    {
+      "path": "factory_v2/tr_web_harness.py",
+      "lines": 8,
+      "verdict": "CLEAN",
+      "summary": "Shim tr_web_harness : redirection d’import vers le harnais web produit. Lecture intégrale ; aucun défaut retenu."
+    },
+    {
+      "path": "factory_v2/twitter_radar_long_run.py",
+      "lines": 8,
+      "verdict": "CLEAN",
+      "summary": "Shim twitter_radar_long_run : expose le module produit au chemin historique. Lecture intégrale ; aucun défaut retenu dans ce relais."
+    },
+    {
+      "path": "factory_v2/validation_receipt.py",
+      "lines": 223,
+      "verdict": "FINDINGS",
+      "summary": "Produit et vérifie les reçus de validation avant promotion. Validité modifiable sans rupture de hash et SHA déclaré différent du checkout exécuté reproduits."
+    },
+    {
+      "path": "factory_v2/verified_fix.py",
+      "lines": 460,
+      "verdict": "FINDINGS",
+      "summary": "Produit les preuves rouge/vert sur worktrees isolés et stocke les reçus par projet. Course reproduite : une mise à jour concurrente de l’index perd une référence déjà retournée."
+    },
+    {
+      "path": "factory_v2/verifier_preflight.py",
+      "lines": 416,
+      "verdict": "FINDINGS",
+      "summary": "Préflights de disponibilité vérificateur, sélection pytest et capacité moteur. Faux diagnostic sur script absent et exécution du second pytest en mode collect-only reproduits."
+    },
+    {
+      "path": "factory_v2/verify_adaptive_routing.py",
+      "lines": 223,
+      "verdict": "FINDINGS",
+      "summary": "Vérifie statistiques adaptatives, moteurs recommandés et calibration des phases. Une paire sans outcomes est comptée comme prédiction correcte."
+    },
+    {
+      "path": "factory_v2/verify_audit_loop.py",
+      "lines": 56,
+      "verdict": "FINDINGS",
+      "summary": "Vérificateur du reçu de boucle d’audit : événements automatiques et compteurs. Accepte schéma erroné, Level A null et compteurs négatifs ; validation structurelle insuffisante."
+    },
+    {
+      "path": "factory_v2/verify_audit_receipt.py",
+      "lines": 153,
+      "verdict": "CLEAN",
+      "summary": "Évalue un reçu d’audit par reconstruction d’observation, hash et fraîcheur du SHA. Lecture intégrale ; refus typés et absence de mutation examinés, aucun défaut retenu."
+    },
+    {
+      "path": "factory_v2/verify_audit_repair.py",
+      "lines": 113,
+      "verdict": "FINDINGS",
+      "summary": "Juge la réparation de l’audit : LOC, références, cause DEF001 et carte d’autorité. Regex de statut dépendant de la mise en forme : ACTIVE multiligne passe, INACTIVE compact échoue."
+    },
+    {
+      "path": "factory_v2/verify_benchmark_receipt.py",
+      "lines": 31,
+      "verdict": "CLEAN",
+      "summary": "Ancien point d’entrée de benchmark explicitement non implémenté : refuse systématiquement avec diagnostic rc=2. Lecture intégrale ; limitation déclarée, pas de succès trompeur."
+    },
+    {
+      "path": "factory_v2/verify_controlled_long_run.py",
+      "lines": 338,
+      "verdict": "FINDINGS",
+      "summary": "Vérification post-hoc de longue exécution et publication de readiness. Le contrôle de fautes accepte zéro injection réussie et peut produire un verdict global PASS contradictoire."
+    },
+    {
+      "path": "factory_v2/verify_cycle2_manifest.py",
+      "lines": 72,
+      "verdict": "FINDINGS",
+      "summary": "Vérifie les seuils de comptes/appels du manifeste cycle2. Compte vingt doublons d’un compte comme vingt comptes qualifiés."
+    },
+    {
+      "path": "factory_v2/verify_cycle2_refresh.py",
+      "lines": 63,
+      "verdict": "FINDINGS",
+      "summary": "Vérifie les événements de refresh et, avec flag, l’absence de gate humaine. Sans ce flag, le message affirme HUMAN_GO=0 même quand le journal contient une intervention."
+    },
+    {
+      "path": "factory_v2/verify_deep_research.py",
+      "lines": 212,
+      "verdict": "FINDINGS",
+      "summary": "Juge les fichiers de recherche, sources, synthèse et moteurs déclarés/lancés. Les cibles et baselines NaN/Infinity passent la validation numérique."
+    },
+    {
+      "path": "factory_v2/verify_factory_hygiene.py",
+      "lines": 1288,
+      "verdict": "FINDINGS",
+      "summary": "Regroupe les juges d’hygiène et de robustesse. Trois défauts reproduits : dépendance du compteur restart à un log local, câblage accepté par commentaires et check autopurge absent du CLI."
+    }
+  ],
+  "findings": [
+    {
+      "id": "L5_factory_v2_rest_2-001",
+      "file": "factory_v2/routing_evidence_backfill.py",
+      "line": 38,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "lvl = m.get(\"spec_level\")",
+      "why": "Le backfill cherche spec_level dans milestone/tasks, alors que les étapes actuelles le portent dans execution.steps[].executor. Il classe donc une étape B en A. De plus, lorsqu’un seul champ de routage manque, il réécrit aussi celui déjà observé : une tentative repair devient build. Ces annotations polluent les populations utilisées pour le routage adaptatif.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json\nfrom factory_v2.routing_evidence_backfill import plan\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'evidence').mkdir()\n (p/'ROADMAP.yaml').write_text(json.dumps({'milestones':[{'id':'M','execution':{'steps':[{'executor':{'spec_level':'B'}}]}}]}))\n row={'phase':'TERMINAL','attempt_key':'M#M1:a1','milestone':'M','engine':'claude','task_kind':'repair'}\n (p/'evidence/attempt_accounts.jsonl').write_text(json.dumps(row)+'\\n')\n result=plan(p)[0]\n assert result['spec_level']=='A' and result['task_kind']=='build'\n print('executor.spec_level=B -> annotation=A; existing task_kind=repair -> annotation=build')\nPY\nSortie observée :\nexecutor.spec_level=B -> annotation=A; existing task_kind=repair -> annotation=build\nTEST backfill_classification : rc=0",
+      "recommendation": "Résoudre le niveau de l’étape exacte depuis execution.steps et compléter uniquement les champs absents ; refuser une attribution ambiguë.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-002",
+      "file": "factory_v2/run_controlled_long_run.py",
+      "line": 177,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "cmd, cwd=repo_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE,",
+      "why": "Les deux PIPE du daemon ne sont jamais drainés. Un daemon bavard se bloque avant de produire son jalon et le harnais conclut TIMEOUT. La reproduction utilise un vrai enfant local écrivant 2 Mo ; seuls les lecteurs de settlement et la précondition sont substitués. Le même enfant sans cette sortie termine PASS. Le wrapper LR5 contourne localement ce défaut par redirection, mais l’API commune reste affectée.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nimport sys\nfrom factory_v2 import run_controlled_long_run as m\nwith TemporaryDirectory() as t:\n p=Path(t); marker=p/'done'\n def run(verbose):\n  marker.unlink(missing_ok=True)\n  code='import os; from pathlib import Path; '+('os.write(1,b\"x\"*2000000); ' if verbose else '')+f'Path({str(marker)!r}).write_text(\"done\")'\n  cfg=m.ControlledLongRunConfig(min_milestones=1,min_engines=1,timeout_s=1,poll_interval_s=.02,project_dir=p,repo_dir=p,factoryd_cmd=[sys.executable,'-c',code])\n  with patch.object(m,'assert_project_long_run_ready',return_value=[]), patch.object(m,'_read_completed_milestones',side_effect=lambda _: ['M'] if marker.exists() else []), patch.object(m,'_count_active_engines',return_value=1), patch.object(m,'_observe_daemon_identity',return_value={}):\n   return m.run_controlled_long_run(cfg).status\n quiet=run(False); verbose=run(True)\n assert quiet=='PASS' and verbose=='TIMEOUT'\n print('same local child: quiet=PASS; stdout_2MB=TIMEOUT; milestone never written')\nPY\nSortie observée :\nsame local child: quiet=PASS; stdout_2MB=TIMEOUT; milestone never written\nTEST controlled_pipe_block : rc=0",
+      "recommendation": "Rediriger vers des journaux bornés ou drainer stdout/stderr pendant l’observation, pour le lancement initial comme pour le redémarrage.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-003",
+      "file": "factory_v2/run_controlled_long_run.py",
+      "line": 377,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "proc.kill()\n            proc.wait(timeout=3)\n    except Exception:",
+      "why": "Le harnais crée un groupe de processus mais son nettoyage ne tue que le PID parent. Les descendants survivent à la fin du run et peuvent continuer à écrire ou consommer des ressources. La reproduction lance un parent et un enfant locaux, observe l’enfant toujours vivant après _kill_proc, puis le nettoie explicitement.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport os,sys,subprocess,time,signal\nfrom factory_v2.run_controlled_long_run import _kill_proc\nwith TemporaryDirectory() as t:\n p=Path(t)/'pid'\n code='import subprocess,sys,time; from pathlib import Path; c=subprocess.Popen([sys.executable,\"-c\",\"import time; time.sleep(30)\"]); '+f'Path({str(p)!r}).write_text(str(c.pid)); time.sleep(30)'\n parent=subprocess.Popen([sys.executable,'-c',code],start_new_session=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)\n try:\n  deadline=time.monotonic()+5\n  while not p.exists() and time.monotonic()<deadline: time.sleep(.01)\n  child=int(p.read_text()); _kill_proc(parent)\n  os.kill(child,0)\n  assert parent.poll() is not None\n  print('parent terminated; child still alive after _kill_proc')\n finally:\n  try: os.killpg(parent.pid,signal.SIGKILL)\n  except ProcessLookupError: pass\n  parent.wait(timeout=5)\nPY\nSortie observée :\nparent terminated; child still alive after _kill_proc\nTEST controlled_child_cleanup : rc=0",
+      "recommendation": "Arrêter et attendre le groupe possédé, avec identité vérifiée et escalade bornée ; appliquer la même discipline au chemin de crash/redémarrage.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-004",
+      "file": "factory_v2/run_f5_benchmark.py",
+      "line": 79,
+      "severity": "MEDIUM",
+      "category": "TEST_GAP",
+      "evidence": "\"passed\": auth1.identity.as_dict() == auth2.identity.as_dict(),",
+      "why": "La sonde censée prouver le rechargement de l’autorité compare deux lectures identiques sans exiger de changement observé. Un loader qui sert toujours le même objet en cache obtient passed=True, même si le fichier change entre les appels. Cette sonde ne détecte donc pas la régression de fraîcheur annoncée.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch\nfrom factory_v2 import run_f5_benchmark as m\nwith TemporaryDirectory() as t:\n p=Path(t); f=p/'SPEC.md'; f.write_text('old')\n cached=SimpleNamespace(identity=SimpleNamespace(as_dict=lambda: {'spec':'old_hash'}))\n def stale_loader(_):\n  f.write_text('new')\n  return cached\n with patch.object(m,'load_authority',side_effect=stale_loader): result=m._probe_context_freshness(p)\n assert result['passed'] and f.read_text()=='new'\n print('disk changed, cached old_hash returned twice: freshness passed=True')\nPY\nSortie observée :\ndisk changed, cached old_hash returned twice: freshness passed=True\nTEST freshness_probe_cached : rc=0",
+      "recommendation": "Faire évoluer une autorité dans une fixture isolée entre deux lectures et vérifier le nouveau contenu/hash, puis exercer advance si la propriété visée concerne advance.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-005",
+      "file": "factory_v2/run_lr5_preflight.py",
+      "line": 190,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "except Exception:\n        pass\n    tty_seen = []",
+      "why": "Les erreurs de lecture du journal et de ps sont avalées, puis comptées comme zéro intervention humaine. Une observation entièrement indisponible est présentée comme une mesure concluante d’autonomie.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom factory_v2 import run_lr5_preflight as m\nwith patch.object(m.event_journal,'iter_events',side_effect=OSError('unreadable')), patch.object(m.subprocess,'run',side_effect=OSError('ps unavailable')):\n r=m._derive_human_interventions(Path('/unused'),'2026-01-01T00:00:00Z',[123])\nassert r['routine_human_interventions']==0 and not r['human_intervention_events']\nprint('journal=OSError; ps=OSError; reported routine_human_interventions=0')\nPY\nSortie observée :\njournal=OSError; ps=OSError; reported routine_human_interventions=0\nTEST human_observation_unknown : rc=0",
+      "recommendation": "Distinguer observation indisponible de zéro observé ; conserver les erreurs et refuser la qualification lorsque les sources requises ne sont pas lisibles.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-006",
+      "file": "factory_v2/run_matched_benchmark_3arm.py",
+      "line": 787,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if problems:\n        print(f\"VERIFY_UNMET: {'; '.join(problems)}\", file=sys.stderr)\n        return 1",
+      "why": "verify_only compare les champs matched au reçu, mais n’exige jamais que ces contrôles soient vrais. Un jeu d’observations dont les tâches diffèrent entre bras, accompagné de son reçu correctement recalculé, sort rc=0 et verified=true avec matched=false. Il confirme ainsi une expérience non appariée.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nimport json,hashlib,contextlib,io\nfrom factory_v2 import run_matched_benchmark_3arm as m\nwith TemporaryDirectory() as t:\n p=Path(t); obs={}; manifest={}\n for arm,task in [('claude_alone','task-A'),('factory','task-B')]:\n  o=dict(arm=arm,run=1,start_sha='a'*40,task_sha256=task,data_sha256='d',self_test_cmd='true',ground_truth_cmd='true',deliverable='x',budget_s=1,faults=[],verified_delivery=True,false_acceptance=False,declared_success=True,elapsed_s=1,active_s=1,usage=[],recovery_time_s=0,human_interventions=0,launches_lost=0,cost_usd=0)\n  obs[arm]=[o]; blob=json.dumps(o); name=arm+'.json'; (p/name).write_text(blob); manifest[name]=hashlib.sha256(blob.encode()).hexdigest()\n prod=hashlib.sha256(Path(m.__file__).read_bytes()).hexdigest()\n (p/'MANIFEST.json').write_text(json.dumps(dict(observations=manifest,producer_sha256=prod,start_sha='a'*40)))\n rec=dict(schema=m.SCHEMA,aggregate=m.aggregate(obs),verdict=m.compute_verdict(m.aggregate(obs)),matched=m.matched_checks(obs),task={'start_sha':'a'*40},producer_sha256=prod)\n receipt=p/'receipt.json'; receipt.write_text(json.dumps(rec)); output=io.StringIO()\n with patch.object(m,'RECEIPT_PATH',receipt), contextlib.redirect_stdout(output): rc=m.verify_only(str(p))\n assert rc==0 and json.loads(output.getvalue())['matched'] is False\n print('different task_sha256 per arm: verify_only rc=0, verified=True, matched=False')\nPY\nSortie observée :\ndifferent task_sha256 per arm: verify_only rc=0, verified=True, matched=False\nTEST three_arm_unmatched_verified : rc=0",
+      "recommendation": "Exiger tous les contrôles matched vrais et la couverture attendue des bras/runs avant toute sortie de vérification réussie.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-007",
+      "file": "factory_v2/runrecords.py",
+      "line": 124,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "r = json.loads(line)",
+      "why": "read_runs ne tolère aucune ligne JSON tronquée, contrairement aux lecteurs de phases du même module. Après interruption d’un append, une seule fin de ligne incomplète rend toutes les statistiques moteur indisponibles, y compris les lignes valides antérieures.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nimport os,json\nfrom factory_v2 import runrecords as m\nwith TemporaryDirectory() as t:\n p=Path(t)/'ledger.jsonl'; p.write_text(json.dumps({'engine':'claude','attempt_ok':True})+'\\n'+ '{\"phase\":')\n with patch.dict(os.environ,{'FACTORY_RUNRECORDS_PATH':str(p)}):\n  try: m.engine_stats()\n  except json.JSONDecodeError: print('one valid row + interrupted tail -> engine_stats JSONDecodeError')\n  else: raise AssertionError('expected corrupt-tail crash')\nPY\nSortie observée :\none valid row + interrupted tail -> engine_stats JSONDecodeError\nTEST runrecords_truncated_tail : rc=0",
+      "recommendation": "Partager un lecteur JSONL qui signale la corruption et traite explicitement les append interrompus ; préserver les enregistrements complets sans confondre le ledger incomplet avec un ledger vide.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-008",
+      "file": "factory_v2/runrecords.py",
+      "line": 201,
+      "severity": "HIGH",
+      "category": "RACE",
+      "evidence": "for aid, rec in preds.items():",
+      "why": "La réconciliation ferme toute PREDICTION sans OBSERVATION comme WORKER_DEATH sans vérifier la vie du worker ni le projet. Elle est appelée au début des cycles (advance/control_plane.py:122-124), pendant que d’autres missions peuvent tourner. Une tentative vivante est donc fermée prématurément ; sa vraie observation produit ensuite deux clôtures malgré le contrat 1:1.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nimport os\nfrom factory_v2 import runrecords as m\nwith TemporaryDirectory() as t, patch.dict(os.environ,{'FACTORY_RUNRECORDS_PATH':str(Path(t)/'ledger.jsonl')}):\n m.record_prediction('live',{'project':'p','engine':'claude','worker_pid':os.getpid()})\n closed=m.reconcile_orphan_predictions()\n m.record_observation('live',{'outcome':'PASS','engine':'claude'})\n rows=[r for r in m.read_attempt_phases() if r['phase']=='OBSERVATION']\n assert len(closed)==1 and len(rows)==2\n print('worker alive=True; premature close=WORKER_DEATH; final observations for live=2')\nPY\nSortie observée :\nworker alive=True; premature close=WORKER_DEATH; final observations for live=2\nTEST runrecords_live_orphan : rc=0",
+      "recommendation": "Lier la prediction à une lease/identité de worker et ne clôturer que les morts prouvés, sous le même verrou que l’observation ; rendre cette dernière idempotente.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-009",
+      "file": "factory_v2/self_modification_ledger.py",
+      "line": 67,
+      "severity": "MEDIUM",
+      "category": "RACE",
+      "evidence": "rows = _read_rows(path)",
+      "why": "Le calcul du précédent hash et l’append ne sont pas sérialisés. Deux écrivains lisant le même dernier hash ajoutent deux lignes qui prétendent être ses successeurs directs ; le registre devient invalide malgré deux append réussis. La reproduction force cet entrelacement précis sans modifier les sources.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom factory_v2 import self_modification_ledger as m\nwith TemporaryDirectory() as t:\n p=Path(t)/'ledger.jsonl'; real=m._read_rows\n def append(n): return m.append(p,sha=n*40,validated=True,validated_by='judge',benchmark_receipt_sha256='d'*64)\n def interleave(path):\n  rows=real(path)\n  with patch.object(m,'_read_rows',real): append('b')\n  return rows\n with patch.object(m,'_read_rows',side_effect=interleave): append('a')\n ok,why=m.verify_chain(p)\n assert not ok and why=='LEDGER_CHAIN_BROKEN:1'\n print('both append returned; verify_chain=False, LEDGER_CHAIN_BROKEN:1')\nPY\nSortie observée :\nboth append returned; verify_chain=False, LEDGER_CHAIN_BROKEN:1\nTEST self_modification_chain_race : rc=0",
+      "recommendation": "Verrouiller la séquence lecture-vérification-append et synchroniser les octets écrits avant de rendre la main.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-010",
+      "file": "factory_v2/settle_fullsuite.py",
+      "line": 39,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "rc = 0 if (\"passed\" in last and \"failed\" not in last",
+      "why": "Le règlement du job ne lit jamais le code de sortie du processus de test : il l’infère d’une ligne contenant « passed ». Un wrapper de suite qui imprime un résumé positif puis sort rc=1 est enregistré PASS avec rc=0. Le reçu annonce aussi des paramètres d’exécution constants plutôt que des observations du job.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport subprocess,sys,json,os,contextlib,io\nfrom factory_v2 import settle_fullsuite as m\nwith TemporaryDirectory() as t:\n p=Path(t); meta=p/'.context/glm-primary-overnight/control'; meta.mkdir(parents=True)\n (p/'factory_v2/receipts/committed').mkdir(parents=True)\n def g(*args): return subprocess.run(['git','-C',t,*args],capture_output=True,text=True,check=True).stdout.strip()\n g('init','-q');g('config','user.name','Fixture');g('config','user.email','fixture@example.invalid');g('commit','--allow-empty','-qm','base'); sha=g('rev-parse','HEAD')\n with (p/'suite.log').open('w') as out: observed=subprocess.run([sys.executable,'-c','import sys; print(\"1 passed in 0.01s\"); sys.exit(1)'],stdout=out).returncode\n (meta/'FULL_SUITE_JOB.json').write_text(json.dumps({'key':'fixture','sha':sha,'log':'suite.log','worktree':str(p/'unused-worktree')}))\n previous=os.getcwd()\n try:\n  os.chdir(p)\n  with contextlib.redirect_stdout(io.StringIO()): rc=m.main()\n finally: os.chdir(previous)\n receipt=json.loads((p/f'factory_v2/receipts/committed/FULL_SUITE_RECEIPT_{sha[:8]}.json').read_text())\n assert observed==1 and rc==0 and receipt['result']['rc']==0\n print('actual suite process rc=1; settle_fullsuite rc=0; committed receipt result.rc=0')\nPY\nSortie observée :\nactual suite process rc=1; settle_fullsuite rc=0; committed receipt result.rc=0\nTEST settle_suite_infers_exit : rc=0",
+      "recommendation": "Persister l’exit code et l’identité de l’exécution dans le job producteur ; refuser de settle sans résultat terminal vérifié et utiliser le log uniquement comme diagnostic.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-011",
+      "file": "factory_v2/settlement_ledger.py",
+      "line": 205,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "out = _dir(repo) / f\"{entry['milestone']}.json\"",
+      "why": "Ce registre partagé entre projets indexe et nomme les fichiers uniquement par milestone. Deux projets possédant tous deux M1 se heurtent à la protection contre l’écrasement : le second settlement est refusé, même avec une preuve et une identité de projet distinctes.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom factory_v2 import settlement_ledger as m\nwith TemporaryDirectory() as t:\n p=Path(t)\n def entry(project,sha): return dict(schema=m.SCHEMA,milestone='M1',project=project,settled_at='2026-01-01T00:00:00Z',candidate_sha=sha*40,base_sha='0'*40,authority_hashes={},contract={},evidence={'active_verify':[{'command':'true','rc':0}],'full_suite':{},'gate':{'verdict':'ACCEPT'}},honest_residual=[])\n first=m.record_settlement(p,entry('project-A','a'))\n try: m.record_settlement(p,entry('project-B','b'))\n except ValueError as e:\n  assert 'refusing silent overwrite' in str(e)\n  print('project-A/M1 recorded; independent project-B/M1 rejected: refusing silent overwrite')\n else: raise AssertionError('expected cross-project collision')\nPY\nSortie observée :\nproject-A/M1 recorded; independent project-B/M1 rejected: refusing silent overwrite\nTEST settlement_project_collision : rc=0",
+      "recommendation": "Inclure l’identité stable du projet dans le chemin et la clé d’index, puis migrer les références et les vérifications existantes.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-012",
+      "file": "factory_v2/single_flight.py",
+      "line": 286,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if not _pid_alive(job.get(\"pid\")):",
+      "why": "La réconciliation de démarrage teste seulement l’existence du PID d’un job RUNNING, alors que acquire compare aussi sa naissance. Un PID réutilisé par un processus sans rapport laisse donc le job RUNNING après reconcile ; acquire sur le même état reconnaît pourtant sa perte et reprend la propriété.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nimport os,json\nfrom factory_v2 import single_flight as m\nwith TemporaryDirectory() as t:\n p=Path(t)\n with patch.object(m,'_birth_of',return_value='current-birth'):\n  m.acquire(p,'key',command=['true'],cwd=t,envelope_s=1)\n  m.mark_running(p,'key',os.getpid())\n  f=m._job_path(p,'key'); d=json.loads(f.read_text()); d['birth']='old-process-birth'; f.write_text(json.dumps(d))\n  reconciled=m.reconcile(p); state=json.loads(f.read_text())['state']\n  next_owner=m.acquire(p,'key',command=['true'],cwd=t,envelope_s=1)\n assert not reconciled and state=='RUNNING' and next_owner['owned']\n print('reused PID: reconcile leaves RUNNING; acquire fences same record and owns generation=2')\nPY\nSortie observée :\nreused PID: reconcile leaves RUNNING; acquire fences same record and owns generation=2\nTEST single_flight_recycled_pid : rc=0",
+      "recommendation": "Utiliser partout le même prédicat pid + identité de naissance, y compris le second contrôle sous verrou et la branche PREPARED.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-013",
+      "file": "factory_v2/stop_gate_policy.py",
+      "line": 244,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "return False\n    except Exception:\n        return True  # fail open (safe default)",
+      "why": "La détection du travail restant ne lit pas la roadmap : sans current_milestone ni superseded_claims, un PROJECT_STATE valide mais vide est assimilé à une campagne terminée. Avec un jalon non exécuté et aucun propriétaire ni handoff, allow_session_exit autorise la sortie. Portée confirmée dans le raccord de production : factory/hooks/stop_gate.py:_classify_stop_v2 appelle cette API. Une seconde reproduction, via ce hook chargé avec runpy et FACTORY_RUN_DIR dirigé vers un répertoire temporaire absent, retourne également allowed=True pour une roadmap inachevée et PROJECT_STATE={}. Aucun hook ni état de production réel n’a été exécuté ou modifié.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom factory_v2.stop_gate_policy import classify_stop_context,allow_session_exit\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'ROADMAP.yaml').write_text('milestones:\\n- id: UNFINISHED\\n  goal: build\\n')\n (p/'PROJECT_STATE.json').write_text('{}')\n ctx=classify_stop_context(p,factoryd_pid_file=p/'missing.pid'); allowed,why=allow_session_exit(ctx)\n assert allowed and not ctx.open_roadmap and not ctx.has_live_owner and not ctx.has_durable_handoff\n print('unfinished roadmap + empty state + no owner/handoff: exit allowed=True')\nPY\nSortie observée :\nunfinished roadmap + empty state + no owner/handoff: exit allowed=True\nTEST stop_policy_empty_state : rc=0",
+      "recommendation": "Dériver le travail restant depuis la résolution canonique de la roadmap et des settlements ; une projection absente ne doit pas prouver la complétude.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-014",
+      "file": "factory_v2/validation_receipt.py",
+      "line": 97,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "return expected == self._data.get(\"receipt_sha\", \"\")",
+      "why": "Le hash du reçu ne couvre ni valid ni les résultats de présence des artefacts. Un reçu réellement produit avec un artefact manquant est refusé, mais la simple modification de valid=False en True, sans modifier le hash, suffit à le faire accepter par assert_receipt_valid_for_promotion. La vérification annonce détecter les booléens déclaratifs mais ne les recalcule pas.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom factory_v2.validation_receipt import produce_validation_receipt,ValidationReceipt,assert_receipt_valid_for_promotion,ValidationReceiptInvalid\nwith TemporaryDirectory() as t:\n r=produce_validation_receipt('a'*40,{'contract_id':'c','body':{'milestone':'M','product_e2e':{'test_command':'true'},'required_artifacts':['missing.txt']}},Path(t))\n assert not r.valid\n try: assert_receipt_valid_for_promotion(r,'a'*40)\n except ValidationReceiptInvalid: pass\n else: raise AssertionError('negative control must fail')\n d=r.as_dict(); d['valid']=True; changed=ValidationReceipt(d)\n assert changed.verify_receipt_sha()\n assert_receipt_valid_for_promotion(changed,'a'*40)\n print('missing artifact receipt refused; change only valid=True -> hash verifies and promotion accepts')\nPY\nSortie observée :\nmissing artifact receipt refused; change only valid=True -> hash verifies and promotion accepts\nTEST receipt_boolean_integrity : rc=0",
+      "recommendation": "Sceller tous les champs sémantiques et recalculer valid depuis exit_code et les vérifications d’artefacts ; rejeter toute incohérence avant promotion.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-015",
+      "file": "factory_v2/validation_receipt.py",
+      "line": 174,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "\"staging_sha\": staging_sha,",
+      "why": "produce_validation_receipt copie staging_sha sans observer HEAD ni la propreté du worktree où la commande tourne. Le producteur peut donc attester le SHA A après avoir exécuté le test sur un checkout B ; sa propre gate de promotion accepte ce reçu. La reproduction utilise un vrai dépôt temporaire, sans lancement de promotion. GoldenPromotion crée normalement son propre worktree ; cette preuve porte sur le contrat public du producteur, pas sur un contournement démontré de ce caller.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport subprocess\nfrom factory_v2.validation_receipt import produce_validation_receipt,assert_receipt_valid_for_promotion\nwith TemporaryDirectory() as t:\n p=Path(t)\n def g(*args): return subprocess.run(['git','-C',t,*args],capture_output=True,text=True,check=True).stdout.strip()\n g('init','-q'); g('config','user.name','Fixture'); g('config','user.email','fixture@example.invalid'); g('commit','--allow-empty','-qm','B')\n actual=g('rev-parse','HEAD'); claimed='a'*40; assert actual!=claimed\n r=produce_validation_receipt(claimed,{'product_e2e':{'test_command':'true'}},p)\n assert_receipt_valid_for_promotion(r,claimed)\n print('actual HEAD != claimed staging_sha; valid receipt and promotion assertion accepted')\nPY\nSortie observée :\nactual HEAD != claimed staging_sha; valid receipt and promotion assertion accepted\nTEST receipt_unobserved_sha : rc=0",
+      "recommendation": "Observer le commit exact et l’état du worktree avant et après validation, ou posséder la création du checkout détaché ; refuser toute divergence.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-016",
+      "file": "factory_v2/verified_fix.py",
+      "line": 404,
+      "severity": "MEDIUM",
+      "category": "RACE",
+      "evidence": "index = _read_index(project_id)",
+      "why": "store_receipt écrit chaque reçu puis remplace INDEX.json après une lecture sans verrou. Dans un entrelacement de deux stockages, les deux appels réussissent mais le dernier index ne contient qu’un reçu : load_referenced refuse ensuite la référence pourtant rendue par l’autre appel. Ce défaut concerne des producteurs concurrents du même projet ; la reproduction force cet entrelacement.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom factory_v2 import verified_fix as m\nwith TemporaryDirectory() as t:\n p=Path(t).resolve(); refs={}\n def receipt(fp): return m.VerifiedFixReceipt(schema=m.SCHEMA,old_fingerprint=fp,old_code_sha='a'*40,fix_code_sha='b'*40,reproduction_command='true',contract_signature='c',context_manifest_sha='d',old_rc=1,new_rc=0,old_output_sha256='e'*64,new_output_sha256='f'*64,verdict='PASS',produced_by='supervisor')\n with patch.object(m,'_REPO_ROOT',p),patch.object(m,'STORE',p/'store'):\n  real=m._read_index\n  def interleave(project):\n   old=real(project)\n   with patch.object(m,'_read_index',real): refs['B']=m.store_receipt(project,receipt('B'))\n   return old\n  with patch.object(m,'_read_index',side_effect=interleave): refs['A']=m.store_receipt('project',receipt('A'))\n  assert m.load_referenced('project',refs['A']) is not None and m.load_referenced('project',refs['B']) is None\n  assert (p/refs['B']['path']).is_file()\n print('both store_receipt returned; B receipt file exists; B reference rejected after lost index update')\nPY\nSortie observée :\nboth store_receipt returned; B receipt file exists; B reference rejected after lost index update\nTEST verified_fix_index_race : rc=0",
+      "recommendation": "Sérialiser l’ensemble lecture-modification-publication de l’index par projet, avec fichiers temporaires uniques et reprise des reçus écrits avant un crash.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-017",
+      "file": "factory_v2/verifier_preflight.py",
+      "line": 69,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "\"not_implemented\": r.returncode == NOT_IMPLEMENTED,",
+      "why": "Le préflight de script assimile tout rc=2 à VERIFIER_NOT_IMPLEMENTED. Or Python utilise aussi rc=2 lorsque le fichier est absent. Une erreur de chemin devient donc un diagnostic erroné de capacité manquante, contrairement à la variante shell qui exige le marqueur explicite.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom factory_v2.verifier_preflight import check_verifier_not_implemented\nwith TemporaryDirectory() as t:\n r=check_verifier_not_implemented(Path(t)/'absent.py')\n assert r['observed'] and r['not_implemented'] and r['rc']==2\n print('nonexistent script: observed=True, rc=2, not_implemented=True')\nPY\nSortie observée :\nnonexistent script: observed=True, rc=2, not_implemented=True\nTEST preflight_missing_script : rc=0",
+      "recommendation": "Exiger le marqueur typé en plus de rc=2 et classifier séparément fichier absent, argument invalide et observation impossible.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-018",
+      "file": "factory_v2/verifier_preflight.py",
+      "line": 121,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "return f\"{test_command[:end]} --collect-only -q{test_command[end:]}\"",
+      "why": "L’insertion de --collect-only ne vise que le premier token pytest. Pour une commande composée de deux invocations reliées par &&, la seconde exécute réellement ses tests malgré la promesse explicite de ne lancer aucun corps de test. La reproduction laisse un marqueur écrit par le second test.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport sys,shlex,os\nfrom unittest.mock import patch\nfrom factory_v2.verifier_preflight import check_no_tests_selected\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'test_a.py').write_text('def test_a():\\n assert True\\n')\n (p/'test_b.py').write_text('from pathlib import Path\\ndef test_b():\\n Path(\"BODY_EXECUTED\").write_text(\"yes\")\\n')\n cmd=f'{shlex.quote(sys.executable)} -m pytest test_a.py -q -p no:cacheprovider && {shlex.quote(sys.executable)} -m pytest test_b.py -q -p no:cacheprovider'\n with patch.dict(os.environ,{'PYTEST_DISABLE_PLUGIN_AUTOLOAD':'1'}): r=check_no_tests_selected(p,cmd)\n assert r['rc']==0 and (p/'BODY_EXECUTED').exists()\n print('collect-only preflight rc=0; second pytest test body executed=True')\nPY\nSortie observée :\ncollect-only preflight rc=0; second pytest test body executed=True\nTEST collect_only_compound : rc=0",
+      "recommendation": "Analyser les invocations autorisées et les convertir toutes, ou refuser les commandes composées non prises en charge ; garantir l’absence de corps exécuté.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-019",
+      "file": "factory_v2/verify_adaptive_routing.py",
+      "line": 102,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "predicted_ok = (pred.get(\"prediction\") or {}).get(\"outcome\") in SUCCESS_OUTCOMES",
+      "why": "La calibration transforme toute valeur absente/inconnue en False puis compare les deux booléens. Une prédiction vide et une clôture WORKER_DEATH sans outcome deviennent une prédiction correcte, ce qui gonfle artificiellement n_correct.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom types import SimpleNamespace\nfrom factory_v2.verify_adaptive_routing import _calibration\nrows=[{'phase':'PREDICTION','attempt_id':'a','prediction':{}},{'phase':'OBSERVATION','attempt_id':'a','observation':{'close_reason':'WORKER_DEATH'}}]\nr=_calibration(SimpleNamespace(read_attempt_phases=lambda: rows))\nassert r==(1,1)\nprint('prediction outcome absent + observed outcome absent -> calibration correct=1/1')\nPY\nSortie observée :\nprediction outcome absent + observed outcome absent -> calibration correct=1/1\nTEST calibration_missing_outcomes : rc=0",
+      "recommendation": "Ne calibrer que les paires dont les issues prédites et observées sont typées et connues ; compter séparément les inconnues et les interruptions.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-020",
+      "file": "factory_v2/verify_audit_loop.py",
+      "line": 48,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if settlements == 0:",
+      "why": "Les validations structurelles acceptent un schema arbitraire, une liste Level A contenant null et des compteurs négatifs. En particulier settlements_covered=-1 passe le contrôle « must be > 0 », car seule l’égalité à zéro est refusée. Le CLI délivre OK pour cette fixture incohérente.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json,subprocess,sys\nwith TemporaryDirectory() as t:\n p=Path(t)/'receipt.json'; p.write_text(json.dumps({'schema':'wrong','produced_at':'','level_a_checks':[None],'level_b_events':[{'trigger':'AUTO','trigger_event':'x'}],'human_triggered_audits':-1,'settlements_covered':-1}))\n r=subprocess.run([sys.executable,'factory_v2/verify_audit_loop.py',str(p)],capture_output=True,text=True)\n assert r.returncode==0\n print('invalid schema, null Level-A, settlements=-1, human audits=-1: CLI rc=0')\nPY\nSortie observée :\ninvalid schema, null Level-A, settlements=-1, human audits=-1: CLI rc=0\nTEST audit_loop_invalid_counts : rc=0",
+      "recommendation": "Valider schéma, types et bornes des compteurs, puis les structures des contrôles et événements avant d’annoncer une qualification.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-021",
+      "file": "factory_v2/verify_audit_repair.py",
+      "line": 93,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if re.search(r\"backlog_refiller[^\\n]{0,200}ACTIVE|ACTIVE[^\\n]{0,200}backlog_refiller\", am):",
+      "why": "Le contrôle de backlog_refiller opère par regex sur une ligne brute, pas sur la structure JSON. Une entrée ACTIVE formatée sur plusieurs lignes passe ; une entrée INACTIVE compacte est rejetée à cause du sous-mot ACTIVE. Le verdict varie donc avec la mise en forme et inverse les deux cas.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json\nfrom factory_v2.verify_audit_repair import check\nwith TemporaryDirectory() as t:\n p=Path(t); d=p/'factory_v2/audit'; d.mkdir(parents=True); f=d/'FACTORY_RUNTIME_AUTHORITY_MAP.json'\n (d/'FACTORY_CONVERGENCE_LEDGER.json').write_text('{\"decisions\":[]}')\n f.write_text(json.dumps({'component':'backlog_refiller','status':'ACTIVE'},indent=2))\n active=[x for x in check(p) if x.startswith('AUTHORITY_MAP:')]\n f.write_text(json.dumps({'component':'backlog_refiller','status':'INACTIVE'}))\n inactive=[x for x in check(p) if x.startswith('AUTHORITY_MAP:')]\n assert not active and inactive\n print('authority-map clause: multiline ACTIVE accepted; compact INACTIVE rejected')\nPY\nSortie observée :\nauthority-map clause: multiline ACTIVE accepted; compact INACTIVE rejected\nTEST audit_repair_map_format : rc=0",
+      "recommendation": "Parser le JSON et vérifier le champ de statut de l’entrée correspondant exactement à backlog_refiller.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-022",
+      "file": "factory_v2/verify_controlled_long_run.py",
+      "line": 160,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "injected = [r for r in long_run_result.fault_records",
+      "why": "La vérification des fautes marque PASS dès que la liste est non vide, même si zéro événement porte outcome=INJECTED. Des booléens crashed/restarted vrais et un enregistrement NOT_FOUND suffisent à qualifier un crash/restart jamais établi par les fautes fournies. La reproduction obtient le verdict global PASS avec cette contradiction.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json\nfrom factory_v2.run_controlled_long_run import ControlledLongRunResult,ControlledLongRunConfig\nfrom factory_v2.verify_controlled_long_run import verify_long_run\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'evidence').mkdir(); (p/'evidence/m.json').write_text(json.dumps({'milestone':'M'}))\n run=ControlledLongRunResult(status='PASS',milestones_completed=['M'],crashed=True,restarted=True,fault_records=[{'outcome':'NOT_FOUND'}])\n cfg=ControlledLongRunConfig(min_milestones=1,min_engines=1,fault_injection=True)\n result=verify_long_run(run,cfg,p,p)\n fault=next(c for c in result.checks if c.check=='fault_records_persisted')\n assert result.status=='PASS' and fault.detail=='0/1 faults injected'\n print('global verification=PASS; fault check=PASS; detail=0/1 faults injected')\nPY\nSortie observée :\nglobal verification=PASS; fault check=PASS; detail=0/1 faults injected\nTEST controlled_verifier_no_injection : rc=0",
+      "recommendation": "Exiger une injection réussie liée aux identités de daemon et une progression post-redémarrage, puis rejeter les contradictions entre le résumé et les observations.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-023",
+      "file": "factory_v2/verify_cycle2_manifest.py",
+      "line": 40,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "for acct in accounts:",
+      "why": "Les seuils portent sur la longueur de accounts et le nombre d’itérations, sans unicité des handles. Vingt occurrences du même compte satisfont donc le seuil de vingt comptes distincts, avec une seule valeur de call_counts.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json,contextlib,io\nfrom factory_v2.verify_cycle2_manifest import verify\nwith TemporaryDirectory() as t:\n p=Path(t)/'manifest.json'; p.write_text(json.dumps({'accounts':['same']*20,'call_counts':{'same':30},'corpus_sha':'a'*40}))\n with contextlib.redirect_stdout(io.StringIO()): rc=verify(p,20,30)\n assert rc==0\n print('distinct accounts=1; accounts entries=20; min_accounts=20: verifier rc=0')\nPY\nSortie observée :\ndistinct accounts=1; accounts entries=20; min_accounts=20: verifier rc=0\nTEST cycle_manifest_duplicates : rc=0",
+      "recommendation": "Normaliser et dédupliquer les identités de compte avant de calculer couverture et qualification, et rejeter les doublons du manifeste.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-024",
+      "file": "factory_v2/verify_cycle2_refresh.py",
+      "line": 58,
+      "severity": "LOW",
+      "category": "BUG",
+      "evidence": "print(f\"PASS: {len(refreshes)} refreshes, all distinct report_shas, HUMAN_GO=0\")",
+      "why": "Sans --verify-no-human-gate, le CLI peut accepter un journal contenant HUMAN_GO mais imprime tout de même HUMAN_GO=0. Le message de qualification affirme une observation qui n’a ni été vérifiée ni recomptée.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport subprocess,sys,json\nwith TemporaryDirectory() as t:\n p=Path(t)/'refresh.log'; rows=[{'event':'HUMAN_GO'}]+[dict(event='REFRESH_COMPLETE',timestamp=f'2026-09-{i:02}T00:00:00Z',accounts_refreshed=20,new_calls=1,report_sha=str(i)*40,date_report=f'2026-09-{i:02}') for i in [1,8]]\n p.write_text(''.join(json.dumps(r)+'\\n' for r in rows))\n cmd=[sys.executable,'factory_v2/verify_cycle2_refresh.py',str(p)]\n plain=subprocess.run(cmd,capture_output=True,text=True); strict=subprocess.run(cmd+['--verify-no-human-gate'],capture_output=True,text=True)\n assert plain.returncode==0 and 'HUMAN_GO=0' in plain.stdout and strict.returncode==1\n print('journal HUMAN_GO=1; without flag rc=0 prints HUMAN_GO=0; with flag rc=1')\nPY\nSortie observée :\njournal HUMAN_GO=1; without flag rc=0 prints HUMAN_GO=0; with flag rc=1\nTEST refresh_claims_human_zero : rc=0",
+      "recommendation": "Afficher le nombre réellement observé ou « non vérifié » lorsque le flag est absent ; conserver le refus avec le flag.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-025",
+      "file": "factory_v2/verify_deep_research.py",
+      "line": 126,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if not isinstance(it.get(k), (int, float)) or isinstance(it.get(k), bool):",
+      "why": "Les valeurs baseline et target sont acceptées dès qu’elles sont de type float, même NaN ou infinies. Le juge valide ainsi une proposition sans mesure ou cible exploitable ; le parseur JSON de Python accepte aussi ces constantes non standard.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom factory_v2.verify_deep_research import _check_synthesis\nr=_check_synthesis({'schema':'deep-research-synthesis/v1','items':[{'rank':1,'metric':'time_to_settle_s','baseline':float('nan'),'target':float('inf'),'sources':['https://example.invalid'],'found_by':['glm'],'title':'x','milestone_proposal':'M'}]}, {'glm'},{'https://example.invalid'},1)\nassert r==1\nprint('baseline=NaN, target=Infinity: synthesis item accepted')\nPY\nSortie observée :\nbaseline=NaN, target=Infinity: synthesis item accepted\nTEST research_nonfinite_metrics : rc=0",
+      "recommendation": "Exiger des nombres finis pour baseline/target et refuser NaN/Infinity au chargement JSON.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-026",
+      "file": "factory_v2/verify_factory_hygiene.py",
+      "line": 137,
+      "severity": "MEDIUM",
+      "category": "TEST_GAP",
+      "evidence": "called = [p for p in stages if Path(p).stem in src]",
+      "why": "Le contrôle de câblage des stages utilise la présence du nom de fichier n’importe où dans runtime.py. Cinq commentaires mentionnant des modules jamais importés ni appelés satisfont STAGES_NOT_WIRED. La reproduction construit un vrai dépôt temporaire dont _advance_locked ne fait que pass et obtient la qualification du split.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport subprocess\nfrom factory_v2.verify_factory_hygiene import check_split_advance\nwith TemporaryDirectory() as t:\n p=Path(t); stages=p/'factory_v2/advance'; stages.mkdir(parents=True)\n (p/'factory_v2/runtime.py').write_text('def _advance_locked():\\n pass\\ndef select_project():\\n pass\\ndef advance():\\n pass\\n# stage0 stage1 stage2 stage3 stage4\\n')\n for i in range(5): (stages/f'stage{i}.py').write_text('def unused():\\n pass\\n')\n def g(*args): subprocess.run(['git','-C',t,*args],capture_output=True,check=True)\n g('init','-q');g('config','user.name','Fixture');g('config','user.email','fixture@example.invalid');g('add','.');g('commit','-qm','fixture')\n r=check_split_advance(p); assert r['stages']==5\n print('5 unused stage modules mentioned only in comments: check_split_advance accepted')\nPY\nSortie observée :\n5 unused stage modules mentioned only in comments: check_split_advance accepted\nTEST hygiene_fake_stage_wiring : rc=0",
+      "recommendation": "Vérifier les imports et appels effectifs depuis l’orchestrateur par AST, puis exercer la séquence de stages dans une sonde comportementale.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-027",
+      "file": "factory_v2/verify_factory_hygiene.py",
+      "line": 327,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if log.is_file():\n        # a startup line carries no timestamp; the daemon's own startup events do\n        # (PROJECT_STATE events RUNTIME_STARTED / CTO_STARTUP_CHECK) — count those in-window",
+      "why": "Le juge ne recompte les événements de redémarrage que si un journal situé sous HOME existe. Le producteur metrics_dashboard les compte directement depuis PROJECT_STATE. Sur une machine sans ce fichier de logs, un tableau de bord exact contenant un redémarrage est refusé : la portabilité de la vérification dépend d’un fichier sans rapport avec les données vérifiées.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nimport json,os\nfrom datetime import datetime,timezone\nfrom factory_v2.metrics_dashboard import build_dashboard,to_markdown\nfrom factory_v2.verify_factory_hygiene import check_metrics_dashboard,Unmet\nwith TemporaryDirectory() as t:\n p=Path(t); project=p/'projects/factory'; project.mkdir(parents=True); run=p/'run'; run.mkdir()\n (project/'PROJECT_STATE.json').write_text(json.dumps({'events':[{'event':'RUNTIME_STARTED','at':datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')}]}))\n data=build_dashboard([project]); assert data['restarts']==1\n (run/'BUILD_METRICS_LATEST.json').write_text(json.dumps(data)); (run/'BUILD_METRICS_LATEST.md').write_text(to_markdown(data))\n with patch.dict(os.environ,{'FACTORY_RUN_DIR':str(run)}),patch.object(Path,'home',return_value=p/'no_home_logs'):\n  try: check_metrics_dashboard(p)\n  except Unmet as e:\n   assert 'settlements/parked/loops/restarts recomputed=0/0/0/0' in str(e)\n   print('producer restarts=1; exact dashboard rejected because unrelated HOME log absent')\n  else: raise AssertionError('expected producer/judge disagreement')\nPY\nSortie observée :\nproducer restarts=1; exact dashboard rejected because unrelated HOME log absent\nTEST hygiene_restart_log_dependency : rc=0",
+      "recommendation": "Recompter les événements de redémarrage indépendamment de la présence du log et partager les règles de fenêtre avec le producteur.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-028",
+      "file": "factory_v2/verify_factory_hygiene.py",
+      "line": 535,
+      "severity": "LOW",
+      "category": "DOC_DRIFT",
+      "evidence": "CHECKS = {\n    \"product-out-of-runtime\": check_product_out_of_runtime,\n    \"tr-test-hygiene\": check_tr_test_hygiene,",
+      "why": "Le module documente le check worktree-autopurge et définit check_worktree_autopurge, mais ne l’ajoute jamais au registre CHECKS. La commande annoncée est rejetée par argparse avec rc=2 avant tout contrôle ; le juge de purge est donc inaccessible via son CLI.\n\nReproduction réexécutée dans cette session sur les sources originales au SHA 56b2c63c5de0228750c8e878ad2041cef395160b, sans correctif (mission de revue uniquement). Exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport subprocess,sys\nfrom factory_v2 import verify_factory_hygiene as m\nassert callable(m.check_worktree_autopurge) and 'worktree-autopurge' not in m.CHECKS\nr=subprocess.run([sys.executable,'factory_v2/verify_factory_hygiene.py','worktree-autopurge','--project-repo','.'],capture_output=True,text=True)\nassert r.returncode==2 and 'invalid choice' in r.stderr\nprint('documented worktree-autopurge CLI: rc=2, invalid choice; function exists but absent from CHECKS')\nPY\nSortie observée :\ndocumented worktree-autopurge CLI: rc=2, invalid choice; function exists but absent from CHECKS\nTEST hygiene_autopurge_unreachable : rc=0",
+      "recommendation": "Enregistrer le check s’il fait toujours partie du contrat, ou retirer sa documentation et son code après clarification de son remplacement.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_2-029",
+      "file": "factory_v2/run_matched_benchmark.py",
+      "line": 240,
+      "severity": "LOW",
+      "category": "BUG",
+      "evidence": "\"The challenger settled more probes with fewer lost launches \"",
+      "why": "Le paragraphe REJECT de render_evidence décrit toujours le même scénario : davantage de jalons, moins de lancements perdus, mais plus de temps. Cette explication contredit les observations lorsque le challenger régresse fonctionnellement tout en étant plus rapide. La table et la décision restent correctes ; c’est le diagnostic humain de DECISION_EVIDENCE.md qui est faux.\n\nReproduction exécutée dans cette session au SHA 56b2c63c5de0228750c8e878ad2041cef395160b. À la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom factory_v2.run_matched_benchmark import render_evidence\nmetrics = {\n 'champion': {'probes':6,'settled':6,'wall_s':10,'restart_recovered':1,'launches_lost':0},\n 'challenger': {'probes':6,'settled':2,'wall_s':5,'restart_recovered':0,'launches_lost':3}}\nreport = render_evidence('fixture','a'*40,'b'*40,'c'*40,metrics,'REJECT',False)\nassert 'settled more probes with fewer lost launches' in report\nassert '6/6' in report and '2/6' in report\nassert 'did not dominate on wall-clock time' in report\nprint('challenger settles 2<6, loses 3>0, takes 5<10s; REJECT prose claims more settlements, fewer losses and time regression')\nPY\nSortie observée :\nchallenger settles 2<6, loses 3>0, takes 5<10s; REJECT prose claims more settlements, fewer losses and time regression\nTEST benchmark_reject_narrative : rc=0",
+      "recommendation": "Construire le commentaire depuis les comparaisons réelles de chaque métrique et tester les différents motifs de REJECT, y compris un challenger plus rapide mais moins fiable.",
+      "fix_effort": "S"
+    }
+  ]
+}

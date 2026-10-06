@@ -1,0 +1,47 @@
+{
+  "schema": "cto-product-state/v1",
+  "produced_at": "2026-09-07T14:38:22Z",
+  "spec_source": "factory/campaigns/app007/canonical_roadmap.json",
+  "spec_source_commit": "7c7becac",
+  "twitter_source_head": "35d6fc1",
+  "factory_qualified_runtime": "705e22fd",
+  "current_release": "RADAR_OFFLINE_VALIDATED",
+  "current_release_status": "IN_PROGRESS",
+  "next_release_gate": "RADAR_LIVE_CANARY",
+  "product_milestones_done": {
+    "M001": "ACCEPTED — t4_outcome_enricher.py prototype",
+    "M002": "ACCEPTED — radar_report.py 18/18 tests",
+    "M003": "ACCEPTED — full_corpus_extractor.py 920 CALLs from external corpus",
+    "M004": "ACCEPTED — reference_price=_price_before (no look-ahead) 30/30 tests",
+    "M005": "ACCEPTED — corpus_quality_validator.py 12/12 tests",
+    "M006": "ACCEPTED — live_collector.py (live_preflight + canary) 18/18 tests",
+    "M007": "ACCEPTED_ARCHITECTURE_ONLY — radar.py E2E pipeline 12/12 tests; OFFLINE dataflow defect found by human review",
+    "X_CHAIN_101_110": "ACCEPTED 2026-09-07 — intelligence stack X101-X110 merged at 35d6fc1 (outcome ledger, MFE/MAE, scoring, clustering, lead/lag, discovery, weekly report)",
+    "REAL_SIGNAL_PRODUCT_INTEGRATION": "COMPLETE 2026-09-07 — product E2E query PROVEN (e2e_answer live run, 2/5 accounts pass PSR gate; proof: X110 evidence product_e2e.json)",
+    "M007B": "ACCEPTED — offline E2E dataflow correctness (historical)",
+    "M008": "ACCEPTED — full corpus + human validation (historical)"
+  },
+  "product_milestones_open": {},
+  "known_blockers": {
+    "OFFLINE_DATAFLOW_DEFECT": "total_posts==total_calls, PhotonBull/RJCcapital corpus missing — M007B fixes this",
+    "TWSCRAPE_DEPENDENCY_MISSING": "twscrape not installed — live collection blocked until M013",
+    "LIVE_AUTH_REQUIRED": "Twitter auth not configured — live canary blocked until M015",
+    "ACCOUNT_RANKING_BLOCKED": "Requires live evidence + sufficient outcomes per account"
+  },
+  "factory_capabilities_qualified": [
+    "FD1: factory-owned candidate capture (snapshot_diff)",
+    "FD2: mission observability (mission_obs.py steps fix)",
+    "FD3: verdict taxonomy (DEPENDENCY_MISSING, AUTH_REQUIRED, etc.)",
+    "FD4: SPEC_TEST_CONFLICT detection at T3 gate",
+    "FD5: rolling backlog (canonical_roadmap.json driven)",
+    "FD6: cross-repo preflight hardening (resolve_task_file + RELATIVE_PATH)"
+  ],
+  "factory_capabilities_open": [
+    "FD7: full dual-backlog scheduler (partial fix only — roadmap extension)",
+    "FD8: persistent CTO planner (this artifact — first iteration)",
+    "FD9: multi-model routing beyond GLM+Claude (Z Code / Codex — unproven)",
+    "FD10: recovery qualification (MOTOR_UNAVAILABLE → fallback proven in theory only)",
+    "FD11: long-run qualification (72h uninterrupted — not yet demonstrated)",
+    "FD12: context optimization (token budget per mission class)"
+  ]
+}

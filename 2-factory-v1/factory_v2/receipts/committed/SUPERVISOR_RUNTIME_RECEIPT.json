@@ -1,0 +1,89 @@
+{
+  "schema": "supervisor-runtime-receipt/v1",
+  "generated_at": "2026-09-09T16:11:07Z",
+  "generated_by": "factory_v2/fix4_production_exercise.py (controller)",
+  "exact_sha": "778e81333fee4a0ac63f02cc4d8a154c24fcc0d9",
+  "label": "com.factory.external-supervisor",
+  "process_class": "PRODUCTION_FACTORYD_REAL_PATH",
+  "paths": {
+    "state_dir": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/factory/run/external-supervisor",
+    "production_run_dir": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/factory/run",
+    "production_project_dir": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/projects/twitter-radar"
+  },
+  "executable_sha256": {
+    "supervisor": "a35f0c989023e23462de4b22ec847d59da900ee3a99c2e3c53dbe59837800cd7",
+    "worker": "54fe87f3bc06ca99cf85c4b3ed8eb2afc88460b2ba6f5f8ccccfeb7b79b989c6",
+    "factoryd": "1b9b05121ab4b5e8890eccdc8b449edfc9885f8b29f2075ebb11667712c0cee6"
+  },
+  "phases": {
+    "healthy_birth": {
+      "supervisor": {
+        "pid": 30977,
+        "birth": "Wed Sep  9 18:11:07 2026",
+        "ppid": "1 (launchd)"
+      },
+      "worker": {
+        "pid": 30981,
+        "birth": "Wed Sep  9 18:11:07 2026",
+        "registry_generation": 1
+      },
+      "factoryd_heartbeat": "2026-09-09T16:11:07Z",
+      "no_dispatch_observed": true
+    },
+    "worker_crash": {
+      "forced_sigkill_worker_group": 30981,
+      "respawned_worker_pid": 31006,
+      "registry_generation": 2,
+      "registry_pid": 31006,
+      "recovery_elapsed_s": 0.82,
+      "factoryd_lock_readopted_and_heartbeat_resumed": true,
+      "factoryd_heartbeat_after": "2026-09-09T16:11:14Z",
+      "KILL_RESTART_RECOVERY": "PASS"
+    },
+    "supervisor_crash": {
+      "forced_sigkill_supervisor": 30977,
+      "relaunched_supervisor": {
+        "pid": 31144,
+        "birth": "Wed Sep  9 18:11:19 2026"
+      },
+      "relaunch_elapsed_s": 0.02,
+      "pids_seen_during_relaunch": [
+        31144
+      ],
+      "no_restart_storm": true,
+      "orphan_transition_receipts": [
+        {
+          "file": "FENCE-31006-6e929354.json",
+          "sha256": "1bcfad62550bbd8292620b0a5bedf17dd5585b858ac755f5393826d3f694a254",
+          "type": "WORKER_FENCED_ORPHAN"
+        }
+      ],
+      "receipt_types": [
+        "WORKER_FENCED_ORPHAN"
+      ],
+      "successor_worker_pid": 31151
+    },
+    "no_duplicate_window": {
+      "window_s": 30,
+      "samples": 40,
+      "max_concurrent_workers": 1,
+      "DUPLICATE_WRITERS": 0,
+      "supervisor_heartbeat_age_s": 0.1,
+      "fencing_exactly_once": true
+    }
+  },
+  "MANUAL_DAEMON_RESTARTS": 0,
+  "KILL_RESTART_RECOVERY": "PASS",
+  "DUPLICATE_WRITERS": 0,
+  "teardown": {
+    "booted_out": true,
+    "service_absent_after": true,
+    "workers_absent_after": true,
+    "at": "2026-09-09T16:11:57Z"
+  },
+  "durable_evidence_dir": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/factory/run/external-supervisor",
+  "self_check": {
+    "ok": true,
+    "problems": []
+  }
+}

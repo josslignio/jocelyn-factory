@@ -1,0 +1,22 @@
+{
+  "pid_a": 99548,
+  "pid_b": 99686,
+  "birth_a": "Wed Sep  9 12:31:22 2026",
+  "birth_b": "Wed Sep  9 12:31:28 2026",
+  "milestones_before": [
+    "MS1"
+  ],
+  "milestones_after": [
+    "MS1",
+    "MS2",
+    "MS3"
+  ],
+  "fault_record": {
+    "fault_type": "SIGKILL",
+    "target": "99548",
+    "injected_at": "2026-09-09T10:31:23Z",
+    "outcome": "INJECTED",
+    "detail": "SIGKILL sent to PID 99548"
+  },
+  "observed_at": "2026-09-09T10:31:33Z"
+}

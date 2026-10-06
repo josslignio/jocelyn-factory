@@ -1,0 +1,60 @@
+{
+  "schema": "authority-audit-receipt/v1",
+  "produced_at": "2026-09-07T15:38:01Z",
+  "verdict": "PASS",
+  "rule": "contradictions = 0",
+  "checks": [
+    {
+      "check": "C1_authoritative_files_exist",
+      "verdict": "PASS",
+      "detail": "missing: []"
+    },
+    {
+      "check": "C2_no_authoritative_superseded",
+      "verdict": "PASS",
+      "detail": "superseded: []"
+    },
+    {
+      "check": "C3_roadmap_vs_campaign",
+      "verdict": "PASS",
+      "detail": "[]"
+    },
+    {
+      "check": "C4_backlog_purged_of_completed",
+      "verdict": "PASS",
+      "detail": "[]"
+    },
+    {
+      "check": "C5_vendored_copies_in_sync",
+      "verdict": "PASS",
+      "detail": "[]"
+    },
+    {
+      "check": "C6_portfolio_no_stale_pointer",
+      "verdict": "PASS",
+      "detail": "[]"
+    },
+    {
+      "check": "C7_single_spec_per_project",
+      "verdict": "PASS",
+      "detail": "radar repo spec superseded; canonical in factory repo"
+    },
+    {
+      "check": "C8_authority_relecture_wiring",
+      "verdict": "PASS",
+      "detail": "all WIRED lifecycle points resolve to live code"
+    },
+    {
+      "check": "C9_legacy_authority_integrity",
+      "verdict": "PASS",
+      "detail": "all frozen legacy authorities intact"
+    },
+    {
+      "check": "C10_canonical_trio_per_project",
+      "verdict": "PASS",
+      "detail": "both projects carry STRATEGY/SPEC/ROADMAP/PROJECT_STATE"
+    }
+  ],
+  "campaign_completed_count": 70,
+  "campaign_active_or_queued": []
+}

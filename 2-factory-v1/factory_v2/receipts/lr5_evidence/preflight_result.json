@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "check": "manifest_reconstruction",
+      "status": "PASS",
+      "detail": "sha=9e2f233f73c1b3cd3d42a93c"
+    },
+    {
+      "check": "manifest_integrity",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "check": "required_fields",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "check": "safety_quarantine_clear",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "check": "no_stale_lease",
+      "status": "SKIP",
+      "detail": "no mission_id or milestone"
+    },
+    {
+      "check": "golden_sha_readable",
+      "status": "SKIP",
+      "detail": "ref 'refs/golden/factory' not found (first run)"
+    },
+    {
+      "check": "authority_files_readable",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "check": "authority_clean_working_tree",
+      "status": "SKIP",
+      "detail": "git status failed (non-git dir?)"
+    }
+  ],
+  "blocked_by": [],
+  "produced_at": "2026-09-09T10:31:21Z",
+  "manifest_sha": "9e2f233f73c1b3cd3d42a93c",
+  "git_sha": "943ec4c83aa678a831081a13d8dabf4fc78cf4bb"
+}

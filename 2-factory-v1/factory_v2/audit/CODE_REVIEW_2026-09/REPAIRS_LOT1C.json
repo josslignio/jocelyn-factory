@@ -1,0 +1,107 @@
+[
+  {
+    "id": "L6_bin_lib_products_2-010",
+    "status": "FIXED",
+    "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+    "test": "tests/test_repairs_lot1_products.py::test_mixed_timezone_corpus_never_raises",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (f67153a27~1) => le même test est ROUGE avec le défaut exact (TypeError: can't compare offset-naive and offset-aware datetimes) ; restauré => VERT. Correctif d'origine (f67153a27) : _parse_dt refuse les timestamps sans fuseau comme non ordonnables (None) : un corpus mixte donne SAME_DAY_UNORDERED, jamais TypeError."
+  },
+  {
+    "id": "L6_bin_lib_products_1-004",
+    "status": "FIXED",
+    "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+    "test": "tests/test_repairs_lot1_bin_a.py::test_factoryctl_status_without_state_dir_is_usage_error",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (aabf3f71b~1) => le même test est ROUGE avec le défaut exact (traceback TypeError NoneType, aucun message 'requires --state-dir') ; restauré => VERT. Correctif d'origine (aabf3f71b) : les commandes du cœur exigent --state-dir par une erreur d'usage explicite (comme --repo) au lieu d'un traceback TypeError sur Path(None)."
+  },
+  {
+    "id": "L3-018",
+    "status": "FIXED",
+    "commit": "44cb3bbda5425dc460319f70c9776f2a866949ce",
+    "test": "tests/test_repairs_lot1_factoryd_router.py::test_l3_018_diagnose_exclusion_keeps_read_only",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (44cb3bbda~1) => le même test est ROUGE avec le défaut exact (c.read_only is False pour DIAGNOSE avec codex exclu) ; restauré => VERT. Correctif d'origine (44cb3bbda) : _finalize_choice préserve read_only/reviewer pour REVIEW, DIAGNOSE et REPLAN sur les fallbacks glm/claude ; cli_args construit l'argv restreint, jamais --dangerously-skip-permissions."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-013",
+    "status": "FIXED",
+    "commit": "62cabb4dec183d874adb4c63f6039b398bf73542",
+    "test": "tests/test_repairs_lot1_guards.py::test_continuation_empty_json_stops",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (62cabb4de~1) => le même test est ROUGE avec le défaut exact (PAUSE.json={} => CONTINUE) ; restauré => VERT. Correctif d'origine (62cabb4de) : _load_pause_file/_load_safety_stop_file : un fichier PRÉSENT mais vide/incomplet ({}) est un ordre de stop fail-closed, jamais une absence ; absent seul ⇒ CONTINUE."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-018",
+    "status": "FIXED",
+    "commit": "62cabb4dec183d874adb4c63f6039b398bf73542",
+    "test": "tests/test_repairs_lot1_guards.py::test_fault_injection_respects_require_in_pgrp",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (62cabb4de~1) => le même test est ROUGE avec le défaut exact (enfant hors pgrp => INJECTED malgré require_in_pgrp=True) ; restauré => VERT. Correctif d'origine (62cabb4de) : inject_sigkill vérifie os.getpgid(pid)==os.getpgrp() quand require_in_pgrp=True : un PID vivant hors périmètre est REFUSED sans signal."
+  },
+  {
+    "id": "L5_factory_v2_rest_1-020",
+    "status": "FIXED",
+    "commit": "62cabb4dec183d874adb4c63f6039b398bf73542",
+    "test": "tests/test_repairs_lot1_guards.py::test_restart_recovery_never_falls_back_to_foreign_run",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (62cabb4de~1) => le même test est ROUGE avec le défaut exact (run TARGET sans événement => recovery True sur la preuve du run OTHER) ; restauré => VERT. Correctif d'origine (62cabb4de) : recompute_restart_recovery supprime le fallback `or ledger` : aucun événement du run_id demandé ⇒ False, jamais une preuve récupérée sur un run étranger."
+  },
+  {
+    "id": "L5_factory_v2_rest_2-006",
+    "status": "FIXED",
+    "commit": "5597202c27976d7a6552343ff4ec85ad9eac7584",
+    "test": "tests/test_repairs_lot1_run_harness.py::test_verify_only_refuses_unmatched_experiment",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (5597202c2~1) => le même test est ROUGE avec le défaut exact (verify_only rc=0 avec matched=False) ; restauré => VERT. Correctif d'origine (5597202c2) : verify_only échoue (VERIFY_UNMET: UNMATCHED_ARMS) dès qu'un contrôle matched est faux ; preuve 3x3 régénérée au SHA du producteur modifié."
+  },
+  {
+    "id": "L6_bin_lib_products_1-001",
+    "status": "FIXED",
+    "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+    "test": "tests/test_repairs_lot1_bin_a.py::test_benchmark_entrypoint_imports_without_pythonpath",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (aabf3f71b~1) => le même test est ROUGE avec le défaut exact (--help sans PYTHONPATH => rc=1 ModuleNotFoundError factory_v2) ; restauré => VERT. Correctif d'origine (aabf3f71b) : sys.path.insert déplacé AVANT l'import factory_v2._io : --help/run/compare démarrent sans PYTHONPATH préconfiguré."
+  },
+  {
+    "id": "L6_bin_lib_products_1-005",
+    "status": "FIXED",
+    "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+    "test": "tests/test_repairs_lot1_bin_a.py::test_frozen_zone_guard_rejects_rewrite_of_existing_evidence",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (aabf3f71b~1) => le même test est ROUGE avec le défaut exact (preuve FAIL réécrite en PASS => FROZEN_ZONE_INTACT) ; restauré => VERT. Correctif d'origine (aabf3f71b) : diff --name-status distingue ajout (seul 'A' sous evidence/P2_runs reste append-only) de modification/suppression d'une preuve existante, qui violent le gel."
+  },
+  {
+    "id": "L6_bin_lib_products_1-008",
+    "status": "FIXED",
+    "commit": "4b8058d0cf6fcd201572b08f7202c7bb9f60cbda",
+    "test": "tests/test_repairs_lot1c_retired_modules.py::test_i2_gate_verdict_retired_no_live_caller",
+    "note": "Réparé rouge→vert au commit aabf3f71b (tests/test_repairs_lot1_bin_a.py::test_i2_gate_manual_continue_requires_zero_per_run) : rejoué au lot 1C dans un worktree temporaire à aabf3f71b => VERT, avec factory/bin/i2_gate_verdict.py à sa version aabf3f71b~1 => ROUGE (I2 [0,0,1] : une intervention réelle ne doit pas passer la médiane (overall_gate=PASS)). Puis le module a été retiré comme code sans appelant vivant par la dédup 4b8058d0c (RETIRE-V1-DRIFT) avec son test exclusif : à HEAD le défaut ne peut plus s'exécuter. Le test du lot 1C verrouille cet état (module absent + aucune référence dans le code vivant, campaigns/RUN8 archive gelée exclue). Correctif d'origine : manual_continue vérifie zéro sur CHAQUE run I2 (médiane gardée descriptive) : [0,0,1] ne passe plus la gate."
+  },
+  {
+    "id": "L6_bin_lib_products_1-014",
+    "status": "FIXED",
+    "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+    "test": "tests/test_repairs_lot1_bin_a.py::test_second_infra_failure_keeps_productive_resume_stage",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (aabf3f71b~1) => le même test est ROUGE avec le défaut exact (recover(force) => status=resume_stage=waiting_infra) ; restauré => VERT. Correctif d'origine (aabf3f71b) : une 2e panne pendant waiting_infra conserve le resume_stage productif d'origine et refuse une cible de reprise improductive : recover(force) restaure 'built'."
+  },
+  {
+    "id": "L6_bin_lib_products_1-026",
+    "status": "FIXED",
+    "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+    "test": "tests/test_repairs_lot1_lib.py::test_candidate_promotion_requires_bound_sha",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (f67153a27~1) => le même test est ROUGE avec le défaut exact (evidence sans sha promeut le QRTS, pas de QualificationError) ; restauré => VERT. Correctif d'origine (f67153a27) : promote_qrts exige un attribut sha PRÉSENT et exactement égal au SHA cible (plus de getattr par défaut)."
+  },
+  {
+    "id": "L6_bin_lib_products_1-030",
+    "status": "FIXED",
+    "commit": "4b8058d0cf6fcd201572b08f7202c7bb9f60cbda",
+    "test": "tests/test_repairs_lot1c_retired_modules.py::test_convergence_gate_retired_no_live_caller",
+    "note": "Réparé rouge→vert au commit f67153a27 (tests/test_repairs_lot1_lib.py::test_convergence_gate_checks_every_required_artifact) : rejoué au lot 1C dans un worktree temporaire à f67153a27 => VERT, avec factory/lib/convergence_gate.py à sa version f67153a27~1 => ROUGE (un artefact requis manquant sur deux : gaps=[], is_converged=True). Puis le module a été retiré comme code sans appelant vivant par la dédup 4b8058d0c (RETIRE-V1-DRIFT) avec son test exclusif : à HEAD le défaut ne peut plus s'exécuter. Le test du lot 1C verrouille cet état (module absent + aucune référence dans le code vivant, campaigns/RUN8 archive gelée exclue). Correctif d'origine : _check_artifact_missing évalue TOUS les required_artifacts et liste chacun des manquants ; plus d'early-return au premier existant."
+  },
+  {
+    "id": "L6_bin_lib_products_2-009",
+    "status": "FIXED",
+    "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+    "test": "tests/test_repairs_lot1_products.py::test_sector_adjusted_path_uses_ticker_peers",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (f67153a27~1) => le même test est ROUGE avec le défaut exact (KeyError: 'Technology') ; restauré => VERT. Correctif d'origine (f67153a27) : peers contient les TICKERS du secteur, utilisés comme clés market[tk] : la carte sectorielle valide ne déclenche plus KeyError."
+  },
+  {
+    "id": "L6_bin_lib_products_2-023",
+    "status": "FIXED",
+    "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+    "test": "tests/test_repairs_lot1_products.py::test_stale_keepalive_is_refused",
+    "note": "Revalidé au lot 1C (HEAD 9ea1c6dd9) : test frais vert ; exploit d'audit rejoué à HEAD et il échoue ; fichier remis à sa version d'avant le commit de correctif (f67153a27~1) => le même test est ROUGE avec le défaut exact (dates de l'an 2000 + script_sha invalide acceptées) ; restauré => VERT. Correctif d'origine (f67153a27) : les jours sont parsés et comparés à la fenêtre des 3 derniers jours d'une horloge injectable, et script_sha doit être un sha256 valide : plus de VERIFIED sur des dates de l'an 2000."
+  }
+]

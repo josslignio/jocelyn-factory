@@ -1,0 +1,20 @@
+FF..                                                                     [100%]
+=================================== FAILURES ===================================
+__________ test_distinct_milestones_with_other_evidence_proven[True] ___________
+tests/test_repairs_vh_exploit_context.py:32: in test_distinct_milestones_with_other_evidence_proven
+    assert judge.main() == (1 if duplicates else 0)
+E   AssertionError: assert 0 == 1
+E    +  where 0 = <function main at 0x1090e65c0>()
+E    +    where <function main at 0x1090e65c0> = <module 'factory_v2.verify_long_run' from '/private/tmp/vh-original-178ba6e1f/factory_v2/verify_long_run.py'>.main
+----------------------------- Captured stdout call -----------------------------
+PASS: 3 milestones, 1 incidents, 1 restarts, HUMAN_GO=0
+___________ test_fullsuite_settlement_uses_observed_wrapper_exit[1] ____________
+/private/tmp/vh-original-178ba6e1f/tests/test_repairs_vh_exploit_context.py:48: in test_fullsuite_settlement_uses_observed_wrapper_exit
+    assert state['result']['rc'] == process_rc
+E   assert 0 == 1
+----------------------------- Captured stdout call -----------------------------
+{"receipt": "factory_v2/receipts/committed/FULL_SUITE_RECEIPT_ce2058ac.json", "rc": 0, "summary": "1719 passed, 4 skipped in 1004.40s", "log_sha": "d4a8861634913a9e"}
+=========================== short test summary info ============================
+FAILED tests/test_repairs_vh_exploit_context.py::test_distinct_milestones_with_other_evidence_proven[True]
+FAILED tests/test_repairs_vh_exploit_context.py::test_fullsuite_settlement_uses_observed_wrapper_exit[1]
+2 failed, 2 passed in 0.62s

@@ -1,0 +1,76 @@
+{
+  "schema": "cto-model-performance/v1",
+  "last_updated": "2026-09-06T03:30:00Z",
+  "note": "Track real performance per model per task type. Use to improve routing. PROVEN values only — no estimates.",
+
+  "missions_completed": 30,
+
+  "claude_sonnet_5": {
+    "role": "CTO / Principal Architect / Complex Missions (spec_level=A)",
+    "missions": ["M008D", "M008E", "M008F", "M008H", "M007B", "F001"],
+    "observations": {
+      "complex_semantic": {
+        "sample": ["M008D", "M008E", "M008F", "M008H"],
+        "notes": "Multi-session missions 2000-2700s. High quality semantic models. factory_capture FAILS (commits before capture). Repair cycles needed for edge cases."
+      },
+      "architecture_and_infra": {
+        "sample": ["F001"],
+        "notes": "706 tests passing, 27 new tests. Double-fork daemon, flock, atomic state writes. High quality."
+      }
+    },
+    "known_issues": [
+      "factory_capture FAILS for spec_level=A — commits directly, nothing to capture",
+      "Sometimes commits multiple times across one session"
+    ]
+  },
+
+  "glm_5_2": {
+    "role": "Primary Builder / Bounded Implementation (spec_level=B)",
+    "missions": ["FD1", "FD2", "FD3", "FD4", "FD5", "FD6", "FD7", "FD8", "FD9", "M008G", "M009", "M010"],
+    "observations": {
+      "bounded_python": {
+        "sample": ["FD1", "FD3", "FD5", "FD9"],
+        "notes": "Typically 300-800s, first attempt. Factory commits automatically via FD1."
+      },
+      "data_pipelines": {
+        "sample": ["M009", "M010"],
+        "notes": "M009 16/16 tests 732s. M010 20/20 tests 497s. Reliable for well-specified tasks."
+      },
+      "timeout_risk": {
+        "sample": ["M008C"],
+        "notes": "GLM timed out at 1800s on complex semantic task — correctly escalated to Claude"
+      }
+    },
+    "known_issues": [
+      "May hallucinate APIs for complex/unfamiliar libraries",
+      "Occasionally commits before factory_capture (anomaly, not guaranteed)"
+    ]
+  },
+
+  "codex": {
+    "role": "Adversarial Reviewer / Debugger (PENDING INTEGRATION)",
+    "status": "NOT_YET_INTEGRATED",
+    "planned_use": "adversarial review after GLM builds, statistical formula verification, API hallucination detection",
+    "integration_priority": "CTO003"
+  },
+
+  "z_code": {
+    "role": "Challenger Engineer / Code Archaeology (PENDING INTEGRATION)",
+    "status": "NOT_YET_INTEGRATED",
+    "planned_use": "alternative architecture proposals, legacy code mining, difficult debugging",
+    "integration_priority": "CTO003"
+  },
+
+  "routing_rules_current": {
+    "spec_level_A": "claude-sonnet-5",
+    "spec_level_B": "glm-5.2",
+    "escalation": "GLM timeout (>1800s) → escalate to Claude",
+    "status": "STATIC — will become dynamic after CTO006 (Model Performance Optimizer)"
+  },
+
+  "routing_rules_target": {
+    "description": "Performance-based routing after N=50 missions with enough variance per task type",
+    "formula": "route = argmax(pass1_rate / (median_duration * token_cost)) per task_type",
+    "task_types": ["bounded_python", "architecture", "semantic_model", "data_pipeline", "test_generation", "adversarial_review"]
+  }
+}

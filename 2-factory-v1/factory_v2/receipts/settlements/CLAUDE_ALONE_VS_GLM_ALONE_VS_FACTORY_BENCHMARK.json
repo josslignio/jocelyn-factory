@@ -1,0 +1,51 @@
+{
+  "authority_hashes": {
+    "project": "factory",
+    "roadmap_sha": "9dc629b56eebb175e3aaa2a898df44753ebdfb766f1f32bff050b48ca902aa4f",
+    "spec_sha": "fd1ef5806d08fe96fbdbe68b4f16e22ce2d79d451978c05b900573c0011da985",
+    "strategy_sha": "030095489223586133869cd04636c8e5d1b0059d319be3c88863cf674e016060"
+  },
+  "base_sha": "",
+  "candidate_repo": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2",
+  "candidate_sha": "0d0fb351d56bf4767726f933a04774b1d8413cc8",
+  "contract": {
+    "frozen_at": "2026-09-18T19:35:52Z",
+    "id": "bb03b1255440a6c8",
+    "path": "/Users/jocelyngrosjean/conductor/workspaces/Jocelyn-factory-control/factory-foundation-v2/projects/factory/validation_contracts/bb03b1255440a6c8.json"
+  },
+  "evidence": {
+    "active_verify": [
+      {
+        "command": [
+          "verify_milestone_acceptance",
+          "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK"
+        ],
+        "observed_at": "2026-09-18T21:26:31Z",
+        "output": "gate verified before settlement (runtime)",
+        "rc": 0
+      }
+    ],
+    "full_suite": {
+      "counts": "gate-verified settlement (full suite per D021 policy at bundle tips)",
+      "duration_s": null,
+      "rc": null,
+      "sha": "0d0fb351",
+      "validation_key": ""
+    },
+    "gate": {
+      "consolidated_claude_review": "pending (sparse gate policy)",
+      "note": "verifier.milestone_complete observed by the settle path",
+      "reviewer": "runtime-gate (independent validator subprocess)",
+      "rounds": 1,
+      "verdict": "ACCEPT"
+    }
+  },
+  "honest_residual": [
+    "runtime-settled entry; consolidated Claude/Sol review pending at the next material gate"
+  ],
+  "milestone": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK",
+  "project": "factory",
+  "recorded_at": "2026-09-18T21:26:31Z",
+  "schema": "settlements/v1",
+  "settled_at": "2026-09-18T21:26:31Z"
+}

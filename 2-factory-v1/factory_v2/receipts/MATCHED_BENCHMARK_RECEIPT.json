@@ -1,0 +1,931 @@
+{
+  "aggregate": {
+    "claude_alone": {
+      "cache_read_tokens_measured": 0,
+      "cost_usd": 0.09315,
+      "declared_successes": 3,
+      "false_acceptances": 3,
+      "human_interventions": 0,
+      "launches_lost": 3,
+      "mean_active_s": 0.033,
+      "mean_elapsed_s": 1.499,
+      "mean_recovery_s": 0.582,
+      "real_cost_usd": 0.0,
+      "runs": 3,
+      "tokens_in": 13800,
+      "tokens_in_measured": 9000,
+      "tokens_measured": 11250,
+      "tokens_measured_launches": 6,
+      "tokens_out": 3450,
+      "tokens_out_measured": 2250,
+      "tokens_unmeasured_launches": 0,
+      "verified_rate": 0.0
+    },
+    "factory": {
+      "cache_read_tokens_measured": 0,
+      "cost_usd": 0.0768,
+      "declared_successes": 3,
+      "false_acceptances": 0,
+      "human_interventions": 0,
+      "launches_lost": 3,
+      "mean_active_s": 0.08,
+      "mean_elapsed_s": 2.406,
+      "mean_recovery_s": 1.479,
+      "real_cost_usd": 0.0,
+      "runs": 3,
+      "tokens_in": 19200,
+      "tokens_in_measured": 14400,
+      "tokens_measured": 18000,
+      "tokens_measured_launches": 9,
+      "tokens_out": 4800,
+      "tokens_out_measured": 3600,
+      "tokens_unmeasured_launches": 0,
+      "verified_rate": 1.0
+    },
+    "glm_alone": {
+      "cache_read_tokens_measured": 0,
+      "cost_usd": 0.0552,
+      "declared_successes": 3,
+      "false_acceptances": 3,
+      "human_interventions": 0,
+      "launches_lost": 3,
+      "mean_active_s": 0.034,
+      "mean_elapsed_s": 1.479,
+      "mean_recovery_s": 0.593,
+      "real_cost_usd": 0.0,
+      "runs": 3,
+      "tokens_in": 13800,
+      "tokens_in_measured": 9000,
+      "tokens_measured": 11250,
+      "tokens_measured_launches": 6,
+      "tokens_out": 3450,
+      "tokens_out_measured": 2250,
+      "tokens_unmeasured_launches": 0,
+      "verified_rate": 0.0
+    }
+  },
+  "arms": {
+    "claude_alone": {
+      "engine_hint": "claude",
+      "engines": [
+        "claude"
+      ],
+      "runs": [
+        {
+          "active_s": 0.033,
+          "arm": "claude_alone",
+          "automated_restarts": 1,
+          "budget_s": 600,
+          "cache_read_tokens": 0,
+          "cost_usd": 0.03105,
+          "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+          "declared_success": true,
+          "deliverable": "universe_report.json",
+          "elapsed_s": 1.588,
+          "engine_exercised": "NOT_EXERCISED",
+          "engines_used": [
+            "claude"
+          ],
+          "false_acceptance": true,
+          "faults": [
+            "FI-1_BUILD_BROKEN",
+            "FI-2_FALSE_BAIT",
+            "FI-3_SIGKILL_MID_REPAIR"
+          ],
+          "ground_truth_cmd": "python3 check_truth.py",
+          "ground_truth_evaluated_at": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/matched-3arm-runs-ndex2zc9/claude_alone_run1/gt_export",
+          "ground_truth_rc": 1,
+          "human_interventions": 0,
+          "input_tokens": 3000,
+          "killed": true,
+          "launches_completed": 2,
+          "launches_lost": 1,
+          "launches_started": 3,
+          "missions": [
+            {
+              "candidate_sha": "f68037f56384229e9468ebce5d5ce7d2ecb08419",
+              "mission": "bench3-claude_alone-m1",
+              "verdict": "ACCEPTED"
+            }
+          ],
+          "notes": "verdicts=['ACCEPTED']",
+          "output_tokens": 750,
+          "real_cost_usd": 0.0,
+          "recovery_time_s": 0.571,
+          "run": 1,
+          "self_test_cmd": "bash self_test.sh",
+          "settled": false,
+          "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+          "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25",
+          "terminal": true,
+          "tokens_measured_launches": 2,
+          "tokens_source": "telemetry observations (dispatch receipts + crash-safe sidecars) measured by factory_v2.telemetry adapters on each launch's stdout (detect_format(argv)); a launch killed in flight is unmeasured, never estimated",
+          "tokens_unmeasured_launches": 0,
+          "usage": [
+            {
+              "engine": "claude",
+              "input_tokens": 1400,
+              "launch": 1,
+              "output_tokens": 350
+            },
+            {
+              "engine": "claude",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "claude",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            }
+          ],
+          "usage_sources": [
+            "claude.stream_json"
+          ],
+          "verified_delivery": false,
+          "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+        },
+        {
+          "active_s": 0.033,
+          "arm": "claude_alone",
+          "automated_restarts": 1,
+          "budget_s": 600,
+          "cache_read_tokens": 0,
+          "cost_usd": 0.03105,
+          "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+          "declared_success": true,
+          "deliverable": "universe_report.json",
+          "elapsed_s": 1.519,
+          "engine_exercised": "NOT_EXERCISED",
+          "engines_used": [
+            "claude"
+          ],
+          "false_acceptance": true,
+          "faults": [
+            "FI-1_BUILD_BROKEN",
+            "FI-2_FALSE_BAIT",
+            "FI-3_SIGKILL_MID_REPAIR"
+          ],
+          "ground_truth_cmd": "python3 check_truth.py",
+          "ground_truth_evaluated_at": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/matched-3arm-runs-ndex2zc9/claude_alone_run2/gt_export",
+          "ground_truth_rc": 1,
+          "human_interventions": 0,
+          "input_tokens": 3000,
+          "killed": true,
+          "launches_completed": 2,
+          "launches_lost": 1,
+          "launches_started": 3,
+          "missions": [
+            {
+              "candidate_sha": "f68037f56384229e9468ebce5d5ce7d2ecb08419",
+              "mission": "bench3-claude_alone-m1",
+              "verdict": "ACCEPTED"
+            }
+          ],
+          "notes": "verdicts=['ACCEPTED']",
+          "output_tokens": 750,
+          "real_cost_usd": 0.0,
+          "recovery_time_s": 0.579,
+          "run": 2,
+          "self_test_cmd": "bash self_test.sh",
+          "settled": false,
+          "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+          "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25",
+          "terminal": true,
+          "tokens_measured_launches": 2,
+          "tokens_source": "telemetry observations (dispatch receipts + crash-safe sidecars) measured by factory_v2.telemetry adapters on each launch's stdout (detect_format(argv)); a launch killed in flight is unmeasured, never estimated",
+          "tokens_unmeasured_launches": 0,
+          "usage": [
+            {
+              "engine": "claude",
+              "input_tokens": 1400,
+              "launch": 1,
+              "output_tokens": 350
+            },
+            {
+              "engine": "claude",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "claude",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            }
+          ],
+          "usage_sources": [
+            "claude.stream_json"
+          ],
+          "verified_delivery": false,
+          "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+        },
+        {
+          "active_s": 0.033,
+          "arm": "claude_alone",
+          "automated_restarts": 1,
+          "budget_s": 600,
+          "cache_read_tokens": 0,
+          "cost_usd": 0.03105,
+          "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+          "declared_success": true,
+          "deliverable": "universe_report.json",
+          "elapsed_s": 1.389,
+          "engine_exercised": "NOT_EXERCISED",
+          "engines_used": [
+            "claude"
+          ],
+          "false_acceptance": true,
+          "faults": [
+            "FI-1_BUILD_BROKEN",
+            "FI-2_FALSE_BAIT",
+            "FI-3_SIGKILL_MID_REPAIR"
+          ],
+          "ground_truth_cmd": "python3 check_truth.py",
+          "ground_truth_evaluated_at": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/matched-3arm-runs-ndex2zc9/claude_alone_run3/gt_export",
+          "ground_truth_rc": 1,
+          "human_interventions": 0,
+          "input_tokens": 3000,
+          "killed": true,
+          "launches_completed": 2,
+          "launches_lost": 1,
+          "launches_started": 3,
+          "missions": [
+            {
+              "candidate_sha": "f68037f56384229e9468ebce5d5ce7d2ecb08419",
+              "mission": "bench3-claude_alone-m1",
+              "verdict": "ACCEPTED"
+            }
+          ],
+          "notes": "verdicts=['ACCEPTED']",
+          "output_tokens": 750,
+          "real_cost_usd": 0.0,
+          "recovery_time_s": 0.597,
+          "run": 3,
+          "self_test_cmd": "bash self_test.sh",
+          "settled": false,
+          "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+          "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25",
+          "terminal": true,
+          "tokens_measured_launches": 2,
+          "tokens_source": "telemetry observations (dispatch receipts + crash-safe sidecars) measured by factory_v2.telemetry adapters on each launch's stdout (detect_format(argv)); a launch killed in flight is unmeasured, never estimated",
+          "tokens_unmeasured_launches": 0,
+          "usage": [
+            {
+              "engine": "claude",
+              "input_tokens": 1400,
+              "launch": 1,
+              "output_tokens": 350
+            },
+            {
+              "engine": "claude",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "claude",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            }
+          ],
+          "usage_sources": [
+            "claude.stream_json"
+          ],
+          "verified_delivery": false,
+          "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+        }
+      ],
+      "settlement_gate": false,
+      "topology": "single_model"
+    },
+    "factory": {
+      "engine_hint": null,
+      "engines": [
+        "glm",
+        "claude"
+      ],
+      "runs": [
+        {
+          "active_s": 0.072,
+          "arm": "factory",
+          "automated_restarts": 1,
+          "budget_s": 600,
+          "cache_read_tokens": 0,
+          "cost_usd": 0.0256,
+          "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+          "declared_success": true,
+          "deliverable": "universe_report.json",
+          "elapsed_s": 2.209,
+          "engine_exercised": "NOT_EXERCISED",
+          "engines_used": [
+            "codex"
+          ],
+          "false_acceptance": false,
+          "faults": [
+            "FI-1_BUILD_BROKEN",
+            "FI-2_FALSE_BAIT",
+            "FI-3_SIGKILL_MID_REPAIR"
+          ],
+          "ground_truth_cmd": "python3 check_truth.py",
+          "ground_truth_evaluated_at": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/matched-3arm-runs-ndex2zc9/factory_run1/gt_export",
+          "ground_truth_rc": 0,
+          "human_interventions": 0,
+          "input_tokens": 4800,
+          "killed": true,
+          "launches_completed": 3,
+          "launches_lost": 1,
+          "launches_started": 4,
+          "missions": [
+            {
+              "candidate_sha": "f68037f56384229e9468ebce5d5ce7d2ecb08419",
+              "gate_rc": 1,
+              "gate_tail": "ACCEPTANCE_NOT_MET: M \u2014 ['product_e2e command rc=1']",
+              "mission": "bench3-factory-m1",
+              "verdict": "ACCEPTED"
+            },
+            {
+              "candidate_sha": "87172f35b6a1fbb1ac6fe2b65881002ef1ee6cdf",
+              "gate_rc": 0,
+              "gate_tail": "ACCEPTANCE_VERIFIED: M",
+              "mission": "bench3-factory-m2",
+              "verdict": "ACCEPTED"
+            }
+          ],
+          "notes": "verdicts=['ACCEPTED', 'ACCEPTED']",
+          "output_tokens": 1200,
+          "real_cost_usd": 0.0,
+          "recovery_time_s": 1.253,
+          "run": 1,
+          "self_test_cmd": "bash self_test.sh",
+          "settled": true,
+          "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+          "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25",
+          "terminal": true,
+          "tokens_measured_launches": 3,
+          "tokens_source": "telemetry observations (dispatch receipts + crash-safe sidecars) measured by factory_v2.telemetry adapters on each launch's stdout (detect_format(argv)); a launch killed in flight is unmeasured, never estimated",
+          "tokens_unmeasured_launches": 0,
+          "usage": [
+            {
+              "engine": "codex",
+              "input_tokens": 1400,
+              "launch": 1,
+              "output_tokens": 350
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1800,
+              "launch": 3,
+              "output_tokens": 450
+            }
+          ],
+          "usage_sources": [
+            "codex.turn_completed"
+          ],
+          "verified_delivery": true,
+          "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+        },
+        {
+          "active_s": 0.077,
+          "arm": "factory",
+          "automated_restarts": 1,
+          "budget_s": 600,
+          "cache_read_tokens": 0,
+          "cost_usd": 0.0256,
+          "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+          "declared_success": true,
+          "deliverable": "universe_report.json",
+          "elapsed_s": 2.383,
+          "engine_exercised": "NOT_EXERCISED",
+          "engines_used": [
+            "codex"
+          ],
+          "false_acceptance": false,
+          "faults": [
+            "FI-1_BUILD_BROKEN",
+            "FI-2_FALSE_BAIT",
+            "FI-3_SIGKILL_MID_REPAIR"
+          ],
+          "ground_truth_cmd": "python3 check_truth.py",
+          "ground_truth_evaluated_at": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/matched-3arm-runs-ndex2zc9/factory_run2/gt_export",
+          "ground_truth_rc": 0,
+          "human_interventions": 0,
+          "input_tokens": 4800,
+          "killed": true,
+          "launches_completed": 3,
+          "launches_lost": 1,
+          "launches_started": 4,
+          "missions": [
+            {
+              "candidate_sha": "f68037f56384229e9468ebce5d5ce7d2ecb08419",
+              "gate_rc": 1,
+              "gate_tail": "ACCEPTANCE_NOT_MET: M \u2014 ['product_e2e command rc=1']",
+              "mission": "bench3-factory-m1",
+              "verdict": "ACCEPTED"
+            },
+            {
+              "candidate_sha": "b718822448fa5a330a14b5f41be8e5bc714031b3",
+              "gate_rc": 0,
+              "gate_tail": "ACCEPTANCE_VERIFIED: M",
+              "mission": "bench3-factory-m2",
+              "verdict": "ACCEPTED"
+            }
+          ],
+          "notes": "verdicts=['ACCEPTED', 'ACCEPTED']",
+          "output_tokens": 1200,
+          "real_cost_usd": 0.0,
+          "recovery_time_s": 1.566,
+          "run": 2,
+          "self_test_cmd": "bash self_test.sh",
+          "settled": true,
+          "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+          "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25",
+          "terminal": true,
+          "tokens_measured_launches": 3,
+          "tokens_source": "telemetry observations (dispatch receipts + crash-safe sidecars) measured by factory_v2.telemetry adapters on each launch's stdout (detect_format(argv)); a launch killed in flight is unmeasured, never estimated",
+          "tokens_unmeasured_launches": 0,
+          "usage": [
+            {
+              "engine": "codex",
+              "input_tokens": 1400,
+              "launch": 1,
+              "output_tokens": 350
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1800,
+              "launch": 3,
+              "output_tokens": 450
+            }
+          ],
+          "usage_sources": [
+            "codex.turn_completed"
+          ],
+          "verified_delivery": true,
+          "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+        },
+        {
+          "active_s": 0.091,
+          "arm": "factory",
+          "automated_restarts": 1,
+          "budget_s": 600,
+          "cache_read_tokens": 0,
+          "cost_usd": 0.0256,
+          "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+          "declared_success": true,
+          "deliverable": "universe_report.json",
+          "elapsed_s": 2.627,
+          "engine_exercised": "NOT_EXERCISED",
+          "engines_used": [
+            "codex"
+          ],
+          "false_acceptance": false,
+          "faults": [
+            "FI-1_BUILD_BROKEN",
+            "FI-2_FALSE_BAIT",
+            "FI-3_SIGKILL_MID_REPAIR"
+          ],
+          "ground_truth_cmd": "python3 check_truth.py",
+          "ground_truth_evaluated_at": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/matched-3arm-runs-ndex2zc9/factory_run3/gt_export",
+          "ground_truth_rc": 0,
+          "human_interventions": 0,
+          "input_tokens": 4800,
+          "killed": true,
+          "launches_completed": 3,
+          "launches_lost": 1,
+          "launches_started": 4,
+          "missions": [
+            {
+              "candidate_sha": "f68037f56384229e9468ebce5d5ce7d2ecb08419",
+              "gate_rc": 1,
+              "gate_tail": "ACCEPTANCE_NOT_MET: M \u2014 ['product_e2e command rc=1']",
+              "mission": "bench3-factory-m1",
+              "verdict": "ACCEPTED"
+            },
+            {
+              "candidate_sha": "3641b5a57668498ffe13edcc117fcee19b783f84",
+              "gate_rc": 0,
+              "gate_tail": "ACCEPTANCE_VERIFIED: M",
+              "mission": "bench3-factory-m2",
+              "verdict": "ACCEPTED"
+            }
+          ],
+          "notes": "verdicts=['ACCEPTED', 'ACCEPTED']",
+          "output_tokens": 1200,
+          "real_cost_usd": 0.0,
+          "recovery_time_s": 1.618,
+          "run": 3,
+          "self_test_cmd": "bash self_test.sh",
+          "settled": true,
+          "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+          "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25",
+          "terminal": true,
+          "tokens_measured_launches": 3,
+          "tokens_source": "telemetry observations (dispatch receipts + crash-safe sidecars) measured by factory_v2.telemetry adapters on each launch's stdout (detect_format(argv)); a launch killed in flight is unmeasured, never estimated",
+          "tokens_unmeasured_launches": 0,
+          "usage": [
+            {
+              "engine": "codex",
+              "input_tokens": 1400,
+              "launch": 1,
+              "output_tokens": 350
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1800,
+              "launch": 3,
+              "output_tokens": 450
+            }
+          ],
+          "usage_sources": [
+            "codex.turn_completed"
+          ],
+          "verified_delivery": true,
+          "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+        }
+      ],
+      "settlement_gate": true,
+      "topology": "factory_multi_ai"
+    },
+    "glm_alone": {
+      "engine_hint": "glm",
+      "engines": [
+        "glm"
+      ],
+      "runs": [
+        {
+          "active_s": 0.032,
+          "arm": "glm_alone",
+          "automated_restarts": 1,
+          "budget_s": 600,
+          "cache_read_tokens": 0,
+          "cost_usd": 0.0184,
+          "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+          "declared_success": true,
+          "deliverable": "universe_report.json",
+          "elapsed_s": 1.593,
+          "engine_exercised": "NOT_EXERCISED",
+          "engines_used": [
+            "codex"
+          ],
+          "false_acceptance": true,
+          "faults": [
+            "FI-1_BUILD_BROKEN",
+            "FI-2_FALSE_BAIT",
+            "FI-3_SIGKILL_MID_REPAIR"
+          ],
+          "ground_truth_cmd": "python3 check_truth.py",
+          "ground_truth_evaluated_at": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/matched-3arm-runs-ndex2zc9/glm_alone_run1/gt_export",
+          "ground_truth_rc": 1,
+          "human_interventions": 0,
+          "input_tokens": 3000,
+          "killed": true,
+          "launches_completed": 2,
+          "launches_lost": 1,
+          "launches_started": 3,
+          "missions": [
+            {
+              "candidate_sha": "f68037f56384229e9468ebce5d5ce7d2ecb08419",
+              "mission": "bench3-glm_alone-m1",
+              "verdict": "ACCEPTED"
+            }
+          ],
+          "notes": "verdicts=['ACCEPTED']",
+          "output_tokens": 750,
+          "real_cost_usd": 0.0,
+          "recovery_time_s": 0.588,
+          "run": 1,
+          "self_test_cmd": "bash self_test.sh",
+          "settled": false,
+          "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+          "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25",
+          "terminal": true,
+          "tokens_measured_launches": 2,
+          "tokens_source": "telemetry observations (dispatch receipts + crash-safe sidecars) measured by factory_v2.telemetry adapters on each launch's stdout (detect_format(argv)); a launch killed in flight is unmeasured, never estimated",
+          "tokens_unmeasured_launches": 0,
+          "usage": [
+            {
+              "engine": "codex",
+              "input_tokens": 1400,
+              "launch": 1,
+              "output_tokens": 350
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            }
+          ],
+          "usage_sources": [
+            "codex.turn_completed"
+          ],
+          "verified_delivery": false,
+          "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+        },
+        {
+          "active_s": 0.033,
+          "arm": "glm_alone",
+          "automated_restarts": 1,
+          "budget_s": 600,
+          "cache_read_tokens": 0,
+          "cost_usd": 0.0184,
+          "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+          "declared_success": true,
+          "deliverable": "universe_report.json",
+          "elapsed_s": 1.482,
+          "engine_exercised": "NOT_EXERCISED",
+          "engines_used": [
+            "codex"
+          ],
+          "false_acceptance": true,
+          "faults": [
+            "FI-1_BUILD_BROKEN",
+            "FI-2_FALSE_BAIT",
+            "FI-3_SIGKILL_MID_REPAIR"
+          ],
+          "ground_truth_cmd": "python3 check_truth.py",
+          "ground_truth_evaluated_at": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/matched-3arm-runs-ndex2zc9/glm_alone_run2/gt_export",
+          "ground_truth_rc": 1,
+          "human_interventions": 0,
+          "input_tokens": 3000,
+          "killed": true,
+          "launches_completed": 2,
+          "launches_lost": 1,
+          "launches_started": 3,
+          "missions": [
+            {
+              "candidate_sha": "f68037f56384229e9468ebce5d5ce7d2ecb08419",
+              "mission": "bench3-glm_alone-m1",
+              "verdict": "ACCEPTED"
+            }
+          ],
+          "notes": "verdicts=['ACCEPTED']",
+          "output_tokens": 750,
+          "real_cost_usd": 0.0,
+          "recovery_time_s": 0.643,
+          "run": 2,
+          "self_test_cmd": "bash self_test.sh",
+          "settled": false,
+          "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+          "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25",
+          "terminal": true,
+          "tokens_measured_launches": 2,
+          "tokens_source": "telemetry observations (dispatch receipts + crash-safe sidecars) measured by factory_v2.telemetry adapters on each launch's stdout (detect_format(argv)); a launch killed in flight is unmeasured, never estimated",
+          "tokens_unmeasured_launches": 0,
+          "usage": [
+            {
+              "engine": "codex",
+              "input_tokens": 1400,
+              "launch": 1,
+              "output_tokens": 350
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            }
+          ],
+          "usage_sources": [
+            "codex.turn_completed"
+          ],
+          "verified_delivery": false,
+          "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+        },
+        {
+          "active_s": 0.038,
+          "arm": "glm_alone",
+          "automated_restarts": 1,
+          "budget_s": 600,
+          "cache_read_tokens": 0,
+          "cost_usd": 0.0184,
+          "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+          "declared_success": true,
+          "deliverable": "universe_report.json",
+          "elapsed_s": 1.361,
+          "engine_exercised": "NOT_EXERCISED",
+          "engines_used": [
+            "codex"
+          ],
+          "false_acceptance": true,
+          "faults": [
+            "FI-1_BUILD_BROKEN",
+            "FI-2_FALSE_BAIT",
+            "FI-3_SIGKILL_MID_REPAIR"
+          ],
+          "ground_truth_cmd": "python3 check_truth.py",
+          "ground_truth_evaluated_at": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/matched-3arm-runs-ndex2zc9/glm_alone_run3/gt_export",
+          "ground_truth_rc": 1,
+          "human_interventions": 0,
+          "input_tokens": 3000,
+          "killed": true,
+          "launches_completed": 2,
+          "launches_lost": 1,
+          "launches_started": 3,
+          "missions": [
+            {
+              "candidate_sha": "f68037f56384229e9468ebce5d5ce7d2ecb08419",
+              "mission": "bench3-glm_alone-m1",
+              "verdict": "ACCEPTED"
+            }
+          ],
+          "notes": "verdicts=['ACCEPTED']",
+          "output_tokens": 750,
+          "real_cost_usd": 0.0,
+          "recovery_time_s": 0.547,
+          "run": 3,
+          "self_test_cmd": "bash self_test.sh",
+          "settled": false,
+          "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+          "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25",
+          "terminal": true,
+          "tokens_measured_launches": 2,
+          "tokens_source": "telemetry observations (dispatch receipts + crash-safe sidecars) measured by factory_v2.telemetry adapters on each launch's stdout (detect_format(argv)); a launch killed in flight is unmeasured, never estimated",
+          "tokens_unmeasured_launches": 0,
+          "usage": [
+            {
+              "engine": "codex",
+              "input_tokens": 1400,
+              "launch": 1,
+              "output_tokens": 350
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            },
+            {
+              "engine": "codex",
+              "input_tokens": 1600,
+              "launch": 2,
+              "output_tokens": 400
+            }
+          ],
+          "usage_sources": [
+            "codex.turn_completed"
+          ],
+          "verified_delivery": false,
+          "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+        }
+      ],
+      "settlement_gate": false,
+      "topology": "single_model"
+    }
+  },
+  "budget": {
+    "max_cost_usd": 1.0,
+    "mission_budget_s": 600,
+    "price_table_mtok_usd": {
+      "claude": [
+        3.0,
+        15.0
+      ],
+      "codex": [
+        2.0,
+        8.0
+      ],
+      "glm": [
+        0.6,
+        2.2
+      ]
+    },
+    "priced_cost_usd_total": 0.22515,
+    "real_cost_usd_total": 0.0
+  },
+  "caveats": [
+    "HERMETIC: engines NOT_EXERCISED (FACTORY_NO_REAL_ENGINE=1). Engine QUALITY is not measured; the paired measurement is the real runtime TOPOLOGY (routing, repair, promote, independent settlement gate) on identical deterministic worlds.",
+    "Real-model paired runs NOT executed in this session (no API budget/credentials); the '>=3 held-out runs per arm when cost allows' clause is met on the hermetic workload at zero real cost. The real-engine dimension is UNMET and declared, not fabricated.",
+    "Retry sampling temperature is not measurable without real engines \u2014 UNMET, declared.",
+    "Milestone product gate: python3 -m factory_v2.product_verifiers CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK returns VERIFIER_NOT_IMPLEMENTED (no verifier registered; verifier registry is owner authority, not editable from this mission).",
+    "run_matched_benchmark.py (two-arm producer of the settled CHAMPION milestone) left byte-identical: its pinned judge recomputes sha256(HEAD:file) vs the committed MANIFEST \u2014 a mutation would weaken a green gate."
+  ],
+  "incomplete_runs": [],
+  "matched": {
+    "budget_equal": true,
+    "data_sha_equal": true,
+    "deliverable_equal": true,
+    "faults_equal": true,
+    "ground_truth_cmd_equal": true,
+    "self_test_cmd_equal": true,
+    "start_sha_equal": true,
+    "task_sha_equal": true
+  },
+  "mode": "hermetic",
+  "produced_at": "2026-09-21T09:40:54Z",
+  "producer": "factory_v2/run_matched_benchmark_3arm.py",
+  "producer_sha256": "271df7b9033e869e52b3779dbe53988b185e37a48f8d752e9ce3e898c54abe0f",
+  "runs_per_arm": 3,
+  "schema": "matched-3arm-benchmark-receipt/v1",
+  "task": {
+    "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+    "deliverable": "universe_report.json",
+    "faults": [
+      "FI-1_BUILD_BROKEN",
+      "FI-2_FALSE_BAIT",
+      "FI-3_SIGKILL_MID_REPAIR"
+    ],
+    "ground_truth_cmd": "python3 check_truth.py",
+    "self_test_cmd": "bash self_test.sh",
+    "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+    "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25"
+  },
+  "verdict": {
+    "best_single_arm": "glm_alone",
+    "d018": {
+      "recommendation": "KEEP_TOPOLOGY",
+      "topology_overhead_measured": true,
+      "verified_delivery_gain": 1.0
+    },
+    "delivery_gain_verified_rate": 1.0,
+    "integrity_gain_false_acceptances_avoided": 3,
+    "overhead": {
+      "extra_cost_usd_vs_best_single": 0.0216,
+      "extra_mean_elapsed_s_vs_best_single": 0.927,
+      "extra_tokens_vs_best_single": 6750
+    },
+    "owner_answer": "la factory co\u00fbte 1.6\u00d7 le meilleur solo (glm_alone) pour +100 % de r\u00e9sultats v\u00e9rifi\u00e9s en plus (tokens mesur\u00e9s : factory 18000, glm_alone 11250)",
+    "reason": "factory: 1.00 verified, 0 fausses acceptances, $0.0768 prix-model ; meilleur single (glm_alone): 0.00 verified, 3 fausses acceptances, $0.0552.",
+    "rule": "FACTORY_WINS ssi false_acceptances(factory) < max(singles) ET verified_rate(factory) >= max(singles); un non-gain de la Factory est un resultat valide du benchmark, pas un echec de l'experiment.",
+    "tokens_vs_best_single": {
+      "basis": "input+output tokens measured by the telemetry adapters on every dispatched launch (dispatch receipts); cache reads apart; a lost launch is unmeasured, never estimated",
+      "best_single_arm": "glm_alone",
+      "best_single_tokens_measured": 11250,
+      "cache_read_tokens_per_arm": {
+        "claude_alone": 0,
+        "factory": 0,
+        "glm_alone": 0
+      },
+      "cheapest_single_arm": "claude_alone",
+      "factory_tokens_measured": 18000,
+      "per_arm_tokens_measured": {
+        "claude_alone": 11250,
+        "factory": 18000,
+        "glm_alone": 11250
+      },
+      "ratio": 1.6,
+      "ratio_vs_cheapest_single": 1.6,
+      "unmeasured_or_lost_launches": {
+        "claude_alone": 3,
+        "factory": 3,
+        "glm_alone": 3
+      },
+      "verified_gain_pct_points": 100.0
+    },
+    "winner": "FACTORY_WINS"
+  },
+  "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+}

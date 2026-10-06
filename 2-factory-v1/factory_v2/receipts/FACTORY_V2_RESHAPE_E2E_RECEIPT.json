@@ -1,0 +1,137 @@
+{
+  "schema": "factory-v2-reshape-e2e-receipt/v1",
+  "produced_at": "2026-09-07T15:35:20Z",
+  "started_at": "2026-09-07T15:35:20Z",
+  "verdict": "PASS",
+  "proof": {
+    "loop": "authority -> resolver -> contract frozen -> missions compiled -> dispatch -> execution -> independent validation -> authoritative gate -> settlement -> next milestone",
+    "restart_between_milestones": "phase1 settles INGEST then process exits; phase2 is a NEW OS process resolving SCORE cold",
+    "distinct_process_pids": [
+      82525,
+      82529
+    ],
+    "milestones_settled_in_order": [
+      "INGEST",
+      "SCORE",
+      "REPORT"
+    ],
+    "final_product_output": "top=a",
+    "gates_exercised": [
+      "contract frozen before build",
+      "validator independent of executor",
+      "milestone settlement via authoritative gate",
+      "dependency enforcement INGEST->SCORE->REPORT"
+    ]
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "name": "cold_start_first_milestone",
+      "steps": [
+        {
+          "mode": "one",
+          "pid": 82525,
+          "resolved_next": "INGEST",
+          "resolved_at_start": true
+        },
+        {
+          "action": "MILESTONE_SETTLED",
+          "milestone": "INGEST"
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "restart_after_kill_continues",
+      "steps": [
+        {
+          "mode": "one",
+          "pid": 82529,
+          "resolved_next": "SCORE",
+          "resolved_at_start": true
+        },
+        {
+          "action": "MILESTONE_SETTLED",
+          "milestone": "SCORE"
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "final_cycle_project_complete",
+      "steps": [
+        {
+          "mode": "until_complete",
+          "pid": 82532,
+          "resolved_next": "REPORT",
+          "resolved_at_start": true
+        },
+        {
+          "action": "MILESTONE_SETTLED",
+          "milestone": "REPORT"
+        },
+        {
+          "action": "PROJECT_COMPLETE",
+          "milestone": null
+        }
+      ]
+    }
+  ],
+  "project_state_events": [
+    {
+      "event": "MISSION_PASS",
+      "mission": "INGEST#M1",
+      "rc": 0,
+      "ts": "2026-09-07T15:35:20Z"
+    },
+    {
+      "complete": true,
+      "event": "VALIDATION_VERDICT",
+      "failures": [],
+      "milestone": "INGEST",
+      "ts": "2026-09-07T15:35:20Z"
+    },
+    {
+      "event": "MILESTONE_SETTLED",
+      "milestone": "INGEST",
+      "ts": "2026-09-07T15:35:20Z"
+    },
+    {
+      "event": "MISSION_PASS",
+      "mission": "SCORE#M1",
+      "rc": 0,
+      "ts": "2026-09-07T15:35:20Z"
+    },
+    {
+      "complete": true,
+      "event": "VALIDATION_VERDICT",
+      "failures": [],
+      "milestone": "SCORE",
+      "ts": "2026-09-07T15:35:20Z"
+    },
+    {
+      "event": "MILESTONE_SETTLED",
+      "milestone": "SCORE",
+      "ts": "2026-09-07T15:35:20Z"
+    },
+    {
+      "event": "MISSION_PASS",
+      "mission": "REPORT#M1",
+      "rc": 0,
+      "ts": "2026-09-07T15:35:20Z"
+    },
+    {
+      "complete": true,
+      "event": "VALIDATION_VERDICT",
+      "failures": [],
+      "milestone": "REPORT",
+      "ts": "2026-09-07T15:35:20Z"
+    },
+    {
+      "event": "MILESTONE_SETTLED",
+      "milestone": "REPORT",
+      "ts": "2026-09-07T15:35:20Z"
+    }
+  ],
+  "workspace": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/f2_e2e_v8qbmk6f"
+}

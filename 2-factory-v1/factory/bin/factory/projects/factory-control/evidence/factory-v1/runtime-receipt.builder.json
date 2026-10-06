@@ -1,0 +1,12 @@
+{
+  "schema": "job-radar-runtime-receipt/v1",
+  "candidate_sha": "a02bb025a8e396927581c05a25fcb4600980b0e4",
+  "exit_code": 1,
+  "oracle_sha256": "1b95838fe5818a9dfef0abbec14d9b4437de5616cb64a999517509f1d6a71334",
+  "tests_passed": false,
+  "bootstrap_lock_valid": true,
+  "mission_id": "factory-v1",
+  "toolchain_lock_sha256": "5e1c05e13d989cb5f06ceab4e6f6e27ac9471b20f00e75ff3ffa5037f97fb221",
+  "pinned_by": "factoryctl",
+  "provider": "builder"
+}

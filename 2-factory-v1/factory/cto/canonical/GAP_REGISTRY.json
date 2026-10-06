@@ -1,0 +1,448 @@
+{
+  "schema": "gap-registry/v1",
+  "produced_at": "2026-09-06T12:00:00Z",
+  "authority": "Compiled from REQUIREMENTS_REGISTRY.json + CTO000_AUDIT_REPORT.md + CTO_LESSONS.jsonl + CTO_STATE.json",
+  "version": "v2",
+  "updated_at": "2026-09-07T15:16:09Z",
+  "note": "All open gaps (status != CLOSED). Each gap maps to a requirement, has severity, blocking description, gate condition, and responsible mission. Close gaps by implementing + testing + updating REQUIREMENTS_REGISTRY.json.",
+  "gaps": [
+    {
+      "id": "GAP-001",
+      "req_id": "FREQ-011",
+      "title": "Context injection not yet running — agents build without ADRs/strategy",
+      "severity": "HIGH",
+      "status": "CLOSED",
+      "closed_at": "2026-09-06",
+      "closed_by": "CTO004_CONTEXT_INJECTION ACCEPTED (commit 1f6a6bd9, merged to main)",
+      "blocking": [
+        "Agents miss ADR005 → produce VIOLATED on passing X-track missions (conftest regression pattern)",
+        "Agents miss CTO_LESSONS → repeat known failure patterns (e.g. L011: hallucinate library version)",
+        "Architectural amnesia: each dispatch starts from zero context — compounding risk over long runs"
+      ],
+      "gate": "F005 ACCEPTED (done) + SOAK_6H PASS",
+      "mission": "CTO004",
+      "source": "CTO000 F.3 + CTO_STATE factory.known_defects"
+    },
+    {
+      "id": "GAP-002",
+      "req_id": "FREQ-017",
+      "title": "SOAK_6H overnight qualification not yet run",
+      "severity": "HIGH",
+      "status": "IN_PROGRESS",
+      "note": "SOAK_6H_QUALIFICATION dispatched 2026-09-06 PID=60981, auto-dispatch (NOT a human gate), running real missions. P0 counter fixes (6de626b5) ensure metrics are now measurable.",
+      "blocking": [
+        "CTO005 cross-model review blocked",
+        "factory_freeze: NO NEW FACTORY FEATURES until SOAK_6H PASS"
+      ],
+      "gate": "F005 ACCEPTED (done) → SOAK_6H PASS auto-verdict",
+      "mission": "SOAK_6H_QUALIFICATION",
+      "criteria": "HUMAN_GO_COUNT=0, LOST_MISSIONS=0, UNRECOVERED_STALL=0, DUPLICATE_DISPATCH=0, GOLDEN_CORRUPTION=0, CONTEXT_RECEIPT_MISSING=0",
+      "source": "APP007_CAMPAIGN_STATE soak_note + factory_freeze"
+    },
+    {
+      "id": "GAP-003",
+      "req_id": "FREQ-022",
+      "title": "CTO000B full independent counter-audit (Z Code + Codex) not yet done",
+      "severity": "HIGH",
+      "status": "CLOSED",
+      "closed_at": "2026-09-06",
+      "closed_by": "CTO000B_COUNTER_AUDIT complete: Z Code (8 findings) + Codex (7 findings), receipt written, 5 P0 gaps fixed in commit 6de626b5",
+      "blocking": [
+        "No independent validation of Factory since CTO000",
+        "RESEARCH_TO_CODE_COVERAGE matrix not formally closed"
+      ],
+      "gate": "SOAK_6H PASS",
+      "mission": "CTO000B",
+      "source": "APP007_CAMPAIGN_STATE cto000b_note"
+    },
+    {
+      "id": "GAP-004",
+      "req_id": "FREQ-018",
+      "title": "Failure signature memory / anti-loop escalation not wired",
+      "severity": "HIGH",
+      "blocking": [
+        "Same failure → same block → silent accumulation of permanently blocked missions",
+        "No retry-with-different-model on attempt 2",
+        "No CTO architectural review trigger on attempt 3 (as defined in CTO_STRATEGY Principle 6)"
+      ],
+      "gate": "F005 ACCEPTED",
+      "mission": "F010",
+      "current_state": "CTO_LESSONS.jsonl has 16 entries but factoryd never reads them during retry decisions",
+      "source": "CTO_STRATEGY Principle 6 + CTO000 F.4"
+    },
+    {
+      "id": "GAP-005",
+      "req_id": "FREQ-023",
+      "title": "Heartbeat never written during builds — hung workers undetectable",
+      "severity": "HIGH",
+      "status": "CLOSED",
+      "closed_at": "2026-09-06",
+      "closed_by": "autopilot.py now calls write_heartbeat() after each mission step (commit 527cc5a0)",
+      "note": "Confirmed P0 by both ZC-004 and CX-001 counter-audit. ProgressWatchdog's birth-anchor fix (started_at) partially mitigates but is not a substitute.",
+      "blocking": [
+        "completion_detector.is_worker_stalled() relies on heartbeat — since it is never written, it is always stale",
+        "Stall detection effectively PID-alive only (as documented CTO000 F.5 + ZC-004 + CX-001)",
+        "Alive-but-stuck processes cannot be detected and recycled before threshold"
+      ],
+      "gate": "available now (small patch)",
+      "mission": "WIRE_HEARTBEAT_AUTOPILOT",
+      "fix": "Call heartbeat.write_heartbeat() from autopilot main loop every 30s during build/test phases",
+      "source": "CTO000 F.5 + ZC-004 + CX-001"
+    },
+    {
+      "id": "GAP-006",
+      "req_id": "FREQ-012",
+      "title": "Cross-model adversarial review not integrated",
+      "severity": "HIGH",
+      "blocking": [
+        "GLM hallucinations in XR03-XR06 statistical implementations cannot be caught without Codex review",
+        "R002 strategic risk: PSR/DSR formula errors would silently produce wrong account rankings"
+      ],
+      "gate": "CTO000B PASS",
+      "mission": "CTO005",
+      "source": "CTO_STATE model_assignment codex=PENDING INTEGRATION"
+    },
+    {
+      "id": "GAP-007",
+      "req_id": "FREQ-024",
+      "title": "DAG dependency scheduler not implemented — depends_on not enforced",
+      "severity": "MEDIUM",
+      "blocking": [
+        "Missions could be dispatched before their dependencies complete",
+        "X101→X102→X103 ordering requires manual campaign state management"
+      ],
+      "gate": "F007 ACCEPTED",
+      "mission": "F008",
+      "source": "canonical_roadmap_v2 F008"
+    },
+    {
+      "id": "GAP-008",
+      "req_id": "FREQ-025",
+      "title": "Autonomous failure classification + repair mission not implemented",
+      "severity": "MEDIUM",
+      "blocking": [
+        "Blocked missions remain blocked indefinitely with no self-healing",
+        "Long runs will accumulate silent blocked missions reducing effective throughput"
+      ],
+      "gate": "F008 ACCEPTED",
+      "mission": "F010",
+      "source": "canonical_roadmap_v2 F010 + CTO000 B5"
+    },
+    {
+      "id": "GAP-009",
+      "req_id": "FREQ-026",
+      "title": "FACTORY_STABLE/CANDIDATE gate not implemented — Factory can overwrite itself",
+      "severity": "MEDIUM",
+      "blocking": [
+        "A Factory mission that modifies factoryd.py runs inside a Factory that uses factoryd.py",
+        "No canary + recovery test before promotion"
+      ],
+      "gate": "F010 ACCEPTED",
+      "mission": "F011",
+      "source": "canonical_roadmap_v2 F011"
+    },
+    {
+      "id": "GAP-010",
+      "req_id": "FREQ-016",
+      "title": "E2E torture test not implemented",
+      "severity": "MEDIUM",
+      "blocking": [
+        "Cannot claim AUTONOMOUS_FACTORY_V1 done without proven 72h run with injected failures"
+      ],
+      "gate": "F011 ACCEPTED",
+      "mission": "F012",
+      "source": "canonical_roadmap_v2 F012 done_definition"
+    },
+    {
+      "id": "GAP-011",
+      "req_id": "FREQ-015",
+      "title": "Parallel workers (2-worker) not yet qualified",
+      "severity": "MEDIUM",
+      "blocking": [
+        "F-track and X-track cannot run simultaneously",
+        "Overall Factory throughput limited to 1 mission at a time"
+      ],
+      "gate": "SOAK_6H PASS",
+      "mission": "F007",
+      "source": "CTO_STATE strategic_risks R001 + ADR004"
+    },
+    {
+      "id": "GAP-012",
+      "req_id": "FREQ-019",
+      "title": "Adaptive model routing with performance feedback not wired",
+      "severity": "LOW",
+      "blocking": [
+        "Suboptimal model assignment — may use Claude on tasks where GLM succeeds cheaper"
+      ],
+      "gate": "N=50 missions across task types",
+      "mission": "CTO006",
+      "source": "CTO_MODEL_PERFORMANCE routing_rules_target"
+    },
+    {
+      "id": "GAP-013",
+      "req_id": "FREQ-028",
+      "title": "Two parallel backlog systems (rolling_backlog + backlog_refiller) may diverge",
+      "severity": "LOW",
+      "blocking": [
+        "Behavior differences between autopilot path and factoryd path"
+      ],
+      "gate": "technical debt cleanup",
+      "mission": null,
+      "source": "CTO000 audit DUPLICATE SYSTEMS finding"
+    },
+    {
+      "id": "GAP-014",
+      "req_id": "FREQ-014",
+      "title": "Transactional promotion base_sha check not enforced on all write paths",
+      "severity": "LOW",
+      "blocking": [
+        "Race condition possible if two writers promote simultaneously (low risk at MAX_WORKERS=1)"
+      ],
+      "gate": "before F007 (parallel workers)",
+      "mission": null,
+      "source": "FREQ-014 partial status"
+    },
+    {
+      "id": "GAP-015",
+      "req_id": "XREQ-002",
+      "title": "Historical scraper covers only 3 accounts (10802 posts) — need ≥10 accounts ≥6m",
+      "severity": "HIGH",
+      "blocking": [
+        "Insufficient corpus for meaningful account ranking",
+        "XR02 social graph coverage only 23.3%",
+        "XR03-XR06 analysis limited to 3 accounts"
+      ],
+      "gate": "X101 execution",
+      "mission": "X101",
+      "source": "APP007_CAMPAIGN_STATE xr02_verdict + CTO_STATE twitter.known_defects"
+    },
+    {
+      "id": "GAP-016",
+      "req_id": "XREQ-015",
+      "title": "Outcome ledger not wired to M008H semantic signals",
+      "severity": "HIGH",
+      "blocking": [
+        "No real P&L from classifier-gated calls",
+        "r5_scoring.py uses raw counts, not semantic-gated signals",
+        "Account scores not credible without real entry/exit"
+      ],
+      "gate": "X103 + X104 execution",
+      "mission": "X104",
+      "source": "CTO_STATE twitter.known_defects + CTO000 D3/D4"
+    },
+    {
+      "id": "GAP-017",
+      "req_id": "XREQ-014",
+      "title": "Thesis reconstruction absent — tweets treated independently",
+      "severity": "HIGH",
+      "blocking": [
+        "Cannot reconstruct multi-post investment theses",
+        "Account conviction/persistence scores unavailable",
+        "X103 downstream blocked"
+      ],
+      "gate": "X102 + M008_VALIDATION human gate (for production use)",
+      "mission": "X103",
+      "source": "CTO_STATE twitter.known_defects"
+    },
+    {
+      "id": "GAP-018",
+      "req_id": "XREQ-009",
+      "title": "Momentum/sector controls not implemented — raw return may be inflated by momentum",
+      "severity": "HIGH",
+      "blocking": [
+        "Account scores without momentum adjustment may reward momentum riders, not skilled analysts",
+        "Core insight from deep_research: much of apparent edge disappears after momentum control"
+      ],
+      "gate": "XR03 ACCEPTED (done) → XR04",
+      "mission": "XR04",
+      "source": "canonical_roadmap_v2 deep_research_note"
+    },
+    {
+      "id": "GAP-019",
+      "req_id": "XREQ-010",
+      "title": "OOS validation not implemented — backtest overfitting unguarded",
+      "severity": "HIGH",
+      "blocking": [
+        "No protection against data snooping / lookahead bias",
+        "Account rankings could be spurious without walk-forward validation"
+      ],
+      "gate": "XR04 ACCEPTED",
+      "mission": "XR05",
+      "note": "purgedcv API pitfalls documented in L015/L016 and XR_EDGE_TEST_VECTORS.json",
+      "source": "canonical_roadmap_v2 XR05"
+    },
+    {
+      "id": "GAP-020",
+      "req_id": "XREQ-011",
+      "title": "Statistical confidence (PSR/DSR/PBO) not computed per account",
+      "severity": "HIGH",
+      "blocking": [
+        "Cannot flag INSUFFICIENT_SAMPLE accounts",
+        "Cannot distinguish genuine edge from lucky small samples"
+      ],
+      "gate": "XR05 ACCEPTED",
+      "mission": "XR06",
+      "source": "canonical_roadmap_v2 XR06"
+    },
+    {
+      "id": "GAP-021",
+      "req_id": "XREQ-021",
+      "title": "Account ranking end-to-end (all dimensions) BLOCKED",
+      "severity": "HIGH",
+      "blocking": [
+        "Final product output not achievable until full pipeline complete"
+      ],
+      "gate": "XREQ-001 through XREQ-020 all IMPLEMENTED",
+      "mission": null,
+      "source": "CTO_STATE twitter.blocked"
+    },
+    {
+      "id": "GAP-022",
+      "req_id": "FREQ-027",
+      "title": "CandidateRegistry completely disconnected from dispatch chain",
+      "severity": "HIGH",
+      "source_audit": "ZC-001 (Z-Code counter-audit 2026-09-06) + CX-005 (Codex counter-audit)",
+      "blocking": [
+        "candidate_sha advancement is uncontrolled — no registry tracks who promoted what",
+        "Cannot replay or audit promotion chain",
+        "QRTS advancement lacks provenance"
+      ],
+      "gate": "available now",
+      "mission": "WIRE_CANDIDATE_REGISTRY",
+      "fix": "Wire register_candidate() in factoryd._default_dispatch after Popen; wire update_status() in _handle_mission_settled",
+      "source": "ZC-001 + CX-005"
+    },
+    {
+      "id": "GAP-023",
+      "req_id": "FREQ-029",
+      "title": "stop_gate.py reads wrong campaign state path — qualification verdicts may be stale",
+      "severity": "MEDIUM",
+      "source_audit": "ZC-007 (Z-Code counter-audit 2026-09-06) + CX-004 (Codex counter-audit)",
+      "blocking": [
+        "stop_gate qualification verdicts are based on wrong or missing file",
+        "QRTS advancement could be triggered by stale data"
+      ],
+      "gate": "available now",
+      "mission": null,
+      "fix": "Align stop_gate.py campaign state path construction with factoryd.cs_path pattern",
+      "source": "ZC-007 + CX-004"
+    },
+    {
+      "id": "GAP-024",
+      "req_id": "FREQ-030",
+      "title": "context_receipt_missing not tracked end-to-end — SOAK criterion unmeasurable",
+      "severity": "MEDIUM",
+      "status": "CLOSED",
+      "closed_at": "2026-09-06",
+      "closed_by": "factoryd._handle_mission_settled now checks context_package.json and increments context_receipt_missing_count (commit 527cc5a0)",
+      "source_audit": "CX-006 (Codex counter-audit 2026-09-06)",
+      "blocking": [
+        "SOAK_6H acceptance criterion CONTEXT_RECEIPT_MISSING_COUNT=0 cannot be verified",
+        "dispatcher_v3 writes context_package.json but factoryd never checks it was written"
+      ],
+      "gate": "before SOAK_6H PASS verdict",
+      "mission": "WIRE_CONTEXT_RECEIPT_CHECK",
+      "fix": "In _handle_mission_settled, check context_package.json exists in evidence_dir; if missing, increment state.context_receipt_missing_count",
+      "source": "CX-006"
+    },
+    {
+      "id": "GAP-025",
+      "title": "ROADMAP RESOLVER absent — next-work resolution ne lit jamais CANONICAL_ROADMAP.json (blueprint §3: PORTFOLIO→authority→roadmap→deps→mission)",
+      "status": "CLOSED_IN_CHALLENGER",
+      "tag": "reshape",
+      "source": "Blueprint reshape 2026-09-07 (deep research + directive owner)",
+      "registered_at": "2026-09-07T14:49:23Z",
+      "closed_by": "FACTORY_V2_RESHAPE (factory_v2/) — champion promotion pending benchmark"
+    },
+    {
+      "id": "GAP-026",
+      "title": "RunRecords absents — aucune trajectoire validée persistée (adapter le modèle trajectory de SWE-agent)",
+      "status": "OPEN",
+      "tag": "learning",
+      "source": "Blueprint reshape 2026-09-07 (deep research + directive owner)",
+      "registered_at": "2026-09-07T14:49:23Z"
+    },
+    {
+      "id": "GAP-027",
+      "title": "Champion/challenger pour Factory elle-même absent — pas d'auto-amélioration mesurée par benchmark",
+      "status": "OPEN",
+      "tag": "learning",
+      "source": "Blueprint reshape 2026-09-07 (deep research + directive owner)",
+      "registered_at": "2026-09-07T14:49:23Z"
+    },
+    {
+      "id": "GAP-028",
+      "title": "Validation contract AVANT build absent (pattern Factory Missions: le validateur indépendant définit la complétion avant le worker)",
+      "status": "CLOSED_IN_CHALLENGER",
+      "tag": "validation",
+      "source": "Blueprint reshape 2026-09-07 (deep research + directive owner)",
+      "registered_at": "2026-09-07T14:49:23Z",
+      "closed_by": "FACTORY_V2_RESHAPE (factory_v2/) — champion promotion pending benchmark"
+    },
+    {
+      "id": "GAP-029",
+      "title": "MilestoneController ADVISORY — doit devenir bloquant au settlement (commentaire factoryd.py:396)",
+      "status": "CLOSED_IN_CHALLENGER",
+      "tag": "validation",
+      "source": "Blueprint reshape 2026-09-07 (deep research + directive owner)",
+      "registered_at": "2026-09-07T14:49:23Z",
+      "closed_by": "FACTORY_V2_RESHAPE (factory_v2/) — champion promotion pending benchmark"
+    },
+    {
+      "id": "GAP-030",
+      "title": "ConvergenceGate non câblé automatiquement — comparaison code vs spec/plan pas continue",
+      "status": "CLOSED_IN_CHALLENGER",
+      "tag": "validation",
+      "source": "Blueprint reshape 2026-09-07 (deep research + directive owner)",
+      "registered_at": "2026-09-07T14:49:23Z",
+      "closed_by": "FACTORY_V2_RESHAPE (factory_v2/) — champion promotion pending benchmark"
+    },
+    {
+      "id": "GAP-031",
+      "title": "PORTFOLIO_STATE.next_mission_id = pointeur hardcodé de next-work — source du drift observé 2026-09-07; à remplacer par le ROADMAP RESOLVER (GAP-025)",
+      "status": "CLOSED_IN_CHALLENGER",
+      "tag": "reshape",
+      "source": "Blueprint reshape 2026-09-07 (deep research + directive owner)",
+      "registered_at": "2026-09-07T14:49:23Z",
+      "closed_by": "FACTORY_V2_RESHAPE (factory_v2/) — champion promotion pending benchmark"
+    }
+  ],
+  "summary": {
+    "total_gaps": 25,
+    "total_open": 18,
+    "total_closed": 7,
+    "factory_gaps": 18,
+    "twitter_gaps": 7,
+    "critical": 0,
+    "high": 12,
+    "medium": 5,
+    "low": 3,
+    "closed_this_session": [
+      "GAP-001 (CTO004 ACCEPTED)",
+      "GAP-003 (CTO000B complete)",
+      "GAP-005 (heartbeat wired in autopilot, commit 527cc5a0)",
+      "GAP-024 (context_receipt_missing wired in factoryd, commit 527cc5a0)"
+    ],
+    "fixed_code_this_session": [
+      "ZC-002",
+      "ZC-003",
+      "CX-002",
+      "CX-003",
+      "CX-007",
+      "GAP-005 (ZC-004/CX-001)",
+      "GAP-024 (CX-006)"
+    ],
+    "new_gaps_from_audit": [
+      "GAP-022 (CandidateRegistry)",
+      "GAP-023 (stop_gate path)",
+      "GAP-024 (now CLOSED)"
+    ],
+    "open_priority": [
+      "GAP-002: SOAK_6H IN_PROGRESS — gates factory_freeze + CTO005",
+      "GAP-022: CandidateRegistry wiring — gates promotion auditability",
+      "GAP-023: stop_gate wrong path — fix before next QRTS advance",
+      "GAP-004: Anti-loop policy not wired cross-dispatch",
+      "GAP-015: X101 corpus expansion — gates all XR analysis credibility"
+    ]
+  }
+}

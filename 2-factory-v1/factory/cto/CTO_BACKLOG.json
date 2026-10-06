@@ -1,0 +1,339 @@
+{
+  "schema": "cto-backlog/v1",
+  "produced_at": "2026-09-04T14:10:00Z",
+  "plan_source_commit": "7c7becac",
+  "replan_trigger": "HUMAN_FEEDBACK + M008_FAIL + CTO_MODE_UPGRADE",
+  "H0_ACTIVE": [],
+  "H0_NEXT": [],
+  "H0_COMPLETED_THIS_CYCLE": [
+    {
+      "id": "APP007_MISSION_007B",
+      "title": "OFFLINE_E2E_DATAFLOW_CORRECTNESS",
+      "status": "ACCEPTED",
+      "verdict": "ACCEPTED",
+      "ended_at": "2026-09-04T13:22:34Z",
+      "wall_s": 1056.42,
+      "candidate_sha": "041174a2",
+      "fixtures_sha": "52e2c5b",
+      "release": "RADAR_OFFLINE_VALIDATED",
+      "model": "claude-sonnet-5"
+    },
+    {
+      "id": "FACTORY_HARDENING_FD7_FULL",
+      "title": "DUAL_BACKLOG_SCHEDULER",
+      "status": "ACCEPTED",
+      "release": "FACTORY_PLATFORM",
+      "depends_on": [],
+      "hard_dependency": false,
+      "estimated_wall_s": 600,
+      "model": "glm",
+      "repo": "factory-foundation-v2",
+      "notes": "Full implementation of dual-backlog: product queue + factory hardening queue. Refill before empty. CTO planner trigger events."
+    },
+    {
+      "id": "FACTORY_HARDENING_FD8",
+      "title": "PERSISTENT_CTO_PLANNER",
+      "status": "ACCEPTED",
+      "release": "FACTORY_PLATFORM",
+      "depends_on": [],
+      "hard_dependency": false,
+      "estimated_wall_s": 1200,
+      "model": "claude-sonnet-5",
+      "repo": "factory-foundation-v2",
+      "notes": "Codify CTO planning layer: CTO_BACKLOG.json maintenance, H1/H2 promotion logic, replan trigger events, horizon tracking."
+    },
+    {
+      "id": "APP007_MISSION_009",
+      "title": "PER_ACCOUNT_RECONCILIATION",
+      "status": "ACCEPTED",
+      "release": "RADAR_OFFLINE_VALIDATED",
+      "depends_on": [
+        "APP007_MISSION_007B"
+      ],
+      "hard_dependency": true,
+      "estimated_wall_s": 1200,
+      "model": "glm",
+      "repo": "twitter-radar-foundation-v2",
+      "notes": "M007B ACCEPTED — dependency satisfied. Verify accounting invariants end-to-end. Per-account provenance already delivered by M007B; this mission cross-validates with M003 expectations and adds structured reconciliation report."
+    },
+    {
+      "id": "APP007_MISSION_010",
+      "title": "DIRECTIONAL_RETURN_DISPLAY",
+      "status": "ACCEPTED",
+      "release": "RADAR_OFFLINE_VALIDATED",
+      "depends_on": [
+        "APP007_MISSION_007B"
+      ],
+      "hard_dependency": false,
+      "estimated_wall_s": 900,
+      "model": "glm",
+      "repo": "twitter-radar-foundation-v2",
+      "notes": "M007B already fixed SHORT display (market_return vs directional_return) and RELAY attribution. Verify no remaining gaps before promoting."
+    },
+    {
+      "id": "FACTORY_HARDENING_FD9",
+      "title": "MULTI_MODEL_ROUTING",
+      "status": "ACCEPTED",
+      "release": "FACTORY_PLATFORM",
+      "depends_on": [],
+      "notes": "Verify Z Code / Codex execution paths actually work. Do NOT claim integration before execution evidence. Needs: z-code CLI test, codex CLI test, model_router extension."
+    }
+  ],
+  "H1_READY": [],
+  "H2_PLANNED": [
+    {
+      "id": "APP007_MISSION_008_REPRESENT",
+      "title": "USER_TEST_V1_OFFLINE_REVALIDATION",
+      "status": "BLOCKED_DEPENDS_M007B",
+      "release": "RADAR_OFFLINE_VALIDATED",
+      "depends_on": [
+        "APP007_MISSION_007B"
+      ],
+      "hard_dependency": true,
+      "notes": "Re-present M008 to user ONLY after M007B ACCEPTED. Present exact command, per-account accounting, 10 CALLs with full field set."
+    },
+    {
+      "id": "APP007_MISSION_011",
+      "title": "REPORT_CLI_HARDENING",
+      "status": "PLANNED",
+      "release": "RADAR_OFFLINE_VALIDATED",
+      "depends_on": [
+        "APP007_MISSION_009",
+        "APP007_MISSION_010"
+      ],
+      "notes": "CLI ergonomics: --output-format, --limit, --accounts validation, --verbose vs --summary. Error exit codes."
+    },
+    {
+      "id": "APP007_MISSION_012",
+      "title": "OFFLINE_QUALITY_REVIEW_PACKAGE",
+      "status": "PLANNED",
+      "release": "RADAR_OFFLINE_VALIDATED",
+      "depends_on": [
+        "APP007_MISSION_009"
+      ],
+      "notes": "Generate human-reviewable CALL package: precision/recall summary, per-account stats, sample of CALL+context for review. Closes RADAR_OFFLINE_VALIDATED."
+    },
+    {
+      "id": "APP007_MISSION_013",
+      "title": "LIVE_DEPENDENCY_READINESS",
+      "status": "WAITING_DEPENDENCY",
+      "release": "RADAR_LIVE_CANARY",
+      "depends_on": [
+        "APP007_MISSION_012"
+      ],
+      "blocker": "DEPENDENCY_MISSING: twscrape not installed",
+      "notes": "Install twscrape. Prove pip install works. live_preflight() returns READY. Write install/setup script. Does NOT require auth."
+    },
+    {
+      "id": "APP007_MISSION_014",
+      "title": "TWSCRAPE_INTEGRATION",
+      "status": "WAITING_DEPENDENCY",
+      "release": "RADAR_LIVE_CANARY",
+      "depends_on": [
+        "APP007_MISSION_013"
+      ],
+      "blocker": "DEPENDENCY_MISSING: twscrape not installed",
+      "notes": "Wire twscrape session management, rate limiting, retry policy. No auth required for this mission — just session initialization."
+    },
+    {
+      "id": "APP007_MISSION_015",
+      "title": "LIVE_AUTH_PREFLIGHT",
+      "status": "WAITING_AUTH",
+      "release": "RADAR_LIVE_CANARY",
+      "depends_on": [
+        "APP007_MISSION_014"
+      ],
+      "blocker": "AUTH_REQUIRED: Twitter credentials not configured",
+      "human_gate": true,
+      "notes": "Prove auth works. live_preflight() → READY. canary() returns ≥1 post. Human must configure auth first."
+    },
+    {
+      "id": "APP007_MISSION_016",
+      "title": "ONE_ACCOUNT_LIVE_CANARY",
+      "status": "WAITING_AUTH",
+      "release": "RADAR_LIVE_CANARY",
+      "depends_on": [
+        "APP007_MISSION_015"
+      ],
+      "blocker": "AUTH_REQUIRED",
+      "notes": "run_radar(['CKCapitalxx'], mode='live') → LIVE_E2E_PASS. ≥1 real post, ≥1 real CALL classified."
+    },
+    {
+      "id": "APP007_MISSION_017",
+      "title": "THREE_ACCOUNT_LIVE_CANARY",
+      "status": "WAITING_AUTH",
+      "release": "RADAR_LIVE_CANARY",
+      "depends_on": [
+        "APP007_MISSION_016"
+      ],
+      "blocker": "AUTH_REQUIRED",
+      "notes": "run_radar(['CKCapitalxx','PhotonBull','RJCcapital'], mode='live'). Per-account live reconciliation."
+    },
+    {
+      "id": "APP007_MISSION_018",
+      "title": "LIVE_E2E_RECONCILIATION",
+      "status": "WAITING_AUTH",
+      "release": "RADAR_LIVE_CANARY",
+      "depends_on": [
+        "APP007_MISSION_017"
+      ],
+      "human_gate": true,
+      "notes": "Human validates live E2E: 10 live CALLs, all fields. Closes RADAR_LIVE_CANARY gate."
+    },
+    {
+      "id": "APP007_MISSION_019",
+      "title": "USER_CLI_HARDENING",
+      "status": "PLANNED",
+      "release": "RADAR_USER_ALPHA",
+      "depends_on": [
+        "APP007_MISSION_018"
+      ],
+      "notes": "User-facing CLI: --mode auto, --output report/json/summary, --top-n, clear error messages, install guide."
+    },
+    {
+      "id": "APP007_MISSION_020",
+      "title": "OUTPUT_PROVENANCE",
+      "status": "PLANNED",
+      "release": "RADAR_USER_ALPHA",
+      "depends_on": [
+        "APP007_MISSION_018"
+      ],
+      "notes": "Every output has: source_commit, pipeline_version, run_id, input_hash. Reproducibility guarantee."
+    },
+    {
+      "id": "APP007_MISSION_021",
+      "title": "USER_TEST_PACKAGE_V2",
+      "status": "PLANNED",
+      "release": "RADAR_USER_ALPHA",
+      "depends_on": [
+        "APP007_MISSION_019",
+        "APP007_MISSION_020"
+      ],
+      "human_gate": true,
+      "notes": "Full user test package: install guide, 3-account run, 10 CALLs review, feedback collection. Human PASS → RADAR_USER_ALPHA gate."
+    },
+    {
+      "id": "FACTORY_HARDENING_FD10",
+      "title": "RECOVERY_QUALIFICATION",
+      "status": "PLANNED",
+      "release": "FACTORY_PLATFORM",
+      "depends_on": [],
+      "notes": "MOTOR_UNAVAILABLE → fallback qualification. Prove repair loop actually falls back correctly when GLM is down."
+    },
+    {
+      "id": "FACTORY_HARDENING_FD11",
+      "title": "LONG_RUN_QUALIFICATION",
+      "status": "PLANNED",
+      "release": "FACTORY_PLATFORM",
+      "depends_on": [
+        "FACTORY_HARDENING_FD7_FULL",
+        "FACTORY_HARDENING_FD8"
+      ],
+      "notes": "72h uninterrupted autonomous run proof. Requires deep backlog + CTO planner to sustain."
+    }
+  ],
+  "H3_RELEASES": [
+    {
+      "id": "RADAR_OFFLINE_VALIDATED",
+      "status": "IN_PROGRESS",
+      "entry_conditions": [
+        "M007 ACCEPTED"
+      ],
+      "exit_gates": [
+        "M007B ACCEPTED",
+        "M008 human PASS (offline)"
+      ],
+      "critical_path": [
+        "M007B → M008 re-present → human validation"
+      ],
+      "parallelizable": [
+        "FD7_FULL",
+        "FD8",
+        "M009/M010 after M007B"
+      ]
+    },
+    {
+      "id": "RADAR_LIVE_CANARY",
+      "status": "BLOCKED_AUTH",
+      "entry_conditions": [
+        "RADAR_OFFLINE_VALIDATED"
+      ],
+      "exit_gates": [
+        "M018 human validation of live E2E"
+      ],
+      "critical_path": [
+        "M013 → M014 → M015(AUTH) → M016 → M017 → M018"
+      ],
+      "external_blockers": [
+        "twscrape install",
+        "Twitter auth credentials"
+      ]
+    },
+    {
+      "id": "RADAR_USER_ALPHA",
+      "status": "PLANNED",
+      "entry_conditions": [
+        "RADAR_LIVE_CANARY"
+      ],
+      "exit_gates": [
+        "M021 user test package human PASS"
+      ],
+      "critical_path": [
+        "M019 → M020 → M021"
+      ]
+    },
+    {
+      "id": "RADAR_VALIDATED_ALPHA",
+      "status": "PLANNED",
+      "entry_conditions": [
+        "RADAR_USER_ALPHA",
+        "semantic quality gates"
+      ],
+      "exit_gates": [
+        "M028 multi-account comparison",
+        "quality thresholds"
+      ],
+      "notes": "Includes semantic precision hardening, ticker/direction hardening, market coverage expansion"
+    },
+    {
+      "id": "RANKING_READINESS",
+      "status": "PLANNED",
+      "entry_conditions": [
+        "RADAR_VALIDATED_ALPHA",
+        "sufficient live evidence per account"
+      ],
+      "exit_gates": [
+        "account scoring QUALIFIED",
+        "ranking output human-validated"
+      ],
+      "blocker": "ACCOUNT_RANKING_BLOCKED until live evidence + outcomes sufficient"
+    }
+  ],
+  "replan_policy": {
+    "triggers": [
+      "SPEC_CHANGED",
+      "RELEASE_GATE_COMPLETED",
+      "NEW_P0_OR_P1",
+      "DEPENDENCY_CHANGED",
+      "HUMAN_FEEDBACK",
+      "FAILED_ASSUMPTION",
+      "QUALITY_GATE_FAILED",
+      "EXTERNAL_ENVIRONMENT_CHANGED"
+    ],
+    "NOT_triggers": [
+      "normal mission completion",
+      "single test green",
+      "FD fixed",
+      "checkpoint written"
+    ]
+  },
+  "refill_policy": {
+    "refill_when": "H1_READY < 4",
+    "target_h1": "4-8 missions",
+    "target_h2": "10-20 missions",
+    "refill_source": "H2 promotion via DAG dependency check",
+    "critical_rule": "REFILL_BEFORE_EMPTY — do not wait until H1=0"
+  },
+  "updated_at": "2026-09-07T14:43:57Z",
+  "reconciliation_note": "2026-09-07: purged missions already ACCEPTED in APP007_CAMPAIGN_STATE (FD1-FD9, 008A, X-chain). Backlog empty = truthful: next cycle awaiting orders."
+}

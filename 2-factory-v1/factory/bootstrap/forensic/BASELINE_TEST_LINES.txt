@@ -1,0 +1,34 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- /Library/Frameworks/Python.framework/Versions/3.12/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/jocelyngrosjean/Jocelyn-Factory-Control
+plugins: anyio-4.14.2
+collecting ... collected 25 items
+
+tests/test_factoryctl.py::test_state_is_external_and_prepare PASSED      [  4%]
+tests/test_factoryctl.py::test_chain_tamper_fails PASSED                 [  8%]
+tests/test_factoryctl.py::test_exact_sha_rejected PASSED                 [ 12%]
+tests/test_factoryctl.py::test_infra_retries_do_not_consume_repairs PASSED [ 16%]
+tests/test_factoryctl.py::test_prepare_sets_milestone_run_id PASSED      [ 20%]
+tests/test_factoryctl.py::test_record_rejects_stale_milestone_run_id PASSED [ 24%]
+tests/test_factoryctl.py::test_record_accepts_matching_milestone_run_id PASSED [ 28%]
+tests/test_factoryctl.py::test_infra_failure_sets_waiting_infra_and_resume_stage PASSED [ 32%]
+tests/test_factoryctl.py::test_infra_failure_dedups_same_attempt_id PASSED [ 36%]
+tests/test_factoryctl.py::test_recover_resumes_at_resume_stage_not_plan_accepted PASSED [ 40%]
+tests/test_factoryctl.py::test_recover_respects_retry_after_unless_forced PASSED [ 44%]
+tests/test_verify_factory_dod.py::test_all_checks_pass_for_a_correctly_run_milestone PASSED [ 48%]
+tests/test_verify_factory_dod.py::test_fails_when_main_was_merged_into PASSED [ 52%]
+tests/test_verify_factory_dod.py::test_fails_when_spec_commit_not_ancestor PASSED [ 56%]
+tests/test_verify_factory_dod.py::test_fails_when_no_independent_reviewer_present PASSED [ 60%]
+tests/test_verify_factory_dod.py::test_fails_when_repairs_exceed_two PASSED [ 64%]
+tests/test_verify_runtime_gate.py::test_fake_receipt_missing_fields_rejected PASSED [ 68%]
+tests/test_verify_runtime_gate.py::test_receipt_wrong_candidate_sha_rejected PASSED [ 72%]
+tests/test_verify_runtime_gate.py::test_receipt_oracle_mismatch_rejected PASSED [ 76%]
+tests/test_verify_runtime_gate.py::test_qa_record_without_receipt_rejected_when_acceptance_locked PASSED [ 80%]
+tests/test_verify_runtime_gate.py::test_qa_record_without_receipt_still_works_when_not_acceptance_locked PASSED [ 84%]
+tests/test_verify_runtime_gate.py::test_build_rejected_when_spec_commit_not_ancestor_of_candidate PASSED [ 88%]
+tests/test_verify_runtime_gate.py::test_verify_runtime_rejects_dirty_worktree PASSED [ 92%]
+tests/test_verify_runtime_gate.py::test_sha_agreement_rejects_divergent_runtime_sha PASSED [ 96%]
+tests/test_verify_runtime_gate.py::test_verify_runtime_end_to_end_against_real_oracle PASSED [100%]
+
+============================= 25 passed in 23.29s ==============================

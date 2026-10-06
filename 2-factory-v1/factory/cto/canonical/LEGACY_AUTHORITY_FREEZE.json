@@ -1,0 +1,27 @@
+{
+  "schema": "legacy-authority-freeze/v1",
+  "produced_at": "2026-09-07T15:21:00Z",
+  "frozen": {
+    "factory/cto/CTO_STRATEGY.md": {
+      "frozen_sha": "625553e8777dc15f",
+      "successor": "projects/factory/STRATEGY.md",
+      "frozen_at": "2026-09-07T15:21:00Z"
+    },
+    "factory/cto/canonical/FACTORY_MASTER_SPEC.md": {
+      "frozen_sha": "e29a3b7c18611245",
+      "successor": "projects/factory/SPEC.md",
+      "frozen_at": "2026-09-12T00:00:00Z",
+      "note": "re-frozen after adding SUPERSEDED header (authority change item 7, owner-approved 2026-09-12)"
+    },
+    "factory/cto/canonical/TWITTER_RADAR_MASTER_SPEC.md": {
+      "frozen_sha": "44ecb2204354cb5a",
+      "successor": "projects/twitter-radar/SPEC.md",
+      "frozen_at": "2026-09-07T15:21:00Z"
+    },
+    "factory/cto/canonical/CANONICAL_ROADMAP.json": {
+      "frozen_sha": "39a17415aaa2f4ed",
+      "successor": "projects/factory/ROADMAP.yaml",
+      "frozen_at": "2026-09-07T15:21:00Z"
+    }
+  }
+}

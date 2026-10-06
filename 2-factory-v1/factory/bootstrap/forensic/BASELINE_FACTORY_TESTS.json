@@ -1,0 +1,16 @@
+{
+  "schema": "factory-baseline-tests/v1",
+  "baseline_commit_sha": "603b2a5cda19d8891e76585d50b8acb6e07a2910",
+  "command": ["python3", "-m", "pytest", "tests/", "--tb=no", "-v"],
+  "result": "25 passed in 23.29s",
+  "passed": 25,
+  "failed": 0,
+  "skipped": 0,
+  "test_files": [
+    "tests/test_factoryctl.py",
+    "tests/test_verify_factory_dod.py",
+    "tests/test_verify_runtime_gate.py"
+  ],
+  "raw_output_path": "factory/bootstrap/forensic/BASELINE_TEST_LINES.txt",
+  "note": "Baseline captured BEFORE any Factory V1 (MASTER_ORDER_FACTORY_V1_FINAL.md) code changes, on commit 603b2a5 (tip of main at the start of this campaign). This is the pre-existing JR-LIVE-RECOVERY-era factoryctl/verify_factory_dod test suite, not yet expanded for Factory V1's own invariants (bootstrap lock, F023 writer-switch, per-project runtime receipt schema)."
+}

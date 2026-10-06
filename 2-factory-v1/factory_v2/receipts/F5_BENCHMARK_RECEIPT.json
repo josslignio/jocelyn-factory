@@ -1,0 +1,24 @@
+{
+  "verdict": "REVOKED",
+  "revoked_at": "2026-09-08T00:00:00Z",
+  "original_verdict": "PROMOTE",
+  "original_ts": "2026-09-07T23:57:38Z",
+  "revocation_reason": "Counter-audit 2026-09-08: DOUBLE_DISPATCH_PREVENTED=false, factoryd died on PORTFOLIO_COMPLETE (no OS service supervision), heartbeat written once (workers >90s become false orphans), receipt self-written by session not external observer, synthetic echo scripts not real AI for all scenarios. F5R1-F5R8 required before re-claim.",
+  "invariants": {
+    "HUMAN_GO": 0,
+    "PREMATURE_IDLE": 0,
+    "DOUBLE_DISPATCH_PREVENTED": false,
+    "ORPHAN_RECOVERED": true,
+    "P1_SETTLED_VIA_VALIDATOR": true,
+    "P2_SETTLED_VIA_VALIDATOR": true,
+    "PORTFOLIO_COMPLETE": true
+  },
+  "defects": [
+    "factoryd exits on PORTFOLIO_COMPLETE — no OS service supervision",
+    "heartbeat written once at process start, not renewed — long workers become false orphans after 90s",
+    "escalation ladder calculates stages but does not create executable DIAGNOSE/REPLAN missions",
+    "external promote receipt self-written, not validated by independent observer",
+    "DOUBLE_DISPATCH_PREVENTED=false explicitly"
+  ],
+  "next": "F5R1 OS_SERVICE_OWNERSHIP -> F5R2 DURABLE_MISSION_LEASES -> F5R3 PROCESS_GROUP_AND_HEARTBEAT -> F5R4 FAIL_CLOSED -> F5R5 RECOVERY_LADDER -> F5R6 CONTEXT_LINEAGE -> F5R7 SHA_BOUND -> F5R8 BLACK_BOX_QUALIFICATION"
+}

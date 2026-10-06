@@ -1,0 +1,95 @@
+{
+  "schema": "factory-v2-reshape-prune-ledger/v1",
+  "produced_at": "2026-09-07T15:10:00Z",
+  "scope": "Modules champion touchés par le reshape (audit exige par le GO Étape 6). Le champion reste FROZEN — les décisions s'appliquent à la promotion du challenger, pas à des hotfixs.",
+  "decisions_required": ["KEEP", "ADAPT", "WRAP", "DEMOTE", "DELETE"],
+  "entries": [
+    {
+      "module": "factory/lib/long_run_supervisor.py (idle_recovery + _transition_to_project + _next_runnable_project)",
+      "current_role": "next-work via portfolio pointer + delivery gate scan",
+      "decision": "DEMOTE",
+      "reason": "Autorité next-work parallèle à la roadmap canonique; le pointer next_mission_id a causé le drift du 2026-09-07 (spin 50 min)",
+      "replacement": "factory_v2/roadmap_resolver.py — statut DÉRIVÉ du ROADMAP.yaml, jamais stocké",
+      "loc_before": 373, "loc_after_v2_role": 0
+    },
+    {
+      "module": "PORTFOLIO_STATE.json field next_mission_id (+ active_missions/queued_missions)",
+      "current_role": "pointeur de prochaine mission (autorité de direction)",
+      "decision": "DELETE",
+      "reason": "GAP-031: un artefact dérivé ne doit jamais décider de la direction produit; le portfolio choisit le PROJET, pas la mission",
+      "replacement": "PORTFOLIO = choix de projet uniquement (factory_v2/runtime.select_project)",
+      "loc_before": null, "loc_after_v2_role": null
+    },
+    {
+      "module": "factory/bin/cto_planner.py (H0/H1/H2 dual backlog + _sync_h1_to_campaign_queue)",
+      "current_role": "planification/rolling backlog parallèle",
+      "decision": "DEMOTE",
+      "reason": "Deuxièmes autorités de next-work concurrentes (GAP-013); backlog jamais purgé → contradictions détectées par l'audit C4",
+      "replacement": "factory_v2/mission_compiler.py — missions dérivées du milestone + contrat",
+      "loc_before": 332, "loc_after_v2_role": 0
+    },
+    {
+      "module": "factory/lib/backlog_refiller.py",
+      "current_role": "refill campaign queue depuis CTO backlog",
+      "decision": "DELETE",
+      "reason": "Duplication du chemin de refill (GAP-013); en V2 la queue se matérialise depuis le resolver (T12)",
+      "replacement": "factory_v2/runtime.advance",
+      "loc_before": 61, "loc_after_v2_role": 0
+    },
+    {
+      "module": "factory/bin/factoryd.py (_handle_mission_settled milestone gate advisory, lignes 396-420)",
+      "current_role": "gate milestone ADVISORY (warn + event, settlement continue)",
+      "decision": "ADAPT",
+      "reason": "GAP-029: advisory = 'runtime can bypass X' — défaut que le reshape élimine",
+      "replacement": "factory_v2/authority_gate.assert_milestone_settleable — BLOQUANT (MILESTONE_GATE_BLOCKED, T6/T7)",
+      "loc_before": 1039, "loc_after_v2_role": null
+    },
+    {
+      "module": "factory/lib/milestone_controller.py",
+      "current_role": "évaluation DoD milestone depuis receipt + evidence",
+      "decision": "ADAPT",
+      "reason": "Logique de gates réutilisée mais recâblée: le validateur est indépendant du worker et le contrat est gelé AVANT le build (GAP-028)",
+      "replacement": "factory_v2/authority_gate.IndependentValidator + factory_v2/validation_contract",
+      "loc_before": 302, "loc_after_v2_role": 160
+    },
+    {
+      "module": "factory/lib/cto_kernel.py",
+      "current_role": "état canonical CTO + invariants startup",
+      "decision": "KEEP",
+      "reason": "Prouvé (CTOK001, cold restart CTOK007); le challenger réutilise le pattern état-disque-unique-mémoire",
+      "replacement": null,
+      "loc_before": 481, "loc_after_v2_role": 481
+    },
+    {
+      "module": "factory/lib/context_compiler.py",
+      "current_role": "compilation contexte depuis CTO_STRATEGY/CTO_STATE (lecture live)",
+      "decision": "WRAP",
+      "reason": "Lecture live correcte; le challenger ajoute la couche identité (hashes) qui invalide le contexte périmé (T8/T9)",
+      "replacement": "factory_v2/project_authority.AuthorityIdentity (wraps le trio au-dessus du compiler)",
+      "loc_before": 329, "loc_after_v2_role": 329
+    },
+    {
+      "module": "APP007_CAMPAIGN_STATE.json (queued/active/completed comme direction)",
+      "current_role": "état d'exécution ET de direction (double rôle)",
+      "decision": "WRAP",
+      "reason": "En V2: état d'exécution UNIQUEMENT (missions dérivées) — CAMPAIGN STATE ≠ direction produit",
+      "replacement": "factory_v2 PROJECT_STATE.json (progress only) + missions re-calculables",
+      "loc_before": null, "loc_after_v2_role": null
+    }
+  ],
+  "external_decisions": [
+    {"pattern": "GitHub Spec Kit — autorité résolue live, jamais copiée", "decision": "ADAPT", "where": "project_authority (hashes à chaque lecture)"},
+    {"pattern": "Factory Missions — validation contract avant build, validateur ≠ implémenteur", "decision": "ADAPT", "where": "validation_contract + IndependentValidator"},
+    {"pattern": "Temporal — décisions déterministes rejouables, side effects idempotents", "decision": "ADAPT", "where": "resolver pur + settlement clé par contract_id"},
+    {"pattern": "LangGraph/Temporal migration complète", "decision": "REJECT", "why": "migration majeure sans preuve de benchmark (exigée par le GO pour toute migration)"},
+    {"pattern": "OpenHands/SWE-ReX runtime", "decision": "REJECT (pour l'instant)", "why": "idem — benchmark d'abord (champion reste la référence)"},
+    {"pattern": "SWE-agent trajectories", "decision": "REPORTÉ", "why": "RunRecords = Étape 8, hors scope Étape 6"},
+    {"pattern": "BMAD planning templates", "decision": "REPORTÉ", "why": "planning docs = post-reshape"}
+  ],
+  "net_effect": {
+    "challenger_loc": 891,
+    "champion_loc_demoted_or_deleted_in_v2_scope": 766,
+    "authority_files_for_direction": 1,
+    "runtime_paths_to_next_work": 1
+  }
+}

@@ -1,0 +1,418 @@
+{
+  "attempt_keys": 2,
+  "attempt_keys_unique": true,
+  "attempt_rows_raw": 6,
+  "authority_files_unchanged": {
+    "gamma/ROADMAP.yaml": true,
+    "gamma/SPEC.md": true,
+    "gamma/STRATEGY.md": true
+  },
+  "cross_write_violations": [],
+  "d019": {
+    "fan_out_event": true,
+    "g1_g2_overlap": true,
+    "knowledge_sha_match": true,
+    "older_product_tree_unchanged": true,
+    "reused_from": "../older_product/knowledge/lesson.md",
+    "workers": 4
+  },
+  "daemon_error": [],
+  "daemon_joined": true,
+  "deliverable_detail": {
+    "gamma/build/g1.txt": "byte_exact",
+    "gamma/research/g2.md": "structural"
+  },
+  "deliverables_ok": {
+    "gamma/build/g1.txt": true,
+    "gamma/research/g2.md": true
+  },
+  "engine_markers": {
+    "G1_BUILD": [
+      [
+        1789856452.475,
+        1789856457.581,
+        85070
+      ]
+    ],
+    "G2_RESEARCH": [
+      [
+        1789856453.78,
+        1789856456.873,
+        85261
+      ]
+    ]
+  },
+  "engine_overlaps": [
+    [
+      "G1_BUILD",
+      "G2_RESEARCH"
+    ]
+  ],
+  "expected_settled": 2,
+  "failure_event_summary": {},
+  "frozen_tree_unchanged": true,
+  "isolation": {
+    "authority_files_unchanged": true,
+    "deliverables_exact": true,
+    "ledger_integrity": true,
+    "mission_records_coexist": true,
+    "no_cross_tree_writes": true
+  },
+  "launches_per_mission": {
+    "A1_BUILD": 0,
+    "A2_RESEARCH": 0,
+    "B1_BUILD": 0,
+    "B2_REUSE": 0,
+    "G1_BUILD": 1,
+    "G2_RESEARCH": 1
+  },
+  "ledger_max_workers": [
+    4
+  ],
+  "logs_tail": [
+    "V2_PORTFOLIO_MODE: portfolio=/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/scalen_d019_f2zuebrv/portfolio.json \u2014 select_project() governs next work. DEFAULT_RUNTIME=V2.",
+    "LOG_TARGET_DETACHED: factoryd.log no longer resolves to the inode this process writes to \u2014 readers are on a stale snapshot",
+    "PARALLEL_ADVANCE_STARTED: gamma slot=0 (running=1)",
+    "CONTINUATION: disposition=CONTINUE AGENT_GO_REQUESTS=0 HUMAN_GO=0",
+    "[factoryd] HEARTBEAT pid=62919 polls=1 action=ADVANCE_RUNNING reason=contract verified, gate authoritative streak=0 next_sleep_s=1.0",
+    "PARALLEL_ADVANCE_STARTED: gamma slot=1 (running=2)",
+    "CONTINUATION: disposition=CONTINUE AGENT_GO_REQUESTS=0 HUMAN_GO=0",
+    "PARALLEL_ADVANCE_STARTED: gamma slot=2 (running=3)",
+    "CONTINUATION: disposition=CONTINUE AGENT_GO_REQUESTS=0 HUMAN_GO=0",
+    "V2_ADVANCE: action=MISSION_IN_FLIGHT milestone=G1_BUILD",
+    "PROGRESS_INCIDENT: DAEMON_IDLE_NO_USEFUL_WORK \u2014 daemon pid 62919 is polling with zero workers and no product progress for infs \u2014 a live runtime without material progress is an incident, not a healthy state (next_safe_action=resolve why the next action is not compilable or not dispatchable, fix that, then resume)",
+    "PARALLEL_ADVANCE_DONE: gamma action=MISSION_IN_FLIGHT",
+    "PARALLEL_ADVANCE_STARTED: gamma slot=2 (running=3)",
+    "CONTINUATION: disposition=CONTINUE AGENT_GO_REQUESTS=0 HUMAN_GO=0",
+    "V2_ADVANCE: action=MISSION_IN_FLIGHT milestone=G1_BUILD",
+    "V2_ADVANCE: action=MILESTONE_SETTLED milestone=G2_RESEARCH",
+    "V2_MILESTONE_SETTLED: G2_RESEARCH",
+    "PARALLEL_ADVANCE_DONE: gamma action=MILESTONE_SETTLED",
+    "PARALLEL_ADVANCE_DONE: gamma action=MISSION_IN_FLIGHT",
+    "PARALLEL_ADVANCE_STARTED: gamma slot=1 (running=2)",
+    "CONTINUATION: disposition=CONTINUE AGENT_GO_REQUESTS=0 HUMAN_GO=0",
+    "V2_ADVANCE: action=MISSION_IN_FLIGHT milestone=G1_BUILD",
+    "PARALLEL_ADVANCE_DONE: gamma action=MISSION_IN_FLIGHT",
+    "PARALLEL_ADVANCE_STARTED: gamma slot=1 (running=2)",
+    "CONTINUATION: disposition=CONTINUE AGENT_GO_REQUESTS=0 HUMAN_GO=0",
+    "V2_ADVANCE: action=MISSION_IN_FLIGHT milestone=G1_BUILD",
+    "V2_ADVANCE: action=MILESTONE_SETTLED milestone=G1_BUILD",
+    "V2_MILESTONE_SETTLED: G1_BUILD"
+  ],
+  "max_workers": 4,
+  "mission_records": {
+    "gamma": [
+      "G1_BUILD#M1",
+      "G2_RESEARCH#M1"
+    ]
+  },
+  "missions_detail": {
+    "gamma": {
+      "G1_BUILD#M1": {
+        "attempts": null,
+        "last_attempt_id": "a1",
+        "lease_generation": 1,
+        "state": "PASS"
+      },
+      "G2_RESEARCH#M1": {
+        "attempts": null,
+        "last_attempt_id": "a1",
+        "lease_generation": 1,
+        "state": "PASS"
+      }
+    }
+  },
+  "new_files": {
+    "gamma": [
+      ".bench/G1_BUILD.85070.end",
+      ".bench/G1_BUILD.85070.start",
+      ".bench/G1_BUILD.launch.txt",
+      ".bench/G2_RESEARCH.85261.end",
+      ".bench/G2_RESEARCH.85261.start",
+      ".bench/G2_RESEARCH.launch.txt",
+      ".project_transaction.lock",
+      "build/g1.txt",
+      "evidence/G1_BUILD/validator_e2e.log",
+      "evidence/G1_BUILD/validator_verdict.json",
+      "evidence/G2_RESEARCH/validator_e2e.log",
+      "evidence/G2_RESEARCH/validator_verdict.json",
+      "evidence/attempt_accounts.jsonl",
+      "evidence/dispatch_checkpoints/attempts.jsonl",
+      "evidence/leases/G1_BUILD_M1.json",
+      "evidence/leases/G2_RESEARCH_M1.json",
+      "evidence/leases/worker_lease.lock",
+      "evidence/progress_incidents.jsonl",
+      "evidence/receipts/G1_BUILD#M1/a1.json",
+      "evidence/receipts/G2_RESEARCH#M1/a1.json",
+      "evidence/telemetry/launch_gate.jsonl",
+      "evidence/telemetry/launch_gate.jsonl.lock",
+      "evidence/telemetry_observations.jsonl",
+      "evidence/telemetry_observations.jsonl.lock",
+      "research/g2.md",
+      "validation_contracts/0a7a24f855730f68.json",
+      "validation_contracts/1fee0bccabe2da46.json"
+    ]
+  },
+  "non_success_attempts": [],
+  "open_orphans": [],
+  "parallel_milestone_selected_events": [
+    [
+      "gamma",
+      "PARALLEL_MILESTONE_SELECTED",
+      {
+        "event": "PARALLEL_MILESTONE_SELECTED",
+        "milestone": "G2_RESEARCH",
+        "reason": "resolved milestone in flight; disjoint deliverables",
+        "ts": "2026-09-19T22:20:53Z"
+      }
+    ]
+  ],
+  "reliability": {
+    "daemon_clean_exit": true,
+    "no_failed_attempts": true,
+    "no_lease_violations": true,
+    "no_mission_failures": true,
+    "no_open_orphans": true,
+    "no_same_mission_concurrent_overlaps": true,
+    "no_torn_ledger_lines": true,
+    "run_windows_closed": true,
+    "settled_all": true,
+    "single_launch_per_mission": true
+  },
+  "repeat": 0,
+  "run_window_ids": [
+    "264092b0bfab4af9910a58f3cc177965"
+  ],
+  "run_window_max_workers": [
+    4
+  ],
+  "run_windows_closed": 1,
+  "runrecords_rows": [
+    {
+      "attempt_id": "G1_BUILD#M1:1fee0bccabe2da46:a1:g1",
+      "phase": "PREDICTION",
+      "predicted_at": "2026-09-19T22:20:52Z",
+      "prediction": {
+        "basis": "no-validated-history",
+        "contract_id": "1fee0bccabe2da46",
+        "engine": "local",
+        "executor_type": "local_command",
+        "milestone": "G1_BUILD",
+        "outcome": "PASS",
+        "predicted_cost_usd": null,
+        "predicted_duration_s": null,
+        "project": "gamma",
+        "spec_level": ""
+      }
+    },
+    {
+      "attempt_id": "G1_BUILD#M1:1fee0bccabe2da46:a1:g1",
+      "observation": {
+        "close_reason": "WORKER_DEATH",
+        "note": "closed by reconcile_orphan_predictions"
+      },
+      "observed_at": "2026-09-19T22:20:53Z",
+      "phase": "OBSERVATION",
+      "reconciled": true
+    },
+    {
+      "attempt_id": "G2_RESEARCH#M1:0a7a24f855730f68:a1:g1",
+      "phase": "PREDICTION",
+      "predicted_at": "2026-09-19T22:20:53Z",
+      "prediction": {
+        "basis": "no-validated-history",
+        "contract_id": "0a7a24f855730f68",
+        "engine": "local",
+        "executor_type": "local_command",
+        "milestone": "G2_RESEARCH",
+        "outcome": "PASS",
+        "predicted_cost_usd": null,
+        "predicted_duration_s": null,
+        "project": "gamma",
+        "spec_level": ""
+      }
+    },
+    {
+      "attempt_id": "G2_RESEARCH#M1:0a7a24f855730f68:a1:g1",
+      "observation": {
+        "close_reason": "WORKER_DEATH",
+        "note": "closed by reconcile_orphan_predictions"
+      },
+      "observed_at": "2026-09-19T22:20:54Z",
+      "phase": "OBSERVATION",
+      "reconciled": true
+    },
+    {
+      "attempt_id": "G2_RESEARCH#M1:0a7a24f855730f68:a1:g1",
+      "attempt_ok": true,
+      "attempt_outcome": "PASS",
+      "attempt_rc": 0,
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "gamma",
+        "roadmap_sha": "05a1c20fced6d5f4b677ddf0953f91974aa18c9a7775009f6e6677fc8229f160",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "9b1e2ba43d36d12f83c0e11598ad9a9fdc64d9455b4d67def3b2782291ca7b8a"
+      },
+      "candidate_sha": "",
+      "context_hash": "0a7a24f855730f68",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "G2_RESEARCH",
+      "mission": "G2_RESEARCH#M1",
+      "product_e2e": {},
+      "project": "gamma",
+      "recorded_at": "2026-09-19T22:20:56Z",
+      "strategy": "9b1e2ba43d36d12f83c0e11598ad9a9fdc64d9455b4d67def3b2782291ca7b8a",
+      "task_type": "local_command",
+      "tests": [],
+      "validated": false,
+      "validator_verdict": null,
+      "wall_time_s": 3.18
+    },
+    {
+      "attempt_id": "G2_RESEARCH#M1:0a7a24f855730f68:a1:g1",
+      "observation": {
+        "authority_hashes": {
+          "project": "gamma",
+          "roadmap_sha": "05a1c20fced6d5f4b677ddf0953f91974aa18c9a7775009f6e6677fc8229f160",
+          "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+          "strategy_sha": "9b1e2ba43d36d12f83c0e11598ad9a9fdc64d9455b4d67def3b2782291ca7b8a"
+        },
+        "close_reason": "ATTEMPT_COMPLETED",
+        "duration_s": 3.18,
+        "engine": "local",
+        "failure_fingerprint": "",
+        "outcome": "PASS",
+        "rc": 0,
+        "result_sha": "",
+        "tokens": null
+      },
+      "observed_at": "2026-09-19T22:20:56Z",
+      "phase": "OBSERVATION"
+    },
+    {
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "gamma",
+        "roadmap_sha": "05a1c20fced6d5f4b677ddf0953f91974aa18c9a7775009f6e6677fc8229f160",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "9b1e2ba43d36d12f83c0e11598ad9a9fdc64d9455b4d67def3b2782291ca7b8a"
+      },
+      "candidate_sha": "",
+      "context_hash": "0a7a24f855730f68",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "G2_RESEARCH",
+      "mission": "G2_RESEARCH",
+      "product_e2e": {
+        "passed": true
+      },
+      "project": "gamma",
+      "recorded_at": "2026-09-19T22:20:56Z",
+      "settled_attempt_ids": [
+        "G2_RESEARCH#M1:0a7a24f855730f68:a1:g1"
+      ],
+      "strategy": "9b1e2ba43d36d12f83c0e11598ad9a9fdc64d9455b4d67def3b2782291ca7b8a",
+      "task_type": "milestone_settlement",
+      "tests": [],
+      "validated": true,
+      "validator_verdict": "COMPLETE",
+      "wall_time_s": 0.0
+    },
+    {
+      "attempt_id": "G1_BUILD#M1:1fee0bccabe2da46:a1:g1",
+      "attempt_ok": true,
+      "attempt_outcome": "PASS",
+      "attempt_rc": 0,
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "gamma",
+        "roadmap_sha": "05a1c20fced6d5f4b677ddf0953f91974aa18c9a7775009f6e6677fc8229f160",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "9b1e2ba43d36d12f83c0e11598ad9a9fdc64d9455b4d67def3b2782291ca7b8a"
+      },
+      "candidate_sha": "",
+      "context_hash": "1fee0bccabe2da46",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "G1_BUILD",
+      "mission": "G1_BUILD#M1",
+      "product_e2e": {},
+      "project": "gamma",
+      "recorded_at": "2026-09-19T22:20:57Z",
+      "strategy": "9b1e2ba43d36d12f83c0e11598ad9a9fdc64d9455b4d67def3b2782291ca7b8a",
+      "task_type": "local_command",
+      "tests": [],
+      "validated": false,
+      "validator_verdict": null,
+      "wall_time_s": 5.21
+    },
+    {
+      "attempt_id": "G1_BUILD#M1:1fee0bccabe2da46:a1:g1",
+      "observation": {
+        "authority_hashes": {
+          "project": "gamma",
+          "roadmap_sha": "05a1c20fced6d5f4b677ddf0953f91974aa18c9a7775009f6e6677fc8229f160",
+          "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+          "strategy_sha": "9b1e2ba43d36d12f83c0e11598ad9a9fdc64d9455b4d67def3b2782291ca7b8a"
+        },
+        "close_reason": "ATTEMPT_COMPLETED",
+        "duration_s": 5.21,
+        "engine": "local",
+        "failure_fingerprint": "",
+        "outcome": "PASS",
+        "rc": 0,
+        "result_sha": "",
+        "tokens": null
+      },
+      "observed_at": "2026-09-19T22:20:57Z",
+      "phase": "OBSERVATION"
+    },
+    {
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "gamma",
+        "roadmap_sha": "05a1c20fced6d5f4b677ddf0953f91974aa18c9a7775009f6e6677fc8229f160",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "9b1e2ba43d36d12f83c0e11598ad9a9fdc64d9455b4d67def3b2782291ca7b8a"
+      },
+      "candidate_sha": "",
+      "context_hash": "1fee0bccabe2da46",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "G1_BUILD",
+      "mission": "G1_BUILD",
+      "product_e2e": {
+        "passed": true
+      },
+      "project": "gamma",
+      "recorded_at": "2026-09-19T22:20:57Z",
+      "settled_attempt_ids": [
+        "G1_BUILD#M1:1fee0bccabe2da46:a1:g1"
+      ],
+      "strategy": "9b1e2ba43d36d12f83c0e11598ad9a9fdc64d9455b4d67def3b2782291ca7b8a",
+      "task_type": "milestone_settlement",
+      "tests": [],
+      "validated": true,
+      "validator_verdict": "COMPLETE",
+      "wall_time_s": 0.0
+    }
+  ],
+  "same_mission_concurrent_overlaps": [],
+  "settled": 2,
+  "throughput_missions_per_s": 0.35548,
+  "throughput_per_worker_s": 0.08887,
+  "torn_ledger_lines": 0,
+  "wall_s": 5.626,
+  "worker_seconds": 22.505,
+  "workload": "SCALE_2_W1",
+  "workload_milestones": [
+    "G1_BUILD",
+    "G2_RESEARCH"
+  ]
+}

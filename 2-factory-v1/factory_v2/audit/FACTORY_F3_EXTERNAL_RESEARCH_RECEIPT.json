@@ -1,0 +1,352 @@
+{
+  "architectural_decisions": [
+    {
+      "DECISION": "ADAPT",
+      "decision_rationale": "Factory's advance()-is-stateless model already implements the correct SEMANTICS — it is conceptually identical to LangGraph's checkpoint-per-super-step but using PROJECT_STATE.json as the checkpoint store. As of 2026-09-07 the critical missing piece was the CONTEXT COMPILER (P6) — the worker then received stale V1 context despite the V2 authority loading being correct; P6 was CLOSED in F4 (commit c489224e2): ContextCompiler now takes project_dir and reads STRATEGY.md/SPEC.md fail-closed (context_compiler.py:146-168), dispatcher_v3 passes it (dispatcher_v3.py:1096). Temporal's server is not justified at single-machine scale. LangGraph's SQLite backend would be a net complexity addition since PROJECT_STATE.json already fulfills the same role. What we ADAPT from Temporal: declarative RetryPolicy semantics for dispatcher_v3's T0/T2/T3 stages. What we ADAPT from LangGraph: the pending_writes concept — factoryd should record per-mission intermediate outputs so a crashed mission doesn't require full restart. KEEP Factory's file-based state. REJECT Temporal server and LangGraph backend.",
+      "f4_requirement": "[EXECUTED for its P6 part — factoryd.py calls V2 runtime.advance() as its inner loop. V2 advance() reloads authority on every call (already correct then). The 2026-09-07 'ONE remaining fix' (ContextCompiler must receive V2 authority as its primary source, not CTO_STRATEGY.md) is DONE since F4 (c489224e2) via the project_dir constructor param: context_compiler.py:146-168 V2 path fail-closed, fallback CTO_STRATEGY.md only when project_dir=None; dispatcher_v3.py:1096 passes project_dir. This closed P6.]",
+      "factory_current": {
+        "approach": "factoryd: on restart, reads supervisor_state.json and reconstructs active_workers dict. V2 advance(): fully stateless — recomputes current position from PROJECT_STATE.json + ROADMAP.yaml on every call.",
+        "code": "def _load_or_create_state(state_path: Path, pid: int, poll_interval_s: float,\n                           log=_log) -> sstate.SupervisorState:\n    \"\"\"F001 — restart recovery: reconstruct `active_workers` (and the rest of the\n    supervisor state) from disk if a prior `supervisor_state.json` exists, instead of\n    always starting fresh. Without this, a kill-9 or crash orphans active missions:\n    `should_refill()` sees them still `active` in the campaign state and refuses to\n    dispatch more, while the fresh in-memory `active_workers=[]` means no completion\n    check ever runs for them — permanent deadlock. A corrupt/unreadable state file is\n    non-fatal: log and fall back to a fresh state rather than crash the daemon.\"\"\"\n    if state_path.exists():\n        try:\n            loaded = sstate.load_state(state_path)\n        except Exception as exc:\n            log(f\"RECOVERY_WARN: could not load state: {exc} — starting fresh\")\n            loaded = None\n        if loaded is not None:\n            log(f\"RECOVERY: reconstructed {len(loaded.active_workers)} active workers \"\n                f\"from disk\")\n            loaded.pid = pid\n            loaded.poll_interval_s = int(poll_interval_s)\n            return loaded\n    return sstate.SupervisorState(",
+        "code_provenance": "[VERBATIM SOURCE — replaced 2026-09-18, BLOCK codex cfd9ecac: the former block was pseudocode (method signature `_load_or_create_state(self)`, non-existent `SupervisorState.from_file()`, non-existent `state.workers`) presented as the code at factoryd.py:884. Real code: module-level function `_load_or_create_state(state_path: Path, pid: int, poll_interval_s: float, log=_log)` calling `sstate.load_state(state_path)` and reading `loaded.active_workers` — copied verbatim by `sed -n '884,905p' factory/bin/factoryd.py` at HEAD, re-executed this session]",
+        "files": [
+          "factory/bin/factoryd.py (_reconcile_stale_active at line 200, _load_or_create_state at line 884 — grep -n re-exécuté session 4 au HEAD courant : l.200 et l.884 exactes ; file measured 2363 lines by wc -l (re-measured 2026-09-19 at re-bind HEAD 865de5703a2450b38bc4f166cbcfe835439c6c9a; was 2343 at d256977f) ; the `code` field above is now the VERBATIM source of lines 884-905, not a sketch)",
+          "factory_v2/runtime.py (stateless advance())"
+        ],
+        "recovery_granularity": "Between advance() calls (i.e., between missions). Cannot recover mid-mission."
+      },
+      "langgraph_approach": {
+        "advantages_over_factory": "put_writes() — intermediate task outputs saved; crashed parallel missions don't restart from zero. Standardized checkpoint interface. Time-travel debugging (restore to any prior checkpoint). Already well-tested (LangGraph production use).",
+        "approach": "BaseCheckpointSaver interface: put(config, checkpoint, metadata) persists Checkpoint at each graph super-step. thread_id = primary key (like Factory's project_dir). checkpoint_id = secondary selector for time-travel. Checkpoint contains channel_values (full state at that step). On restart: get_tuple(config) loads the latest checkpoint; graph resumes from that state.",
+        "code": "class BaseCheckpointSaver(Generic[V]):\n    def get_tuple(self, config: RunnableConfig) -> CheckpointTuple | None: ...\n    def put(self, config, checkpoint: Checkpoint, metadata: CheckpointMetadata, new_versions: ChannelVersions) -> RunnableConfig: ...\n    def put_writes(self, config, writes: Sequence[tuple[str, Any]], task_id: str) -> None: ...\n\nclass Checkpoint(TypedDict):\n    v: int               # format version\n    id: str              # monotonically increasing checkpoint ID\n    ts: str              # ISO 8601\n    channel_values: dict[str, Any]  # full state at this checkpoint\n    channel_versions: ChannelVersions\n    versions_seen: dict[str, ChannelVersions]  # node-level version tracking\n    pending_sends: list[PendingWrite]  # outputs not yet consumed\n\n# Config uses configurable dict:\nconfig = {'configurable': {'thread_id': 'factory-project-1', 'checkpoint_id': '...'}}\n# thread_id = Factory's project_dir\n# checkpoint_id = Factory's contract_id",
+        "disadvantages_for_factory": "channel_values model (full state at each step) is richer than what Factory needs. thread_id model doesn't map cleanly to Factory's multi-project portfolio. Factory's JSON files ARE already a checkpointer — wrapping in a LangGraph interface adds a dependency without clear benefit at current scale.",
+        "files": [
+          "libs/checkpoint/langgraph/checkpoint/base/__init__.py"
+        ],
+        "recovery_granularity": "Between graph super-steps (similar to Factory's between-advance() granularity). put_writes() saves intermediate task outputs, so a crashed super-step doesn't re-run already-completed parallel tasks.",
+        "requires": "A checkpointer backend: SQLite (single-machine, zero-infra), Postgres, Redis. SQLite works without a server."
+      },
+      "p6_status_2026_09_19": "codex BLOCK 2f0e5bf3 (2026-09-18T12:12:54Z) — 'la description du contexte V2 contredit le code' : les présents de 2026-09-07 ('worker still receives stale V1 context') sont reformulés au passé avec statut. Preuves re-exécutées 2026-09-19 au HEAD ed8cbfc37 : sed -n '1090,1098p' factory/bin/dispatcher_v3.py → l.1096 'compiler = ContextCompiler(repo_root, project_dir=project_dir)' ; sed -n '135,168p' factory/lib/context_compiler.py → '# P6 fix: V2 authoritative path' l.135-137, STRATEGY.md l.146-155 (FileNotFoundError si absent), SPEC.md l.158-168 (fail-closed), fallback V1 l.156 'project_dir=None ONLY' ; factory_v2/executors.py:691 passe --project-dir.",
+      "problem": "DURABLE_EXECUTION_AND_RESTART",
+      "question": "When a worker/daemon crashes mid-run, how do we resume exactly where we were?",
+      "temporal_approach": {
+        "advantages_over_factory": "Mid-activity recovery. Exactly-once guarantees via event history. No custom restart reconstruction code needed. Retry policy is declarative and tested.",
+        "approach": "Workflows are deterministic functions that can be replayed from event history. On worker restart: _WorkflowInstance.activate() replays all historical events via _apply(job) for each job, setting _is_replaying=True during replay to suppress side effects. State is fully reconstructed by replaying the event log. Activity heartbeat: worker sends heartbeat(*details) every N seconds; if heartbeat stops, Temporal server re-schedules activity on another worker.",
+        "code": "# From _workflow_instance.py:\nself._is_replaying = act.is_replaying  # True during replay\n# During replay: existing decisions from history are used\n# instead of generating new commands\nfor job_set in job_sets:\n    for job in job_set:\n        self._apply(job)  # replay historical event\n\n# RetryPolicy (temporalio/common.py):\n@dataclass\nclass RetryPolicy:\n    initial_interval: timedelta = timedelta(seconds=1)\n    backoff_coefficient: float = 2.0\n    maximum_interval: timedelta | None = None\n    maximum_attempts: int = 0  # 0 = unlimited\n    non_retryable_error_types: Sequence[str] | None = None\n\n# Activity heartbeat (temporalio/activity.py):\ndef heartbeat(*details: Any) -> None:\n    heartbeat_fn = _Context.current().heartbeat\n    heartbeat_fn(*details)  # sends details to Temporal server\n\ndef is_worker_shutdown() -> bool:\n    return _Context.current().worker_shutdown_event.is_set()",
+        "disadvantages_for_factory": "Requires Temporal server. Distributed system overhead. All state must fit the Temporal workflow programming model. Cannot easily use existing git-worktree isolation.",
+        "files": [
+          "temporalio/worker/_workflow_instance.py",
+          "temporalio/common.py (RetryPolicy)",
+          "temporalio/activity.py (heartbeat)"
+        ],
+        "recovery_granularity": "Within an activity (mid-execution via heartbeat). Workflow state fully reconstructed from event log without any snapshot file.",
+        "requires": "Temporal server (separate process, gRPC, database). Not zero-infrastructure."
+      }
+    },
+    {
+      "DECISION": "ADAPT_MORE_AGGRESSIVELY",
+      "decision_rationale": "Factory already has the Spec Kit pattern 90% implemented (Strategy/Spec/Roadmap + ProjectAuthority + ConvergenceGate). The 2026-09-07 missing 10% was: (1) ContextCompiler must inject the V2 STRATEGY/SPEC/current milestone as the worker's context, not CTO_STATE.json/CTO_STRATEGY.md — EXECUTED in F4 (c489224e2, project_dir param). (2) ConvergenceGate must be wired as an automatic post-settlement check (like 'converge' in Spec Kit) rather than a manual advisory tool — still an open F4+ change. Both of these were F4 changes, not new features.",
+      "f4_requirement": "[Item (1) EXECUTED — ContextCompiler receives project_dir (dispatcher_v3.py:1096) and reads STRATEGY.md + SPEC.md fail-closed as the worker's primary context (context_compiler.py:146-168); CTO_STATE.json/CTO_STRATEGY.md remain only as the legacy project_dir=None path. This was the P6 fix. Item (2) ConvergenceGate automatic wiring remains prescribed.]",
+      "factory_current": {
+        "approach": "ProjectAuthority loads STRATEGY.md + SPEC.md + ROADMAP.yaml, computes SHA-256 per file. advance() reloads authority on every cycle — intent freshness guaranteed at the advance() level. The 2026-09-07 gap (ContextCompiler read CTO_STATE.json/CTO_STRATEGY.md as the worker's context source, bypassing V2 authority) is CLOSED since F4 (c489224e2): ContextCompiler(project_dir=…) reads the V2 canonical trio fail-closed (context_compiler.py:146-168), and dispatcher_v3 passes project_dir on every V2 dispatch (dispatcher_v3.py:1096). V2-dispatched workers receive V2 canonical context; the CTO_* fallback is reachable only on the legacy project_dir=None path.",
+        "files": [
+          "factory_v2/project_authority.py",
+          "factory/lib/cto_kernel.py",
+          "factory/lib/context_compiler.py"
+        ],
+        "gap": "As of 2026-09-07: 90% correct (authority loaded fresh), 10% broken (context injected from V1 files). The 10% was fixed in F4 (c489224e2, project_dir param) — see p6_status_2026_09_19 on this receipt's first entry for re-executed evidence. Residual open item from this entry: ConvergenceGate automatic wiring (item 2)."
+      },
+      "problem": "PROJECT_BRAIN_INTENT_PRESERVATION",
+      "question": "How do we ensure the system never loses the product intent (Strategy/Spec/Roadmap) across runs?",
+      "spec_kit_approach": {
+        "advantages_over_factory": "Converge is automatic and generates the work queue — our ConvergenceGate is advisory only. Sub-spec decomposition explicitly addresses the context window problem for long-horizon work.",
+        "approach": "Constitution (strategy/principles) + Product Spec (intent) + Roadmap decomposition. Core innovation: 'converge' operator that continuously compares current code state against the spec and automatically generates the remaining tasks until the code matches the spec. For large features: create sub-spec roadmaps rather than loading entire spec in one context window.",
+        "code": "```text\n/speckit-constitution Create principles focused on code quality, testing, and maintainability.\n/speckit-specify Build a photo organizer with albums grouped by date and a tile preview of each album.\n/speckit-plan Use Vite with vanilla JavaScript. Keep images local and store metadata in SQLite.\n/speckit-tasks",
+        "code_source": "github/spec-kit README.md lines 80-84 at commit 5e952140659287106580d32f242ba71365a3862b (fetched 2026-09-18) — the 2026-09-07 'Conceptual pattern (BMAD methodology)' pseudo-code block is replaced by this verbatim excerpt; BMAD methodology is cited separately and is NOT Spec Kit",
+        "commit_sha": "5e952140659287106580d32f242ba71365a3862b",
+        "factory_has_this_partially": "RoadmapResolver + ConvergenceGate together approximate 'converge'. But ConvergenceGate is advisory and ConvergenceGate + RoadmapResolver are separate, not unified.",
+        "relevant_patterns": [
+          "Live re-read of spec/constitution at every run — never trust cached state",
+          "Converge = auto-generate remaining work until code matches spec (like our ConvergenceGate but authoritative)",
+          "Sub-spec decomposition for long-horizon work — maps to Factory's milestone decomposition",
+          "Story template: user_story → acceptance_criteria → test_commands → done_when"
+        ],
+        "repo": "github.com/github/spec-kit"
+      }
+    },
+    {
+      "DECISION": "KEEP+ADAPT",
+      "decision_rationale": "dispatcher_v3's approach (subprocess agent CLI + per-stage retry + worktrees) is the correct abstraction for Factory's workload. OpenHands' runtime (Docker, EventStream, typed actions) is architecturally cleaner but the migration cost is high and the benefit is low for Factory's git-centric, single-machine use case. Factory's worktrees already provide the isolation OpenHands provides via Docker. The typed action taxonomy from OpenHands is worth adapting as an internal schema improvement. What we ADOPT from SWE-agent: trajectory JSONL schema for RunRecords.",
+      "f4_requirement": "dispatcher_v3 refactored: (1) Extract T0→T2→T3 stage-retry logic to factory/lib/retry_policy.py. (2) dispatcher_v3 becomes ~600 LOC. (3) RunRecords.append_run() called after each mission completion, using SWE-agent-inspired trajectory schema. (4) ContextCompiler fix (P6): receives ProjectAuthority, injects V2 canonical context. Do NOT migrate to OpenHands runtime. [Status 2026-09-19: item (4) EXECUTED in F4 (c489224e2) — implemented as ContextCompiler(project_dir=…) (dispatcher_v3.py:1096, context_compiler.py:146-168), not as the sketched ProjectAuthority object param. Items (1)-(3) remain prescriptions.]",
+      "factory_current": {
+        "approach": "dispatcher_v3: subprocess invocation of agent CLIs (claude/opencode), per-stage retry (T0 build / T2 repair / T3 escalation via Claude), heartbeat, budget tracking, receipt generation, context injection. Git worktrees for isolation. model_router maps (spec_level, task_kind) → engine.",
+        "code": "[ILLUSTRATIVE SKETCH — comments only, NOT copied source; real code: factory/bin/dispatcher_v3.py route_for_dispatch() def :105 (evidence_from_ledger call :123), _route_and_record() def :2687, build routing :3047 (_route_and_record(\"build\")), repair stall=1 :3217, repair stall=2 :3337 — grep -n re-exécuté session 4]\n# dispatcher_v3.py key structure:\n# Stage T0: model_router.route(spec_level, task_kind, 0) → engine\n# subprocess.run(model_router.cli_args(engine) + ['--task', task_md])\n# Stage T2: if verdict==VIOLATED and stall_count==1: repair run\n# Stage T3: if verdict==VIOLATED and stall_count==2: Claude escalation\n# Worktree: WorktreeManager.create_worktree(mission_id)\n# Context: ContextCompiler.compile(mission_id) → context_package.json",
+        "files": [
+          "factory/bin/dispatcher_v3.py (3646 LOC mesurés wc -l au HEAD d256977f9bb00006fb5f5271a762b1c58354cfae — le '918 LOC' de 2026-09-07 n'avait jamais été re-mesuré, corrigé session codex-BLOCK)",
+          "factory/lib/worktree_manager.py (327 LOC mesurés — 169 déclaré en 2026-09-07)",
+          "factory/bin/model_router.py (1888 LOC mesurés — 198 déclaré en 2026-09-07)"
+        ]
+      },
+      "openhands_approach": {
+        "advantages_over_factory": "Typed actions (not free-form subprocess). EventStream as a durable replay log. Clean agent/runtime separation means you can swap runtimes (Docker → local → remote). Tested by a large community.",
+        "approach": "OpenHands separates: (1) Runtime (Docker/local sandbox, file system access, shell execution) from (2) Agent (LLM reasoning, action generation) from (3) Controller (state machine, orchestration). EventStream is the durable state bridge. Actions are typed (CmdRunAction, FileReadAction, FileWriteAction, etc.).",
+        "code": "# OpenHands conceptual pattern:\nclass Runtime:\n    def execute_action(self, action: Action) -> Observation: ...\n\nclass Agent:\n    def step(self, state: State) -> Action: ...\n    # Agent doesn't know HOW actions are executed\n\nclass AgentController:\n    def _step(self):\n        action = self.agent.step(self.state)\n        observation = self.runtime.execute_action(action)\n        self.event_stream.add_event(action, EventSource.AGENT)\n        self.event_stream.add_event(observation, EventSource.ENVIRONMENT)",
+        "disadvantages_for_factory": "Docker sandbox is not needed for git-centric tasks. OpenHands is single-task focused — no roadmap progression, no multi-project portfolio, no multi-AI routing strategy. Migrating dispatcher_v3 to OpenHands runtime would require rewriting the entire dispatch layer for uncertain benefit.",
+        "relevant_patterns": [
+          "Typed action taxonomy: CmdRun, FileRead, FileWrite, BrowserNavigate, AgentFinish — structured not free-form",
+          "EventStream: every action+observation persisted as typed events — replay possible",
+          "Clean separation: Agent knows nothing about how actions are executed (runtime handles it)",
+          "AgentController state machine: LOADING → RUNNING → AWAITING_USER_INPUT → FINISHED/ERROR/STOPPED"
+        ]
+      },
+      "problem": "AGENT_RUNTIME_DISPATCHER_WORKSPACE",
+      "question": "Is our dispatcher_v3 + git worktrees + subprocess execution the right agent runtime, or should we wrap/replace with OpenHands?",
+      "swe_agent_approach": {
+        "approach": "RunSingle.run(): env.start() → agent.run() → save_predictions(). Trajectory saved as JSONL under output_dir/problem_id/. Hook system for pre/post run. No explicit retry — structural safety only.",
+        "code": "def run(self):\n    self._chooks.on_start()\n    self.env.start()\n    output_dir = self.output_dir / self.problem_statement.id\n    output_dir.mkdir(parents=True, exist_ok=True)\n    result = self.agent.run(\n        problem_statement=self.problem_statement,\n        env=self.env,\n        output_dir=output_dir,\n    )\n    self._chooks.on_instance_completed(result=result)\n    self.env.close()",
+        "files": [
+          "sweagent/run/run_single.py"
+        ],
+        "relevant_for_factory": "SWE-agent's per-problem trajectory JSONL is exactly what Factory needs for RunRecords. Adopt their schema.",
+        "trajectory_schema": "JSONL per problem: {action, observation, timestamp, token_count, step_number} — this is what Factory's RunRecords should capture"
+      }
+    }
+  ],
+  "control_sha": "865de5703a2450b38bc4f166cbcfe835439c6c9a",
+  "control_sha_rebind_2026_09_19": "REBOUND 2026-09-19 (codex BLOCK 2f0e5bf3 repair, session 5): control_sha moved 57cd98e0->865de5703a2450b38bc4f166cbcfe835439c6c9a because intervening milestones (SAFE_SELF_IMPROVEMENT, FACTORY_CODE_REVIEW_SWEEP, FACTORY_DEEP_RESEARCH) committed real code after 2f0e5bf3 (git diff --name-only 2f0e5bf3..HEAD: factoryd.py, runtime.py, mission_dispatch.py, settlement.py, launch_gate.py, owner_routing_policy.py, tests/). Re-verified at the new binding: LOC re-measured fresh (wc -l; drift found and updated: runtime.py 4468->4475, factoryd.py 2343->2363; all other entries exact), line citations re-resolved (factoryd _reconcile_stale_active l.200, _load_or_create_state l.884 still exact), mechanical judge python3 factory_v2/verify_audit_repair.py . -> AUDIT_REPAIR_VERIFIED rc=0.",
+  "f4_definition_of_done": {
+    "criterion": "Old concurrent paths CANNOT direct the runtime — not just deprecated but structurally incapable",
+    "specific_deletions_required": [
+      "backlog_refiller.select_next_mission() removed from factoryd.do_poll_iteration()",
+      "cto_planner.promote_h2_to_h1() no longer called by factoryd",
+      "campaign_state.next_mission() deleted",
+      "milestone_controller.evaluate() removed from settlement path",
+      "ContextCompiler reading CTO_STRATEGY.md as primary source — replaced by ProjectAuthority",
+      "autopilot.py no longer spawned by factoryd (factoryd calls advance() directly)"
+    ],
+    "what_remains_after_f4": {
+      "ONE_brain": "ProjectAuthority loads STRATEGY/SPEC/ROADMAP.yaml",
+      "ONE_context_path": "ContextCompiler(project_authority=authority) → worker",
+      "ONE_execution_path": "factoryd poll loop → advance() → dispatcher_v3 (retained as backend)",
+      "ONE_resolver": "roadmap_resolver.resolve(authority, state)",
+      "ONE_settlement_path": "advance() settles → PROJECT_STATE.json updated",
+      "ONE_validation_path": "ValidationContract + IndependentValidator (authoritative, raises)",
+      "retained_v1_as_plumbing": [
+        "dispatcher_v3 (execution backend)",
+        "WorktreeManager (worktree isolation)",
+        "FailureDirector (fingerprinting)",
+        "ProgressWatchdog + heartbeat (stall detection)",
+        "CandidateRegistry (QRTS/CAS)",
+        "CTOKernel (factory-internal state, supplementary)"
+      ]
+    }
+  },
+  "frameworks_inspected": [
+    {
+      "code_excerpt": "@dataclass\nclass RetryPolicy:\n    \"\"\"Options for retrying workflows and activities.\"\"\"\n\n    initial_interval: timedelta = timedelta(seconds=1)\n    \"\"\"Backoff interval for the first retry. Default 1s.\"\"\"\n\n    backoff_coefficient: float = 2.0\n    \"\"\"Coefficient to multiply previous backoff interval by to get new\n    interval. Default 2.0.\n    \"\"\"\n\n    maximum_interval: timedelta | None = None\n    \"\"\"Maximum backoff interval between retries. Default 100x",
+      "code_excerpt_source": "raw.githubusercontent.com/github.com/temporalio/sdk-python/5a1703a30295291f9c944c26ec193d468e200a3b/temporalio/common.py lines 36-49, fetched and copied verbatim by curl in session 2026-09-18",
+      "commit_sha": "5a1703a30295291f9c944c26ec193d468e200a3b",
+      "file": "temporalio/common.py",
+      "files_inspected": [
+        "temporalio/common.py",
+        "temporalio/activity.py",
+        "temporalio/worker/_workflow_instance.py"
+      ],
+      "name": "Temporal Python SDK",
+      "repo": "github.com/temporalio/sdk-python",
+      "takeaway_for_factory": "Declarative RetryPolicy dataclass (initial_interval, backoff_coefficient, maximum_interval...) — the semantics adapted for dispatcher retry_policy, without the Temporal server."
+    },
+    {
+      "code_excerpt": "class BaseCheckpointSaver(Generic[V]):\n    \"\"\"Base class for creating a graph checkpointer.\n\n    Checkpointers allow LangGraph agents to persist their state\n    within and across multiple interactions.\n\n    When a checkpointer is configured, you should pass a `thread_id` in the config when\n    invoking the graph:\n\n    ```python",
+      "code_excerpt_source": "raw.githubusercontent.com/github.com/langchain-ai/langgraph/c81c13533ee48c1ae0ef2de314737ef0c455f2be/libs/checkpoint/langgraph/checkpoint/base/__init__.py lines 177-186, fetched and copied verbatim by curl in session 2026-09-18",
+      "commit_sha": "c81c13533ee48c1ae0ef2de314737ef0c455f2be",
+      "file": "libs/checkpoint/langgraph/checkpoint/base/__init__.py",
+      "files_inspected": [
+        "libs/checkpoint/langgraph/checkpoint/base/__init__.py"
+      ],
+      "name": "LangGraph",
+      "repo": "github.com/langchain-ai/langgraph",
+      "takeaway_for_factory": "BaseCheckpointSaver: checkpoint per graph super-step keyed by thread_id; the pending_writes concept (partial task outputs) is the pattern adapted for RunRecords attempt trajectories."
+    },
+    {
+      "code_excerpt": "    def run(self):\n        self._chooks.on_start()\n        self.logger.info(\"Starting environment\")\n        self.env.start()\n        self.logger.info(\"Running agent\")\n        self._chooks.on_instance_start(index=0, env=self.env, problem_statement=self.problem_statement)\n        output_dir = self.output_dir / self.problem_statement.id\n        output_dir.mkdir(parents=True, exist_ok=True)\n        if self.agent.replay_config is not None:  # type: ignore[attr-defined]\n            (output_dir / \"config.yaml\").write_text(yaml.dump(self.agent.replay_config.model_dump_json(), indent=2))  # type: ignore[attr-defined]\n        result = self.agent.run(\n            problem_statement=self.problem_statement,\n            env=self.env,\n            output_dir=output_dir,",
+      "code_excerpt_source": "raw.githubusercontent.com/github.com/SWE-agent/SWE-agent/3ea751c087f32b16e039a2233dd6eefecef325d5/sweagent/run/run_single.py lines 188-201, fetched and copied verbatim by curl in session 2026-09-18",
+      "commit_sha": "3ea751c087f32b16e039a2233dd6eefecef325d5",
+      "file": "sweagent/run/run_single.py",
+      "files_inspected": [
+        "sweagent/run/run_single.py"
+      ],
+      "name": "SWE-agent",
+      "repo": "github.com/SWE-agent/SWE-agent",
+      "repo_rename_note": "formerly princeton-nlp/SWE-agent (GitHub redirect follows)",
+      "takeaway_for_factory": "RunSingle.run(): env.start() → agent.run() → hooks → env.close(); per-problem trajectory saved under output_dir/problem_id — the JSONL trajectory schema adapted for RunRecords."
+    },
+    {
+      "code_excerpt": "    def run(self, task: str = \"\", **kwargs) -> dict:\n        \"\"\"Run step() until agent is finished. Returns dictionary with exit_status, submission keys.\"\"\"\n        self.extra_template_vars |= {\"task\": task, **kwargs}\n        self.messages = []\n        self.add_messages(\n            self.model.format_message(role=\"system\", content=self._render_template(self.config.system_template)),\n            self.model.format_message(role=\"user\", content=self._render_template(self.config.instance_template)),\n        )\n        while True:\n            try:\n                self.step()\n                self.n_consecutive_format_errors = 0  # reset on any clean step",
+      "code_excerpt_source": "raw.githubusercontent.com/github.com/SWE-agent/mini-swe-agent/04d809ceab9df28f9adaed044884180159172930/src/minisweagent/agents/default.py lines 88-99, fetched and copied verbatim by curl in session 2026-09-18",
+      "commit_sha": "04d809ceab9df28f9adaed044884180159172930",
+      "file": "src/minisweagent/agents/default.py",
+      "files_inspected": [
+        "src/minisweagent/agents/default.py",
+        "src/minisweagent/environments/local.py"
+      ],
+      "name": "mini-swe-agent",
+      "repo": "github.com/SWE-agent/mini-swe-agent",
+      "takeaway_for_factory": "Minimal agent loop run() → while True: step() with typed exit statuses — the reference shape for the dispatcher core loop (file measured 190 lines by wc -l on the fetched copy)."
+    },
+    {
+      "code_excerpt": "class BashAction(BaseModel):\n    command: str\n    \"\"\"The command to run.\"\"\"\n\n    session: str = \"default\"\n    \"\"\"The session to run the command in.\"\"\"\n\n    timeout: float | None = None\n    \"\"\"The timeout for the command. None means no timeout.\"\"\"\n\n    is_interactive_command: bool = False\n    \"\"\"For a non-exiting command to an interactive program",
+      "code_excerpt_source": "raw.githubusercontent.com/github.com/SWE-agent/SWE-ReX/5c995c365dfb1fd5bc56fda688be5d8538f9931f/src/swerex/runtime/abstract.py lines 51-62, fetched and copied verbatim by curl in session 2026-09-18",
+      "commit_sha": "5c995c365dfb1fd5bc56fda688be5d8538f9931f",
+      "file": "src/swerex/runtime/abstract.py",
+      "files_inspected": [
+        "src/swerex/runtime/abstract.py",
+        "src/swerex/deployment/local.py"
+      ],
+      "name": "SWE-ReX",
+      "repo": "github.com/SWE-agent/SWE-ReX",
+      "takeaway_for_factory": "BashAction/BashObservation typed Pydantic models instead of free-form subprocess — the typed execution-action model adapted against dispatcher_v3's ad-hoc exit-code checking."
+    },
+    {
+      "code_excerpt": "class Event(DiscriminatedUnionMixin, ABC):\n    \"\"\"Base class for all events.\"\"\"\n\n    model_config: ClassVar[ConfigDict] = ConfigDict(extra=\"forbid\", frozen=True)\n    id: EventID = Field(\n        default_factory=lambda: str(uuid.uuid4()),\n        description=\"Unique event id (ULID/UUID)\",\n    )\n    timestamp: str = Field(\n        default_factory=lambda: datetime.now().isoformat(),\n        description=\"Event timestamp\",",
+      "code_excerpt_source": "raw.githubusercontent.com/github.com/OpenHands/software-agent-sdk/28e8ed273617992e9556410804f54937cc059878/openhands-sdk/openhands/sdk/event/base.py lines 20-30, fetched and copied verbatim by curl in session 2026-09-18",
+      "commit_sha": "28e8ed273617992e9556410804f54937cc059878",
+      "file": "openhands-sdk/openhands/sdk/event/base.py",
+      "files_inspected": [
+        "openhands-sdk/openhands/sdk/event/base.py",
+        "openhands-sdk/openhands/sdk/event/types.py"
+      ],
+      "name": "OpenHands Agent SDK",
+      "repo": "github.com/OpenHands/software-agent-sdk",
+      "repo_rename_note": "the old All-Hands-AI/OpenHands monorepo moved: the desktop app remains under OpenHands/OpenHands, the agent SDK (inspected here) lives under OpenHands/software-agent-sdk",
+      "takeaway_for_factory": "Typed Event base (DiscriminatedUnionMixin) — every action/observation is a typed event in the stream; the typed-action taxonomy cited for dispatcher's ExecutionResult schema."
+    },
+    {
+      "code_excerpt": "    pub async fn reply(\n        &self,\n        user_message: Message,\n        session_config: SessionConfig,\n        use_state_machine: bool,\n        cancel_token: Option<CancellationToken>,\n    ) -> Result<BoxStream<'_, Result<AgentEvent>>> {\n        let reply_span = tracing::Span::current();\n        let events = self\n            .reply_impl(\n                user_message,\n                session_config,\n                use_state_machine,",
+      "code_excerpt_source": "raw.githubusercontent.com/github.com/aaif-goose/goose/1e83e89f556fc60fd396df1fd0f2992f8b2f2dc1/crates/goose/src/agents/agent.rs lines 2044-2056, fetched and copied verbatim by curl in session 2026-09-18",
+      "commit_sha": "1e83e89f556fc60fd396df1fd0f2992f8b2f2dc1",
+      "file": "crates/goose/src/agents/agent.rs",
+      "files_inspected": [
+        "crates/goose/src/agents/agent.rs"
+      ],
+      "name": "Goose",
+      "repo": "github.com/aaif-goose/goose",
+      "repo_rename_note": "formerly block/goose (GitHub redirect follows)",
+      "takeaway_for_factory": "reply() returns a typed event stream (BoxStream of AgentEvent) with cancellation token — provider/toolkit separation and streamed typed events; rejected as a dependency (CLI tool, no roadmap/portfolio)."
+    },
+    {
+      "code_excerpt": "class Role(BaseRole, SerializationMixin, ContextMixin, BaseModel):\n    \"\"\"Role/Agent\"\"\"\n\n    model_config = ConfigDict(arbitrary_types_allowed=True, extra=\"allow\")\n\n    name: str = \"\"\n    profile: str = \"\"\n    goal: str = \"\"\n    constraints: str = \"\"\n    desc: str = \"\"",
+      "code_excerpt_source": "raw.githubusercontent.com/github.com/FoundationAgents/MetaGPT/11cdf466d042aece04fc6cfd13b28e1a70341b1f/metagpt/roles/role.py lines 125-134, fetched and copied verbatim by curl in session 2026-09-18",
+      "commit_sha": "11cdf466d042aece04fc6cfd13b28e1a70341b1f",
+      "file": "metagpt/roles/role.py",
+      "files_inspected": [
+        "metagpt/roles/role.py"
+      ],
+      "name": "MetaGPT",
+      "repo": "github.com/FoundationAgents/MetaGPT",
+      "repo_rename_note": "formerly geekan/MetaGPT (GitHub redirect follows)",
+      "takeaway_for_factory": "Role as a typed BaseModel with profile/goal/constraints and typed message subscribe — the role/message taxonomy suggested for CTO_EVENTS.jsonl; rejected as framework (in-memory blackboard, no durable state)."
+    },
+    {
+      "code_excerpt": "class SupportsAgentRun(Protocol):\n    \"\"\"A protocol for an agent that can be invoked.\n\n    This protocol defines the interface that all agents must implement,\n    including properties for identification and methods for execution.\n\n    Note:\n        Protocols use structural subtyping (duck typing). Classes don't need\n        to explicitly inherit from this protocol to be considered compatible.\n        This allows you to create completely custom agents without using\n        any Agent Framework base classes.",
+      "code_excerpt_source": "raw.githubusercontent.com/github.com/microsoft/agent-framework/fdf7e80ad6c8f6dbdd9b779d5d6923c74d8b583e/python/packages/core/agent_framework/_agents.py lines 236-246, fetched and copied verbatim by curl in session 2026-09-18",
+      "commit_sha": "fdf7e80ad6c8f6dbdd9b779d5d6923c74d8b583e",
+      "file": "python/packages/core/agent_framework/_agents.py",
+      "files_inspected": [
+        "python/packages/core/agent_framework/_agents.py"
+      ],
+      "name": "Microsoft Agent Framework (AutoGen successor)",
+      "repo": "github.com/microsoft/agent-framework",
+      "takeaway_for_factory": "SupportsAgentRun Protocol — structural typing for agents (no base class required); AutoGen + Semantic Kernel converged here (AutoGen in maintenance mode). Too large for single-machine Factory; protocol idea only."
+    },
+    {
+      "code_excerpt": "**Constitution once per project; specify → plan → tasks → implement → converge per feature.**\n\nInvoke these skills in your agent's chat:\n\n```text\n/speckit-constitution Create principles focused on code quality, testing, and maintainability.\n/speckit-specify Build a photo organizer with albums grouped by date and a tile preview of each album.\n/speckit-plan Use Vite with vanilla JavaScript. Keep images local and store metadata in SQLite.\n/speckit-tasks",
+      "code_excerpt_source": "raw.githubusercontent.com/github.com/github/spec-kit/5e952140659287106580d32f242ba71365a3862b/README.md lines 76-84, fetched and copied verbatim by curl in session 2026-09-18",
+      "commit_sha": "5e952140659287106580d32f242ba71365a3862b",
+      "file": "README.md",
+      "files_inspected": [
+        "README.md"
+      ],
+      "name": "GitHub Spec Kit",
+      "repo": "github.com/github/spec-kit",
+      "takeaway_for_factory": "Spec Kit is its OWN toolkit (uv tool install specify-cli), NOT BMAD: per-feature slash-command flow /speckit-constitution → /speckit-specify → /speckit-plan → /speckit-tasks → implement → converge. The converge step IS a Spec Kit concept (README line 76), correcting this receipt's 2026-09-07 conflation of Spec Kit with BMAD methodology."
+    }
+  ],
+  "frameworks_methodology_not_pinned": {
+    "commit_sha": null,
+    "name": "BMAD Method",
+    "note": "Methodology only. No canonical repo resolvable on 2026-09-18: bmad-method/bmad-method, bmad-code/BMAD-METHOD and saqirb/BMAD all return 404 (curl, session 2026-09-18). NOT counted toward the >=8 pinned-commit floor; the story-template/acceptance-checklist ideas remain attributed to the methodology documents read in 2026-09-07 research.",
+    "repo": "github.com/bmad-method/bmad-method (unresolvable at fetch time)"
+  },
+  "milestone": "FULL_CODEBASE_STATE_OF_ART_AUDIT",
+  "p6_explicit_fix_specification": {
+    "current_broken_path": "V2 RoadmapResolver → resolve correct milestone → AutopilotExecutor → dispatcher_v3 → ContextCompiler → reads CTO_STRATEGY.md (V1) → worker receives stale strategy",
+    "exact_code_change": "factory/lib/context_compiler.py: add parameter `project_authority: Optional[ProjectAuthority] = None`. When provided: use authority.strategy_path, authority.spec_path, and the current milestone from PROJECT_STATE.json as primary context sources. CTO_STATE.json becomes supplementary (factory-internal state only, not product intent).",
+    "f4_acceptance_criterion": "A worker dispatched via V2 advance() receives STRATEGY.md and current_milestone from projects/factory/ in its context_package.json — NOT from factory/cto/CTO_STRATEGY.md",
+    "invariants_satisfied": [
+      "DISPATCH_WITHOUT_FRESH_CANONICAL_PROJECT_CONTEXT = 0",
+      "STALE_CTO_CONTEXT_DISPATCH = 0"
+    ],
+    "problem": "STALE_CTO_CONTEXT_DISPATCH — ContextCompiler reads V1 CTO_STATE.json/CTO_STRATEGY.md instead of V2 ProjectAuthority files",
+    "required_fixed_path": "V2 ProjectAuthority → STRATEGY.md → SPEC.md → current_milestone → ContextCompiler → worker",
+    "status_2026_09_18": "[HISTORICAL SPEC as of 2026-09-07/09-12 — BLOCK codex cfd9ecac pass: 'current_broken_path' no longer describes the code. P6 is FIXED since F4 (c489224e2, 2026-09-07), implemented as a `project_dir` constructor param (not the optional project_authority object sketched above): context_compiler.py:135-140 '# P6 fix: V2 authoritative path', STRATEGY.md read :148 (FAILS HARD if missing), SPEC.md :159-166 (fail-closed), ROADMAP.yaml :334; factory/bin/dispatcher_v3.py:1096 passes project_dir=project_dir — V2-dispatched workers receive V2 canonical context, satisfying the acceptance criterion. grep/sed re-executed session 4.]"
+  },
+  "produced_at": "2026-09-07",
+  "research_method": "Public source code inspection (WebFetch of raw GitHub content + gh API) + documentation analysis. Research by technical problem, not product name.",
+  "schema": "f3-external-research-receipt/v1",
+  "update_2026_09_12": {
+    "applied_findings": [
+      "Doom-loop / stall detection: factoryd's _v2_consecutive_blocked list omits LAUNCH_BLOCKED (271 cycles never triggered V2_STALL_DETECTED) — RAPPORT_FINAL section 8 P0",
+      "Typed terminal states over polling: mini-swe-agent's typed exit_status vs Factory's generic MISSION_FAILED on error_max_turns — RAPPORT_FINAL section 4 row DSP-01/ECO-03",
+      "Idempotency-key step journal (DBOS/Restate/Morling pattern): 283/286 phantom FULL_CODEBASE_STATE_OF_ART_AUDIT predictions closed WORKER_DEATH with zero process launched — RAPPORT_FINAL section 2/3"
+    ],
+    "new_frameworks_inspected_since_2026_09_07": [
+      {
+        "commit": "04d809ce",
+        "files_inspected": [
+          "src/minisweagent/agents/default.py",
+          "src/minisweagent/environments/local.py"
+        ],
+        "name": "mini-swe-agent",
+        "repo": "github.com/SWE-agent/mini-swe-agent"
+      },
+      {
+        "commit": "5c995c36",
+        "files_inspected": [
+          "src/swerex/runtime/abstract.py",
+          "src/swerex/deployment/local.py"
+        ],
+        "name": "SWE-ReX",
+        "repo": "github.com/SWE-agent/SWE-ReX"
+      },
+      {
+        "name": "opencode-anti-loop",
+        "note": "doom-loop detection thresholds (identical command x3, identical output 3/5, action cycle 6/8) — no pinned commit captured, URL-only citation, not counted toward the >=8 valid-with-commit_sha floor",
+        "repo": "github.com/joeyism/opencode-anti-loop"
+      },
+      {
+        "name": "ralph-orchestrator",
+        "note": "hard caps: similarity>=90%, 3 identical subjects, 5 consecutive failures, idle_timeout 1800s — URL-only citation, not counted toward the >=8 floor",
+        "repo": "github.com/mikeyobrien/ralph-orchestrator"
+      }
+    ],
+    "note": "Two of the four newly-inspected repos above (opencode-anti-loop, ralph-orchestrator) are cited by URL only in RESEARCH_EXTERNE_2026-09-12.md, without a pinned commit_sha this receipt can verify independently; they are NOT added to UPSTREAM_SOURCE_MANIFEST.json's machine-checked upstreams list for that reason — adding an entry without a real commit_sha there would be exactly the fabricated-reference problem this milestone exists to prevent. mini-swe-agent and SWE-ReX, which do carry commit_sha, are already present in UPSTREAM_SOURCE_MANIFEST.json from the 2026-09-07 pass (dispatcher_v3 / typed-actions rows).",
+    "source": ".context/factory-tightening-audit-2026-09-12/RESEARCH_EXTERNE_2026-09-12.md (175 sources, 6 research axes: boucles solo, frameworks, dépense, fiabilité, vérification, simplification) — ATTENTION session 3 : ce fichier source est ABSENT du dépôt et n'a jamais été commité (git log --all --diff-filter=A → vide) ; son contenu (175 sources, seuils anti-loop) est as-of, non reproductible depuis le dépôt"
+  },
+  "update_2026_09_18": {
+    "factoryd_lines_fix": "La citation 2026-09-07 'factory/bin/factoryd.py (lines 802-883: _load_or_create_state, _reconcile_stale_active)' avait derive : re-mesure grep 2026-09-18 -> _reconcile_stale_active l.200, _load_or_create_state l.884 (fichier 2343 l. wc -l). Corrige ci-dessous dans factory_current.files.",
+    "fetch_method": "curl https://api.github.com/repos/<owner>/<repo>/git/ref/heads/<branch> -> SHA 40 hex ; curl raw.githubusercontent.com/<owner>/<repo>/<sha>/<file> -> extrait copie verbatim (ranges cites dans code_excerpt_source). Tous les SHA sont reels et resolvables.",
+    "fourth_pass_2026_09_18": "[BLOCK codex cfd9ecac107192230931a1b7eb86dc0449faed9f, 2026-09-18T11:54:47Z — transcript codex_20260918T115447Z.log absent du worktree et de review_accounts.jsonl au HEAD : re-vérification exhaustive par exécution. Extrait pseudocode (SupervisorState.from_file/state.workers/méthode self) présenté comme le code source de factoryd.py:884 REMPLACÉ par l'extrait verbatim (sed -n '884,905p' factory/bin/factoryd.py, session 4) — l'API réelle est sstate.load_state()/loaded.active_workers, fonction module (state_path, pid, poll_interval_s). Le sketch dispatcher de architectural_decisions[2] est maintenant marqué ILLUSTRATIVE SKETCH avec lignes réelles citées. Justifications ledger contradictoires corrigées dans FACTORY_CONVERGENCE_LEDGER.json (fourth_pass_2026_09_18).",
+    "measured_at_head": "d256977f9bb00006fb5f5271a762b1c58354cfae",
+    "pinned_references": 10,
+    "reason": "Relecteur Claude BLOCK aa295959: moins de 8 references avec commit SHA reel + extrait de code copie ; 'N/A' et '(fetched via WebFetch)' ne sont pas des SHA ; OpenHands/BMAD/Goose/MetaGPT/AutoGen 'conceptuels' ; Spec Kit confondu avec BMAD.",
+    "repo_renames_observed_2026_09_18": {
+      "All-Hands-AI/OpenHands": "monorepo scinde : app OpenHands/OpenHands, SDK OpenHands/software-agent-sdk (cite)",
+      "block/goose": "aaif-goose/goose",
+      "geekan/MetaGPT": "FoundationAgents/MetaGPT",
+      "princeton-nlp/SWE-agent": "SWE-agent/SWE-agent"
+    },
+    "second_pass_2026_09_18": "BLOCK codex 60d76f11 ('plusieurs mesures restent non reproductibles') : les 3 locs non re-mesurés de factory_current.files (918/169/198) sont re-mesurés au HEAD d256977f9bb00006fb5f5271a762b1c58354cfae (3646/327/1888, wc -l exécuté) ; les 10 références pinnées ont été RE-vérifiées par re-fetch urllib frais dans CETTE session (SHA résout + extrait sous-chaîne exacte aux lignes citées, 10/10 receipts + 10/10 manifeste) ; record_cell_transition re-cité l.4334,4344 (dérive fusion 4e553aab1) ; journal vivant re-mesuré : 55970 lignes (wc -l, 2026-09-18T11:22:09Z — journal vivant, compteur mouvant)",
+    "spec_kit_bmad_deconflation": "L'entree 2026-09-07 spec_kit_approach attribuait a 'Spec Kit' un pseudo-code etiquete 'Conceptual pattern (BMAD methodology)' avec le repo bmad-method — corrige : GitHub Spec Kit = github.com/github/spec-kit, pinne 5e952140659287106580d32f242ba71365a3862b, extrait reel du README (flux /speckit-*, converge inclus). BMAD reste une methodology non pinnee (repo introuvable), listee a part.",
+    "third_pass_2026_09_18": "BLOCK codex a4f12607 (2026-09-18T11:29:25Z, transcription absente du worktree) : RE-vérification fraîche des 10 références pinnées par fetch urllib dans CETTE session — 10/10 SHAs résolvent et 10/10 extraits sont sous-chaîne EXACTE du raw au SHA (commande : python3 urllib fetch de raw.githubusercontent.com/<repo>/<sha>/<file>, sous-chaîne check) ; citation factoryd re-liée au HEAD courant de la session (grep -n : _reconcile_stale_active l.200, _load_or_create_state l.884, exactes) ; source RESEARCH_EXTERNE_2026-09-12.md annotée ABSENTE du dépôt (jamais commitée)."
+  }
+}

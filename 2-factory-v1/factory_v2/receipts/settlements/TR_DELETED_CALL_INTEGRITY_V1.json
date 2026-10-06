@@ -1,0 +1,51 @@
+{
+  "authority_hashes": {
+    "project": "twitter-radar",
+    "roadmap_sha": "5c466d336e97f57c15fb7563f0cd5b8745649fbc64a8b6b11fa0623fbda33b6b",
+    "spec_sha": "df0871d4ca9e94dccece22d9217b7fa49c971e81c5f4114375269afe7935e71e",
+    "strategy_sha": "2acfb1cda7b8def87f465ae74984bdefc4211ecf860be25377cc9a25de6d51fc"
+  },
+  "base_sha": "",
+  "candidate_repo": "/Users/jocelyngrosjean/conductor/workspaces/twitter-radar/twitter-radar-foundation-v2",
+  "candidate_sha": "59eef004dcc942dd82f96da21b9478c2968ae241",
+  "contract": {
+    "frozen_at": "2026-09-11T13:50:00Z",
+    "id": "07aa44f2306c0a1b",
+    "path": "projects/twitter-radar/validation_contracts/07aa44f2306c0a1b.json"
+  },
+  "evidence": {
+    "active_verify": [
+      {
+        "command": [
+          "verify_milestone_acceptance",
+          "TR_DELETED_CALL_INTEGRITY_V1"
+        ],
+        "observed_at": "2026-09-11T14:01:51Z",
+        "output": "gate verified before settlement (runtime)",
+        "rc": 0
+      }
+    ],
+    "full_suite": {
+      "counts": "gate-verified settlement (full suite per D021 policy at bundle tips)",
+      "duration_s": null,
+      "rc": null,
+      "sha": "59eef004",
+      "validation_key": ""
+    },
+    "gate": {
+      "consolidated_claude_review": "pending (sparse gate policy)",
+      "note": "verifier.milestone_complete observed by the settle path",
+      "reviewer": "runtime-gate (independent validator subprocess)",
+      "rounds": 1,
+      "verdict": "ACCEPT"
+    }
+  },
+  "honest_residual": [
+    "runtime-settled entry; consolidated Claude/Sol review pending at the next material gate"
+  ],
+  "milestone": "TR_DELETED_CALL_INTEGRITY_V1",
+  "project": "twitter-radar",
+  "recorded_at": "2026-09-11T14:01:51Z",
+  "schema": "settlements/v1",
+  "settled_at": "2026-09-11T14:01:51Z"
+}

@@ -1,0 +1,122 @@
+{
+  "schema": "scale2-benchmark-receipt/v1",
+  "milestone": "SCALE_2",
+  "produced_at": "2026-09-20T02:55:00Z",
+  "last_amended_at": "2026-09-20T05:10:00Z",
+  "amendment": "Review-repair session 2026-09-20 (brief announced BLOCK, reviewer's actual final verdict in evidence/reviews/SCALE_2/glm_20260919T213427Z.log line 102 is ACCEPT): three non-blocking drift remarks closed with fresh executions (gate note rewritten to the current producer-re-run gate + fresh rc=0 cited; -k scale count refreshed 3->2 with both selections named; defect-wall aside corrected +34% -> +36.1% vs canonical median). NO measurement, decision number, verdict or pooled sample was altered; decision stays NO_SCALE.",
+  "producer": {
+    "script": "factory_v2/run_scale_benchmark.py",
+    "commands": [
+      "python3 factory_v2/run_scale_benchmark.py --out factory_v2/benchmarks/SCALE_2_V1 --repeats 3 --mission-sleep 6 --d019",
+      "python3 factory_v2/run_scale_benchmark.py --out factory_v2/benchmarks/SCALE_2_V1_extra2w --workers 2 --repeats 8 --mission-sleep 6",
+      "python3 factory_v2/run_scale_benchmark.py --out factory_v2/benchmarks/SCALE_2_V1_extra1w --workers 1 --repeats 8 --mission-sleep 6"
+    ],
+    "driver": "REAL factoryd.run_daemon_loop (portfolio supervisor mode, in-process, main thread; completion watcher stops it via its own _shutdown_requested flag)",
+    "scope_honesty": "missions are local_command executors with real sleeps and real subprocesses: every scaled cost is real scheduling machinery (project locks, worker leases, heartbeats, attempt ledgers, settlement, run windows). NO AI quality is measured and none is claimed."
+  },
+  "environment": {
+    "repo_head_at_run": "764798638 SCALE_2 PLAN commit (benchmark ran on the worktree with only PLAN.md/REPORT.json/.factory_worktree_meta.json committed ahead)",
+    "platform": "darwin",
+    "python": "3.12",
+    "poll_interval_s": 0.05,
+    "backoff_ceiling_s": 1.0,
+    "idle_poll_interval_s": 0.05
+  },
+  "workload": {
+    "id": "SCALE_2_W1",
+    "structure": "portfolio {alpha, beta}; alpha: A1_BUILD (6s, writes knowledge/lesson.json) then A2_RESEARCH (6s, reads a STATIC pre-planted input, disjoint deliverable); beta: B1_BUILD (6s) then B2_REUSE (6s, bounded read-only wait for alpha's A1 artifact, embeds its sha256 — cross-product knowledge reuse, zero authority sharing)",
+    "missions": 4,
+    "mission_sleep_s": 6.0,
+    "identical_across_arms": "command bytes are relative paths; trees regenerated fresh per run; arms differ ONLY by FACTORY_MAX_WORKERS",
+    "d019_drill": "separate workload SCALE_2_D019 at 2 workers: gamma {G1_BUILD 5s, G2_RESEARCH 3s} (disjoint deliverables, intra-product elastic fan-out) + pre-planted inert older_product whose knowledge/lesson.md is read READ-ONLY by G2"
+  },
+  "measurements": {
+    "arm_1w_baseline": {
+      "runs": 3,
+      "walls_s": [25.833, 25.467, 25.475],
+      "median_wall_s": 25.475,
+      "throughputs_missions_per_s": [0.15484, 0.15706, 0.15702],
+      "median_throughput": 0.15702,
+      "run_window_ids": ["5144d038b5c94056b4990945ce793097", "38adaaa88e1c4c728f8d2f920cb327ab", "c00feefb0719463fb8dad8a817bd8a6b"],
+      "engine_overlaps_total": 0,
+      "evidence": ["factory_v2/benchmarks/SCALE_2_V1/run_0_1w.json", "factory_v2/benchmarks/SCALE_2_V1/run_1_1w.json", "factory_v2/benchmarks/SCALE_2_V1/run_2_1w.json"]
+    },
+    "arm_2w": {
+      "runs": 3,
+      "walls_s": [14.3, 15.004, 14.796],
+      "median_wall_s": 14.796,
+      "throughputs_missions_per_s": [0.27972, 0.2666, 0.27035],
+      "median_throughput": 0.27035,
+      "run_window_ids": ["d84026dc55504c3e997499638be64c71", "06d03e674f3e45179be55068457f904f", "50cbed43159b4e22979601c52d2969d5"],
+      "engine_overlaps_total": 9,
+      "evidence": ["factory_v2/benchmarks/SCALE_2_V1/run_0_2w.json", "factory_v2/benchmarks/SCALE_2_V1/run_1_2w.json", "factory_v2/benchmarks/SCALE_2_V1/run_2_2w.json"]
+    },
+    "same_workload": true,
+    "throughput_improvement": {
+      "median_ratio_2w_over_1w": 1.722,
+      "median_gain_pct": 72.2,
+      "per_worker_throughput_2w_vs_1w": 0.861,
+      "note": "total throughput +72.2% at 2 workers; per-worker efficiency 86.1% of the 1-worker arm (sub-linear, expected: shared daemon polling and settlement serialization)"
+    }
+  },
+  "reliability": {
+    "decision_rule_predeclared": "every counter equal or better at 2w than 1w on the SAME workload, else regression",
+    "pooled_sample": {
+      "arm_1w_runs": 11,
+      "arm_2w_runs": 11,
+      "arm_1w_all_counters_clean": 11,
+      "arm_2w_all_counters_clean": 10,
+      "arm_2w_defect_runs": 1,
+      "defect_file": "factory_v2/benchmarks/SCALE_2_V1_extra2w/run_3_2w.json",
+      "defect_run_window_id": "b035426daa694195aba6feab5929e17a"
+    },
+    "defect_detail": "run_3 (2 workers): B2_REUSE launched TWICE (launch file shows pid 49399 window [1789845903.526, 1789845909.66] then pid 49717 window [1789845909.763, 1789845915.83] — sequential, not concurrent), 19x beta:STALE_GENERATION_WRITE_BLOCKED cycles, final mission state PASS with lease_generation=2 (B1 stayed 1), wall 20.137s (+36.1% vs the canonical 2w median — 20.137/14.796; corrected 2026-09-20 per reviewer remark 3, the previously published +34% matched only the slowest canonical run 15.004 at +34.2%), still settled 4/4. Fencing held (no double settlement, no concurrent same-mission engines) but the duplicate launch wasted a full 6s engine run and spun blocked polls.",
+    "defect_mechanism": "intra-portfolio parallel advances: in the window between the engine process EXITING and its settlement being written, the worker heartbeat is gone, so a sibling advance on the same project legitimately sees 'no live worker + not settled' and re-dispatches the mission (new lease generation); the first advance's settlement is then refused as stale generation until the second attempt settles. Impossible at MAX_WORKERS=1 (no sibling dispatcher exists).",
+    "additional_disclosure": "one further occurrence with the same signature (B2 launches=2, stale-generation storm, wall 21.094s) was observed in a first benchmark execution whose raw files were replaced by the final instrumentation upgrade; it is disclosed here as an observation and NOT counted in the pooled citable sample (rate would be 2/12).",
+    "regression_verdict": "REGRESSED_AT_2W: single-launch-per-mission holds 11/11 at 1 worker vs 10/11 at 2 workers (citable files; 10/12 counting the disclosed occurrence). Reliability is NOT non-regressed."
+  },
+  "context_isolation": {
+    "verdict": "PERFECT_ON_ALL_MEASURED_RUNS",
+    "runs_checked": 22,
+    "all_passing": 22,
+    "checks_per_run": [
+      "every deliverable byte-exact vs the deterministic expected content (retried mission rewrote identical bytes)",
+      "STRATEGY.md/SPEC.md/ROADMAP.yaml byte-identical before/after in every project",
+      "zero cross-tree writes (no file authored by another project's missions appears in a project's tree)",
+      "attempt ledger: 100% parseable JSONL, unique attempt_keys, no torn lines under concurrent appends",
+      "all mission records coexist in PROJECT_STATE after concurrent advances (no clobbering)",
+      "ledger rows and run windows carry max_workers matching the arm, run windows closed"
+    ],
+    "evidence": "isolation block of every factory_v2/benchmarks/SCALE_2_V1*/run_*.json"
+  },
+  "d019_elastic_fanout_and_knowledge_reuse": {
+    "verdict": "DEMONSTRATED_AT_2W",
+    "drill_file": "factory_v2/benchmarks/SCALE_2_V1/d019_drill.json",
+    "fan_out_event": "PARALLEL_MILESTONE_SELECTED emitted (intra-product elastic fan-out on the real daemon path)",
+    "real_overlap": "G1_BUILD and G2_RESEARCH engine windows overlap in time (g1_g2_overlap=true)",
+    "cross_product_knowledge_reuse": "G2_RESEARCH read older_product/knowledge/lesson.md READ-ONLY and its report embeds the exact sha256 of that file (knowledge_sha_match=true)",
+    "no_authority_sharing": "older_product tree byte-identical before/after the drill (older_product_tree_unchanged=true)"
+  },
+  "decision": {
+    "verdict": "NO_SCALE",
+    "max_workers_after_this_mission": 1,
+    "rule": "scale only if throughput improved AND reliability non-regressed AND isolation perfect at 2w",
+    "throughput_improved": true,
+    "reliability_non_regressed": false,
+    "isolation_perfect_2w": true,
+    "consequence": "FACTORY_MAX_WORKERS stays 1 (no default flip, no operational change). The measured throughput gain (+72.2%) is real but the goal's conjunction fails on reliability: the settlement-window re-dispatch race must be fixed and re-benchmarked before MAX_WORKERS 1->2.",
+    "followup_named": "close the engine-exited->settlement-written liveness gap for sibling advances (settlement-intent marker consulted by the in-flight guard), then re-run this exact benchmark; the producer is committed for that purpose."
+  },
+  "unmet_and_notes": [
+    "ROADMAP blocker 'D004 resolu avant SCALE_2 (RMW lock inter-process)' is OPEN in SPEC.md (v1 campaign-state path _mark_dispatched/_mark_settled). This benchmark exercises the v2 portfolio supervisor path (project_transaction flock is inter-process) and does not touch the D004 path; D004 remains OPEN and unsettled by this receipt.",
+    "The gate factory_v2/verify_scale_benchmark.py is NO LONGER the exit-2 stub this note originally described: upgraded 2026-09-20 at ef89a19aa, it RE-RUNS the hermetic producer itself (3+3 fresh 1w/2w runs in a temp dir, FACTORY_NO_REAL_ENGINE=1) and recomputes the decision rule from the raw per-run files, refusing only a SCALE_RECOMMENDED the fresh observation does not support — a conservative NO_SCALE is never refused. Fresh execution at the 2026-09-20 repair HEAD: rc=0, output 'SCALE_2: ACCEPTED — fresh observation SCALE_RECOMMENDED 1w=0.1576/s 2w=0.2696/s isolation_2w=True reliability_2w=True' — that fresh 3+3 sample happened to be defect-free at 2w (the re-dispatch defect is probabilistic: 1/11 in the pooled citable 2w sample), so the gate's own recomputation is compatible with, and accepts, this receipt's pooled-sample NO_SCALE verdict, which stands unchanged (reviewer remark 1 closed).",
+    "worker_slot is persisted on every attempt (ledger rows carry worker_slot=0, max_workers per arm): the slot plumbing of FACTORY_WORKER_SLOTS_V1 is present, but the daemon does not stamp DISTINCT slots per parallel advance (FACTORY_WORKER_SLOT is never set in production); slot-separation could not be used as isolation evidence, the isolation verdict rests on the six measured checks listed above."
+  ],
+  "qualification": {
+    "milestone_test_cmd": "python3 -m pytest tests/ -q -k scale",
+    "milestone_test_cmd_fresh_result": "2 passed, 3236 deselected in 5.94s, rc=0 (fresh at the 2026-09-20 repair HEAD; selection: test_model_router.py::TestCliArgs::test_writer_max_turns_scales_with_budget + test_cto_coherence_2026_09_11.py::test_gate_without_a_producer_defers_instead_of_passing[verify_scale_n_benchmark.py-SCALE_N]). Historical: 3 passed at the qualification commit d3f648667 — the third selection, the verify_scale_benchmark.py-SCALE_2 DEFERRED parametrization, was removed by a1823326f once that gate gained its own producer re-run (reviewer remark 2 closed).",
+    "safe_suite": "python3 -m pytest tests -q -p no:cacheprovider -x --ignore=tests/test_stabilization_proof.py --ignore=tests/test_external_supervisor_production_path.py --ignore=tests/test_lr4_interprocess.py --ignore=tests/test_p0_supervision_repairs.py --ignore=tests/test_sol_ladder_fairness.py --ignore=tests/test_telemetry_integration.py --ignore=tests/test_tr_weekly_refresh_verifier.py",
+    "safe_suite_fresh_result": "1 failed (test_base_ready_aggregator.py::test_authored_aggregate_cannot_influence_grading), 1498 passed, 1 skipped, 4 subtests passed in 512.57s — the failure is PRE-EXISTING at the intact baseline 7a9e2731f (reproduced on a detached worktree at that commit: '1 failed in 0.38s', same assertion); introduced by the baseline commit's verifier-recompute, not by this mission; no test was modified or sacrificed by this mission",
+    "status": "milestone test_cmd GREEN fresh; safe suite carries one documented pre-existing baseline failure — see REPORT.json for the full execution"
+  }
+}

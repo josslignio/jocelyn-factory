@@ -1,0 +1,345 @@
+<!-- AUTORITÉ DÉPLACÉE 2026-09-07T15:21:00Z — l'autorité canonique est désormais projects/factory/ROADMAP.yaml. Ce fichier est GELÉ (contenu inchangé pour compatibilité champion). Violation d'intégrité = check C9 de authority_audit.py. -->
+
+{
+  "schema": "canonical-roadmap/v1",
+  "produced_at": "2026-09-06T13:30:00Z",
+  "authority": "Compiled from CTO_STRATEGY.md + APP007_CAMPAIGN_STATE.json + canonical_roadmap_v2.json + session 2026-09-06 CTO directives",
+  "version": "v1",
+  "note": "This is the single authoritative sequencing of Factory + Twitter Radar missions. A mission MUST NOT start before its dependencies are ACCEPTED+QUALIFIED (unless overridden by CTO with rationale). The DAG enforces sequence; Factory enforces the DAG. Reconciled 2026-09-07 against APP007_CAMPAIGN_STATE.json — single source of truth for statuses.",
+  "phases": [
+    {
+      "id": "PHASE_0_STABILITY",
+      "title": "P0 — Long-Run Stability",
+      "status": "DONE",
+      "goal": "Factory can run autonomously for 6h+ without silent stall, zombie hang, or stale-active deadlock",
+      "missions": [
+        {
+          "id": "F005_STALL_RECOVERY",
+          "status": "ACCEPTED",
+          "verdict_sha": "347f150f",
+          "note": "ProgressWatchdog, zombie PID, stale-active REQUEUE, canonical counters. ACCEPTED 877s."
+        },
+        {
+          "id": "CTO004_CONTEXT_INJECTION",
+          "status": "ACCEPTED",
+          "depends_on": [
+            "F005_STALL_RECOVERY"
+          ],
+          "note": "ContextCompiler — agents receive relevant ADRs/lessons/receipts, not raw dump"
+        },
+        {
+          "id": "SOAK_6H_QUALIFICATION",
+          "status": "ACCEPTED",
+          "depends_on": [
+            "CTO004_CONTEXT_INJECTION"
+          ],
+          "note": "Auto-dispatch — NOT a human gate. Real missions execute during soak. Factory is PRODUCTIVE during soak (not idle). Watchdog/recovery/refill/reporting observed under real load. Auto-verdict on metrics.",
+          "human_gate": false,
+          "auto_dispatch": true,
+          "qualification_criteria": [
+            "HUMAN_GO_COUNT == 0 for full run",
+            "LOST_MISSIONS == 0",
+            "UNRECOVERED_STALL == 0",
+            "DUPLICATE_DISPATCH == 0",
+            "DUPLICATE_PROMOTION_COUNT == 0",
+            "GOLDEN_CORRUPTION == 0",
+            "CONTEXT_RECEIPT_MISSING_COUNT == 0"
+          ],
+          "required_soak_metrics": [
+            "missions_started",
+            "missions_settled",
+            "missions_accepted",
+            "missions_failed",
+            "missions_repaired",
+            "missions_replanned",
+            "stall_count",
+            "recovered_stall_count",
+            "unrecovered_stall_count",
+            "stale_active_count",
+            "zombie_worker_count",
+            "duplicate_dispatch_count",
+            "duplicate_promotion_count",
+            "lost_mission_count",
+            "golden_corruption_count",
+            "human_go_count",
+            "last_meaningful_progress_at",
+            "max_no_progress_duration",
+            "context_receipt_missing_count"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PHASE_1_AUDIT",
+      "title": "P1 — Full Counter-Audit",
+      "status": "DONE",
+      "goal": "Independent verification of entire Factory codebase + research registry + all specs",
+      "depends_on": [
+        "PHASE_0_STABILITY"
+      ],
+      "missions": [
+        {
+          "id": "CTO000B_COUNTER_AUDIT",
+          "status": "ACCEPTED",
+          "depends_on": [
+            "SOAK_6H_QUALIFICATION"
+          ],
+          "spec_level": "A",
+          "note": "Z Code + Codex independent counter-audit. Entire repo + CTO000 findings + new code since CTO000 + research registry + all receipts. Must produce: FOUND/ALREADY_FIXED/STILL_OPEN/NOT_APPLICABLE matrix."
+        }
+      ],
+      "blocker_note": "P0 findings from CTO000B must be fixed before PHASE_2"
+    },
+    {
+      "id": "PHASE_2_CROSS_REVIEW",
+      "title": "P2 — Cross-Model Review",
+      "status": "DONE",
+      "goal": "CTO005 adversarial cross-model review integrated into dispatch pipeline",
+      "depends_on": [
+        "PHASE_1_AUDIT"
+      ],
+      "missions": [
+        {
+          "id": "CTO005_CROSS_MODEL_REVIEW",
+          "status": "ACCEPTED",
+          "depends_on": [
+            "CTO000B_COUNTER_AUDIT"
+          ],
+          "note": "Risk-based routing: not 4 reviewers on every trivial function. Adversarial review for spec_level=A complex missions."
+        }
+      ]
+    },
+    {
+      "id": "PHASE_3_PARALLEL",
+      "title": "P3 — Parallel Workers",
+      "status": "SUPERSEDED_BY_V1_SEAL",
+      "goal": "2-worker then 4-worker qualified and audited",
+      "depends_on": [
+        "PHASE_2_CROSS_REVIEW"
+      ],
+      "missions": [
+        {
+          "id": "2_WORKER_QUALIFICATION",
+          "status": "PLANNED",
+          "note": "Two parallel writers in isolated worktrees. Proven: no merge conflicts, no candidate race. counter-audit after."
+        },
+        {
+          "id": "CONCURRENCY_COUNTER_AUDIT",
+          "status": "PLANNED",
+          "depends_on": [
+            "2_WORKER_QUALIFICATION"
+          ],
+          "note": "Independent audit of 2-worker run: race conditions, atomic writes, DAG correctness"
+        },
+        {
+          "id": "4_WORKER_QUALIFICATION",
+          "status": "PLANNED",
+          "depends_on": [
+            "CONCURRENCY_COUNTER_AUDIT"
+          ],
+          "note": "Four parallel writers. Measure: pass@1, wall time, repairs, review defects, regressions, quota, cost"
+        },
+        {
+          "id": "SCALE_COUNTER_AUDIT",
+          "status": "PLANNED",
+          "depends_on": [
+            "4_WORKER_QUALIFICATION"
+          ],
+          "note": "Audit at 4-worker scale before proceeding to long-run"
+        }
+      ]
+    },
+    {
+      "id": "PHASE_4_LONG_RUN",
+      "title": "P4 — Long-Run Autonomy",
+      "status": "SUPERSEDED_BY_V1_SEAL",
+      "goal": "Factory runs unattended for 24h, 72h, with zero human intervention",
+      "depends_on": [
+        "PHASE_3_PARALLEL"
+      ],
+      "missions": [
+        {
+          "id": "LONG_RUN_AUDIT_BEFORE_24H",
+          "status": "PLANNED",
+          "note": "Full audit before 24h run"
+        },
+        {
+          "id": "SOAK_24H_QUALIFICATION",
+          "status": "PLANNED",
+          "note": "Real 24h unattended run. HUMAN_GO_COUNT=0 entire run."
+        },
+        {
+          "id": "AUTONOMY_AUDIT_BEFORE_72H",
+          "status": "PLANNED",
+          "note": "Full autonomy audit before 72h run"
+        },
+        {
+          "id": "SOAK_72H_QUALIFICATION",
+          "status": "PLANNED",
+          "note": "Real 72h unattended run. Jocelyn returns to progressed missions, detected failures, repaired runs."
+        }
+      ]
+    },
+    {
+      "id": "PHASE_5_TWITTER",
+      "title": "P5 — Twitter Radar Quant Pipeline",
+      "status": "DONE",
+      "goal": "Full quant pipeline: account ranking, OOS validation, statistical credibility",
+      "parallel_to": [
+        "PHASE_0_STABILITY",
+        "PHASE_1_AUDIT",
+        "PHASE_2_CROSS_REVIEW"
+      ],
+      "missions": [
+        {
+          "id": "XR04_MOMENTUM_CONTROLS",
+          "status": "ACCEPTED",
+          "depends_on": [
+            "SOAK_6H_QUALIFICATION"
+          ]
+        },
+        {
+          "id": "XR05_OOS_VALIDATION",
+          "status": "ACCEPTED",
+          "depends_on": [
+            "XR04_MOMENTUM_CONTROLS"
+          ],
+          "note": "purgedcv API must be verified before use (XR01 finding)"
+        },
+        {
+          "id": "XR06_STATISTICAL_CONFIDENCE",
+          "status": "ACCEPTED",
+          "depends_on": [
+            "XR05_OOS_VALIDATION"
+          ],
+          "note": "PSR / DSR / PBO from Bailey et al."
+        },
+        {
+          "id": "QUANT_COUNTER_AUDIT",
+          "status": "PLANNED",
+          "depends_on": [
+            "XR06_STATISTICAL_CONFIDENCE"
+          ],
+          "note": "Adversarial audit for quant correctness: lookahead, survivorship, bad tickers, bad market calendar, wrong entry prices, CAR errors, multiple testing, bad PSR/DSR/PBO"
+        },
+        {
+          "id": "X101_HISTORICAL_CORPUS_FILL",
+          "status": "ACCEPTED"
+        },
+        {
+          "id": "X102_M008H_FULL_CORPUS",
+          "status": "ACCEPTED",
+          "depends_on": [
+            "X101_HISTORICAL_CORPUS_FILL"
+          ]
+        },
+        {
+          "id": "X103_THESIS_RECONSTRUCTION",
+          "status": "ACCEPTED",
+          "depends_on": [
+            "X102_M008H_FULL_CORPUS"
+          ],
+          "note": "M008 validation must complete first (WAITING_HUMAN_VALIDATION)"
+        },
+        {
+          "id": "X104_REAL_SIGNAL_OUTCOME_LEDGER",
+          "status": "ACCEPTED",
+          "note": "delivered; X110 = product E2E, merged at 35d6fc1, proof X110/product_e2e.json"
+        },
+        {
+          "id": "X105_PERFORMANCE_V2_MFE_MAE",
+          "status": "ACCEPTED",
+          "note": "delivered; X110 = product E2E, merged at 35d6fc1, proof X110/product_e2e.json"
+        },
+        {
+          "id": "X106_ADVANCED_ACCOUNT_SCORING",
+          "status": "ACCEPTED",
+          "note": "delivered; X110 = product E2E, merged at 35d6fc1, proof X110/product_e2e.json"
+        },
+        {
+          "id": "X107_CONSENSUS_CLUSTERING",
+          "status": "ACCEPTED",
+          "note": "delivered; X110 = product E2E, merged at 35d6fc1, proof X110/product_e2e.json"
+        },
+        {
+          "id": "X108_LEAD_LAG_ORIGINALITY",
+          "status": "ACCEPTED",
+          "note": "delivered; X110 = product E2E, merged at 35d6fc1, proof X110/product_e2e.json"
+        },
+        {
+          "id": "X109_RECURSIVE_ACCOUNT_DISCOVERY",
+          "status": "ACCEPTED",
+          "note": "delivered; X110 = product E2E, merged at 35d6fc1, proof X110/product_e2e.json"
+        },
+        {
+          "id": "X110_WEEKLY_REPORT_V2",
+          "status": "ACCEPTED",
+          "note": "delivered; X110 = product E2E, merged at 35d6fc1, proof X110/product_e2e.json"
+        }
+      ]
+    }
+  ],
+  "current_position": {
+    "phase": "CYCLE_COMPLETE",
+    "active_mission": null,
+    "next_mission": null,
+    "note": "Factory V1 sealed 2026-09-07 (CTOK chain DONE). twitter_radar product E2E delivered (X110 merged at 35d6fc1, product_e2e.json PROVEN). Next cycle awaiting orders."
+  },
+  "anti_loop_policy": {
+    "description": "Same failure signature cannot retry with same approach indefinitely",
+    "rules": [
+      {
+        "attempt": 1,
+        "action": "Targeted repair — same model, different prompt/fix"
+      },
+      {
+        "attempt": 2,
+        "action": "Different model / different implementation strategy"
+      },
+      {
+        "attempt": 3,
+        "action": "CTO architectural decomposition / replan — escalate to CTO planner"
+      }
+    ],
+    "requirement": "Failure signatures must be persisted to CTO_LESSONS.jsonl for routing decisions",
+    "status": "PARTIALLY_IMPLEMENTED",
+    "gap": "FREQ-018 — failure signature storage exists but retry-routing not wired"
+  },
+  "flywheel_model": {
+    "description": "Compounding improvement cycle — not a mathematical guarantee",
+    "steps": [
+      "better context → fewer mistakes",
+      "fewer mistakes → higher pass@1",
+      "higher pass@1 → fewer repairs",
+      "fewer repairs → less quota",
+      "less quota → more missions/hour",
+      "more missions/hour → more model-performance data",
+      "more performance data → better routing",
+      "better routing → more reliable parallelism",
+      "more parallelism → more output",
+      "more missions → more failure lessons",
+      "more failure lessons → better future context"
+    ]
+  },
+  "updated_at": "2026-09-07T14:43:57Z",
+  "challenger": {
+    "id": "FACTORY_V2_RESHAPE",
+    "created_at": "2026-09-07T14:58:00Z",
+    "updated_at": "2026-09-07T15:16:09Z",
+    "state": "BUILT_AND_PROVEN — awaiting champion-vs-challenger benchmark before promotion",
+    "location": "factory_v2/",
+    "delivers": [
+      "GAP-025 roadmap resolver",
+      "GAP-028 validation contract before build",
+      "GAP-029 authoritative milestone gate",
+      "GAP-030 convergence enforcement",
+      "GAP-031 hardcoded pointer removal"
+    ],
+    "proofs": [
+      "T1-T15: 15/15 (tests/test_factory_v2.py)",
+      "E2E multi-process with cold restart between milestones (factory_v2/receipts/FACTORY_V2_RESHAPE_E2E_RECEIPT.json)",
+      "full regression 970 passed / 0 new failures"
+    ],
+    "promotion_rule": "benchmark champion vs challenger (same workloads, restart, failure injection, context loss) — PROMOTE only if V2 wins"
+  }
+}

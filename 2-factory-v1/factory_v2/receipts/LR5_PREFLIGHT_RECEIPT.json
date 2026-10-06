@@ -1,0 +1,43 @@
+{
+  "schema": "lr5-preflight-receipt/v2",
+  "produced_by": "factory_v2.run_lr5_preflight (real harness)",
+  "produced_at": "2026-09-09T10:31:33Z",
+  "integration_sha": "943ec4c83aa678a831081a13d8dabf4fc78cf4bb",
+  "branch_preserved": true,
+  "branch_preserved_detail": "external repo ACCEPTED candidate/LR5EXT still exists after the real dispatcher_v3._run_in_worktree cleanup path (see lr5_evidence/branch_preserved.json)",
+  "capability_policy_check": {
+    "spec_level": "A",
+    "task_kind": "build",
+    "hint": "codex",
+    "selected_engine": "claude",
+    "reason": "engine_hint='codex' REJECTED by ActorCapabilityPolicy (spec_level='A', task_kind='build'); routing table used: 'claude'"
+  },
+  "kill_restart_recovery": "PASS",
+  "kill_restart_detail": "real SIGKILL of factoryd pid 99548 after ['MS1']; successor pid 99686 (distinct birth identity); 3 milestones total (see lr5_evidence/kill_restart_recovery.json)",
+  "cas_double_dispatch": "REJECTED",
+  "cas_double_dispatch_detail": "second promotion of LR5_HARNESS#DOUBLE_DISPATCH rejected CAS_DUPLICATE (see lr5_evidence/cas_double_dispatch.json)",
+  "routine_human_interventions": 0,
+  "human_interventions_detail": "DERIVED from observed evidence: zero HUMAN*/OWNER* events in the project ledger during the run window and zero controlling TTYs on the daemon identities (see long_run_result.json derivation fields)",
+  "observations": {
+    "kill_restart_recovery": {
+      "evidence_path": "factory_v2/receipts/lr5_evidence/kill_restart_recovery.json",
+      "evidence_sha256": "1aa18b7e0638709f0a31fb26128ab6c603f83aeb3f379501c52178f9ffeeae50"
+    },
+    "cas_double_dispatch": {
+      "evidence_path": "factory_v2/receipts/lr5_evidence/cas_double_dispatch.json",
+      "evidence_sha256": "4707dca14dcf61f34bf1e137ddcd3d6dfc364d7a3c8b725b5e5a23bf2b442c01"
+    },
+    "branch_preserved": {
+      "evidence_path": "factory_v2/receipts/lr5_evidence/branch_preserved.json",
+      "evidence_sha256": "405aeeb71d9c58307a7e42895c05852c304770fc157f82c84e83dd4ffcf0ff47"
+    },
+    "controlled_run": {
+      "evidence_path": "factory_v2/receipts/lr5_evidence/long_run_result.json",
+      "evidence_sha256": "e87cef8bf544c62711a4512f8876f9c59e6dbea2a0b762ff38cbf16383e2efe6"
+    }
+  },
+  "controlled_run_evidence": "factory_v2/receipts/lr5_evidence/long_run_result.json",
+  "preflight_evidence": "factory_v2/receipts/lr5_evidence/preflight_result.json",
+  "all_pass": true,
+  "verifier_rc": 0
+}

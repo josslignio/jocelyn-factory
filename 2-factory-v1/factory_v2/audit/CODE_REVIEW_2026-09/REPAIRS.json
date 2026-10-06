@@ -1,0 +1,316 @@
+[
+ {
+  "id": "L3-002",
+  "status": "FIXED",
+  "commit": "c97cdc2f947590582a46fbd363086fddeecac343",
+  "test": "tests/test_repairs_lot1_dispatcher.py::test_l3_002_merge_failure_blocks_on_disk_receipt",
+  "note": "Échec de fusion : la copie retournée ET le reçu sur disque passent BLOCKED avec promotable=False (réécriture atomique, comme le chemin integration_sha)."
+ },
+ {
+  "id": "L3-004",
+  "status": "FIXED",
+  "commit": "c97cdc2f947590582a46fbd363086fddeecac343",
+  "test": "tests/test_repairs_lot1_dispatcher.py::test_l3_004_timeout_preserves_flushed_diagnostics",
+  "note": "TimeoutExpired : killpg puis communicate() draine stdout/stderr ; les diagnostics flushés avant le délai sont rendus, marqueur TIMEOUT conservé sur stderr."
+ },
+ {
+  "id": "L3-008",
+  "status": "FIXED",
+  "commit": "44cb3bbda5425dc460319f70c9776f2a866949ce",
+  "test": "tests/test_repairs_lot1_factoryd_router.py::test_l3_008_same_project_advances_keep_their_own_detail",
+  "note": "Le pool soumet _advance_v2_harvestable : chaque Future porte son propre (action, detail, touched) via un thread-local ; _ADVANCE_RESULTS par projet n'est plus la source."
+ },
+ {
+  "id": "L3-009",
+  "status": "FIXED",
+  "commit": "44cb3bbda5425dc460319f70c9776f2a866949ce",
+  "test": "tests/test_repairs_lot1_factoryd_router.py::test_l3_009_unreadable_state_is_not_idle",
+  "note": "_project_in_flight : observed!=True + fichier d'état PRÉSENT ⇒ inconnu (1), jamais 0 ; _reload_in_flight délègue au même calcul prudent."
+ },
+ {
+  "id": "L3-010",
+  "status": "FIXED",
+  "commit": "44cb3bbda5425dc460319f70c9776f2a866949ce",
+  "test": "tests/test_repairs_lot1_factoryd_router.py::test_l3_010_unreadable_state_membership_is_unknown",
+  "note": "_live_engine_lease_ids retourne None (contrat) quand un état présent ou un fichier de lease est illisible ; le sweep retombe sur le plafond d'âge au lieu de tuer."
+ },
+ {
+  "id": "L3-017",
+  "status": "FIXED",
+  "commit": "44cb3bbda5425dc460319f70c9776f2a866949ce",
+  "test": "tests/test_repairs_lot1_factoryd_router.py::test_l3_017_quota_ration_transaction_is_atomic",
+  "note": "lecture-compte-réservation sous flock exclusif sur le journal lui-même (a+ puis seek) : deux dispatchers concurrents ne peuvent plus réserver la dernière place chacun."
+ },
+ {
+  "id": "L3-018",
+  "status": "FIXED",
+  "commit": "44cb3bbda5425dc460319f70c9776f2a866949ce",
+  "test": "tests/test_repairs_lot1_factoryd_router.py::test_l3_018_diagnose_exclusion_keeps_read_only",
+  "note": "_finalize_choice préserve read_only/reviewer pour REVIEW, DIAGNOSE et REPLAN sur les fallbacks glm/claude ; cli_args construit l'argv restreint, jamais --dangerously-skip-permissions."
+ },
+ {
+  "id": "L5_factory_v2_rest_1-003",
+  "status": "FIXED",
+  "commit": "2ac58e7b84ffa8dffa2603876a200a51f0c1358b",
+  "test": "tests/test_repairs_lot1_io_authority.py::test_io_atomic_write_unique_tmp_no_collision",
+  "note": "_atomic_write crée un tmp unique (pid+uuid4) par appel : deux écrivains vers le même chemin ne partagent plus l'inode temporaire."
+ },
+ {
+  "id": "L5_factory_v2_rest_1-004",
+  "status": "FIXED",
+  "commit": "2ac58e7b84ffa8dffa2603876a200a51f0c1358b",
+  "test": "tests/test_repairs_lot1_io_authority.py::test_io_read_json_invalid_utf8_returns_none",
+  "note": "_read_json capture ValueError (couvre UnicodeDecodeError) : un octet UTF-8 invalide retourne None conformément au contrat."
+ },
+ {
+  "id": "L5_factory_v2_rest_1-005",
+  "status": "FIXED",
+  "commit": "2ac58e7b84ffa8dffa2603876a200a51f0c1358b",
+  "test": "tests/test_repairs_lot1_io_authority.py::test_authority_cache_pins_sha_not_moving_head",
+  "note": "git show lit <sha-capturé>:<rel> au lieu de HEAD:<rel> : la clé de cache et le blob lu ne peuvent plus diverger quand HEAD avance."
+ },
+ {
+  "id": "L5_factory_v2_rest_1-011",
+  "status": "FIXED",
+  "commit": "62cabb4dec183d874adb4c63f6039b398bf73542",
+  "test": "tests/test_repairs_lot1_guards.py::test_cas_corrupt_ledger_does_not_reset_promotion",
+  "note": "_read_ledger réserve le ledger vide à FileNotFoundError ; un ledger présent mais illisible lève LedgerCorruptError et check_and_record_promotion refuse (la protection unique ne se réinitialise plus)."
+ },
+ {
+  "id": "L5_factory_v2_rest_1-013",
+  "status": "FIXED",
+  "commit": "62cabb4dec183d874adb4c63f6039b398bf73542",
+  "test": "tests/test_repairs_lot1_guards.py::test_continuation_empty_json_stops",
+  "note": "_load_pause_file/_load_safety_stop_file : un fichier PRÉSENT mais vide/incomplet ({}) est un ordre de stop fail-closed, jamais une absence ; absent seul ⇒ CONTINUE."
+ },
+ {
+  "id": "L5_factory_v2_rest_1-016",
+  "status": "FIXED",
+  "commit": "62cabb4dec183d874adb4c63f6039b398bf73542",
+  "test": "tests/test_repairs_lot1_guards.py::test_supervisor_corrupt_quarantine_stays_quarantined",
+  "note": "is_quarantined : marqueur présent mais illisible ⇒ enregistrement GLOBAL_QUARANTINE synthétique (spawn refusé) ; seul un fichier absent ou un record valide non-quarantaine retourne None."
+ },
+ {
+  "id": "L5_factory_v2_rest_1-018",
+  "status": "FIXED",
+  "commit": "62cabb4dec183d874adb4c63f6039b398bf73542",
+  "test": "tests/test_repairs_lot1_guards.py::test_fault_injection_respects_require_in_pgrp",
+  "note": "inject_sigkill vérifie os.getpgid(pid)==os.getpgrp() quand require_in_pgrp=True : un PID vivant hors périmètre est REFUSED sans signal."
+ },
+ {
+  "id": "L5_factory_v2_rest_1-019",
+  "status": "FIXED",
+  "commit": "62cabb4dec183d874adb4c63f6039b398bf73542",
+  "test": "tests/test_repairs_lot1_guards.py::test_preflight_lease_read_error_is_not_pass",
+  "note": "seul un retour explicite None du lecteur vaut absence de lease ; une exception de lecture devient no_stale_lease=FAIL (pas de démarrage sans preuve d'exclusivité)."
+ },
+ {
+  "id": "L5_factory_v2_rest_1-020",
+  "status": "FIXED",
+  "commit": "62cabb4dec183d874adb4c63f6039b398bf73542",
+  "test": "tests/test_repairs_lot1_guards.py::test_restart_recovery_never_falls_back_to_foreign_run",
+  "note": "recompute_restart_recovery supprime le fallback `or ledger` : aucun événement du run_id demandé ⇒ False, jamais une preuve récupérée sur un run étranger."
+ },
+ {
+  "id": "L5_factory_v2_rest_2-002",
+  "status": "FIXED",
+  "commit": "5597202c27976d7a6552343ff4ec85ad9eac7584",
+  "test": "tests/test_repairs_lot1_run_harness.py::test_chatty_daemon_does_not_block_on_pipes",
+  "note": "lancement ET redémarrage du daemon redirigés vers evidence/long_run/*.log : plus aucun PIPE jamais drainé, un daemon bavard ne bloque plus avant son jalon."
+ },
+ {
+  "id": "L5_factory_v2_rest_2-003",
+  "status": "FIXED",
+  "commit": "5597202c27976d7a6552343ff4ec85ad9eac7584",
+  "test": "tests/test_repairs_lot1_run_harness.py::test_kill_proc_reaps_the_whole_group",
+  "note": "_kill_proc tue le groupe de processus possédé (killpg, fallback PID seul) : les descendants ne survivent plus à la fin du run."
+ },
+ {
+  "id": "L5_factory_v2_rest_2-005",
+  "status": "FIXED",
+  "commit": "5597202c27976d7a6552343ff4ec85ad9eac7584",
+  "test": "tests/test_repairs_lot1_run_harness.py::test_human_interventions_unavailable_is_not_zero",
+  "note": "_derive_human_interventions conserve les erreurs (observation_errors), observation_available=False et routine_human_interventions=None : une observation indisponible n'est plus une mesure de zéro."
+ },
+ {
+  "id": "L5_factory_v2_rest_2-006",
+  "status": "FIXED",
+  "commit": "5597202c27976d7a6552343ff4ec85ad9eac7584",
+  "test": "tests/test_repairs_lot1_run_harness.py::test_verify_only_refuses_unmatched_experiment",
+  "note": "verify_only échoue (VERIFY_UNMET: UNMATCHED_ARMS) dès qu'un contrôle matched est faux ; preuve 3x3 régénérée au SHA du producteur modifié."
+ },
+ {
+  "id": "L5_factory_v2_rest_2-007",
+  "status": "FIXED",
+  "commit": "d9353fa9b02f740fa7082faebe1b99a498d78bfe",
+  "test": "tests/test_repairs_lot1_ledgers.py::test_runrecords_truncated_tail_keeps_valid_rows",
+  "note": "read_runs saute les lignes JSON invalides comme les lecteurs de phases : une queue d'append interrompue ne rend plus les statistiques moteur indisponibles."
+ },
+ {
+  "id": "L5_factory_v2_rest_2-008",
+  "status": "FIXED",
+  "commit": "d9353fa9b02f740fa7082faebe1b99a498d78bfe",
+  "test": "tests/test_repairs_lot1_ledgers.py::test_reconcile_never_closes_a_live_worker",
+  "note": "reconcile_orphan_predictions vérifie worker_pid par os.kill(pid,0) : une tentative au worker vivant n'est pas fermée (contrat 1:1 préservé) ; sans worker vivant, fermeture WORKER_DEATH inchangée."
+ },
+ {
+  "id": "L5_factory_v2_rest_2-009",
+  "status": "FIXED",
+  "commit": "d9353fa9b02f740fa7082faebe1b99a498d78bfe",
+  "test": "tests/test_repairs_lot1_ledgers.py::test_self_modification_chain_survives_interleaved_append",
+  "note": "append lit le dernier row_hash SOUS flock exclusif sur le ledger puis écrit+fsync : lecture-vérification-append est une seule étape sérialisée, la chaîne reste valide quel que soit l'entrelacement."
+ },
+ {
+  "id": "L5_factory_v2_rest_2-016",
+  "status": "FIXED",
+  "commit": "d9353fa9b02f740fa7082faebe1b99a498d78bfe",
+  "test": "tests/test_repairs_lot1_ledgers.py::test_verified_fix_index_keeps_both_interleaved_stores",
+  "note": "INDEX.json publié par fusion (snapshot + contenu courant) sous verrou par projet et tmp unique : deux stores entrelacés laissent les deux références chargeables."
+ },
+ {
+  "id": "L6_bin_lib_products_1-001",
+  "status": "FIXED",
+  "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+  "test": "tests/test_repairs_lot1_bin_a.py::test_benchmark_entrypoint_imports_without_pythonpath",
+  "note": "sys.path.insert déplacé AVANT l'import factory_v2._io : --help/run/compare démarrent sans PYTHONPATH préconfiguré."
+ },
+ {
+  "id": "L6_bin_lib_products_1-002",
+  "status": "FIXED",
+  "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+  "test": "tests/test_repairs_lot1_bin_a.py::test_budget_ledger_concurrent_appends_keep_all_records",
+  "note": "_atomic_append écrit en O_APPEND+fsync au lieu de lire-puis-remplacer : deux enregistrements concurrents ne perdent plus de ligne (_load_records tolère déjà les lignes déchirées)."
+ },
+ {
+  "id": "L6_bin_lib_products_1-004",
+  "status": "FIXED",
+  "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+  "test": "tests/test_repairs_lot1_bin_a.py::test_factoryctl_status_without_state_dir_is_usage_error",
+  "note": "les commandes du cœur exigent --state-dir par une erreur d'usage explicite (comme --repo) au lieu d'un traceback TypeError sur Path(None)."
+ },
+ {
+  "id": "L6_bin_lib_products_1-005",
+  "status": "FIXED",
+  "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+  "test": "tests/test_repairs_lot1_bin_a.py::test_frozen_zone_guard_rejects_rewrite_of_existing_evidence",
+  "note": "diff --name-status distingue ajout (seul 'A' sous evidence/P2_runs reste append-only) de modification/suppression d'une preuve existante, qui violent le gel."
+ },
+ {
+  "id": "L6_bin_lib_products_1-006",
+  "status": "FIXED",
+  "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+  "test": "tests/test_repairs_lot1_bin_a.py::test_frozen_zone_guard_unknown_state_keeps_freeze",
+  "note": "la levée du gel exige un état inactif EXPLICITE (IDLE/DONE/FAIL) ; absent/illisible/inconnu → CAMPAIGN_STATE_UNKNOWN, gel maintenu."
+ },
+ {
+  "id": "L6_bin_lib_products_1-008",
+  "status": "FIXED",
+  "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+  "test": "tests/test_repairs_lot1_bin_a.py::test_i2_gate_manual_continue_requires_zero_per_run",
+  "note": "manual_continue vérifie zéro sur CHAQUE run I2 (médiane gardée descriptive) : [0,0,1] ne passe plus la gate."
+ },
+ {
+  "id": "L6_bin_lib_products_1-010",
+  "status": "FIXED",
+  "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+  "test": "tests/test_repairs_lot1_bin_a.py::test_memory_store_concurrent_promotions_keep_all_lessons",
+  "note": "append_lesson sérialise dédoublonnage+lecture+remplacement sous flock : deux promotions concurrentes conservent toutes les leçons."
+ },
+ {
+  "id": "L6_bin_lib_products_1-014",
+  "status": "FIXED",
+  "commit": "aabf3f71b4de4b70be6976bc0778fc37a595cb4e",
+  "test": "tests/test_repairs_lot1_bin_a.py::test_second_infra_failure_keeps_productive_resume_stage",
+  "note": "une 2e panne pendant waiting_infra conserve le resume_stage productif d'origine et refuse une cible de reprise improductive : recover(force) restaure 'built'."
+ },
+ {
+  "id": "L6_bin_lib_products_1-026",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_lib.py::test_candidate_promotion_requires_bound_sha",
+  "note": "promote_qrts exige un attribut sha PRÉSENT et exactement égal au SHA cible (plus de getattr par défaut)."
+ },
+ {
+  "id": "L6_bin_lib_products_1-027",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_lib.py::test_completion_detector_tolerates_truncated_receipt",
+  "note": "check_mission_completion capture OSError/JSONDecodeError/UnicodeDecodeError : reçu tronqué ⇒ done=False avec verdict RECEIPT_UNREADABLE typé, la boucle de polling des autres missions continue."
+ },
+ {
+  "id": "L6_bin_lib_products_1-030",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_lib.py::test_convergence_gate_checks_every_required_artifact",
+  "note": "_check_artifact_missing évalue TOUS les required_artifacts et liste chacun des manquants ; plus d'early-return au premier existant."
+ },
+ {
+  "id": "L6_bin_lib_products_1-031",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_lib.py::test_convergence_gate_absent_sources_block",
+  "note": "une autorité de campagne absente/illisible produit un gap P0 SOURCE_UNREADABLE (jamais is_converged=True) ; l'absence de plan par mission garde sa sémantique épinglée par la suite publique."
+ },
+ {
+  "id": "L6_bin_lib_products_1-036",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_lib.py::test_watchdog_accepts_offset_free_iso_timestamps",
+  "note": "_parse_dt normalise les ISO sans fuseau en UTC (politique explicite) : plus de TypeError naive-vs-aware dans snapshot."
+ },
+ {
+  "id": "L6_bin_lib_products_2-002",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_lib.py::test_required_state_resolver_invalid_registry_blocks",
+  "note": "contained_capabilities doit être une liste de chaînes, sinon DependencyGapResult(can_dispatch=False, reason=CHAIN_STATE_INVALID) — plus de TypeError de set()."
+ },
+ {
+  "id": "L6_bin_lib_products_2-003",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_lib.py::test_reuse_gate_invalid_registry_is_typed_block",
+  "note": "load_registry refuse les entrées non-objets et convertit les OSError (IsADirectoryError…) en ReuseRegistryError ; check_gate_for_dispatch rend un blocked_reason typé sans lever."
+ },
+ {
+  "id": "L6_bin_lib_products_2-006",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_lib.py::test_supervisor_state_tmp_collision_is_gone"
+ },
+ {
+  "id": "L6_bin_lib_products_2-007",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_lib.py::test_worktree_pins_resolved_base_commit",
+  "note": "git worktree add reçoit le base_commit déjà résolu (pas la branche mobile) : le HEAD du worktree et la métadonnée concordent même si HEAD avance entre les deux."
+ },
+ {
+  "id": "L6_bin_lib_products_2-009",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_products.py::test_sector_adjusted_path_uses_ticker_peers",
+  "note": "peers contient les TICKERS du secteur, utilisés comme clés market[tk] : la carte sectorielle valide ne déclenche plus KeyError."
+ },
+ {
+  "id": "L6_bin_lib_products_2-010",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_products.py::test_mixed_timezone_corpus_never_raises",
+  "note": "_parse_dt refuse les timestamps sans fuseau comme non ordonnables (None) : un corpus mixte donne SAME_DAY_UNORDERED, jamais TypeError."
+ },
+ {
+  "id": "L6_bin_lib_products_2-022",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_products.py::test_weekly_index_interleaved_stores_keep_both",
+  "note": "l'index est publié par fusion (snapshot + contenu courant) sous flock par projet avec tmp unique : deux stores entrelacés laissent deux observations valides."
+ },
+ {
+  "id": "L6_bin_lib_products_2-023",
+  "status": "FIXED",
+  "commit": "f67153a27f16ed1832cc24bdf53404537993600a",
+  "test": "tests/test_repairs_lot1_products.py::test_stale_keepalive_is_refused",
+  "note": "les jours sont parsés et comparés à la fenêtre des 3 derniers jours d'une horloge injectable, et script_sha doit être un sha256 valide : plus de VERIFIED sur des dates de l'an 2000."
+ }
+]

@@ -1,0 +1,69 @@
+{
+  "schema": "convergence-reshape-receipt/v2",
+  "ledger_sha256": "c5fd737d2dfb4413a0cfdf8bc19c1c4da3ed998b06a35d789fe4e372417b1de1",
+  "base_sha": "a1823326f4cecfb38406028ab085d13ee33ffe5b",
+  "integration_sha": "c36e9387f0fad50fef84aad6397d556b45bf0f1d",
+  "decisions_applied": [
+    {
+      "subsystem": "MilestoneController_V1",
+      "file": "factory/lib/milestone_controller.py",
+      "decision": "REPLACE",
+      "status": "APPLIED",
+      "commit_sha": "e54dacb30a917a368ab5a467937383e31f4c9ed8",
+      "companion_files": ["tests/test_milestone_controller.py"],
+      "evidence": {
+        "before": "302 LOC advisory multi-signal gate (receipt stages derivation, verdict=ACCEPTED fallback, CTO_STATE DoD lookup, declarative product_e2e.json proof)",
+        "after": "136 LOC compatibility wrapper delegating the milestone verdict to the AUTHORITATIVE V2 gate named by the audit (factory_v2/authority_gate.py IndependentValidator): frozen contract executed (product_e2e test_command run in isolation), required artifacts disk-checked, fail-closed INCOMPLETE when the receipt carries no frozen validation_contract",
+        "replacement_wrapped": "factory_v2/authority_gate.py — the audit's best_public_alternative — is wrapped at the replacement site; no new module created (no new .py under factory/ or factory_v2/, verifier-added-files clause recomputed clean)",
+        "loc": "302 -> 136 measured (wc -l); behavior change proven executed: ORIGINAL controller at detached base a1823326f on inputs {ACCEPTED receipt + green stages + declarative product_e2e.json {'pass':true}} returned verdict COMPLETE; the wrapper returns INCOMPLETE fail-closed (test_a_gone_declarative_proof_file_no_longer_drives_verdict, 14 passed fresh)",
+        "kept_invariants": "MILESTONE_COMPLETE_WITHOUT_PRODUCT_E2E=0 (now proven by EXECUTION of the contract command, test A-E2E), MILESTONE_COMPLETE_WITHOUT_REQUIRED_ARTIFACT=0 (A-ART), lying receipt cannot buy COMPLETE (A-REC1/A-REC2), evaluate() never raises (A-REC2), factoryd settlement wiring unchanged and green (TestFactorydSettlementGateWiring kept intact)"
+      }
+    },
+    {
+      "subsystem": "CampaignState_next_mission",
+      "file": "factory_v2/roadmap_resolver.py",
+      "decision": "DELETE",
+      "status": "APPLIED_PRE_BASE_VERIFIED_VIA_DELETED_IN_COMMIT",
+      "commit_sha": "b671efe7889fbd3b8b0004dd8c4ef1379efe790c",
+      "evidence": {
+        "subsystem_file": "factory/bin/campaign_state.py",
+        "subsystem_loc_at_deletion": 243,
+        "proof_code_actually_removed": "git cat-file -e HEAD:factory/bin/campaign_state.py -> rc!=0 (file absent); git log --diff-filter=D --format=%H -- factory/bin/campaign_state.py -> b671efe7889fbd3b8b0004dd8c4ef1379efe790c; git show b671efe7^:factory/bin/campaign_state.py | wc -l -> 243",
+        "verification_path": "T3 repair 2026-09-20: the gate (verify_reshape_receipt.py clause 4) honors the ledger's own update_2026_09_18.deleted_subsystem_fields convention: the structural DELETE proof lives on subsystem_file at deleted_in_commit (present at b671efe7^, absent at b671efe7, absent at integration_sha, reachable from integration, receipt commit_sha == deleted_in_commit). The deletion was real all along; nothing was rewritten — neither ledger nor successor."
+      }
+    },
+    {
+      "subsystem": "gauntlet_champion_py",
+      "file": "campaigns/RUN8/factory_gauntlet/factory_gauntlet/champion.py",
+      "decision": "DEMOTE",
+      "status": "APPLIED_AS_DEMOTE_PER_OWNER_AMENDMENT_2026_09_20",
+      "commit_sha": "0e3f2eb3a9a3d3d48103496c51738a77a6e5804b",
+      "evidence": {
+        "amendment": "Operateur 20/09 (zone gelee): 'La decision DC-003 du ledger est passee de DELETE a DEMOTE : ne jamais supprimer ni modifier un fichier sous campaigns/RUN8.' Ledger edit applied verbatim at commit 0e3f2eb3a — decision flipped to DEMOTE with the operator's own rationale text (the exact edit of operator precedent 4b829610f, which the attempt-14 merge 63f89c8d7 had reverted while the task brief kept carrying the amendment).",
+        "history": "DELETE applied then reverted pre-merge (dacc214ff deleted, reverted at c36e9387f after factory/bin/frozen_zone_guard.py stopped the suite: FROZEN_ZONE_WRITTEN); receipt documented the block as UNAPPLIED_BLOCKED_BY_OWNER_FROZEN_ZONE through attempt 14; glm BLOCK verdict 2026-09-20T01:13:24Z (transcription absent from the worktree — evidence/reviews/FACTORY_CONVERGENCE_RESHAPE/glm_20260920T011324Z.log does not exist, verified by execution) followed the 'amendment satisfied as-is' position; this session applies the amendment literally.",
+        "mechanical_effect": "DEMOTE is not a structural decision for the gate: the frozen-zone file stays on disk, dead (zero importers: grep 'champion' across the gauntlet package shows no reference outside the file itself), never deleted and never modified while the zone is frozen. Frozen zone intact, executed fresh this session: python3 factory/bin/frozen_zone_guard.py -> rc=0 FROZEN_ZONE_INTACT; git status --porcelain campaigns/ -> empty; champion.py byte-identical to tag factory-v1-run8-baseline-v2 at HEAD (guard re-verifies on every run).",
+        "census": "ledger live census after the amendment (recomputed by execution): KEEP 11, ADAPT 8, DEMOTE 8, DELETE 1, REPLACE 1, WRAP 0 = 29 decisions; the single remaining DELETE is CampaignState_next_mission (applied above), so 'every DELETE decision applied' now holds with no blocked residue."
+      }
+    }
+  ],
+  "loc": {
+    "scope": "verifier-recomputed (git ls-tree + git show, .py under factory/ and factory_v2/), via factory_v2.verify_reshape_receipt._loc_total",
+    "before": 72459,
+    "after": 72293,
+    "reduced": true,
+    "loc_justification": "Not required (reduced). For the record: -166 comes entirely from the applied REPLACE (milestone_controller.py 302->136); the demoted champion.py (21 LOC) lives under campaigns/ which the verifier scope excludes, and the pre-base DELETE (campaign_state.py, 243 LOC) predates base_sha."
+  },
+  "test_log_path": "factory_v2/receipts/convergence_reshape_oracle_log.txt",
+  "test_log_sha256": "1339efc1e68eac3aee689c9ebbce5c566182e86a479eb3fa7bdfda44ca8440e6",
+  "tests": {
+    "cmd": "python3 -m pytest tests -q -p no:cacheprovider --ignore=tests/test_stabilization_proof.py --ignore=tests/test_external_supervisor_production_path.py --ignore=tests/test_lr4_interprocess.py --ignore=tests/test_p0_supervision_repairs.py --ignore=tests/test_sol_ladder_fairness.py --ignore=tests/test_telemetry_integration.py --ignore=tests/test_tr_weekly_refresh_verifier.py",
+    "summary": "FULL SAFE SUITE GREEN, FRESH, session a17 (2026-09-20, base cb98ce584 + this session's commits): rc=0, '3103 passed, 4 skipped, 4 subtests passed in 801.65s' with the session environment intact (including FACTORY_MISSION_REOPENED=1). Log committed at factory_v2/receipts/convergence_reshape_full_suite_2026-09-20.log. The acceptance clause 'the full test suite passes on the reshaped codebase' is MET by this run. History: the previous session's full-suite log carried '1 failed, 3087 passed' (F3, test_base_ready_aggregator, fixed since by 1358ea61f which removed the shadowing provisional verifier — 18 passed fresh at base cb98ce584) and ran without FACTORY_MISSION_REOPENED in scope.",
+    "milestone_test_cmd_fresh": "Exact 12-file milestone test_cmd pytest part re-run green FRESH this session: '160 passed in 63.38s', pytest rc=0 (this run is the sha-bound test_log_path, convergence_reshape_oracle_log.txt, sha 1339efc1...). Earlier bindings preserved in git history (2ee6aa0e... at 9a84c41b1, 9a1b2f31... at ab24cad25).",
+    "hermeticity_repair": "Two tests (tests/test_dispatcher_worktree.py::test_blocked_mission_no_merge, ::test_merge_conflict_golden_preserved) were failing in this session's first full-suite run: the harness exports FACTORY_MISSION_REOPENED=1 for a mission re-opened after a review BLOCK, and those scenarios were not hermetic to that variable (reproduced: '2 failed, 7 passed' with the variable, '9 passed' without). Fixed by monkeypatch.delenv in both tests — assertions unchanged, green with AND without the variable ('9 passed' both ways, runs cited in REPORT.json). This also explains the count delta vs the previous session's log (their environment did not carry the variable)."
+  },
+  "new_subsystems": "none — no .py file added under factory/ or factory_v2/ between base_sha and integration_sha (verifier _added_files recomputed: empty); net non-test code change is one file rewritten in place; this session's commits touch only the ledger JSON, tests/test_dispatcher_worktree.py, receipts/logs and session files — no new module anywhere",
+  "verifier_expectation": "Session a17 2026-09-20: gate re-run rc=0 after the amendment + regeneration, both invocation forms (script python3 factory_v2/verify_reshape_receipt.py and module python3 -m factory_v2.verify_reshape_receipt): 'CONVERGENCE_RESHAPE_VERIFIER: PASS — 2 decisions verified, LOC 72459->72293, 160 tests passed' (0 blocked DELETE: DC-003 is DEMOTE per the owner amendment, the last structural DELETE — CampaignState — is applied, no frozen-zone residue). Receipt diff vs attempt-14 binding: ledger_sha256 re-bound to the amended ledger (c5fd737d...), champion.py entry requalified DELETE-blocked -> DEMOTE-applied, tests section carrying THIS session's fresh counts (full suite rc=0 3103 passed), oracle log re-bound (1339efc1...). base_sha, integration_sha, the REPLACE/DELETE entries and their commit shas are unchanged; added-files and LOC clauses recompute at the bound shas exactly as before.",
+  "wraps": [],
+  "wrap_note": "The ledger carries zero WRAP decisions (live census after the 20/09 amendment, recomputed by execution: KEEP 11, ADAPT 8, DEMOTE 8, DELETE 1, REPLACE 1 = 29 total); the milestone outcome wording 'REPLACE/DELETE/WRAP' therefore reduces to the one REPLACE and the one DELETE handled above.",
+  "mission_id": "FACTORY_CONVERGENCE_RESHAPE#M1"
+}

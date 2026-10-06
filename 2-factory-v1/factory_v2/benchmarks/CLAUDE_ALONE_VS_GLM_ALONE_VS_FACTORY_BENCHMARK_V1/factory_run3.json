@@ -1,0 +1,91 @@
+{
+  "active_s": 0.091,
+  "arm": "factory",
+  "automated_restarts": 1,
+  "budget_s": 600,
+  "cache_read_tokens": 0,
+  "cost_usd": 0.0256,
+  "data_sha256": "911ee5eeaccd386139b581e10b7a5692c4ba534fccdee141be5044d9bd1551aa",
+  "declared_success": true,
+  "deliverable": "universe_report.json",
+  "elapsed_s": 2.627,
+  "engine_exercised": "NOT_EXERCISED",
+  "engines_used": [
+    "codex"
+  ],
+  "false_acceptance": false,
+  "faults": [
+    "FI-1_BUILD_BROKEN",
+    "FI-2_FALSE_BAIT",
+    "FI-3_SIGKILL_MID_REPAIR"
+  ],
+  "ground_truth_cmd": "python3 check_truth.py",
+  "ground_truth_evaluated_at": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/matched-3arm-runs-ndex2zc9/factory_run3/gt_export",
+  "ground_truth_rc": 0,
+  "human_interventions": 0,
+  "input_tokens": 4800,
+  "killed": true,
+  "launches_completed": 3,
+  "launches_lost": 1,
+  "launches_started": 4,
+  "missions": [
+    {
+      "candidate_sha": "f68037f56384229e9468ebce5d5ce7d2ecb08419",
+      "gate_rc": 1,
+      "gate_tail": "ACCEPTANCE_NOT_MET: M \u2014 ['product_e2e command rc=1']",
+      "mission": "bench3-factory-m1",
+      "verdict": "ACCEPTED"
+    },
+    {
+      "candidate_sha": "3641b5a57668498ffe13edcc117fcee19b783f84",
+      "gate_rc": 0,
+      "gate_tail": "ACCEPTANCE_VERIFIED: M",
+      "mission": "bench3-factory-m2",
+      "verdict": "ACCEPTED"
+    }
+  ],
+  "notes": "verdicts=['ACCEPTED', 'ACCEPTED']",
+  "output_tokens": 1200,
+  "real_cost_usd": 0.0,
+  "recovery_time_s": 1.618,
+  "run": 3,
+  "self_test_cmd": "bash self_test.sh",
+  "settled": true,
+  "start_sha": "d4971822cddef743627e73aebbc8e36628ef7d03",
+  "task_sha256": "3cf9f9462232f6cc3ff5260ac6753f40b8946b35e1877fe62d2182f1e2489a25",
+  "terminal": true,
+  "tokens_measured_launches": 3,
+  "tokens_source": "telemetry observations (dispatch receipts + crash-safe sidecars) measured by factory_v2.telemetry adapters on each launch's stdout (detect_format(argv)); a launch killed in flight is unmeasured, never estimated",
+  "tokens_unmeasured_launches": 0,
+  "usage": [
+    {
+      "engine": "codex",
+      "input_tokens": 1400,
+      "launch": 1,
+      "output_tokens": 350
+    },
+    {
+      "engine": "codex",
+      "input_tokens": 1600,
+      "launch": 2,
+      "output_tokens": 400
+    },
+    {
+      "engine": "codex",
+      "input_tokens": 1600,
+      "launch": 2,
+      "output_tokens": 400
+    },
+    {
+      "engine": "codex",
+      "input_tokens": 1800,
+      "launch": 3,
+      "output_tokens": 450
+    }
+  ],
+  "usage_sources": [
+    "codex.turn_completed"
+  ],
+  "verified_delivery": true,
+  "workload_id": "CLAUDE_ALONE_VS_GLM_ALONE_VS_FACTORY_BENCHMARK_V1"
+}

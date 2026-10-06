@@ -1,0 +1,111 @@
+[
+  {
+    "case": "judge-default-paths",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_code_review_repairs.py"
+    ],
+    "cwd": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/judge",
+    "rc": 0,
+    "output": "CODE_REVIEW_REPAIRS_VERIFIED: {\"ids\": 1, \"fixed\": 1, \"tests\": 1}"
+  },
+  {
+    "case": "judge-explicit-paths",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_code_review_repairs.py",
+      "--project-repo",
+      "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/judge",
+      "--ids-file",
+      "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/judge/factory/config/code_review_repair_lot1_ids.json",
+      "--repairs-file",
+      "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/judge/factory_v2/audit/CODE_REVIEW_2026-09/REPAIRS.json"
+    ],
+    "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+    "rc": 0,
+    "output": "CODE_REVIEW_REPAIRS_VERIFIED: {\"ids\": 1, \"fixed\": 1, \"tests\": 1}"
+  },
+  {
+    "case": "min-runs-default-3",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_runrecords.py",
+      "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/records"
+    ],
+    "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+    "rc": 0,
+    "output": "PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']"
+  },
+  {
+    "case": "min-runs-100",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_runrecords.py",
+      "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/records",
+      "--min-runs",
+      "100"
+    ],
+    "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+    "rc": 1,
+    "output": "FAIL: only 3 records, need ≥100"
+  },
+  {
+    "case": "require-validated-present",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_runrecords.py",
+      "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/records",
+      "--require-validated"
+    ],
+    "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+    "rc": 0,
+    "output": "PASS: 3 records, 3 validated, engines=['claude', 'codex', 'glm']"
+  },
+  {
+    "case": "human-gate-flag-absent",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_cycle2_refresh.py",
+      "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/cycle2.jsonl"
+    ],
+    "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+    "rc": 0,
+    "output": "PASS: 2 refreshes, all distinct report_shas, HUMAN_GO=1 (recounted)"
+  },
+  {
+    "case": "human-gate-flag-present",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1/factory_v2/verify_cycle2_refresh.py",
+      "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/cycle2.jsonl",
+      "--verify-no-human-gate"
+    ],
+    "cwd": "/private/tmp/factory-worktrees/FACTORY_REPAIR_VERIFY_HARDENING_V1#M1",
+    "rc": 1,
+    "output": "FAIL: 1 HUMAN_GO event(s) found — routine human gate violated: {'event': 'HUMAN_GO', 'timestamp': '2026-09-14T11:00:00Z'}"
+  },
+  {
+    "case": "compound-collect-only",
+    "command": [
+      "sh",
+      "-c",
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m pytest --collect-only -q -q /var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/test_body.py && /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m pytest --collect-only -q -q /var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/test_body.py"
+    ],
+    "cwd": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az",
+    "rc": 0,
+    "output": "test_body.py: 1\n\ntest_body.py: 1"
+  },
+  {
+    "case": "pytest-without-collect-only",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "-m",
+      "pytest",
+      "-q",
+      "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az/test_body.py"
+    ],
+    "cwd": "/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/vh-cli-ef_p0_az",
+    "rc": 0,
+    "output": ".                                                                        [100%]\n1 passed in 0.23s"
+  }
+]

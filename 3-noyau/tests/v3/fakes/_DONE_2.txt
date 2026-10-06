@@ -1,0 +1,20 @@
+Tâche 2/3 — faux moteurs robustesse/triche complémentaires + conftest :
+
+- triche_lit_gh_token.py
+- triche_git_log_all.py
+- triche_junit_forge.py
+- triche_skip_test.py
+- triche_hook_git.py
+- robuste_enfant_setsid.py
+- robuste_muet.py
+- robuste_blocked.py
+- ../conftest.py (fixtures produit_repo, make_roadmap, run_v3)
+
+Vérifications faites : py_compile OK sur les 9 ; smoke rc 0 + ligne
+{"type":"result","usage":{"input":1,"output":1},"num_turns":1} sur
+triche_lit_gh_token, triche_git_log_all, triche_junit_forge,
+triche_skip_test, triche_hook_git, robuste_blocked (exécutés dans un
+dépôt factice hors du banc). robuste_enfant_setsid et robuste_muet non
+exécutés ici : ils laissent un sleep 600 / dorment 400 s (le banc les
+tue via --budget-s). Tous ≤ 60 lignes (fakes), stdlib seule, écrits
+seulement sous tests/v3/.

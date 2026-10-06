@@ -1,0 +1,70 @@
+{
+  "schema": "v1-qualification-matrix/v1",
+  "evaluated_at": "2026-09-07T12:03:58.711164+00:00",
+  "canonical_head": "e2cc21db",
+  "requirements": {
+    "persistent_cto_state": {
+      "capability": "CTOK001_CANONICAL_CTO_STATE",
+      "status": "E2E_PROVEN",
+      "pass": true
+    },
+    "context_enforcement": {
+      "capability": "CTOK002_CONTEXT_COMPILER_V2+CTOK002B",
+      "status": "E2E_PROVEN",
+      "pass": true
+    },
+    "research_reuse": {
+      "capability": "CTOK003_Q_RESEARCH_REUSE_GATE_QUALIFIED",
+      "status": "E2E_PROVEN_RUNTIME_PATH_CLOSED",
+      "pass": true
+    },
+    "persistent_failure_director": {
+      "capability": "CTOK006_PERSISTENT_FAILURE_DIRECTOR+CTOK006B+CTOK006C",
+      "status": "E2E_PROVEN",
+      "pass": true
+    },
+    "milestone_product_e2e": {
+      "capability": "CTOK004_MILESTONE_PRODUCT_E2E",
+      "status": "E2E_PROVEN",
+      "pass": true
+    },
+    "convergence_gate": {
+      "capability": "CTOK005_SPEC_CODE_CONVERGENCE",
+      "status": "E2E_PROVEN",
+      "pass": true
+    },
+    "cold_restart": {
+      "capability": "CTOK007_COLD_RESTART_CONTINUITY",
+      "status": "E2E_PROVEN",
+      "pass": true
+    },
+    "candidate_integrity": {
+      "qrts": "e2cc21db",
+      "promotion": "CAS",
+      "status": "CANONICAL_PROMOTED",
+      "pass": true
+    },
+    "full_regression": {
+      "result": "REGRESSION_FULLY_CLEAN_931_931",
+      "failed": 0,
+      "pass": true
+    },
+    "long_horizon_benchmark": {
+      "event": "SOLO_BENCHMARK_COMPLETE",
+      "lane_a_pass": true,
+      "lane_d_pass": true,
+      "pass": true
+    },
+    "hard_invariants": {
+      "violations": 0,
+      "pass": true
+    },
+    "long_run_governance": {
+      "capability": "CTOK008_LONG_RUN_SUPERVISOR",
+      "status": "E2E_PROVEN",
+      "pass": true
+    }
+  },
+  "all_pass": true,
+  "verdict": "FACTORY_CONDUCTOR_V1_READY"
+}

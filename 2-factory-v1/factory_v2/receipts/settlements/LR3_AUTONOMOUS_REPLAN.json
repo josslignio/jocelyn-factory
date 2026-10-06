@@ -1,0 +1,50 @@
+{
+  "authority_hashes": {
+    "roadmap": "fbd6a8a73db76fa9bf42c224b311bcae69f487ecb074c3063d80a9cf6f879f12",
+    "spec": "2ac7e8f706456ad7e0cdee1fca03be562a76d742ff8ecc3867a5dbf29ae885c9",
+    "strategy": "42d768f10752fd0a46501d062ac5c9955ba38eade2a15d46d87b8bd353590249"
+  },
+  "base_sha": "c2f05a43a721a978e04f7b23831d1cd485225343",
+  "binding_sol_reject": "d0bff136743cd84be4c6ad7ba200dad1ecc4d51f",
+  "candidate_sha": "37ff37c4cda69a413a46caebbc881589d39ca7a5",
+  "contract": {
+    "frozen_at": "2026-09-09T04:30:00Z",
+    "id": "84399c2de5c3f97d8d65f343",
+    "path": "projects/factory/validation_contracts/lr3_interprocess_frozen.json"
+  },
+  "evidence": {
+    "active_verify": [
+      {
+        "command": "python3 -m pytest tests/test_lr3_autonomous_replan.py -q",
+        "observed_at": "see gate response",
+        "output": "targeted suite in detached exact-SHA worktree",
+        "rc": 0
+      }
+    ],
+    "backfill": true,
+    "backfilled_from": "backfilled from durable untracked evidence (gate responses under .context/glm-primary-overnight/reviews, live PROJECT_STATE notes, per-machine validation-job receipts, full-suite logs under .context/glm-primary-overnight)",
+    "full_suite": {
+      "command": "full suite in detached worktree",
+      "counts": "1610 passed, 4 skipped",
+      "duration_s": 949.2,
+      "rc": 0,
+      "sha": "37ff37c4",
+      "validation_key": "52adb4ea6b56781b44571faf"
+    },
+    "gate": {
+      "note": "gate3 consolidated ACCEPT {LR2,LR3}; python<3.10 loud skip follow-up c2f05a43",
+      "response_context": "gate response (untracked .context reviews dir)",
+      "reviewer": "claude-sonnet-5",
+      "rounds": 1,
+      "verdict": "ACCEPT"
+    }
+  },
+  "honest_residual": [
+    "replan graph acyclicity checked at proposal time only"
+  ],
+  "milestone": "LR3_AUTONOMOUS_REPLAN",
+  "project": "factory",
+  "recorded_at": "2026-09-09T09:09:12Z",
+  "schema": "settlements/v1",
+  "settled_at": "2026-09-09"
+}

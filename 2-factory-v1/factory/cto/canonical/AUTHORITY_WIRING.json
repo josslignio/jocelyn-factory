@@ -1,0 +1,59 @@
+{
+  "schema": "authority-wiring/v1",
+  "produced_at": "2026-09-07T14:55:00Z",
+  "authority": "Blueprint reshape 2026-09-07 Étape 2 — prouver que chaque point du cycle de vie relit ou valide les autorités canoniques (AUTHORITY_MAP.md).",
+  "method": "Inspection statique des chemins de code runtime (champion frozen — aucune modification). Chaque point: autorité lue, référence code, verdict WIRED | GAP.",
+  "lifecycle_points": [
+    {
+      "point": "startup_restart",
+      "authority_read": "CTO_STATE.json (via CTOKernel load→validate→assert_invariants)",
+      "code_ref": "factory/bin/factoryd.py:847",
+      "verdict": "WIRED",
+      "evidence": "_cto_startup_check — CTOK_STARTUP_CHECK_PASS émis en événement durable"
+    },
+    {
+      "point": "context_compile",
+      "authority_read": "CTO_STRATEGY.md (lecture live)",
+      "code_ref": "factory/lib/context_compiler.py:150",
+      "verdict": "WIRED",
+      "evidence": "_read_text(cto_dir/CTO_STRATEGY.md) — jamais mis en cache"
+    },
+    {
+      "point": "pre_spawn",
+      "authority_read": "CTO_STRATEGY.md + CTO_STATE.json (via ContextCompiler.compile)",
+      "code_ref": "factory/bin/dispatcher_v3.py:302",
+      "verdict": "WIRED",
+      "evidence": "barrière CTOK002B-P2: pas de spawn sans context package compilé depuis les autorités"
+    },
+    {
+      "point": "mission_settlement",
+      "authority_read": "APP007_CAMPAIGN_STATE.json + PORTFOLIO_STATE.json (sync settle)",
+      "code_ref": "factory/bin/factoryd.py:298",
+      "verdict": "WIRED",
+      "evidence": "_sync_portfolio_settlement — next_mission_id avance vers la tête de queue à chaque settle"
+    },
+    {
+      "point": "milestone_settlement",
+      "authority_read": "CTO_STATE.json milestone_definition_of_done + evidence dir",
+      "code_ref": "factory/bin/factoryd.py:411",
+      "verdict": "WIRED_ADVISORY",
+      "evidence": "MilestoneController.evaluate — ADVISORY (voir GAP-029: doit devenir bloquant)"
+    },
+    {
+      "point": "project_switch_next_work",
+      "authority_read": "PORTFOLIO_STATE.json (lecture live à chaque idle_recovery)",
+      "code_ref": "factory/lib/long_run_supervisor.py:332",
+      "verdict": "WIRED",
+      "evidence": "idle_recovery lit le portfolio frais; PREMATURE_GLOBAL_IDLE_WITH_OPEN_PORTFOLIO=0"
+    },
+    {
+      "point": "next_work_from_roadmap",
+      "authority_read": "CANONICAL_ROADMAP.json",
+      "code_ref": null,
+      "verdict": "GAP",
+      "evidence": "AUCUN chemin runtime ne lit la roadmap canonique pour décider du prochain travail — dépend de campaign queue + portfolio pointer (voir GAP-025, GAP-031). Cible blueprint: ROADMAP RESOLVER"
+    }
+  ],
+  "summary": {"wired": 6, "wired_advisory": 1, "gaps": 1},
+  "conclusion": "La relecture des autorités est prouvée sur 6 points + 1 advisory. Le chaînon manquant est le ROADMAP RESOLVER (next-work depuis la roadmap canonique) — enregistré comme gap, à traiter en reshape (Étape 6), pas en hotfix champion."
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "bench-status/v1",
+  "campaign": "RUN8",
+  "status": "SUPERSEDED_PENDING_RECOMPUTE",
+  "frozen_baseline": "factory-v1-run8-baseline-v2",
+  "why": "The published figures were produced by campaigns/RUN8/P5/holdout_mcnemar.py BEFORE its repair. That script took last-write-wins per cell, discarding the append-only attempt history, and paired on (task, rep) so replays of one task counted as independent pairs — which inflated n. The corrected script is factory_v2/bench_repairs/holdout_mcnemar_repaired.py.",
+  "superseded_documents": [
+    "campaigns/RUN8/P5/PHASE_B_RESULT.md",
+    "campaigns/RUN8/P5/PHASE_B_V2_RESULT.md",
+    "campaigns/RUN8/P5/FACTORY_AUDIT_DOSSIER.md"
+  ],
+  "rules": [
+    "Do NOT cite these figures to justify routing, engine choice or optimisation.",
+    "Do NOT recompute inside the frozen zone: campaigns/RUN8 stays byte-identical to its baseline.",
+    "Recompute later under a NEW frozen baseline tag, with the repaired script.",
+    "This marker lives OUTSIDE campaigns/RUN8 because writing into the frozen zone is exactly what the frozen-zone guard exists to catch."
+  ],
+  "blocks_rearm": false
+}

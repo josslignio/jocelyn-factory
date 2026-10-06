@@ -1,0 +1,49 @@
+{
+ "schema": "committed-full-suite-receipt/v1",
+ "candidate_sha": "b286be09a520ab3772f83f144c47b6b4cebd7715",
+ "material_tip_within": "b286be09a520ab3772f83f144c47b6b4cebd7715",
+ "single_flight_key": "fullsuiteb286be09",
+ "command": [
+  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+  "-m",
+  "pytest",
+  "tests/",
+  "-q",
+  "--timeout=600"
+ ],
+ "environment": {
+  "cwd": "detached git worktree factory-fullsuite-b286be09-r3/tree",
+  "PATH": "/Library/Frameworks/Python.framework/Versions/3.12/bin first (attempt R1 without it was typed HARNESS_ENVIRONMENT_INVALID and is NOT counted)"
+ },
+ "result": {
+  "rc": 0,
+  "passed": 1736,
+  "skipped": 4,
+  "subtests": 3,
+  "duration_s": 934.96
+ },
+ "log_sha256": "e4408e1fb65f9a27cd142766104ba810670710ea35858709bac29fe2ef52f874",
+ "attempts": [
+  {
+   "attempt": 1,
+   "sha": "5c30a8e5fe2c600579de9d13e02563299aa20343",
+   "verdict": "HARNESS_ENVIRONMENT_INVALID",
+   "detail": "26 failures were all spawned-python3-environment artifacts (verified by re-run with framework python); not counted"
+  },
+  {
+   "attempt": 2,
+   "sha": "5c30a8e5fe2c600579de9d13e02563299aa20343",
+   "result": "1 failed, 1735 passed",
+   "verdict": "REAL_FINDING_REPAIRED",
+   "detail": "KOL-records ledger join collapsed same-day theses; repaired in b286be09 (builder + probe strengthened, records regenerated at product d7c2cfe0)"
+  },
+  {
+   "attempt": 3,
+   "sha": "b286be09a520ab3772f83f144c47b6b4cebd7715",
+   "result": "1736 passed, 4 skipped, rc=0",
+   "verdict": "PASS"
+  }
+ ],
+ "verifier_independence": "executed in a detached worktree at the exact SHA by the gen9 controller; log hash-bound here",
+ "settled_at": "2026-09-09T20:10:22Z"
+}

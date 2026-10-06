@@ -1,0 +1,9 @@
+{
+  "mission_id": "LR5_HARNESS#DOUBLE_DISPATCH",
+  "integration_sha": "ffffffffffffffffffffffffffffffffffffffff",
+  "first_allowed": true,
+  "first_outcome": "CAS_ALLOWED: mission_id='LR5_HARNESS#DOUBLE_DISPATCH' promoted at 'ffffffffffffffffffffffffffffffffffffffff'",
+  "second_allowed": false,
+  "second_outcome": "CAS_DUPLICATE: mission_id='LR5_HARNESS#DOUBLE_DISPATCH' already promoted at integration_sha='ffffffffffffffffffffffffffffffffffffffff'. Double-dispatch rejected.",
+  "observed_at": "2026-09-09T10:31:32Z"
+}

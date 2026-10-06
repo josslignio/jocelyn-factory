@@ -1,0 +1,621 @@
+{
+  "schema": "code-review-lot/v1",
+  "lot": "L5_factory_v2_rest_1",
+  "engine": "codex",
+  "reviewed_sha": "78e1e41e98be956933b84be8f520652ce3afe006",
+  "files_reviewed": [
+    {
+      "path": "factory_v2/__init__.py",
+      "lines": 13,
+      "verdict": "CLEAN",
+      "summary": "Décrit la chaîne d’autorité et ses invariants ; module documentaire sans exécution, aucun défaut autonome confirmé."
+    },
+    {
+      "path": "factory_v2/_a1a6_gate.py",
+      "lines": 90,
+      "verdict": "FINDINGS",
+      "summary": "Contrôle statiquement trois capacités de la cellule d’audit ; accepte des imports sans aucun appel effectif."
+    },
+    {
+      "path": "factory_v2/_benchmark_probes.py",
+      "lines": 403,
+      "verdict": "CLEAN",
+      "summary": "Pilote six scénarios de benchmark hermétiques avec résultats typés ; lecture complète, aucun défaut supplémentaire confirmé dans les scénarios examinés."
+    },
+    {
+      "path": "factory_v2/_io.py",
+      "lines": 71,
+      "verdict": "FINDINGS",
+      "summary": "Centralise temps, Git et JSON durable ; collision du fichier temporaire et exception de décodage non gérée confirmées."
+    },
+    {
+      "path": "factory_v2/_wiring_gate.py",
+      "lines": 163,
+      "verdict": "FINDINGS",
+      "summary": "Vérifie présence et ordre des gates ; ignore les dispatchs déplacés dans les stages et accepte un contrôle dans une branche inaccessible."
+    },
+    {
+      "path": "factory_v2/authority.py",
+      "lines": 163,
+      "verdict": "FINDINGS",
+      "summary": "Charge les autorités depuis Git avec cache par SHA ; une course entre capture HEAD et git show peut empoisonner ce cache."
+    },
+    {
+      "path": "factory_v2/authority_change.py",
+      "lines": 418,
+      "verdict": "FINDINGS",
+      "summary": "Applique des propositions avec verrou, CAS et garde canonique ; validation du schéma et de l’identité absente sur les projets non canoniques."
+    },
+    {
+      "path": "factory_v2/authority_reconcile.py",
+      "lines": 140,
+      "verdict": "CLEAN",
+      "summary": "Invalide les verdicts liés à une ancienne autorité et reconstruit un snapshot ; aucun défaut distinct confirmé après lecture complète."
+    },
+    {
+      "path": "factory_v2/bench_repairs/holdout_mcnemar_repaired.py",
+      "lines": 201,
+      "verdict": "FINDINGS",
+      "summary": "Agrège les tentatives puis calcule McNemar par tâche ; le CLI de scores bruts reste incompatible avec les listes retournées."
+    },
+    {
+      "path": "factory_v2/blocked_event_dedup.py",
+      "lines": 56,
+      "verdict": "CLEAN",
+      "summary": "Déduplique les événements de blocage par empreinte stable ; dépend du save du caller explicitement documenté, aucun défaut reproduit retenu."
+    },
+    {
+      "path": "factory_v2/canonical_authority.py",
+      "lines": 127,
+      "verdict": "CLEAN",
+      "summary": "Refuse les écritures sur les autorités canoniques du dépôt avec résolution des chemins ; aucun défaut autonome confirmé dans ce périmètre."
+    },
+    {
+      "path": "factory_v2/canonical_context.py",
+      "lines": 347,
+      "verdict": "FINDINGS",
+      "summary": "Reconstruit un manifeste haché de contexte ; validation trop permissive des sentinelles et perte des événements d’échec sous la clé event."
+    },
+    {
+      "path": "factory_v2/capability_snapshot.py",
+      "lines": 142,
+      "verdict": "FINDINGS",
+      "summary": "Photographie les capacités depuis les blobs Git ; le hash du vérificateur ne couvre plus son implémentation déléguée."
+    },
+    {
+      "path": "factory_v2/cas_promotion.py",
+      "lines": 124,
+      "verdict": "FINDINGS",
+      "summary": "Sérialise la promotion par flock et registre ; la corruption du registre permet de promouvoir à nouveau une mission déjà traitée."
+    },
+    {
+      "path": "factory_v2/cell_challenger.py",
+      "lines": 89,
+      "verdict": "CLEAN",
+      "summary": "Challenger déterministe de package et de hashes de preuves ; aucun défaut autonome confirmé dans son rôle de vérificateur structurel."
+    },
+    {
+      "path": "factory_v2/cell_reviewer.py",
+      "lines": 100,
+      "verdict": "CLEAN",
+      "summary": "Reviewer structurel avec recomputation HEAD et hashes des preuves ; refus explicite en cas de SHA différent, aucun défaut distinct confirmé."
+    },
+    {
+      "path": "factory_v2/cli_canary.py",
+      "lines": 329,
+      "verdict": "CLEAN",
+      "summary": "Lance un canary CLI borné et écrit comptabilité, télémétrie et reçu ; lecture complète, aucun lancement de modèle effectué pour cette revue, aucun constat retenu."
+    },
+    {
+      "path": "factory_v2/collection_observer.py",
+      "lines": 372,
+      "verdict": "FINDINGS",
+      "summary": "Observe une collecte et rattache événements et registre ; son timeout ne termine pas les descendants conservant les pipes."
+    },
+    {
+      "path": "factory_v2/continuation_controller.py",
+      "lines": 295,
+      "verdict": "FINDINGS",
+      "summary": "Décide continuation, pause et arrêt ; un marqueur JSON vide présent est ignoré et la boucle continue."
+    },
+    {
+      "path": "factory_v2/derived_plan.py",
+      "lines": 398,
+      "verdict": "CLEAN",
+      "summary": "Valide et persiste des plans dérivés liés au contrat et à l’incident ; hypothèse du verrou externe explicite, aucun défaut reproduit retenu."
+    },
+    {
+      "path": "factory_v2/dispatch_checkpoint.py",
+      "lines": 250,
+      "verdict": "CLEAN",
+      "summary": "Persiste/recharge/consomme le résultat builder avec identité et journal ; lecture complète, aucun défaut autonome confirmé sous verrou du runtime."
+    },
+    {
+      "path": "factory_v2/durable_handoff.py",
+      "lines": 135,
+      "verdict": "CLEAN",
+      "summary": "Écrit et acquitte un handoff durable ; validation de charge et helpers lus en entier, aucun nouveau défaut reproduit retenu."
+    },
+    {
+      "path": "factory_v2/e2e_run.py",
+      "lines": 177,
+      "verdict": "CLEAN",
+      "summary": "Harness de trois milestones locaux avec reprise en nouveaux processus ; reçu distingue les frontières entre milestones, aucun constat confirmé retenu."
+    },
+    {
+      "path": "factory_v2/event_journal.py",
+      "lines": 214,
+      "verdict": "FINDINGS",
+      "summary": "Externalise les événements dans un journal ; chaque ajout relit tout l’historique et la désactivation du flag masque les nouveaux événements inline."
+    },
+    {
+      "path": "factory_v2/evidence_grading.py",
+      "lines": 14,
+      "verdict": "CLEAN",
+      "summary": "Retourne un refus typé pour les capacités sans producteur indépendant ; fonction pure et explicite, aucun constat."
+    },
+    {
+      "path": "factory_v2/external_supervisor.py",
+      "lines": 707,
+      "verdict": "FINDINGS",
+      "summary": "Supervise workers et quarantaine durable ; suppression de fichiers non détectée et marqueur de quarantaine corrompu assimilé à une absence."
+    },
+    {
+      "path": "factory_v2/external_supervisor_harness.py",
+      "lines": 388,
+      "verdict": "CLEAN",
+      "summary": "Harness launchd jetable de relance et containment ; lecture complète des preuves et nettoyages, aucune installation launchd effectuée pour la revue, aucun défaut reproduit retenu."
+    },
+    {
+      "path": "factory_v2/factory_verifiers.py",
+      "lines": 1012,
+      "verdict": "FINDINGS",
+      "summary": "Regroupe les vérificateurs Factory et recomputations de preuves ; la comparaison de nombres ne rejette pas NaN."
+    },
+    {
+      "path": "factory_v2/fault_injection.py",
+      "lines": 184,
+      "verdict": "FINDINGS",
+      "summary": "Injecte pannes de processus, leases et refs ; garde de groupe inutilisée et chemin de lease incompatible avec les mission_id contenant #."
+    },
+    {
+      "path": "factory_v2/heartbeat_sidecar.py",
+      "lines": 122,
+      "verdict": "CLEAN",
+      "summary": "Renouvelle le heartbeat dans un sidecar détaché avec recontrôle de naissance ; aucun défaut autonome confirmé après lecture complète."
+    },
+    {
+      "path": "factory_v2/long_run_preflight.py",
+      "lines": 225,
+      "verdict": "FINDINGS",
+      "summary": "Construit les checks de lancement long ; une erreur de lecture du lease est enregistrée PASS."
+    },
+    {
+      "path": "factory_v2/long_run_ready.py",
+      "lines": 84,
+      "verdict": "CLEAN",
+      "summary": "Exécute le vérificateur indépendant avant la mise à jour long_run_ready ; lecture complète, aucun nouveau défaut reproduit retenu."
+    },
+    {
+      "path": "factory_v2/long_run_truth.py",
+      "lines": 135,
+      "verdict": "FINDINGS",
+      "summary": "Recalcule les preuves d’autonomie ; corrélation de run, ordre de reprise, couverture temporelle et liaison effective aux SHA insuffisants."
+    },
+    {
+      "path": "factory_v2/maintenance_request.py",
+      "lines": 139,
+      "verdict": "FINDINGS",
+      "summary": "Déduplique des demandes de maintenance durables ; la troncature du fingerprint fait fusionner des incidents réellement distincts."
+    },
+    {
+      "path": "factory_v2/metrics_dashboard.py",
+      "lines": 136,
+      "verdict": "FINDINGS",
+      "summary": "Projette les métriques de 24 h ; lit uniquement la queue inline et perd les événements externalisés au-delà de 200 entrées."
+    },
+    {
+      "path": "factory_v2/owner_console.py",
+      "lines": 606,
+      "verdict": "FINDINGS",
+      "summary": "Construit la console propriétaire ; double compte les lignes OPEN/TERMINAL, masque la dérive répétée et perd les incréments sortis de la queue inline."
+    },
+    {
+      "path": "factory_v2/process_control.py",
+      "lines": 114,
+      "verdict": "CLEAN",
+      "summary": "Capture le PGID puis termine le groupe avec escalade TERM/KILL ; limites du fallback Popen explicitement documentées, aucun défaut nouveau confirmé."
+    },
+    {
+      "path": "factory_v2/product_verifiers.py",
+      "lines": 25,
+      "verdict": "CLEAN",
+      "summary": "Shim de compatibilité qui route les vérificateurs TR et Factory ; aucun défaut autonome reproduit, effet sur le snapshot traité dans capability_snapshot.py."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen10-r1-20260909T213515Z/sandbox/ctrl-fault-crash/factory_v2/cell_challenger.py",
+      "lines": 89,
+      "verdict": "CLEAN",
+      "summary": "Copie historique du challenger dans le sandbox crash ; contrôle des hashes intact, panne portée par le reviewer voisin, aucun constat propre à cette fixture."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen10-r1-20260909T213515Z/sandbox/ctrl-fault-crash/factory_v2/cell_reviewer.py",
+      "lines": 5,
+      "verdict": "CLEAN",
+      "summary": "Fixture historique de crash : stderr explicite puis os._exit(9) volontaire ; conforme à son scénario, aucun bug de production déclaré."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen10-r1-20260909T213515Z/sandbox/ctrl-fault-quarantine/factory_v2/cell_challenger.py",
+      "lines": 89,
+      "verdict": "CLEAN",
+      "summary": "Copie historique du challenger dans le sandbox quarantine ; lecture complète, aucun constat autonome confirmé."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen10-r1-20260909T213515Z/sandbox/ctrl-fault-quarantine/factory_v2/cell_reviewer.py",
+      "lines": 12,
+      "verdict": "CLEAN",
+      "summary": "Fixture historique imposant QUARANTINE dans un verdict lié au package ; résultat volontaire du scénario, aucun bug de production déclaré."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen10-r1-20260909T213515Z/sandbox/ctrl-fault-slow/factory_v2/cell_challenger.py",
+      "lines": 7,
+      "verdict": "CLEAN",
+      "summary": "Fixture historique lente : sommeil de 2 s pour dépasser une enveloppe de 0,2 s ; dépassement intentionnel, aucun constat de bug."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen10-r1-20260909T213515Z/sandbox/ctrl-fault-slow/factory_v2/cell_reviewer.py",
+      "lines": 100,
+      "verdict": "CLEAN",
+      "summary": "Copie historique du reviewer dans le sandbox slow ; contrôle SHA et preuves lu intégralement, aucun constat autonome confirmé."
+    },
+    {
+      "path": "factory_v2/receipts/audit_cells/exercise-gen10-r1-20260909T213515Z/sandbox/ctrl/factory_v2/cell_challenger.py",
+      "lines": 89,
+      "verdict": "CLEAN",
+      "summary": "Copie historique du challenger du sandbox témoin ; hashes des preuves recomputés, conservation comme trace d’exercice, aucun défaut distinct confirmé."
+    }
+  ],
+  "findings": [
+    {
+      "id": "L5_factory_v2_rest_1-001",
+      "file": "factory_v2/_a1a6_gate.py",
+      "line": 73,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "seen = imports | calls",
+      "why": "La gate A1/A6 assimile un import à une capacité atteignable. Un runtime qui importe les trois symboles mais ne les appelle jamais est déclaré connecté : le contrôle peut donc qualifier une boucle qui ne déclenche, ne lance ni n’applique la cellule.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom factory_v2._a1a6_gate import audit_cell_reachable_from_runtime\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'factory_v2').mkdir()\n (p/'factory_v2/runtime.py').write_text('from factory_v2.audit_loop import persist_audit_cell_request, run_audit_cell, mark_result_applied\\n')\n ok,why=audit_cell_reachable_from_runtime(p)\n assert ok\n print('imports_only_without_any_call: accepted=True')\nPY\nSortie observée :\nimports_only_without_any_call: accepted=True\nTEST a1_imports_only: rc=0\n",
+      "recommendation": "Exiger des appels rattachés aux fonctions du chemin de production et ajouter une régression import-only ; compléter le contrôle statique par une preuve comportementale du déclenchement et de l’application.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-002",
+      "file": "factory_v2/_wiring_gate.py",
+      "line": 123,
+      "severity": "HIGH",
+      "category": "TEST_GAP",
+      "evidence": "tree = ast.parse(path.read_text(encoding=\"utf-8\"))",
+      "why": "launch_gate_precedes_execute ne parcourt que runtime.py et ne reconnaît que runner.execute, pas ctx.runner.execute. Après le split, les deux appels builder sont dans advance/mission_dispatch.py:908,915 ; seul le chemin recovery de runtime est couvert. La reproduction accepte une recovery protégée à côté d’un dispatch de stage sans gate.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom factory_v2._wiring_gate import launch_gate_precedes_execute\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'factory_v2/advance').mkdir(parents=True)\n (p/'factory_v2/runtime.py').write_text('def recovery(runner):\\n check_before_launch()\\n runner.execute(None)\\n')\n (p/'factory_v2/advance/mission_dispatch.py').write_text('def dispatch(ctx):\\n ctx.runner.execute(ctx.mission)\\n')\n ok,why=launch_gate_precedes_execute(p)\n assert ok\n print('ungated_ctx_runner_in_stage: accepted=True; '+why)\nPY\nSortie observée :\nungated_ctx_runner_in_stage: accepted=True; all 1 spending path(s) gated: recovery()@3\nTEST wiring_stage_ignored: rc=0\n",
+      "recommendation": "Inclure les modules advance, reconnaître ctx.runner et vérifier chaque site de dispatch ; tester un retrait de gate dans un stage sans toucher à recovery.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-003",
+      "file": "factory_v2/_io.py",
+      "line": 44,
+      "severity": "HIGH",
+      "category": "RACE",
+      "evidence": "tmp = path.with_suffix(path.suffix + \".tmp\")",
+      "why": "Deux écritures visant le même chemin utilisent le même inode temporaire. Dans l’entrelacement reproduit, B remplace le fichier temporaire de A et termine, puis A échoue FileNotFoundError. D’autres entrelacements peuvent publier le contenu d’un autre writer. Le helper partagé ne garantit pas son atomicité face à des appelants concurrents non sérialisés.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nimport json\nfrom factory_v2 import _io\nwith TemporaryDirectory() as t:\n p=Path(t)/'state.json'; real_replace=_io.os.replace; seen=[]\n def interleave(src,dst):\n  with patch.object(_io.os,'replace',real_replace): _io._atomic_write(p, {'writer':'B'})\n  seen.append(json.loads(p.read_text())['writer'])\n  return real_replace(src,dst)\n try:\n  with patch.object(_io.os,'replace',interleave): _io._atomic_write(p, {'writer':'A'})\n except FileNotFoundError:\n  print('writer_B=success; writer_A=FileNotFoundError; final='+seen[0])\n else: raise AssertionError('expected shared temporary-file collision')\nPY\nSortie observée :\nwriter_B=success; writer_A=FileNotFoundError; final=B\nTEST atomic_write_interleaving: rc=0\n",
+      "recommendation": "Créer un fichier temporaire unique dans le même répertoire puis remplacer la cible ; garder un verrou distinct pour les opérations read-modify-write et ajouter un test à deux écrivains.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-004",
+      "file": "factory_v2/_io.py",
+      "line": 60,
+      "severity": "MEDIUM",
+      "category": "ERROR_HANDLING",
+      "evidence": "except (OSError, json.JSONDecodeError):",
+      "why": "Le contrat annonce None pour tout JSON illisible/corrompu, mais un octet UTF-8 invalide lève UnicodeDecodeError, hors des exceptions capturées. Les consommateurs comme owner_console peuvent tomber au lieu de gérer l’absence de données.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom factory_v2._io import _read_json\nwith TemporaryDirectory() as t:\n p=Path(t)/'x.json'; p.write_bytes(b'\\xff')\n try: _read_json(p)\n except UnicodeDecodeError: print('invalid_UTF8=UnicodeDecodeError (not None)')\n else: raise AssertionError('expected uncaught decoding failure')\nPY\nSortie observée :\ninvalid_UTF8=UnicodeDecodeError (not None)\nTEST read_json_bad_encoding: rc=0\n",
+      "recommendation": "Capturer UnicodeDecodeError dans le lecteur commun et tester un fichier contenant un octet invalide.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-005",
+      "file": "factory_v2/authority.py",
+      "line": 94,
+      "severity": "HIGH",
+      "category": "RACE",
+      "evidence": "r = _run_git(repo_root, \"show\", f\"HEAD:{rel}\")",
+      "why": "La clé de cache utilise le SHA lu avant git show, mais git show relit la référence mobile HEAD. Un commit entre ces deux commandes associe le blob B au SHA A ; revenir ensuite sur A sert B depuis le cache. La reproduction utilise deux vrais commits isolés et montre HEAD=A alors que l’autorité retournée vaut B.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nimport subprocess\nfrom factory_v2 import authority as a\nwith TemporaryDirectory() as t:\n p=Path(t); f=p/'SPEC.md'; f.write_text('A')\n def git(*args):\n  return subprocess.run(['git','-C',str(p),*args],capture_output=True,text=True,check=True).stdout.strip()\n git('init','-q'); git('config','user.name','Fixture'); git('config','user.email','fixture@example.invalid')\n git('add','.'); git('commit','-qm','A'); sha_a=git('rev-parse','HEAD')\n real=a._run_git\n def interleave(root,*args):\n  if args[0]=='show':\n   f.write_text('B'); git('add','.'); git('commit','-qm','B')\n  return real(root,*args)\n with patch.object(a,'_run_git',interleave): first=a.load_authority_text(p,'SPEC.md')\n git('checkout','--detach',sha_a)\n second=a.load_authority_text(p,'SPEC.md'); actual=git('show','HEAD:SPEC.md')\n assert first==second=='B' and actual=='A'\n print('HEAD_blob=A; cached_authority=B after concurrent_HEAD_move')\nPY\nSortie observée :\nHEAD_blob=A; cached_authority=B after concurrent_HEAD_move\nTEST authority_head_cache_race: rc=0\n",
+      "recommendation": "Lire le blob via le SHA déjà capturé (git show <head>:<rel>) et réutiliser un snapshot unique pour les lectures d’une même autorité ; tester un déplacement de HEAD entre les commandes.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-006",
+      "file": "factory_v2/authority_change.py",
+      "line": 127,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if \"milestones\" not in parsed:",
+      "why": "La transaction prétend valider schéma et identité de projet, mais _validate_roadmap ignore project_id et schema. Une proposition pour un autre projet avec un schéma invalide reçoit APPLIED sur un répertoire non canonique. Portée : les six fichiers canoniques restent protégés par assert_writable ; ce défaut concerne l’API sur les autres projets/fixtures, pas un contournement démontré de cette garde.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom factory_v2.authority_change import build_proposal_from_current,apply_authority_change_proposal\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'ROADMAP.yaml').write_text('schema: roadmap/v2\\nproject: local\\nmilestones: [{id: M}]\\n')\n content='schema: wrong-schema\\nproject: foreign\\nmilestones: [{id: M}]\\n'\n r=apply_authority_change_proposal(build_proposal_from_current(p,content),p)\n assert r.status=='APPLIED' and (p/'ROADMAP.yaml').read_text()==content\n print('noncanonical_fixture: wrong_schema_and_foreign_project=APPLIED')\nPY\nSortie observée :\nnoncanonical_fixture: wrong_schema_and_foreign_project=APPLIED\nTEST authority_change_identity: rc=0\n",
+      "recommendation": "Vérifier schema == roadmap/v2 et project contre l’identité attendue avant écriture ; ajouter des tests de rejet et de conservation du fichier initial.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-007",
+      "file": "factory_v2/bench_repairs/holdout_mcnemar_repaired.py",
+      "line": 177,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "n_res = sum(1 for _, r in arm_cells if r.get(\"resolved\"))",
+      "why": "effective_per_cell renvoie désormais une liste de tentatives par cellule. main continue à traiter r comme un dict et plante dès la première cellule non vide, avant de produire la comparaison McNemar. La reproduction appelle le vrai main avec une ligne de résultats, seule la lecture du jeu de données étant substituée.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom unittest.mock import patch\nfrom factory_v2.bench_repairs import holdout_mcnemar_repaired as m\nrows=[{'task_id':'T','arm':'FACTORY','repetition':1,'resolved':True}]\nwith patch.object(m,'load_results',return_value=rows), patch('sys.argv',['mcnemar','--label','fixture']):\n try: m.main()\n except AttributeError as e:\n  assert \"'list' object has no attribute 'get'\" in str(e)\n  print('CLI_CRASH: '+str(e))\n else: raise AssertionError('expected crash')\nPY\nSortie observée :\n=== HOLDOUT MCNEMAR — fixture ===\nÉpreuves : ['T']\nArms     : ['FACTORY']\nCellules : 1\n\nSCORES BRUTS :\nCLI_CRASH: 'list' object has no attribute 'get'\nTEST mcnemar_cli: rc=0\n",
+      "recommendation": "Utiliser _cell_outcome(r) pour les scores bruts et ajouter un test CLI avec au moins une cellule et plusieurs tentatives.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-008",
+      "file": "factory_v2/canonical_context.py",
+      "line": 277,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "missing = [name for name, val in required if not val]",
+      "why": "Le contrôle de complétude accepte les sentinelles non vides MISSING et unknown. Un manifeste construit sans STRATEGY, ROADMAP, SPEC et sans dépôt Git passe assert_manifest_complete ; spec_sha n’est pas requis non plus. Le preflight possède un contrôle de présence supplémentaire, mais cette assertion seule ne garantit pas les préconditions qu’elle annonce.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json\nfrom factory_v2.canonical_context import build_manifest,assert_manifest_complete\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'PROJECT_STATE.json').write_text(json.dumps({'current_milestone':'M'}))\n m=build_manifest(p,repo_dir=p); assert_manifest_complete(m)\n assert m.strategy_sha=='MISSING' and m.roadmap_sha=='MISSING' and m.base_sha=='unknown'\n print('completeness=accepted; strategy=MISSING; roadmap=MISSING; base=unknown')\nPY\nSortie observée :\ncompleteness=accepted; strategy=MISSING; roadmap=MISSING; base=unknown\nTEST manifest_missing_authority: rc=0\n",
+      "recommendation": "Exiger des SHA au format attendu et les trois autorités, rejeter explicitement les sentinelles ; tester le manifeste issu d’un projet incomplet.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-009",
+      "file": "factory_v2/canonical_context.py",
+      "line": 166,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if \"FAIL\" in e.get(\"type\", \"\") or \"INVALID\" in e.get(\"type\", \"\")][-10:]",
+      "why": "Le journal de production encode le nom d’événement sous event ; le manifeste filtre uniquement type. Une entrée MISSION_FAILED présente dans PROJECT_STATE.events disparaît donc de failure_history, privant le contexte reconstruit de l’historique d’échecs.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json\nfrom factory_v2.canonical_context import build_manifest\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'PROJECT_STATE.json').write_text(json.dumps({'current_milestone':'M','events':[{'event':'MISSION_FAILED','mission':'M#1'}]}))\n m=build_manifest(p,repo_dir=p)\n assert m.failure_history==[]\n print('state.events=[MISSION_FAILED]; manifest.failure_history=[]')\nPY\nSortie observée :\nstate.events=[MISSION_FAILED]; manifest.failure_history=[]\nTEST manifest_failure_events: rc=0\n",
+      "recommendation": "Normaliser event/type comme le fait event_journal et tester un échec issu du schéma d’événement de production.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-010",
+      "file": "factory_v2/capability_snapshot.py",
+      "line": 92,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "return hashlib.sha256(_head_bytes(repo, \"factory_v2/product_verifiers.py\")).hexdigest()",
+      "why": "Le digest de validation ne couvre que product_verifiers.py, devenu un shim de 25 lignes. Les contrôles effectifs sont dans factory_verifiers.py et products/twitter_radar/product_verifiers.py. Deux commits dont l’implémentation du vérificateur diffère radicalement produisent le même validator_source_sha256 ; la comparaison de snapshots ne détecte pas cette modification de l’autorité de validation.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport subprocess,hashlib\nfrom factory_v2.capability_snapshot import _validator_source_sha256\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'factory_v2').mkdir()\n for name in ('product_verifiers.py','factory_verifiers.py'):\n  (p/'factory_v2'/name).write_bytes((Path('factory_v2')/name).read_bytes())\n def git(*args):\n  return subprocess.run(['git','-C',str(p),*args],capture_output=True,text=True,check=True).stdout.strip()\n git('init','-q'); git('config','user.name','Fixture'); git('config','user.email','fixture@example.invalid')\n git('add','.'); git('commit','-qm','baseline')\n before=_validator_source_sha256(p); first=git('rev-parse','HEAD')\n (p/'factory_v2/factory_verifiers.py').write_text('def verify_audit_loop_cell(repo): return (0, \"accepted unconditionally\")\\n')\n git('add','.'); git('commit','-qm','changed validation')\n after=_validator_source_sha256(p)\n assert first!=git('rev-parse','HEAD') and before==after\n print('committed_implementation_changed=True; validator_source_sha256_unchanged=True')\nPY\nSortie observée :\ncommitted_implementation_changed=True; validator_source_sha256_unchanged=True\nTEST capability_validator_shim: rc=0\n",
+      "recommendation": "Hacher les sources effectives des vérificateurs et leur fermeture de dépendances pertinente, avec un manifeste déterministe ; tester une modification du module délégué sans changement du shim.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-011",
+      "file": "factory_v2/cas_promotion.py",
+      "line": 58,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "except (FileNotFoundError, json.JSONDecodeError):",
+      "why": "Un ledger malformé est assimilé à un ledger absent. Une mission déjà promue, correctement refusée au deuxième appel, reçoit à nouveau CAS_ALLOWED après troncature du JSON. La protection de promotion unique se réinitialise silencieusement au moment où sa preuve devient illisible.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom factory_v2.cas_promotion import check_and_record_promotion\nwith TemporaryDirectory() as t:\n p=Path(t); a=check_and_record_promotion('M','a'*40,p)[0]\n b=check_and_record_promotion('M','a'*40,p)[0]\n (p/'evidence/cas_promotion_ledger.json').write_text('{')\n c=check_and_record_promotion('M','a'*40,p)[0]\n assert (a,b,c)==(True,False,True)\n print('first=True; duplicate=False; after_corruption=True')\nPY\nSortie observée :\nfirst=True; duplicate=False; after_corruption=True\nTEST cas_corrupt_ledger: rc=0\n",
+      "recommendation": "Réserver le ledger vide à FileNotFoundError ; refuser/quarantainer un ledger corrompu avec diagnostic et restauration explicite. Tester promotion, corruption, puis tentative de doublon.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-012",
+      "file": "factory_v2/collection_observer.py",
+      "line": 115,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "proc.kill()\n        proc.communicate()\n    finished = time.strftime(\"%Y-%m-%dT%H:%M:%SZ\", time.gmtime())",
+      "why": "Sur expiration, seul bash est tué puis communicate est rappelé sans borne. Ses enfants gardent les pipes stdout/stderr ouverts : sleep 0.7 & wait dépasse le timeout de 0.05 s de plus de dix fois ; un enfant sans fin peut bloquer indéfiniment la collecte et empêcher l’émission du reçu.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nimport time,os\nfrom factory_v2.collection_observer import observe_collection\nwith TemporaryDirectory() as t:\n p=Path(t)\n with patch.dict(os.environ,{'FACTORY_COLLECTION_SESSION_REGISTRY':str(p/'registry.jsonl')}):\n  start=time.monotonic()\n  observe_collection(command='sleep 0.7 & wait',cwd=p,observation_dir=p/'obs',timeout_s=0.05)\n  elapsed=time.monotonic()-start\n assert elapsed>=0.6\n print('timeout_s=0.05; elapsed_at_least_0.6s=True (descendant retained pipes)')\nPY\nSortie observée :\ntimeout_s=0.05; elapsed_at_least_0.6s=True (descendant retained pipes)\nTEST collection_timeout_descendant: rc=0\n",
+      "recommendation": "Démarrer une session/groupe dédié, capturer son PGID et terminer tout le groupe au timeout ; borner la récupération finale des sorties. Tester un shell avec enfant conservant les pipes.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-013",
+      "file": "factory_v2/continuation_controller.py",
+      "line": 192,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if pause:\n            return ContinuationDecision(\n                disposition=RunDisposition.PAUSED_BY_USER,",
+      "why": "Les fichiers de pause/arrêt sont interprétés par vérité logique. Un JSON valide mais vide {} est donc traité comme une absence ; PAUSE.json={} et SAFETY_STOP.json={} conduisent tous deux à CONTINUE. La protection fail-closed ajoutée pour un JSON tronqué ne couvre pas ces formes incomplètes.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom factory_v2.continuation_controller import decide_continuation\nwith TemporaryDirectory() as t:\n p=Path(t)\n for name in ('PAUSE.json','SAFETY_STOP.json'):\n  f=p/name; f.write_text('{}')\n  d=decide_continuation(p,p,'BLOCKED',single_project=True)\n  assert d.disposition.value=='CONTINUE'\n  print(name+'={} -> CONTINUE'); f.unlink()\nPY\nSortie observée :\nPAUSE.json={} -> CONTINUE\nSAFETY_STOP.json={} -> CONTINUE\nTEST continuation_empty_stops: rc=0\n",
+      "recommendation": "Distinguer absence du fichier, objet valide et contenu invalide ; tout fichier présent mais incomplet doit produire une pause/erreur contrôlée, jamais CONTINUE. Appliquer le même contrat aux deux chargeurs.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-014",
+      "file": "factory_v2/event_journal.py",
+      "line": 111,
+      "severity": "MEDIUM",
+      "category": "PERF",
+      "evidence": "existing_keys = _keys_from_lines(_read_all_lines(path)[-_DEDUP_WINDOW:])",
+      "why": "La fenêtre de déduplication de 500 lignes est appliquée après lecture intégrale du fichier. Chaque append normal reste donc O(historique) en temps et en mémoire, malgré le contrat annoncé O(nouveaux événements). La sonde mesure 10 000 lignes lues pour l’ajout d’un seul événement.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nfrom factory_v2 import event_journal as j\nimport json\nwith TemporaryDirectory() as t:\n p=Path(t); f=j.journal_path(p); f.parent.mkdir(); f.write_text(''.join(json.dumps({'event':'X','seq':i})+'\\n' for i in range(10000)))\n orig=j._read_all_lines; sizes=[]\n def counted(path):\n  lines=orig(path); sizes.append(len(lines)); return lines\n with patch.object(j,'_read_all_lines',counted): j.append_event(p,{'event':'NEW'})\n assert sizes==[10000]\n print('append_one: lines_read=10000; dedup_window=500')\nPY\nSortie observée :\nappend_one: lines_read=10000; dedup_window=500\nTEST journal_linear_read: rc=0\n",
+      "recommendation": "Lire une queue bornée depuis la fin du fichier ou maintenir un index de déduplication ; ajouter un test mesurant les octets/lignes effectivement lus quand le journal grossit.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-015",
+      "file": "factory_v2/external_supervisor.py",
+      "line": 494,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "for rel, sha in current.items():",
+      "why": "Le contrôle _observe_boundary compare uniquement les fichiers encore présents. Une suppression d’un fichier d’autorité contenu dans la baseline est invisible : après unlink, il retourne None. La même omission affecte la vérification de retour à la baseline au safe-clear.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json\nfrom factory_v2 import external_supervisor as s\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'authority').mkdir(); f=p/'authority/intent.txt'; f.write_text('owner intent')\n (p/'_boundary_baseline.json').write_text(json.dumps(s._tree_hashes(p)))\n f.unlink(); result=s._observe_boundary(p)\n assert result is None\n print('authority/intent.txt deleted; boundary_violation=None')\nPY\nSortie observée :\nauthority/intent.txt deleted; boundary_violation=None\nTEST supervisor_deleted_file: rc=0\n",
+      "recommendation": "Comparer l’union des chemins de baseline et courants, et produire une violation typée pour toute suppression non exemptée ; adapter les preuves pour une cible devenue absente et tester run/clear.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-016",
+      "file": "factory_v2/external_supervisor.py",
+      "line": 118,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "except (FileNotFoundError, json.JSONDecodeError, KeyError):",
+      "why": "is_quarantined transforme un GLOBAL_QUARANTINE.json corrompu en None, valeur interprétée au démarrage comme autorisation de passer au spawn. Une corruption du marqueur durable peut donc faire disparaître la quarantaine sans safe-clear.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom factory_v2.external_supervisor import is_quarantined\nwith TemporaryDirectory() as t:\n p=Path(t); (p/'GLOBAL_QUARANTINE.json').write_text('{')\n assert is_quarantined(p) is None\n print('GLOBAL_QUARANTINE.json corrupt -> None (same as absent)')\nPY\nSortie observée :\nGLOBAL_QUARANTINE.json corrupt -> None (same as absent)\nTEST supervisor_corrupt_quarantine: rc=0\n",
+      "recommendation": "Traiter un fichier présent mais illisible ou invalide comme une quarantaine/erreur persistante ; refuser le spawn jusqu’à réparation explicite. Tester le redémarrage avec marqueur tronqué.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-017",
+      "file": "factory_v2/factory_verifiers.py",
+      "line": 537,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if abs(float(published) - float(recomputed)) > 1e-6:",
+      "why": "La comparaison numérique accepte NaN : abs(NaN - 42) > 1e-6 est False, donc _diff_numbers ne signale rien. Le parseur json Python accepte NaN par défaut ; un agrégat non numérique peut ainsi survivre à la vérification censée établir son égalité aux valeurs recomputées.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom factory_v2.factory_verifiers import _diff_numbers\nr=_diff_numbers({'total':float('nan')},{'total':42},path='summary')\nassert r==[]\nprint('published=NaN; recomputed=42; discrepancies=[]')\nPY\nSortie observée :\npublished=NaN; recomputed=42; discrepancies=[]\nTEST verifier_nan_comparison: rc=0\n",
+      "recommendation": "Rejeter toute valeur non finie et les constantes JSON non standard ; tester NaN et les infinis aux feuilles numériques du reçu.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-018",
+      "file": "factory_v2/fault_injection.py",
+      "line": 61,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "os.kill(pid, signal.SIGKILL)",
+      "why": "Le paramètre require_in_pgrp=True est inutilisé : la fonction vérifie seulement l’existence du PID puis envoie SIGKILL. Un PID fourni par erreur hors du groupe reste ciblé. La reproduction lance uniquement son propre enfant jetable dans une nouvelle session, confirme que son groupe diffère de celui du test, puis observe INJECTED et rc=-9 malgré la garde activée.\n\nReproduction exécutée dans cette session sur le code original, sans correction (mission de revue uniquement). Commande à la racine du dépôt :\nPYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport contextlib, inspect, io, json, os, subprocess, sys, tempfile, time\nfrom pathlib import Path\nfrom unittest import mock\nsys.path.insert(0, os.getcwd())\nos.environ['FACTORY_NO_REAL_ENGINE'] = '1'\n\ndef fault_group():\n    from factory_v2.fault_injection import inject_sigkill\n    proc = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(10)'], start_new_session=True)\n    try:\n        outside = os.getpgid(proc.pid) != os.getpgrp(); rec = inject_sigkill(proc.pid, require_in_pgrp=True); rc = proc.wait(timeout=5)\n        assert outside and rec.outcome == 'INJECTED' and rc == -9\n        print('disposable_child_outside_pgrp=True require_in_pgrp=True outcome=INJECTED child_rc=-9')\n    finally:\n        if proc.poll() is None:\n            proc.kill(); proc.wait()\n\nfault_group()\nPY\nSortie observée :\ndisposable_child_outside_pgrp=True require_in_pgrp=True outcome=INJECTED child_rc=-9\nTEST fault_group : rc=0\n",
+      "recommendation": "Valider un PID strictement positif et son groupe/identité avant tout signal destructif ; respecter require_in_pgrp et tester le rejet d’un processus hors du périmètre.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-019",
+      "file": "factory_v2/long_run_preflight.py",
+      "line": 137,
+      "severity": "HIGH",
+      "category": "ERROR_HANDLING",
+      "evidence": "checks.append(PreflightCheck(\"no_stale_lease\", \"PASS\", f\"no lease (ok): {exc}\"))",
+      "why": "Toute erreur de lecture du lease est convertie en PASS « no lease ». Une PermissionError simulée sur le lecteur mène à no_stale_lease=PASS et au preflight global PASS, alors que l’absence de worker actif n’a pas pu être établie. Cela peut autoriser un démarrage sans preuve d’exclusivité.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nimport json\nfrom factory_v2.long_run_preflight import run_preflight\nfrom factory_v2.worker_lease import WorkerLease\nwith TemporaryDirectory() as t:\n p=Path(t)\n for name in ('STRATEGY.md','SPEC.md'): (p/name).write_text('fixture')\n (p/'ROADMAP.yaml').write_text('milestones: []')\n (p/'PROJECT_STATE.json').write_text(json.dumps({'current_milestone':'M'}))\n with patch.object(WorkerLease,'_read_nolock',side_effect=PermissionError('lease unreadable')):\n  r=run_preflight(p,repo_dir=p,mission_id='M#1')\n c=next(c for c in r.checks if c.check=='no_stale_lease')\n assert c.status=='PASS'\n print('lease_read=PermissionError; no_stale_lease=PASS; preflight='+r.status)\nPY\nSortie observée :\nlease_read=PermissionError; no_stale_lease=PASS; preflight=PASS\nTEST preflight_lease_error: rc=0\n",
+      "recommendation": "Ne considérer comme absence que le retour explicite None du lecteur ; transformer les exceptions en FAIL/UNKNOWN bloquant et tester les erreurs de lecture.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-020",
+      "file": "factory_v2/long_run_truth.py",
+      "line": 66,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "scoped = [e for e in ledger if str(e.get(\"run_id\", \"\")) == run_id] or ledger",
+      "why": "Si aucun événement ne correspond au run_id demandé, la vérification se rabat sur tout le journal. Un run TARGET sans aucune preuve est ainsi déclaré récupéré à partir des décès/naissance/progrès d’un run OTHER. Le fallback annule le rattachement de la preuve au run.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json\nfrom factory_v2.long_run_truth import recompute_restart_recovery\nwith TemporaryDirectory() as t:\n p=Path(t); f=p/'.context/external-watchdog/EVENTS.jsonl'; f.parent.mkdir(parents=True)\n rows=[{'run_id':'OTHER','event':'WORKER_DEATH','pid':1},{'run_id':'OTHER','event':'SPAWN','pid':2,'birth':'x'},{'run_id':'OTHER','event':'MISSION_PASS','pid':2}]\n f.write_text(''.join(json.dumps(r)+'\\n' for r in rows))\n ok,_=recompute_restart_recovery(p,'TARGET',{'observed_pid_before':1,'observed_pid_after':2})\n assert ok; print('ledger_run=OTHER; requested_run=TARGET; recovery=True')\nPY\nSortie observée :\nledger_run=OTHER; requested_run=TARGET; recovery=True\nTEST restart_foreign_run: rc=0\n",
+      "recommendation": "Refuser en l’absence d’événements du run ; tout support de journaux historiques sans run_id doit utiliser une corrélation explicite et bornée, jamais le journal global.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-021",
+      "file": "factory_v2/long_run_truth.py",
+      "line": 70,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "progressed = any(\n        str(e.get(\"event\", \"\")) in {\"MILESTONE_SETTLED\", \"MISSION_PASS\",\n                                    \"FORWARD_PROGRESS\", \"V2_ADVANCE\"}",
+      "why": "La preuve de reprise repose sur trois recherches any indépendantes, sans ordre temporel ni comparaison des identités de naissance. Des événements ordonnés progrès puis naissance puis décès, avec la même valeur birth, satisfont recovery=True. Ils ne prouvent aucun progrès après la reprise annoncée.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json\nfrom factory_v2.long_run_truth import recompute_restart_recovery\nwith TemporaryDirectory() as t:\n p=Path(t); f=p/'.context/external-watchdog/EVENTS.jsonl'; f.parent.mkdir(parents=True)\n rows=[{'run_id':'R','event':'MISSION_PASS','pid':2,'ts':'2026-01-01T00:00:00Z'},{'run_id':'R','event':'SPAWN','pid':2,'birth':'same','ts':'2026-01-02T00:00:00Z'},{'run_id':'R','event':'WORKER_DEATH','pid':1,'birth':'same','ts':'2026-01-03T00:00:00Z'}]\n f.write_text(''.join(json.dumps(r)+'\\n' for r in rows))\n ok,_=recompute_restart_recovery(p,'R',{'observed_pid_before':1,'observed_pid_after':2})\n assert ok; print('progress < birth < death; identical_births; recovery=True')\nPY\nSortie observée :\nprogress < birth < death; identical_births; recovery=True\nTEST restart_progress_before_death: rc=0\n",
+      "recommendation": "Relier décès, nouvelle identité et premier progrès dans l’ordre des événements et des timestamps ; exiger une nouvelle identité de processus et des preuves corrélées à la même reprise.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-022",
+      "file": "factory_v2/long_run_truth.py",
+      "line": 94,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "if not ledger:\n        raise Unproven(\n            \"no supervisor event ledger covers this run window — human interventions \"",
+      "why": "Le contrôle d’interventions refuse uniquement un journal entièrement vide. Un seul événement de 2025, hors du run et de la fenêtre demandée en septembre 2026, suffit à retourner zéro intervention. Un manque total de couverture est donc présenté comme preuve d’autonomie.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json\nfrom factory_v2.long_run_truth import recompute_human_interventions\nwith TemporaryDirectory() as t:\n p=Path(t); f=p/'.context/external-watchdog/EVENTS.jsonl'; f.parent.mkdir(parents=True)\n f.write_text(json.dumps({'run_id':'OLD','event':'V2_ADVANCE','ts':'2025-01-01T00:00:00Z'})+'\\n')\n n,_=recompute_human_interventions(p,'TARGET',('2026-09-18T00:00:00Z','2026-09-19T00:00:00Z'))\n assert n==0; print('no_events_cover_requested_window; human_interventions=0 (not Unproven)')\nPY\nSortie observée :\nno_events_cover_requested_window; human_interventions=0 (not Unproven)\nTEST human_window_not_covered: rc=0\n",
+      "recommendation": "Exiger une couverture observée du run et de ses bornes temporelles, distinguer zéro observé d’absence de mesure et exploiter run_id au lieu de l’ignorer.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-023",
+      "file": "factory_v2/long_run_truth.py",
+      "line": 126,
+      "severity": "HIGH",
+      "category": "BUG",
+      "evidence": "[\"python3\", \"-m\", \"factory_v2.product_verifiers\", milestone_id,",
+      "why": "control_sha et product_sha ne servent qu’à tester leur non-vacuité et à décorer le message final. Ni checkout, ni comparaison des HEAD, ni passage des SHA au vérificateur : la commande travaille dans les arbres courants. La reproduction exécute réellement un vérificateur fixture dans un répertoire temporaire sans dépôt Git ; deux valeurs qui ne sont pas des commits suffisent à obtenir True. Aucun E2E produit réel ni modèle n’est lancé.\n\nReproduction exécutée dans cette session sur le code original, sans correction (mission de revue uniquement). Commande à la racine du dépôt :\nPYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport contextlib, inspect, io, json, os, subprocess, sys, tempfile, time\nfrom pathlib import Path\nfrom unittest import mock\nsys.path.insert(0, os.getcwd())\nos.environ['FACTORY_NO_REAL_ENGINE'] = '1'\n\ndef e2e_sha_binding():\n    from factory_v2.long_run_truth import recompute_product_e2e\n    with tempfile.TemporaryDirectory() as t:\n        p = Path(t); (p / 'factory_v2').mkdir(); (p / 'factory_v2/__init__.py').write_text('')\n        (p / 'factory_v2/product_verifiers.py').write_text(\"print('fixture verifier ran')\\n\")\n        ok, detail = recompute_product_e2e(p, 'M', p, 'NOT_A_COMMIT', 'ALSO_NOT_A_COMMIT')\n        assert ok and 'NOT_A_COMMIT' in detail\n        print('git_repository=False supplied_shas=invalid verifier_rc=0 exact_sha_result=True')\n\ne2e_sha_binding()\nPY\nSortie observée :\ngit_repository=False supplied_shas=invalid verifier_rc=0 exact_sha_result=True\nTEST e2e_sha_binding : rc=0\n",
+      "recommendation": "Exécuter dans deux arbres isolés aux commits demandés ou refuser si les HEAD et l’état de travail ne correspondent pas ; vérifier les SHA avant et après le test et consigner les valeurs observées.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-024",
+      "file": "factory_v2/metrics_dashboard.py",
+      "line": 74,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "for event in _events(project / \"PROJECT_STATE.json\"):",
+      "why": "Avec FACTORY_EVENTS_JOURNAL=1, PROJECT_STATE ne conserve que les 200 derniers événements. Le dashboard lit cette queue au lieu du journal ; la reproduction conserve 201 settlements sur 24 h dans le journal mais n’en affiche que 200. Les compteurs de reprise et de boucles subissent la même perte.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nfrom unittest.mock import patch\nimport os,json,datetime as dt\nfrom factory_v2 import event_journal as j,metrics_dashboard as m\nwith TemporaryDirectory() as t:\n p=Path(t); events=[{'event':'MILESTONE_SETTLED','milestone':str(i),'ts':'2026-09-19T00:00:00Z'} for i in range(201)]\n with patch.dict(os.environ,{'FACTORY_EVENTS_JOURNAL':'1'}):\n  state=j.sync_events_to_journal(p,{'events':events})\n (p/'PROJECT_STATE.json').write_text(json.dumps(state))\n d=m.build_dashboard([p],now=dt.datetime(2026,9,19,1,tzinfo=dt.timezone.utc))\n assert len(j.iter_events(p))==201 and d['settlements']==200\n print('journal_settlements=201; dashboard_settlements=200')\nPY\nSortie observée :\njournal_settlements=201; dashboard_settlements=200\nTEST metrics_journal_tail: rc=0\n",
+      "recommendation": "Utiliser event_journal.iter_events avec la fenêtre temporelle, puis tester plus de 200 événements sur 24 h avec migration activée.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-025",
+      "file": "factory_v2/maintenance_request.py",
+      "line": 83,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "\"failure_fingerprint\": str(fingerprint)[:400],",
+      "why": "L’identité de requête est calculée sur le fingerprint complet, mais _supersede_legacy_duplicates compare le champ enregistré tronqué à 400 caractères. Deux incidents distincts partageant ces 400 caractères obtiennent deux IDs, puis le second marque le premier SUPERSEDED comme faux doublon. Une demande de maintenance encore pertinente disparaît des requêtes ouvertes.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom tempfile import TemporaryDirectory\nfrom pathlib import Path\nimport json\nfrom factory_v2 import maintenance_request as m\nwith TemporaryDirectory() as t:\n p=Path(t); common=dict(kind=m.KIND_REPAIR_REENTRY_UNPROVABLE,milestone_id='M',old_code_sha='old',new_code_sha='new',missing_proof='proof')\n a,_=m.raise_request(p,fingerprint='x'*400+'A',**common)\n b,_=m.raise_request(p,fingerprint='x'*400+'B',**common)\n old=json.loads(m.request_path(p,a['request_id']).read_text())\n assert a['request_id']!=b['request_id'] and old['state']=='SUPERSEDED'\n print('distinct_full_fingerprints=True; first_request=SUPERSEDED; open_requests='+str(len(m.open_requests(p))))\nPY\nSortie observée :\ndistinct_full_fingerprints=True; first_request=SUPERSEDED; open_requests=1\nTEST maintenance_fingerprint_truncation: rc=0\n",
+      "recommendation": "Conserver le fingerprint complet ou son digest séparé pour les comparaisons d’identité ; réserver la troncature à l’affichage et tester deux fingerprints ayant un long préfixe commun.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-026",
+      "file": "factory_v2/owner_console.py",
+      "line": 290,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if t is not None and t >= cutoff and a.get(\"consumes_model_quota\") is True:",
+      "why": "Le fallback de plafond compte les lignes brutes du ledger, pas les tentatives. Une même tentative a une ligne OPEN et une ligne TERMINAL consommant du quota : used_today vaut 2 pour un seul lancement, ce qui exagère l’utilisation affichée lorsque aucun événement STANDING_CAP_REACHED n’est disponible.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport datetime as dt\nfrom factory_v2.owner_console import _standing_cap_for_project\nrows=[{'phase':phase,'attempt_key':'same','started_at':'2026-09-19T00:00:00Z','consumes_model_quota':True} for phase in ('OPEN','TERMINAL')]\nr=_standing_cap_for_project({},rows,dt.datetime(2026,9,19,1,tzinfo=dt.timezone.utc))\nassert r['used_today']==2\nprint('one_attempt_OPEN_plus_TERMINAL; used_today=2')\nPY\nSortie observée :\none_attempt_OPEN_plus_TERMINAL; used_today=2\nTEST owner_cap_double_count: rc=0\n",
+      "recommendation": "Replier le ledger par attempt_key avec la fonction commune de resource_accounting avant le comptage ; couvrir une tentative ouverte, une clôturée et leurs éventuelles réécritures.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-027",
+      "file": "factory_v2/owner_console.py",
+      "line": 204,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "if (now - t).total_seconds() <= _AUTHORITY_DRIFT_GRACE_S:",
+      "why": "La durée de dérive est mesurée depuis le dernier événement, plutôt que depuis le début du blocage non résolu. Si chaque poll répète AUTHORITY_DRIFT_BLOCKED, le délai d’une heure repart sans cesse : une dérive présente depuis trois heures reste invisible quand sa dernière répétition date d’une minute.\n\nReproduction sur le code original, sans correction (mission de revue uniquement). Commande à exécuter à la racine du dépôt :\nFACTORY_NO_REAL_ENGINE=1 PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport datetime as dt\nfrom factory_v2.owner_console import _authority_drift_exceptions\nstate={'events':[{'event':'AUTHORITY_DRIFT_BLOCKED','milestone':'M','ts':ts} for ts in ('2026-09-19T00:00:00Z','2026-09-19T02:59:00Z')]}\nr=_authority_drift_exceptions(state,'p','state',dt.datetime(2026,9,19,3,tzinfo=dt.timezone.utc))\nassert r==[]\nprint('same_drift_block_3_hours; latest_poll_1_minute_ago; exceptions=[]')\nPY\nSortie observée :\nsame_drift_block_3_hours; latest_poll_1_minute_ago; exceptions=[]\nTEST owner_persistent_drift_hidden: rc=0\n",
+      "recommendation": "Suivre le début de l’épisode de dérive jusqu’à un événement explicite de résolution ; ne pas réinitialiser cette date aux polls identiques et tester des répétitions sur plusieurs heures.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-028",
+      "file": "factory_v2/fault_injection.py",
+      "line": 136,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "lease_path = Path(project_dir) / \"evidence\" / \"leases\" / f\"{mission_id}.json\"",
+      "why": "L’injecteur construit le nom du lease à partir du mission_id brut, alors que WorkerLease normalise # en _. Pour une mission ordinaire M#1, le lease M_1.json existe mais l’injection cherche M#1.json, retourne REFUSED et ne supprime rien. Le scénario de panne heartbeat ne vise donc pas le lease réellement utilisé.\n\nReproduction exécutée dans cette session sur le code original, sans correction (mission de revue uniquement). Commande à la racine du dépôt :\nPYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport contextlib, inspect, io, json, os, subprocess, sys, tempfile, time\nfrom pathlib import Path\nfrom unittest import mock\nsys.path.insert(0, os.getcwd())\nos.environ['FACTORY_NO_REAL_ENGINE'] = '1'\n\ndef fault_lease_path():\n    from factory_v2.worker_lease import WorkerLease\n    from factory_v2.fault_injection import inject_heartbeat_interrupt\n    with tempfile.TemporaryDirectory() as t:\n        p = Path(t); f = WorkerLease._lease_path('M#1', p); f.parent.mkdir(parents=True); f.write_text('{}')\n        rec = inject_heartbeat_interrupt('M#1', p)\n        assert f.exists() and rec.outcome == 'REFUSED'\n        print('lease=M_1.json mission=M#1 interrupt=REFUSED lease_still_exists=True')\n\nfault_lease_path()\nPY\nSortie observée :\nlease=M_1.json mission=M#1 interrupt=REFUSED lease_still_exists=True\nTEST fault_lease_path : rc=0\n",
+      "recommendation": "Réutiliser WorkerLease._lease_path ou un helper public partagé ; tester une mission contenant # et vérifier que le lease réellement lu par require_current_lease devient absent.",
+      "fix_effort": "S"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-029",
+      "file": "factory_v2/event_journal.py",
+      "line": 148,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "path = journal_path(project_dir)\n    if path.is_file():\n        result = []",
+      "why": "Après activation puis désactivation de FACTORY_EVENTS_JOURNAL, sync_events_to_journal conserve les nouveaux événements dans PROJECT_STATE, mais iter_events lit exclusivement l’ancien journal dès qu’il existe. L’événement NEW enregistré après désactivation devient invisible aux consommateurs : la présence du fichier prime sur le mode de persistance effectif.\n\nReproduction exécutée dans cette session sur le code original, sans correction (mission de revue uniquement). Commande à la racine du dépôt :\nPYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport contextlib, inspect, io, json, os, subprocess, sys, tempfile, time\nfrom pathlib import Path\nfrom unittest import mock\nsys.path.insert(0, os.getcwd())\nos.environ['FACTORY_NO_REAL_ENGINE'] = '1'\n\ndef journal_disabled():\n    from factory_v2 import event_journal as j\n    with tempfile.TemporaryDirectory() as t:\n        p = Path(t); state = {'events': [{'event': 'OLD'}]}\n        with mock.patch.dict(os.environ, {'FACTORY_EVENTS_JOURNAL': '1'}):\n            j.sync_events_to_journal(p, state)\n        state['events'].append({'event': 'NEW'})\n        with mock.patch.dict(os.environ, {'FACTORY_EVENTS_JOURNAL': '0'}):\n            j.sync_events_to_journal(p, state); (p / 'PROJECT_STATE.json').write_text(json.dumps(state)); got = j.iter_events(p)\n        assert got == [{'event': 'OLD'}]\n        print('flag=0 state_events=[OLD,NEW] iter_events=[OLD]')\n\njournal_disabled()\nPY\nSortie observée :\nflag=0 state_events=[OLD,NEW] iter_events=[OLD]\nTEST journal_disabled : rc=0\n",
+      "recommendation": "Définir une transition durable de mode : soit interdire explicitement la désactivation après migration, soit fusionner journal et événements inline récents avec déduplication. Tester activation, sauvegarde, désactivation puis nouvel événement.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-030",
+      "file": "factory_v2/owner_console.py",
+      "line": 253,
+      "severity": "MEDIUM",
+      "category": "BUG",
+      "evidence": "for ev in state.get(\"events\") or []:",
+      "why": "La console calcule les incréments de 24 h depuis la seule queue PROJECT_STATE.events. Avec le journal activé, 200 polls suffisent à éjecter un settlement pourtant dans la fenêtre de 24 h : la console annonce zéro livraison alors que le journal conserve le settlement. Défaut du consommateur console, distinct du dashboard de métriques signalé par -024.\n\nReproduction exécutée dans cette session sur le code original, sans correction (mission de revue uniquement). Commande à la racine du dépôt :\nPYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport contextlib, inspect, io, json, os, subprocess, sys, tempfile, time\nfrom pathlib import Path\nfrom unittest import mock\nsys.path.insert(0, os.getcwd())\nos.environ['FACTORY_NO_REAL_ENGINE'] = '1'\n\ndef dashboard_journal():\n    import datetime as dt\n    from factory_v2 import event_journal as j, metrics_dashboard as d, owner_console as o\n    with tempfile.TemporaryDirectory() as t:\n        p = Path(t); state = {'events': [{'event': 'MILESTONE_SETTLED', 'milestone': 'M', 'ts': '2026-09-19T00:00:00Z'}] + [{'event': 'POLL', 'ts': '2026-09-19T01:00:00Z', 'n': i} for i in range(200)]}\n        with mock.patch.dict(os.environ, {'FACTORY_EVENTS_JOURNAL': '1'}):\n            j.sync_events_to_journal(p, state)\n        (p / 'PROJECT_STATE.json').write_text(json.dumps(state)); (p / 'ROADMAP.yaml').write_text('milestones: [{id: M}]')\n        now = dt.datetime(2026, 9, 19, 2, tzinfo=dt.timezone.utc)\n        metrics = d.build_dashboard([p], now=now); console = o.build([p], now=now)\n        real = len(j.iter_events(p, kinds=['MILESTONE_SETTLED']))\n        assert real == 1 and metrics['settlements'] == 0 and console['increments_24h'] == []\n        print('journal_settlements_24h=1 dashboard_settlements=0 owner_increments=[]')\n\ndashboard_journal()\nPY\nSortie observée :\njournal_settlements_24h=1 dashboard_settlements=0 owner_increments=[]\nTEST dashboard_journal : rc=0\n",
+      "recommendation": "Charger les événements via event_journal.iter_events pour la fenêtre nécessaire, puis les fournir aux calculs de progression et d’exceptions ; conserver une lecture bornée pour l’affichage. Tester un settlement suivi de plus de 200 événements dans les mêmes 24 h.",
+      "fix_effort": "M"
+    },
+    {
+      "id": "L5_factory_v2_rest_1-031",
+      "file": "factory_v2/_wiring_gate.py",
+      "line": 157,
+      "severity": "MEDIUM",
+      "category": "TEST_GAP",
+      "evidence": "elif min(gate_lines) >= min(exec_lines):",
+      "why": "Le contrôle d’ordre compare uniquement les numéros de ligne. Un check_before_launch sous if False placé avant runner.execute est considéré comme protecteur, alors qu’il n’est jamais exécuté. Ce faux positif subsiste même dans runtime.py, indépendamment des stages ignorés décrits par -002.\n\nReproduction exécutée dans cette session sur le code original, sans correction (mission de revue uniquement). Commande à la racine du dépôt :\nPYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nimport contextlib, inspect, io, json, os, subprocess, sys, tempfile, time\nfrom pathlib import Path\nfrom unittest import mock\nsys.path.insert(0, os.getcwd())\nos.environ['FACTORY_NO_REAL_ENGINE'] = '1'\n\ndef wiring_conditional():\n    from factory_v2._wiring_gate import launch_gate_precedes_execute\n    with tempfile.TemporaryDirectory() as t:\n        p = Path(t); (p / 'factory_v2').mkdir()\n        (p / 'factory_v2/runtime.py').write_text('def dispatch(runner):\\n    if False:\\n        check_before_launch()\\n    runner.execute()\\n')\n        ok, _ = launch_gate_precedes_execute(p)\n        assert ok\n        print('unreachable_gate=True ungated_execute=True gate_pass=True')\n\nwiring_conditional()\nPY\nSortie observée :\nunreachable_gate=True ungated_execute=True gate_pass=True\nTEST wiring_conditional : rc=0\n",
+      "recommendation": "Vérifier que le contrôle domine chaque appel execute sur tous les chemins, ou compléter ce contrôle AST par une preuve dynamique de refus avant lancement. Ajouter le cas if False et des branches alternatives non protégées.",
+      "fix_effort": "M"
+    }
+  ]
+}

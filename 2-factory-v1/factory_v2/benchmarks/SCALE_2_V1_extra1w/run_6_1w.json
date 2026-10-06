@@ -1,0 +1,625 @@
+{
+  "attempt_keys": 4,
+  "attempt_keys_unique": true,
+  "attempt_rows_raw": 12,
+  "authority_files_unchanged": {
+    "alpha/ROADMAP.yaml": true,
+    "alpha/SPEC.md": true,
+    "alpha/STRATEGY.md": true,
+    "beta/ROADMAP.yaml": true,
+    "beta/SPEC.md": true,
+    "beta/STRATEGY.md": true
+  },
+  "cross_write_violations": [],
+  "daemon_error": [],
+  "daemon_joined": true,
+  "deliverable_detail": {
+    "alpha/knowledge/lesson.json": "byte_exact",
+    "alpha/research/report.md": "structural",
+    "beta/build_out.txt": "byte_exact",
+    "beta/reuse/reuse.json": "structural"
+  },
+  "deliverables_ok": {
+    "alpha/knowledge/lesson.json": true,
+    "alpha/research/report.md": true,
+    "beta/build_out.txt": true,
+    "beta/reuse/reuse.json": true
+  },
+  "engine_markers": {
+    "A1_BUILD": [
+      [
+        1789846161.122,
+        1789846167.155,
+        66766
+      ]
+    ],
+    "A2_RESEARCH": [
+      [
+        1789846173.674,
+        1789846179.726,
+        67363
+      ]
+    ],
+    "B1_BUILD": [
+      [
+        1789846167.352,
+        1789846173.453,
+        67117
+      ]
+    ],
+    "B2_REUSE": [
+      [
+        1789846179.915,
+        1789846186.039,
+        67805
+      ]
+    ]
+  },
+  "engine_overlaps": [],
+  "expected_settled": 4,
+  "failure_event_summary": {},
+  "frozen_tree_unchanged": true,
+  "isolation": {
+    "authority_files_unchanged": true,
+    "deliverables_exact": true,
+    "ledger_integrity": true,
+    "mission_records_coexist": true,
+    "no_cross_tree_writes": true
+  },
+  "launches_per_mission": {
+    "A1_BUILD": 1,
+    "A2_RESEARCH": 1,
+    "B1_BUILD": 1,
+    "B2_REUSE": 1,
+    "G1_BUILD": 0,
+    "G2_RESEARCH": 0
+  },
+  "ledger_max_workers": [
+    1
+  ],
+  "logs_tail": [
+    "V2_PORTFOLIO_MODE: portfolio=/var/folders/3n/cp7h29p55gzds1ttv9rkjdgw0000gn/T/scale2_1w_cr2kx4de/portfolio.json \u2014 select_project() governs next work. DEFAULT_RUNTIME=V2.",
+    "LOG_TARGET_DETACHED: factoryd.log no longer resolves to the inode this process writes to \u2014 readers are on a stale snapshot",
+    "V2_ADVANCE: action=MILESTONE_SETTLED milestone=A1_BUILD",
+    "V2_MILESTONE_SETTLED: A1_BUILD",
+    "CONTINUATION: disposition=CONTINUE AGENT_GO_REQUESTS=0 HUMAN_GO=0",
+    "V2_ADVANCE: action=MILESTONE_SETTLED milestone=B1_BUILD",
+    "V2_MILESTONE_SETTLED: B1_BUILD",
+    "CONTINUATION: disposition=CONTINUE AGENT_GO_REQUESTS=0 HUMAN_GO=0",
+    "V2_ADVANCE: action=MILESTONE_SETTLED milestone=A2_RESEARCH",
+    "V2_MILESTONE_SETTLED: A2_RESEARCH",
+    "CONTINUATION: disposition=CONTINUE AGENT_GO_REQUESTS=0 HUMAN_GO=0",
+    "V2_ADVANCE: action=MILESTONE_SETTLED milestone=B2_REUSE",
+    "V2_MILESTONE_SETTLED: B2_REUSE",
+    "CONTINUATION: disposition=CONTINUE AGENT_GO_REQUESTS=0 HUMAN_GO=0",
+    "PORTFOLIO_COMPLETE: all projects done",
+    "CONTINUATION: disposition=PORTFOLIO_COMPLETE AGENT_GO_REQUESTS=0 HUMAN_GO=0",
+    "DAEMON_IDLE: portfolio complete \u2014 IDLE_WAITING_FOR_NEW_WORK (next check in 0.05s)"
+  ],
+  "max_workers": 1,
+  "mission_records": {
+    "alpha": [
+      "A1_BUILD#M1",
+      "A2_RESEARCH#M1"
+    ],
+    "beta": [
+      "B1_BUILD#M1",
+      "B2_REUSE#M1"
+    ]
+  },
+  "missions_detail": {
+    "alpha": {
+      "A1_BUILD#M1": {
+        "attempts": null,
+        "last_attempt_id": "a1",
+        "lease_generation": 1,
+        "state": "PASS"
+      },
+      "A2_RESEARCH#M1": {
+        "attempts": null,
+        "last_attempt_id": "a1",
+        "lease_generation": 1,
+        "state": "PASS"
+      }
+    },
+    "beta": {
+      "B1_BUILD#M1": {
+        "attempts": null,
+        "last_attempt_id": "a1",
+        "lease_generation": 1,
+        "state": "PASS"
+      },
+      "B2_REUSE#M1": {
+        "attempts": null,
+        "last_attempt_id": "a1",
+        "lease_generation": 1,
+        "state": "PASS"
+      }
+    }
+  },
+  "new_files": {
+    "alpha": [
+      ".bench/A1_BUILD.66766.end",
+      ".bench/A1_BUILD.66766.start",
+      ".bench/A1_BUILD.launch.txt",
+      ".bench/A2_RESEARCH.67363.end",
+      ".bench/A2_RESEARCH.67363.start",
+      ".bench/A2_RESEARCH.launch.txt",
+      ".project_transaction.lock",
+      "evidence/A1_BUILD/validator_e2e.log",
+      "evidence/A1_BUILD/validator_verdict.json",
+      "evidence/A2_RESEARCH/validator_e2e.log",
+      "evidence/A2_RESEARCH/validator_verdict.json",
+      "evidence/attempt_accounts.jsonl",
+      "evidence/dispatch_checkpoints/attempts.jsonl",
+      "evidence/leases/A1_BUILD_M1.json",
+      "evidence/leases/A2_RESEARCH_M1.json",
+      "evidence/leases/worker_lease.lock",
+      "evidence/receipts/A1_BUILD#M1/a1.json",
+      "evidence/receipts/A2_RESEARCH#M1/a1.json",
+      "evidence/telemetry/launch_gate.jsonl",
+      "evidence/telemetry/launch_gate.jsonl.lock",
+      "evidence/telemetry_observations.jsonl",
+      "evidence/telemetry_observations.jsonl.lock",
+      "knowledge/lesson.json",
+      "research/report.md",
+      "validation_contracts/ec833c97f51e11ff.json",
+      "validation_contracts/f13b013ebdc920ff.json"
+    ],
+    "beta": [
+      ".bench/B1_BUILD.67117.end",
+      ".bench/B1_BUILD.67117.start",
+      ".bench/B1_BUILD.launch.txt",
+      ".bench/B2_REUSE.67805.end",
+      ".bench/B2_REUSE.67805.start",
+      ".bench/B2_REUSE.launch.txt",
+      ".project_transaction.lock",
+      "build_out.txt",
+      "evidence/B1_BUILD/validator_e2e.log",
+      "evidence/B1_BUILD/validator_verdict.json",
+      "evidence/B2_REUSE/validator_e2e.log",
+      "evidence/B2_REUSE/validator_verdict.json",
+      "evidence/attempt_accounts.jsonl",
+      "evidence/dispatch_checkpoints/attempts.jsonl",
+      "evidence/leases/B1_BUILD_M1.json",
+      "evidence/leases/B2_REUSE_M1.json",
+      "evidence/leases/worker_lease.lock",
+      "evidence/receipts/B1_BUILD#M1/a1.json",
+      "evidence/receipts/B2_REUSE#M1/a1.json",
+      "evidence/telemetry/launch_gate.jsonl",
+      "evidence/telemetry/launch_gate.jsonl.lock",
+      "evidence/telemetry_observations.jsonl",
+      "evidence/telemetry_observations.jsonl.lock",
+      "reuse/reuse.json",
+      "validation_contracts/72ccdbfce81ff9e2.json",
+      "validation_contracts/c4337465fe960f25.json"
+    ]
+  },
+  "non_success_attempts": [],
+  "open_orphans": [],
+  "parallel_milestone_selected_events": [],
+  "reliability": {
+    "daemon_clean_exit": true,
+    "no_failed_attempts": true,
+    "no_lease_violations": true,
+    "no_mission_failures": true,
+    "no_open_orphans": true,
+    "no_same_mission_concurrent_overlaps": true,
+    "no_torn_ledger_lines": true,
+    "run_windows_closed": true,
+    "settled_all": true,
+    "single_launch_per_mission": true
+  },
+  "repeat": 6,
+  "run_window_ids": [
+    "b525c648ec2a4c09aaf75fe788021861"
+  ],
+  "run_window_max_workers": [
+    1
+  ],
+  "run_windows_closed": 1,
+  "runrecords_rows": [
+    {
+      "attempt_id": "A1_BUILD#M1:ec833c97f51e11ff:a1:g1",
+      "phase": "PREDICTION",
+      "predicted_at": "2026-09-19T19:29:21Z",
+      "prediction": {
+        "basis": "no-validated-history",
+        "contract_id": "ec833c97f51e11ff",
+        "engine": "local",
+        "executor_type": "local_command",
+        "milestone": "A1_BUILD",
+        "outcome": "PASS",
+        "predicted_cost_usd": null,
+        "predicted_duration_s": null,
+        "project": "alpha",
+        "spec_level": ""
+      }
+    },
+    {
+      "attempt_id": "A1_BUILD#M1:ec833c97f51e11ff:a1:g1",
+      "attempt_ok": true,
+      "attempt_outcome": "PASS",
+      "attempt_rc": 0,
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "alpha",
+        "roadmap_sha": "0cd8761206a1b8d57bd25fafb2d71f81e5e45ee916b9681ce4e1b546b86b7887",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "3a92423c79c79868eefdb8500ba800f2a30d9c4addf2acb7b26e01c2f8f5f61c"
+      },
+      "candidate_sha": "",
+      "context_hash": "ec833c97f51e11ff",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "A1_BUILD",
+      "mission": "A1_BUILD#M1",
+      "product_e2e": {},
+      "project": "alpha",
+      "recorded_at": "2026-09-19T19:29:27Z",
+      "strategy": "3a92423c79c79868eefdb8500ba800f2a30d9c4addf2acb7b26e01c2f8f5f61c",
+      "task_type": "local_command",
+      "tests": [],
+      "validated": false,
+      "validator_verdict": null,
+      "wall_time_s": 6.08
+    },
+    {
+      "attempt_id": "A1_BUILD#M1:ec833c97f51e11ff:a1:g1",
+      "observation": {
+        "authority_hashes": {
+          "project": "alpha",
+          "roadmap_sha": "0cd8761206a1b8d57bd25fafb2d71f81e5e45ee916b9681ce4e1b546b86b7887",
+          "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+          "strategy_sha": "3a92423c79c79868eefdb8500ba800f2a30d9c4addf2acb7b26e01c2f8f5f61c"
+        },
+        "close_reason": "ATTEMPT_COMPLETED",
+        "duration_s": 6.08,
+        "engine": "local",
+        "failure_fingerprint": "",
+        "outcome": "PASS",
+        "rc": 0,
+        "result_sha": "",
+        "tokens": null
+      },
+      "observed_at": "2026-09-19T19:29:27Z",
+      "phase": "OBSERVATION"
+    },
+    {
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "alpha",
+        "roadmap_sha": "0cd8761206a1b8d57bd25fafb2d71f81e5e45ee916b9681ce4e1b546b86b7887",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "3a92423c79c79868eefdb8500ba800f2a30d9c4addf2acb7b26e01c2f8f5f61c"
+      },
+      "candidate_sha": "",
+      "context_hash": "ec833c97f51e11ff",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "A1_BUILD",
+      "mission": "A1_BUILD",
+      "product_e2e": {
+        "passed": true
+      },
+      "project": "alpha",
+      "recorded_at": "2026-09-19T19:29:27Z",
+      "settled_attempt_ids": [
+        "A1_BUILD#M1:ec833c97f51e11ff:a1:g1"
+      ],
+      "strategy": "3a92423c79c79868eefdb8500ba800f2a30d9c4addf2acb7b26e01c2f8f5f61c",
+      "task_type": "milestone_settlement",
+      "tests": [],
+      "validated": true,
+      "validator_verdict": "COMPLETE",
+      "wall_time_s": 0.0
+    },
+    {
+      "attempt_id": "B1_BUILD#M1:c4337465fe960f25:a1:g1",
+      "phase": "PREDICTION",
+      "predicted_at": "2026-09-19T19:29:27Z",
+      "prediction": {
+        "basis": "no-validated-history",
+        "contract_id": "c4337465fe960f25",
+        "engine": "local",
+        "executor_type": "local_command",
+        "milestone": "B1_BUILD",
+        "outcome": "PASS",
+        "predicted_cost_usd": null,
+        "predicted_duration_s": null,
+        "project": "beta",
+        "spec_level": ""
+      }
+    },
+    {
+      "attempt_id": "B1_BUILD#M1:c4337465fe960f25:a1:g1",
+      "attempt_ok": true,
+      "attempt_outcome": "PASS",
+      "attempt_rc": 0,
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "beta",
+        "roadmap_sha": "d4fb6c230eb3c0f6370277198f23d937931f71384004ba778e5d013afb1ee38f",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "49ca79ed55d0f173e1e73b162e3b3fb35373ba2f51d514895d218a3942c6a743"
+      },
+      "candidate_sha": "",
+      "context_hash": "c4337465fe960f25",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "B1_BUILD",
+      "mission": "B1_BUILD#M1",
+      "product_e2e": {},
+      "project": "beta",
+      "recorded_at": "2026-09-19T19:29:33Z",
+      "strategy": "49ca79ed55d0f173e1e73b162e3b3fb35373ba2f51d514895d218a3942c6a743",
+      "task_type": "local_command",
+      "tests": [],
+      "validated": false,
+      "validator_verdict": null,
+      "wall_time_s": 6.15
+    },
+    {
+      "attempt_id": "B1_BUILD#M1:c4337465fe960f25:a1:g1",
+      "observation": {
+        "authority_hashes": {
+          "project": "beta",
+          "roadmap_sha": "d4fb6c230eb3c0f6370277198f23d937931f71384004ba778e5d013afb1ee38f",
+          "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+          "strategy_sha": "49ca79ed55d0f173e1e73b162e3b3fb35373ba2f51d514895d218a3942c6a743"
+        },
+        "close_reason": "ATTEMPT_COMPLETED",
+        "duration_s": 6.15,
+        "engine": "local",
+        "failure_fingerprint": "",
+        "outcome": "PASS",
+        "rc": 0,
+        "result_sha": "",
+        "tokens": null
+      },
+      "observed_at": "2026-09-19T19:29:33Z",
+      "phase": "OBSERVATION"
+    },
+    {
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "beta",
+        "roadmap_sha": "d4fb6c230eb3c0f6370277198f23d937931f71384004ba778e5d013afb1ee38f",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "49ca79ed55d0f173e1e73b162e3b3fb35373ba2f51d514895d218a3942c6a743"
+      },
+      "candidate_sha": "",
+      "context_hash": "c4337465fe960f25",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "B1_BUILD",
+      "mission": "B1_BUILD",
+      "product_e2e": {
+        "passed": true
+      },
+      "project": "beta",
+      "recorded_at": "2026-09-19T19:29:33Z",
+      "settled_attempt_ids": [
+        "B1_BUILD#M1:c4337465fe960f25:a1:g1"
+      ],
+      "strategy": "49ca79ed55d0f173e1e73b162e3b3fb35373ba2f51d514895d218a3942c6a743",
+      "task_type": "milestone_settlement",
+      "tests": [],
+      "validated": true,
+      "validator_verdict": "COMPLETE",
+      "wall_time_s": 0.0
+    },
+    {
+      "attempt_id": "A2_RESEARCH#M1:f13b013ebdc920ff:a1:g1",
+      "phase": "PREDICTION",
+      "predicted_at": "2026-09-19T19:29:33Z",
+      "prediction": {
+        "basis": "no-validated-history",
+        "contract_id": "f13b013ebdc920ff",
+        "engine": "local",
+        "executor_type": "local_command",
+        "milestone": "A2_RESEARCH",
+        "outcome": "PASS",
+        "predicted_cost_usd": null,
+        "predicted_duration_s": null,
+        "project": "alpha",
+        "spec_level": ""
+      }
+    },
+    {
+      "attempt_id": "A2_RESEARCH#M1:f13b013ebdc920ff:a1:g1",
+      "attempt_ok": true,
+      "attempt_outcome": "PASS",
+      "attempt_rc": 0,
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "alpha",
+        "roadmap_sha": "0cd8761206a1b8d57bd25fafb2d71f81e5e45ee916b9681ce4e1b546b86b7887",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "3a92423c79c79868eefdb8500ba800f2a30d9c4addf2acb7b26e01c2f8f5f61c"
+      },
+      "candidate_sha": "",
+      "context_hash": "f13b013ebdc920ff",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "A2_RESEARCH",
+      "mission": "A2_RESEARCH#M1",
+      "product_e2e": {},
+      "project": "alpha",
+      "recorded_at": "2026-09-19T19:29:39Z",
+      "strategy": "3a92423c79c79868eefdb8500ba800f2a30d9c4addf2acb7b26e01c2f8f5f61c",
+      "task_type": "local_command",
+      "tests": [],
+      "validated": false,
+      "validator_verdict": null,
+      "wall_time_s": 6.12
+    },
+    {
+      "attempt_id": "A2_RESEARCH#M1:f13b013ebdc920ff:a1:g1",
+      "observation": {
+        "authority_hashes": {
+          "project": "alpha",
+          "roadmap_sha": "0cd8761206a1b8d57bd25fafb2d71f81e5e45ee916b9681ce4e1b546b86b7887",
+          "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+          "strategy_sha": "3a92423c79c79868eefdb8500ba800f2a30d9c4addf2acb7b26e01c2f8f5f61c"
+        },
+        "close_reason": "ATTEMPT_COMPLETED",
+        "duration_s": 6.12,
+        "engine": "local",
+        "failure_fingerprint": "",
+        "outcome": "PASS",
+        "rc": 0,
+        "result_sha": "",
+        "tokens": null
+      },
+      "observed_at": "2026-09-19T19:29:39Z",
+      "phase": "OBSERVATION"
+    },
+    {
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "alpha",
+        "roadmap_sha": "0cd8761206a1b8d57bd25fafb2d71f81e5e45ee916b9681ce4e1b546b86b7887",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "3a92423c79c79868eefdb8500ba800f2a30d9c4addf2acb7b26e01c2f8f5f61c"
+      },
+      "candidate_sha": "",
+      "context_hash": "f13b013ebdc920ff",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "A2_RESEARCH",
+      "mission": "A2_RESEARCH",
+      "product_e2e": {
+        "passed": true
+      },
+      "project": "alpha",
+      "recorded_at": "2026-09-19T19:29:39Z",
+      "settled_attempt_ids": [
+        "A2_RESEARCH#M1:f13b013ebdc920ff:a1:g1"
+      ],
+      "strategy": "3a92423c79c79868eefdb8500ba800f2a30d9c4addf2acb7b26e01c2f8f5f61c",
+      "task_type": "milestone_settlement",
+      "tests": [],
+      "validated": true,
+      "validator_verdict": "COMPLETE",
+      "wall_time_s": 0.0
+    },
+    {
+      "attempt_id": "B2_REUSE#M1:72ccdbfce81ff9e2:a1:g1",
+      "phase": "PREDICTION",
+      "predicted_at": "2026-09-19T19:29:39Z",
+      "prediction": {
+        "basis": "no-validated-history",
+        "contract_id": "72ccdbfce81ff9e2",
+        "engine": "local",
+        "executor_type": "local_command",
+        "milestone": "B2_REUSE",
+        "outcome": "PASS",
+        "predicted_cost_usd": null,
+        "predicted_duration_s": null,
+        "project": "beta",
+        "spec_level": ""
+      }
+    },
+    {
+      "attempt_id": "B2_REUSE#M1:72ccdbfce81ff9e2:a1:g1",
+      "attempt_ok": true,
+      "attempt_outcome": "PASS",
+      "attempt_rc": 0,
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "beta",
+        "roadmap_sha": "d4fb6c230eb3c0f6370277198f23d937931f71384004ba778e5d013afb1ee38f",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "49ca79ed55d0f173e1e73b162e3b3fb35373ba2f51d514895d218a3942c6a743"
+      },
+      "candidate_sha": "",
+      "context_hash": "72ccdbfce81ff9e2",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "B2_REUSE",
+      "mission": "B2_REUSE#M1",
+      "product_e2e": {},
+      "project": "beta",
+      "recorded_at": "2026-09-19T19:29:46Z",
+      "strategy": "49ca79ed55d0f173e1e73b162e3b3fb35373ba2f51d514895d218a3942c6a743",
+      "task_type": "local_command",
+      "tests": [],
+      "validated": false,
+      "validator_verdict": null,
+      "wall_time_s": 6.17
+    },
+    {
+      "attempt_id": "B2_REUSE#M1:72ccdbfce81ff9e2:a1:g1",
+      "observation": {
+        "authority_hashes": {
+          "project": "beta",
+          "roadmap_sha": "d4fb6c230eb3c0f6370277198f23d937931f71384004ba778e5d013afb1ee38f",
+          "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+          "strategy_sha": "49ca79ed55d0f173e1e73b162e3b3fb35373ba2f51d514895d218a3942c6a743"
+        },
+        "close_reason": "ATTEMPT_COMPLETED",
+        "duration_s": 6.17,
+        "engine": "local",
+        "failure_fingerprint": "",
+        "outcome": "PASS",
+        "rc": 0,
+        "result_sha": "",
+        "tokens": null
+      },
+      "observed_at": "2026-09-19T19:29:46Z",
+      "phase": "OBSERVATION"
+    },
+    {
+      "attempts": 1,
+      "authority_hashes": {
+        "project": "beta",
+        "roadmap_sha": "d4fb6c230eb3c0f6370277198f23d937931f71384004ba778e5d013afb1ee38f",
+        "spec_sha": "603c828a03383f98b82bf9c6787deeb5c40c02871a1b8d6ba14b0d538020a02b",
+        "strategy_sha": "49ca79ed55d0f173e1e73b162e3b3fb35373ba2f51d514895d218a3942c6a743"
+      },
+      "candidate_sha": "",
+      "context_hash": "72ccdbfce81ff9e2",
+      "engine": "local",
+      "failure_fingerprints": [],
+      "human_interventions": 0,
+      "milestone": "B2_REUSE",
+      "mission": "B2_REUSE",
+      "product_e2e": {
+        "passed": true
+      },
+      "project": "beta",
+      "recorded_at": "2026-09-19T19:29:46Z",
+      "settled_attempt_ids": [
+        "B2_REUSE#M1:72ccdbfce81ff9e2:a1:g1"
+      ],
+      "strategy": "49ca79ed55d0f173e1e73b162e3b3fb35373ba2f51d514895d218a3942c6a743",
+      "task_type": "milestone_settlement",
+      "tests": [],
+      "validated": true,
+      "validator_verdict": "COMPLETE",
+      "wall_time_s": 0.0
+    }
+  ],
+  "same_mission_concurrent_overlaps": [],
+  "settled": 4,
+  "throughput_missions_per_s": 0.15904,
+  "throughput_per_worker_s": 0.15904,
+  "torn_ledger_lines": 0,
+  "wall_s": 25.151,
+  "worker_seconds": 25.151,
+  "workload": "SCALE_2_W1",
+  "workload_milestones": [
+    "A1_BUILD",
+    "A2_RESEARCH",
+    "B1_BUILD",
+    "B2_REUSE"
+  ]
+}

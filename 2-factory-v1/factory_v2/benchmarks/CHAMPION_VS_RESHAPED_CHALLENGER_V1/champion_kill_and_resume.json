@@ -1,0 +1,13 @@
+{
+  "engine_exercised": "NOT_EXERCISED",
+  "launches_lost": 1,
+  "notes": "SIGKILL mid-command, partial='start' final='start' r2=MISSION_IN_FLIGHT",
+  "probe_id": "kill_and_resume",
+  "restart_recovered": false,
+  "settled": false,
+  "side": "champion",
+  "side_sha": "5257c8c9689aba1e85eb7638b621458eb3a067e8",
+  "start_sha": "798a9fff53280a478fbf049aae0bcd2cf68e4fd0",
+  "wall_s": 1.369,
+  "workload_id": "CHAMPION_VS_RESHAPED_CHALLENGER_V1"
+}

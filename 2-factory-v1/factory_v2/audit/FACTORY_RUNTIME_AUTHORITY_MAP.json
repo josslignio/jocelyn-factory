@@ -1,0 +1,247 @@
+{
+  "authority_sources": [
+    {
+      "file": "projects/factory/STRATEGY.md",
+      "id": "A1",
+      "scope": "project canonical strategy",
+      "status": "CANONICAL_V2"
+    },
+    {
+      "file": "projects/factory/SPEC.md",
+      "id": "A2",
+      "scope": "project canonical spec",
+      "status": "CANONICAL_V2"
+    },
+    {
+      "file": "projects/factory/ROADMAP.yaml",
+      "id": "A3",
+      "scope": "project canonical roadmap / dependency DAG",
+      "status": "CANONICAL_V2"
+    },
+    {
+      "file": "projects/factory/PROJECT_STATE.json",
+      "id": "A4",
+      "scope": "settled milestone state + roadmap SHA",
+      "status": "CANONICAL_V2"
+    },
+    {
+      "file": "factory/cto/CTO_STRATEGY.md",
+      "id": "A5",
+      "scope": "V1 factory-internal strategy summary",
+      "status": "STALE_V1 — DELETE from context path"
+    },
+    {
+      "file": "factory/cto/CTO_STATE.json",
+      "id": "A6",
+      "scope": "V1 factory-internal current state",
+      "status": "STALE_V1 — secondary fallback only"
+    },
+    {
+      "file": "factory/cto/CTO_BACKLOG.json",
+      "id": "A7",
+      "scope": "V1 H1/H2 horizon queue",
+      "status": "DERIVED_ARTIFACT — DELETE in F4"
+    }
+  ],
+  "control_sha": "865de5703a2450b38bc4f166cbcfe835439c6c9a",
+  "control_sha_rebind_2026_09_19": "REBOUND 2026-09-19 (codex BLOCK 2f0e5bf3 repair, session 5): control_sha moved 57cd98e0->865de5703a2450b38bc4f166cbcfe835439c6c9a because intervening milestones (SAFE_SELF_IMPROVEMENT, FACTORY_CODE_REVIEW_SWEEP, FACTORY_DEEP_RESEARCH) committed real code after 2f0e5bf3 (git diff --name-only 2f0e5bf3..HEAD: factoryd.py, runtime.py, mission_dispatch.py, settlement.py, launch_gate.py, owner_routing_policy.py, tests/). Re-verified at the new binding: LOC re-measured fresh (wc -l; drift found and updated: runtime.py 4468->4475, factoryd.py 2343->2363; all other entries exact), line citations re-resolved (factoryd _reconcile_stale_active l.200, _load_or_create_state l.884 still exact), mechanical judge python3 factory_v2/verify_audit_repair.py . -> AUDIT_REPAIR_VERIFIED rc=0.",
+  "current_v1_path": {
+    "label": "LP-001 REMOVED 2026-09-13 — V1 PRODUCTION PATH DELETED (the 2026-09-07 map still called this path live, which was already false then: factoryd no longer referenced the refiller module — deletions FACTORY_SIMPLIFY_S2 b671efe7 + S4 2f5249ab)",
+    "removal_evidence": {
+      "factory/bin/autopilot.py": {
+        "deleted_in_commit": "b671efe7889fbd3b8b0004dd8c4ef1379efe790c"
+      },
+      "factory/bin/campaign_state.py": {
+        "deleted_in_commit": "b671efe7889fbd3b8b0004dd8c4ef1379efe790c"
+      },
+      "factory/bin/cto_planner.py": {
+        "deleted_in_commit": "b671efe7889fbd3b8b0004dd8c4ef1379efe790c"
+      },
+      "factory/lib/backlog_refiller.py": {
+        "cmd": "git log --diff-filter=D --format=%H -- factory/lib/backlog_refiller.py",
+        "deleted_in_commit": "2f5249abe3cab8ce80dd3ee628e190eff7ff8317"
+      },
+      "grep_check": "grep -n backlog_refiller factory/bin/factoryd.py -> no match at HEAD (2026-09-18)"
+    },
+    "status": "REMOVED",
+    "steps": [
+      {
+        "bug": "DUP-001 — wrong next-work source",
+        "caller": "factoryd.py:do_poll_iteration()",
+        "calls": "backlog_refiller.select_next_mission()",
+        "path_status_2026_09_18": "STEP NO LONGER REACHABLE — every module named in this step was deleted on 2026-09-13 (see removal_evidence)",
+        "reads": "A7 (CTO_BACKLOG.json)",
+        "step": 1
+      },
+      {
+        "bug": "DUP-003 — bypass V2 runtime",
+        "caller": "factoryd.py",
+        "calls": "AutopilotExecutor(plan)",
+        "path_status_2026_09_18": "STEP NO LONGER REACHABLE — every module named in this step was deleted on 2026-09-13 (see removal_evidence)",
+        "reads": "plan JSON (not V2 authority)",
+        "step": 2
+      },
+      {
+        "bug": "P6 — stale V1 context injected into worker",
+        "caller": "AutopilotExecutor._dispatch_mission()",
+        "calls": "ContextCompiler.compile()",
+        "path_status_2026_09_18": "PARTIALLY RESOLVED — les modules nommés ne sont PAS tous supprimés (l'ancien libellé 'every module named in this step was deleted' était FAUX) : ContextCompiler (396 l.) et dispatcher_v3 (3646 l.) vivent au HEAD. Résolu PAR LE FIX P6 dans le code : context_compiler.py l.135-156 — chemin V2 autoritaire quand project_dir est fourni, fallback CTO_STRATEGY.md seulement si project_dir=None",
+        "reads": "A5 CTO_STRATEGY.md, A6 CTO_STATE.json",
+        "step": 3
+      },
+      {
+        "bug": "worker builds toward STALE strategy",
+        "caller": "ContextCompiler → dispatcher_v3.py",
+        "calls": "agent subprocess",
+        "injects": "V1 strategy/state as worker context",
+        "path_status_2026_09_18": "PARTIALLY RESOLVED — dispatcher_v3.py N'A PAS été supprimé (3646 l. au HEAD, backend d'exécution retenu) ; seul le module autopilot.py de la chaîne V1 a été supprimé (b671efe7). L'injection V1 n'atteint plus le chemin V2 : AutopilotExecutor V2 (factory_v2/executors.py:576) passe --project-dir → dispatcher charge l'autorité V2 fail-closed (P6)",
+        "step": 4
+      },
+      {
+        "bug": "DUP-002 — advisory gate on critical path",
+        "caller": "dispatcher_v3.py settlement",
+        "calls": "milestone_controller.evaluate()",
+        "path_status_2026_09_18": "RESOLVED (retrait d'APPEL, pas suppression de fichier) — factoryd.py:449 : porte advisory milestone_controller RETIRÉE du settlement (remplacée par IndependentValidator V2). Le fichier milestone_controller.py (302 l.) existe toujours au HEAD, sans appelant de production",
+        "result": "advisory only — does NOT raise",
+        "step": 5
+      },
+      {
+        "bug": "P2 RunRecords not wired (2026-09-07 claim) — REFUTED by measurement 2026-09-18",
+        "caller": "factoryd settlement callback",
+        "calls": "runrecords wired at settlement/dispatch boundaries: settlement_ledger.py:272 calls record_settlement, factory_v2/advance/mission_dispatch.py:1159 calls record_attempt (rt._record_attempt), runtime.py calls record_reproduction_baseline (l.2699) and record_cell_transition (l.4334,4344); review_dispatch.py READS the ledger (_builder_engine_from_runrecords) but does not write it. Regression coverage tests/test_runrecords_wired.py (4 tests, green). runtime.py's own record_* imports (l.94-98) remain call-less IN THAT MODULE.",
+        "path_status_2026_09_18": "RESOLVED PAR MESURE — runrecords est câblé aux frontières settlement/dispatch : settlement_ledger.py:272 record_settlement, advance/mission_dispatch.py:1159 record_attempt (via rt._record_attempt — la citation antérieure 'review_dispatch.py' était FAUSSE : ce module ne fait que LIRE le ledger dans _builder_engine_from_runrecords, corrigé session 3), runtime.py:2699 record_reproduction_baseline, runtime.py:4334,4344 record_cell_transition ; couverture de régression tests/test_runrecords_wired.py (4 tests verts). Journal vivant <run-dir>/journals/runrecords.jsonl = 55990 lignes (wc -l, 2026-09-18T11:42:32Z — journal vivant, compteur mouvant) ; les imports record_* de runtime.py:94-98 restent sans appel DANS CE module",
+        "result": "run data IS recorded (55990 journal lines measured 2026-09-18T11:42:32Z, moving counter)",
+        "step": 6
+      }
+    ]
+  },
+  "deleted_in_f4": [
+    "factoryd → backlog_refiller.select_next_mission() call",
+    "factoryd → cto_planner.promote_h2_to_h1() call",
+    "campaign_state.next_mission() function",
+    "factoryd → AutopilotExecutor spawn",
+    "factoryd settlement → milestone_controller.evaluate() advisory call",
+    "ContextCompiler reading CTO_STRATEGY.md as primary source",
+    "long_run_supervisor hardcoded V1 gate list (lines 89-155)"
+  ],
+  "deleted_in_f4_item_status": {
+    "ContextCompiler reading CTO_STRATEGY.md as primary source": {
+      "evidence": "factory/lib/context_compiler.py l.135-156 : quand project_dir est fourni, _strategy_text() lit l'autorité V2 ; le fallback CTO_STRATEGY.md (l.156) n'est atteignable QUE si project_dir=None. Correction attribuée au fix P6 (code), pas aux commits de suppression S2/S4 — l'ancienne attribution à git log --diff-filter=D était fausse",
+      "status": "EXECUTED AS A CODE FIX (P6), pas une suppression"
+    },
+    "campaign_state.next_mission() function": {
+      "evidence": "fichier supprimé dans b671efe7 (332/243/423/384 l. aux parents, mesurées par git show <sha>^:<path> | wc -l)",
+      "status": "EXECUTED"
+    },
+    "factoryd settlement → milestone_controller.evaluate() advisory call": {
+      "evidence": "factory/bin/factoryd.py:449 — commentaire F4 'milestone_controller advisory gate REMOVED — IndependentValidator in …' ; le FICHIER factory/lib/milestone_controller.py (302 l.) existe TOUJOURS au HEAD (suppression NON exécutée, et non requise par cet item)",
+      "status": "EXECUTED (le RETRAIT D'APPEL, pas la suppression de fichier)"
+    },
+    "factoryd → AutopilotExecutor spawn": {
+      "evidence": "factory/bin/factoryd.py porte ENCORE la constante AUTOPILOT_SCRIPT (l.56) et le spawn subprocess.Popen([sys.executable, str(AUTOPILOT_SCRIPT), ...]) (l.606) dans _default_dispatch — le fichier cible factory/bin/autopilot.py est SUPPRIMÉ depuis b671efe7 : tout spawn atteint lancerait un fichier mort. Le V2 AutopilotExecutor vit dans factory_v2/executors.py:576 (execute() l.604, commande dispatcher construite l.667). Affirmation 'autopilot.py no longer spawned by factoryd' FAUSSE au HEAD.",
+      "status": "NOT EXECUTED — CONTRADICTED BY CODE (corrigé 2026-09-18, session codex-BLOCK)"
+    },
+    "factoryd → backlog_refiller.select_next_mission() call": {
+      "evidence": "grep -n backlog_refiller factory/bin/factoryd.py → aucun match au HEAD d256977f9bb00006fb5f5271a762b1c58354cfae",
+      "status": "EXECUTED"
+    },
+    "factoryd → cto_planner.promote_h2_to_h1() call": {
+      "evidence": "module supprimé (git log --diff-filter=D → b671efe7889fbd3b8b0004dd8c4ef1379efe790c, 2026-09-13 02:41:20 +0200) ; plus aucun appel",
+      "status": "EXECUTED"
+    },
+    "long_run_supervisor hardcoded V1 gate list (lines 89-155)": {
+      "evidence": "les 5 portes V1 vivent TOUJOURS : grep -n 'ctok_chain_complete|full_regression_clean|m008_pass|solo_benchmark_complete|v1_seal_issued' factory/lib/long_run_supervisor.py → l.61-65 au HEAD d256977f9bb00006fb5f5271a762b1c58354cfae (l'ancienne plage 89-155 datait de 2026-09-07, voir SS-003 du dead-code report)",
+      "status": "NOT EXECUTED — CONTRADICTED BY CODE (corrigé 2026-09-18, session codex-BLOCK)"
+    }
+  },
+  "deleted_in_f4_status": "PARTIALLY EXECUTED — re-vérifié item par item au HEAD d256977f9bb00006fb5f5271a762b1c58354cfae (BLOCK codex 60d76f11 : l'ancienne mention 'all seven items carried out, verified by git log --diff-filter=D' était fausse pour 3 items). Table par item dans deleted_in_f4_item_status.",
+  "milestone": "FULL_CODEBASE_STATE_OF_ART_AUDIT",
+  "note": "Runtime call graph showing every authority-flow path. P6 is highlighted. V1 paths marked for deletion in F4.",
+  "p6_fix_spec": {
+    "api_note": "ProjectAuthority.strategy_text and .spec_text are str fields loaded at authority creation. No .strategy_path attribute — they are already in memory.",
+    "callers_to_update": [
+      "factory_v2/executors.py:AutopilotExecutor.execute() — add --project-dir to dispatcher_v3 cmd",
+      "factory/bin/dispatcher_v3.py:_inject_context() — read --project-dir, load V2 authority, fail-closed",
+      "factory/lib/context_compiler.py:compile() — add project_authority param, use strategy_text when provided"
+    ],
+    "fail_closed_requirement": "STALE_CTO_CONTEXT_DISPATCH = 0, DISPATCH_WITHOUT_FRESH_CANONICAL_PROJECT_CONTEXT = 0. V2 path must NOT fallback to CTO_STRATEGY.md silently. If canonical authority unavailable → RAISE, do not dispatch.",
+    "implementation": {
+      "step1": "AutopilotExecutor.execute() (factory_v2/executors.py) adds '--project-dir str(self.repo)' to the dispatcher_v3 subprocess command",
+      "step2": "dispatcher_v3._inject_context() reads --project-dir from args. When present: calls load_authority(project_dir) to get V2 ProjectAuthority. Passes authority.strategy_text + authority.spec_text to ContextCompiler explicitly.",
+      "step3": "ContextCompiler gains an optional project_authority param for the explicit V2 path. BUT: when --project-dir is provided and load_authority() FAILS → raise ContextAuthorityError (fail-closed). Do NOT fall back.",
+      "step4": "Legacy V1 path (autopilot.py → dispatcher_v3 without --project-dir): ContextCompiler continues to read CTO_STRATEGY.md. This is the 'isolated legacy adapter' — the V2 authoritative path cannot call it.",
+      "step5": "In F4, autopilot.py is retired, making the legacy path structurally unreachable from factoryd. Only the V2 AutopilotExecutor path (with --project-dir) remains."
+    },
+    "problem": "ContextCompiler.compile() reads CTO_STRATEGY.md (A5) as primary context for workers. dispatcher_v3 creates ContextCompiler(repo_root) without a project_dir, so V2 authority is never used."
+  },
+  "produced_at": "2026-09-07",
+  "schema": "factory-runtime-authority-map/v1",
+  "target_v2_path": {
+    "label": "V2 TARGET PATH (after F4)",
+    "steps": [
+      {
+        "caller": "factoryd.py:do_poll_iteration()",
+        "calls": "roadmap_resolver.resolve(authority, project_state)",
+        "note": "CANONICAL next-work determination",
+        "reads": "A1+A2+A3+A4",
+        "step": 1
+      },
+      {
+        "caller": "factoryd.py",
+        "calls": "V2 runtime.advance(authority, project_state, next_milestone)",
+        "note": "stateless — reloads authority on every call",
+        "reads": "A1+A2+A3+A4",
+        "step": 2
+      },
+      {
+        "caller": "factory_v2/runtime.py:advance()",
+        "calls": "ContextCompiler.compile(project_authority=authority)",
+        "note": "P6 FIX — V2 authority injected",
+        "reads": "A1 STRATEGY.md + A2 SPEC.md as PRIMARY",
+        "step": 3
+      },
+      {
+        "caller": "ContextCompiler → dispatcher_v3.py",
+        "calls": "agent subprocess",
+        "injects": "V2 canonical strategy/spec context",
+        "note": "worker builds toward CURRENT strategy",
+        "step": 4
+      },
+      {
+        "caller": "dispatcher_v3.py settlement",
+        "calls": "IndependentValidator.validate()",
+        "note": "DUP-002 fix — advisory gate removed",
+        "result": "RAISES on failure — authoritative gate",
+        "step": 5
+      },
+      {
+        "caller": "factoryd settlement callback after PASS",
+        "calls": "runrecords.append_run(milestone_id, sha, duration, agent, tokens)",
+        "note": "P2 RunRecords wired at correct boundary",
+        "step": 6
+      }
+    ]
+  },
+  "update_2026_09_12": {
+    "measured_concurrent_next_work_state_chains": 5,
+    "measured_project_state_rewrite_under_block": {
+      "approx_total_bytes": "180MB over 266 ticks (runtime.py:3175,3273)",
+      "lines_ref_note": "références de lignes runtime.py:3175,3273 = telles que mesurées le 2026-09-12 (RAPPORT_FINAL) ; runtime.py a depuis dérivé (4468 l. au HEAD d256977f9bb00006fb5f5271a762b1c58354cfae) — la mesure de 2026-09-12 est citée as-of, non re-validable ligne à ligne au HEAD",
+      "min_bytes_per_write": 338000,
+      "writes_observed_on_one_blocked_tick_run": 266
+    },
+    "note": "STA-02/STA-04/STA-05 (5 concurrent 'next work' state chains, PROJECT_STATE.json as a 338KB monolith rewritten on every blocked tick, 2 writers outside any transaction) are flagged DECISION D'ARCHITECTURE in RAPPORT_FINAL section 8, P2: append-only journal + materialized view for PROJECT_STATE, single next-work chain. Not yet executed — this is a finding, not a completed convergence.",
+    "source": ".context/factory-tightening-audit-2026-09-12/RAPPORT_FINAL_2026-09-12.md (section 2, lens STA) — source ABSENTE du dépôt : jamais commitée (git log --all --diff-filter=A → vide, vérifié session 3 ; .context/factory-tightening-audit-2026-09-12/ ne contient que RESILIENCE_DRILL.md). Les mesures STA de 2026-09-12 (5 chaînes, 338KB, 266 écritures) sont as-of, non reproductibles depuis le dépôt.",
+    "source_absence_note_2026_09_18_s3": "voir third_pass ci-dessous"
+  },
+  "update_2026_09_18": {
+    "changes": [
+      "LP-001 : libellé de chemin V1 vivant -> REMOVED (suppressions S2/S4 citées avec SHA 40 hex + commande de vérification git log --diff-filter=D)",
+      "step 6 (RunRecords) : does_NOT_call remplacé par les appels réels mesurés (settlement_ledger.py:272, review_dispatch.py, runtime.py:2699/4314/4324) et le journal vivant mesuré 54926 lignes [ANNOTATION session 3 : entrée de changelog de la session 1, conservée comme trace — la mention 'review_dispatch.py' et les lignes 4314/4324 y sont depuis corrigées (voir third_pass_2026_09_18 et step 6 : appels réels = mission_dispatch.py:1159 + runtime.py:4334/4344, journal 55990)]"
+    ],
+    "measured_at_head": "d256977f9bb00006fb5f5271a762b1c58354cfae",
+    "reason": "Relecteur Claude BLOCK aa295959: la carte étiquetait encore le chemin V1 du refiller comme chemin de production vivant (faux — factoryd ne le référence plus) et déclarait RunRecords non câblé (faux). Le libellé LP-001 passe à REMOVED avec SHA de suppression.",
+    "second_pass_2026_09_18": "BLOCK codex 60d76f11 ('suppressions, justifications et citation contredisent le code') : table par item ajoutée (deleted_in_f4_item_status) — 3 items sur 7 n'étaient PAS exécutés (spawn autopilot mort factoryd.py:56/606, portes V1 long_run_supervisor l.61-65, attribution P6) ; statuts des steps 3-6 réécrits sur la vérité mesurée ; l.4314,4324 -> l.4334,4344 ; journal re-mesuré 55970 lignes (wc -l, 2026-09-18T11:22:09Z — journal vivant, compteur mouvant)",
+    "third_pass_2026_09_18": "BLOCK codex a4f12607 (2026-09-18T11:29:25Z, transcription absente — re-vérification par exécution) : step 6 corrigé — record_attempt s'écrit dans factory_v2/advance/mission_dispatch.py:1159 (rt._record_attempt), review_dispatch.py ne fait que LIRE le ledger (grep -n : docstring l.339/357 + import lecture l.361 seulement) ; journal re-mesuré 55990 lignes (wc -l, 2026-09-18T11:42:32Z) ; toutes les citations de lignes re-exécutées au HEAD courant (factoryd 56/449/591/606/627/783/884/1000, long_run_supervisor 61-65, context_compiler 135-156, executors 576/604/667, runtime 94-98/739/2699/4334/4344 — toutes exactes)."
+  }
+}

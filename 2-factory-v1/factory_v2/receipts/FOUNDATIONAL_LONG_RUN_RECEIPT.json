@@ -1,0 +1,93 @@
+{
+ "schema": "foundational-long-run-receipt/v2",
+ "project": "twitter-radar",
+ "project_dir": "projects/twitter-radar",
+ "milestones_settled": [
+  "TR_DATA_BACKFILL_AND_CREDENTIAL_POOL",
+  "TR_KOL_DISCOVERY_AND_RANKING_V1",
+  "TR_CALL_THESIS_TRACK_RECORD_V1"
+ ],
+ "settlement_mode": "dual-pin canonical verification (S5): each settlement proven by verify_settlement = contract + PASS missions + sha-verified receipts, acceptance re-run as verifier@receipt.candidate_sha x product@receipt.integration_sha (control a58e110a x product d7c2cfe0 (artifact chain 72194b43 -> 66440719 -> d7c2cfe0: KOL records consistency) at r2; historical gates ca213b10/693d73d4/d0bff136 retained as provenance)",
+ "incidents": [
+  {
+   "id": "NAMESAKE_RESOLUTION_DEFECT",
+   "type": "failure_replan",
+   "observed_at": "2026-09-09T14:41:09Z",
+   "what": "user_by_login('Frenchie') resolved the lookalike 'frenchie' (dog rescue) instead of the namesake 'Frenchie_' in the collection driver",
+   "recovery": "fail-closed namesake resolution landed (708320e9) + corrected session (product 2b54123, 14/14 reconcile) + r2 artifact regeneration from the corrected corpus (product 72194b4) — contaminated gate-9 artifacts superseded, never reproduced",
+   "evidence": ".context/glm-primary-overnight/control/INCIDENTS.jsonl"
+  },
+  {
+   "id": "SOL_REJECT_REPAIR_LOOP",
+   "type": "failure_replan",
+   "observed_at": "2026-09-09T13:00:00Z",
+   "what": "Sol REJECT@097e25ae on the runtime-evidence bundle (5 findings)",
+   "recovery": "repair 28fe2626 -> re-review ACCEPT; later r3/r4/r5 repairs to final closure ACCEPT@492bb90d",
+   "evidence": ".context/external-watchdog/sol-reviews/"
+  },
+  {
+   "id": "BACKFILL_NO_PROGRESS_RULE",
+   "type": "failure_reroute",
+   "observed_at": "2026-09-09T12:10:00Z",
+   "what": "repeated newest-window scrapes without historical progression were typed BACKFILL_NO_PROGRESS instead of being accepted as progress",
+   "recovery": "resumable windowed backfill (290e617d) with durable non-overlapping windows",
+   "evidence": "projects/twitter-radar/evidence/collection_observations/.events_order028-h2-*.jsonl"
+  }
+ ],
+ "restart_events": [
+  {
+   "id": "CONTROLLER_GEN6_TO_GEN7",
+   "observed_pid_before": 46735,
+   "observed_pid_after": 80173,
+   "observed_at": "2026-09-09T14:12:39Z",
+   "cause": "watchdog dead-controller recovery (gen6 process death)",
+   "recovered_from_canonical_brain_only": true,
+   "evidence": ".context/glm-primary-overnight/control/EVENTS.jsonl + STATE.json recovery_gen7"
+  },
+  {
+   "id": "CONTROLLER_GEN7_TO_GEN8",
+   "observed_pid_before": 80173,
+   "observed_pid_after": 85956,
+   "observed_at": "2026-09-09T15:37:58Z",
+   "cause": "watchdog dead-controller recovery (gen7 process death)",
+   "recovered_from_canonical_brain_only": true,
+   "evidence": ".context/glm-primary-overnight/control/STATE.json recovery_gen8"
+  },
+  {
+   "id": "CONTROLLER_GEN8_TO_GEN9",
+   "observed_pid_before": 85956,
+   "observed_pid_after": 10692,
+   "observed_at": "2026-09-09T18:12:00Z",
+   "cause": "watchdog dead-controller recovery (gen8 context boundary death)",
+   "recovered_from_canonical_brain_only": true,
+   "evidence": ".context/glm-primary-overnight/control/EVENTS.jsonl CONTROLLER_RECOVERY gen9"
+  },
+  {
+   "id": "SUPERVISOR_SIGKILL_RESTART_FIX4",
+   "observed_pid_before": 30977,
+   "observed_pid_after": 31144,
+   "observed_at": "2026-09-09T16:11:07Z",
+   "cause": "planned supervisor SIGKILL boundary (Order 030 s8) on the real production path",
+   "recovered_from_canonical_brain_only": true,
+   "evidence": "factory_v2/receipts/committed/SUPERVISOR_RUNTIME_RECEIPT.json (KILL_RESTART_RECOVERY=PASS, DUPLICATE_WRITERS=0, MANUAL_DAEMON_RESTARTS=0)"
+  }
+ ],
+ "routine_human_interventions": 0,
+ "human_go_requests": 0,
+ "product_e2e_proven": true,
+ "product_e2e_evidence": {
+  "TR_DATA": "ACCEPTANCE_PROVEN (three-channel provenance: validated observations + sha256-bound H1 forensic sources + committed H2 windows)",
+  "TR_KOL": "ACCEPTANCE_PROVEN (honest typed INSUFFICIENT_QUALIFIED_ACCOUNTS, call-ledger wired, verifier recomputes from raw corpus)",
+  "TR_CALL": "ACCEPTANCE_PROVEN (389 thesis-keyed episodes recomputed from raw corpus + market CSV, zero look-ahead)",
+  "owner_qa_report": "research/tr_owner_qa_report.json + .md (product 6eb66fd/19f40bf4 lineage; count mismatches resolved 14/14)",
+  "weekly_report_lineage": "research/X110_WEEKLY_REPORT.json baseline + cycle2 refresh reports (superseded-set retained)"
+ },
+ "engines_exercised": {
+  "mission_writer": "zai-coding-plan/glm-5.3 (unique writer, receipts' actual_engine_id)",
+  "gate_reviewer": "claude-sonnet-5 (15 gate calls, 4.05 USD total)",
+  "adversarial_auditor": "codex/sol (5 escalations; closure ACCEPT@492bb90d)"
+ },
+ "duration_note": "milestone sequence settled automatically across controller generations 06:24Z-18:5xZ 2026-09-09; every recovery reconstructed position from disk authority",
+ "generated_at": "2026-09-09T19:51:26Z",
+ "generated_by": "glm-5.3 gen9 controller (r2 reconciliation)"
+}
